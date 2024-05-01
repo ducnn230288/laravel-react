@@ -12,6 +12,6 @@ class CodeTypeSeeder extends Seeder
      */
     public function run(): void
     {
-      for ($i = 0; $i < 10; $i++) CodeType::factory()->create();
+      CodeType::factory()->create(['name' => 'Position', 'code' => 'POSITION']);
     }
 }

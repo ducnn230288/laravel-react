@@ -3,28 +3,36 @@
 namespace App\Http\Controllers\Api\Base;
 
 use App\Http\Controllers\Controller;
+use App\Http\Enums\Permissions;
 use App\Http\Resources\Base\CodeResource;
+use App\Http\Traits\CanCheckPermissionByRole;
 use App\Http\Traits\CanLoadRelationships;
 use App\Models\Base\Code;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Gate;
 
-class CodeController extends Controller
+class CodeController extends Controller implements HasMiddleware
 {
-  use CanLoadRelationships;
+  use CanLoadRelationships, CanCheckPermissionByRole;
   private array $relations = ['type'];
 
-  public function __construct()
+  public static function middleware(): array
   {
-//    $this->middleware('auth:sanctum')->except(['index']);
-//    $this->middleware('throttle:60,1')->only(['store','update','destroy']);
+    return [
+      new Middleware('auth:sanctum'),
+      new Middleware('throttle:60,1', only: ['store','update','destroy'])
+    ];
   }
     /**
      * Display a listing of the resource.
      */
     public function index(): AnonymousResourceCollection
     {
+      $this->checkPermission(Permissions::P_CODE_INDEX);
       $query = $this->loadRelationships(Code::query());
       return CodeResource::collection($query->latest()->paginate());
     }
@@ -34,6 +42,7 @@ class CodeController extends Controller
      */
     public function store(Request $request): CodeResource
     {
+      $this->checkPermission(Permissions::P_CODE_STORE);
       $event = Code::create([
         ...$request->validate([
           'name' => 'required|string|max:255',
@@ -42,7 +51,6 @@ class CodeController extends Controller
           'description' => 'nullable|string',
         ]),
       ]);
-
       return new CodeResource($this->loadRelationships($event));
     }
 
@@ -51,8 +59,8 @@ class CodeController extends Controller
      */
     public function show(string $code) : CodeResource
     {
+      $this->checkPermission(Permissions::P_CODE_SHOW);
       return new CodeResource($this->loadRelationships(Code::query()->where('code', $code)->first()));
-
     }
 
     /**
@@ -60,6 +68,7 @@ class CodeController extends Controller
      */
     public function update(Request $request, string $code): CodeResource
     {
+      $this->checkPermission(Permissions::P_CODE_UPDATE);
       $code = Code::query()->where('code', $code)->first();
       $code->update(
         $request->validate([
@@ -75,8 +84,8 @@ class CodeController extends Controller
      */
     public function destroy(string $code): JsonResponse
     {
+      $this->checkPermission(Permissions::P_CODE_DESTROY);
       Code::query()->where('code', $code)->delete();
-
       return response()->json([
         'message' => 'Code deleted successfully'
       ]);

@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Base;
 
-use App\Models\Base\Code;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CodeTypeResource extends JsonResource
+class UserRoleResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -20,7 +19,8 @@ class CodeTypeResource extends JsonResource
         'name' => $this->name,
         'code' => $this->code,
         'description' => $this->description,
-        'codes' => CodeResource::collection($this->whenLoaded('codes'))
+        'permissions' => $this->permissions,
+        'users' => UserResource::collection($this->whenLoaded('users'))
       ];
     }
 }

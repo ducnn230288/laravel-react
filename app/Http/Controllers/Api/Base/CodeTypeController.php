@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\Base;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\CodeTypeResource;
+use App\Http\Resources\Base\CodeTypeResource;
 use App\Http\Traits\CanLoadRelationships;
 use App\Models\Base\CodeType;
 use Illuminate\Http\JsonResponse;

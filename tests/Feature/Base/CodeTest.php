@@ -1,13 +1,12 @@
 <?php
 
-namespace Tests\Feature;
+namespace Base;
 
 use App\Models\Base\Code;
 use App\Models\Base\CodeType;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
-use function PHPUnit\Framework\assertEquals;
 
 class CodeTest extends TestCase
 {
@@ -15,7 +14,7 @@ class CodeTest extends TestCase
   /**
    * A basic feature test example.
    */
-  public function test_create_code_type(): void
+  public function test_create_code(): void
   {
     $this->withoutExceptionHandling();
     $data = CodeType::factory()->raw();

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\Base;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\CodeResource;
+use App\Http\Resources\Base\CodeResource;
 use App\Http\Traits\CanLoadRelationships;
 use App\Models\Base\Code;
 use Illuminate\Http\JsonResponse;
@@ -78,7 +78,7 @@ class CodeController extends Controller
       Code::query()->where('code', $code)->delete();
 
       return response()->json([
-        'message' => 'Code Type deleted successfully'
+        'message' => 'Code deleted successfully'
       ]);
     }
 }

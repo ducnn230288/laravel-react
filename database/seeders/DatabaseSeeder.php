@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use App\Models\Base\User;
 use Database\Seeders\Base\CodeSeeder;
 use Database\Seeders\Base\CodeTypeSeeder;
+use Database\Seeders\Base\UserRoleSeeder;
+use Database\Seeders\Base\UserSeeder;
 use Illuminate\Database\Seeder;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -16,8 +18,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-      User::factory(1)->create();
-
+      $this->call(UserRoleSeeder::class);
+      $this->call(UserSeeder::class);
       $this->call(CodeTypeSeeder::class);
       $this->call(CodeSeeder::class);
     }

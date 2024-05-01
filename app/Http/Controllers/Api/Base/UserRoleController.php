@@ -5,8 +5,6 @@ namespace App\Http\Controllers\Api\Base;
 use App\Http\Controllers\Controller;
 use App\Http\Enums\Permissions;
 use App\Http\Resources\Base\UserRoleResource;
-use App\Http\Traits\CanCheckPermissionByRole;
-use App\Http\Traits\CanLoadRelationships;
 use App\Models\Base\UserRole;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -16,8 +14,10 @@ use Illuminate\Routing\Controllers\Middleware;
 
 class UserRoleController extends Controller implements HasMiddleware
 {
-  use CanLoadRelationships, CanCheckPermissionByRole;
-  private array $relations = ['users'];
+  public function __construct()
+  {
+    $this->relations = ['users'];
+  }
   public static function middleware(): array
   {
     return [

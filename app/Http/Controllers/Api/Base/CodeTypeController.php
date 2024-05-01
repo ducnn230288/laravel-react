@@ -5,8 +5,6 @@ namespace App\Http\Controllers\Api\Base;
 use App\Http\Controllers\Controller;
 use App\Http\Enums\Permissions;
 use App\Http\Resources\Base\CodeTypeResource;
-use App\Http\Traits\CanCheckPermissionByRole;
-use App\Http\Traits\CanLoadRelationships;
 use App\Models\Base\CodeType;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -16,9 +14,10 @@ use Illuminate\Routing\Controllers\Middleware;
 
 class CodeTypeController extends Controller implements HasMiddleware
 {
-    use CanLoadRelationships, CanCheckPermissionByRole;
-    private array $relations = ['codes'];
-
+  public function __construct()
+  {
+    $this->relations = ['codes'];
+  }
   public static function middleware(): array
   {
     return [

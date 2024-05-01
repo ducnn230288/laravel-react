@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('code_types', function (Blueprint $table) {
-            $table->uuid('id');
-            $table->string('name');
-            $table->string('code')->unique();
-            $table->text('description')->nullable();
+        Schema::create('files', function (Blueprint $table) {
+          $table->uuid('id');
+          $table->string('path');
+          $table->text('description')->nullable();
+          $table->boolean('is_active')->default(false);
+            $table->foreignUuid('user_id');
             $table->timestamps();
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('code_types');
+        Schema::dropIfExists('files');
     }
 };

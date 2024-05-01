@@ -19,6 +19,12 @@ enum Permissions: string
   case P_USER_ROLE_UPDATE = '3e8aa2c2-35bf-4a56-8bf2-8f8de240e24c';
   case P_USER_ROLE_DESTROY = '62fd3bc2-0921-4113-9b5b-9966dd5a0517';
 
+  case P_FILE_INDEX = 'f5d6c0fa-f0b7-4b19-a0ae-4bad5393df4e';
+  case P_FILE_STORE = '6828ff01-024f-426d-aa81-70cce8d02157';
+  case P_FILE_SHOW = '750a578a-e346-4e45-ad84-4768f5ffec62';
+  case P_FILE_UPDATE = '794f9edf-4d17-42ad-bf6c-374a7ad28f1a';
+  case P_FILE_DESTROY = '1ed8a391-73e3-4056-bec8-5ad272b463a0';
+
   case P_CODE_INDEX = '5d808d76-bf99-4a51-b4b6-d5aa37bdb398';
   case P_CODE_STORE = 'a9574d5e-269d-44f9-a5bb-41cf06d7bdda';
   case P_CODE_SHOW = 'eb510a79-4f75-4b14-a118-f036c1daa430';

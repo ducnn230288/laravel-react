@@ -37,4 +37,22 @@ enum Permissions: string
   case P_CODE_TYPE_UPDATE = 'fdb47b79-1a6e-49be-8f5b-8525a547534a';
   case P_CODE_TYPE_DESTROY = 'f16e2bc7-12b9-446e-b53b-a2597ca0ad3a';
 
+  case P_PARAMETER_INDEX = 'd278abcb-1956-4b45-95c1-2ab612110ec6';
+  case P_PARAMETER_STORE = 'd9185449-e2ac-4e72-9c9f-25788c23d5ba';
+  case P_PARAMETER_SHOW = 'f22743c7-f7d4-4ae5-b4e1-cd88e6426240';
+  case P_PARAMETER_UPDATE = '3d478437-949b-4ae7-9c21-79cabb1663a3';
+  case P_PARAMETER_DESTROY = '275ebda7-3e03-4c93-b352-baa7705528aa';
+
+  case P_DATA_INDEX = '1db70aa0-7541-4433-b2f6-fbd7bf8bf7bb';
+  case P_DATA_STORE = 'c3ab9e11-7ba3-4afd-b5cb-c560362a3144';
+  case P_DATA_SHOW = '94751fbb-65e0-4efa-a124-ed3f641bcfcb';
+  case P_DATA_UPDATE = '99ea12da-5800-4d6d-9e73-60c016a267a9';
+  case P_DATA_DESTROY = '2e8c8772-2505-4683-b6fa-13fa2570eee7';
+
+  case P_DATA_TYPE_INDEX = '2712ca04-7e7c-44b6-83c1-b8c7f332a0fb';
+  case P_DATA_TYPE_STORE = '03380c3a-3336-42f4-b8c2-e54084d35655';
+  case P_DATA_TYPE_SHOW = 'f4010557-b3bf-445a-a2fa-2199ce90725b';
+  case P_DATA_TYPE_UPDATE = '00e77095-35ea-4755-bbae-46a1ba78e46e';
+  case P_DATA_TYPE_DESTROY = '0e481286-bd5d-4203-a374-a8f8f8735f33';
+
 }

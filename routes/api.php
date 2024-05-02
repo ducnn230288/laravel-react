@@ -12,8 +12,11 @@ Route::post('/logout', [\App\Http\Controllers\Api\Base\AuthController::class, 'l
 Route::apiResource('users/roles', \App\Http\Controllers\Api\Base\UserRoleController::class);
 Route::apiResource('users', \App\Http\Controllers\Api\Base\UserController::class);
 Route::apiResource('files', \App\Http\Controllers\Api\Base\FileController::class);
+Route::apiResource('parameters', \App\Http\Controllers\Api\Base\ParameterController::class);
 
 
 Route::apiResource('codes/types', \App\Http\Controllers\Api\Base\CodeTypeController::class)->scoped(['code' => 'type']);
 Route::apiResource('codes', \App\Http\Controllers\Api\Base\CodeController::class);
 
+Route::apiResource('data/types', \App\Http\Controllers\Api\Base\CodeTypeController::class)->scoped(['data' => 'type']);
+Route::apiResource('data', \App\Http\Controllers\Api\Base\CodeController::class);

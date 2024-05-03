@@ -7,6 +7,7 @@ use Database\Seeders\Base\CodeSeeder;
 use Database\Seeders\Base\CodeTypeSeeder;
 use Database\Seeders\Base\ContentTypeSeeder;
 use Database\Seeders\Base\ParameterSeeder;
+use Database\Seeders\Base\PostTypeSeeder;
 use Database\Seeders\Base\UserRoleSeeder;
 use Database\Seeders\Base\UserSeeder;
 use Illuminate\Database\Seeder;
@@ -26,5 +27,6 @@ class DatabaseSeeder extends Seeder
       $this->call(CodeSeeder::class);
       $this->call(ParameterSeeder::class);
       $this->call(ContentTypeSeeder::class);
+      $this->call(PostTypeSeeder::class);
     }
 }

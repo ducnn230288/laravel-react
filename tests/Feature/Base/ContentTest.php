@@ -87,10 +87,10 @@ class ContentTest extends TestCase
     $this->put('/api/contents/' . $id, $data)->assertStatus($eRole !== ERole::USER ? 200 : 403);
     if ($eRole !== ERole::USER) $this->assertDatabaseHas('contents', $data);
 
-    $res = $this->get('/api/contents/types/'. $type['code'] . '?include=data')->assertStatus($eRole !== ERole::USER ? 200 : 403);
+    $res = $this->get('/api/contents/types/'. $type['code'] . '?include=contents')->assertStatus($eRole !== ERole::USER ? 200 : 403);
     if ($eRole !== ERole::USER) {
       foreach($data as $key=>$value) {
-        $this->assertEquals($value, $res['data'][0][$key]);
+        $this->assertEquals($value, $res['data']['contents'][0][$key]);
       }
     }
 

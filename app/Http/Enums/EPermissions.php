@@ -55,4 +55,15 @@ enum EPermissions: string
   case P_CONTENT_TYPE_UPDATE = '00e77095-35ea-4755-bbae-46a1ba78e46e';
   case P_CONTENT_TYPE_DESTROY = '0e481286-bd5d-4203-a374-a8f8f8735f33';
 
+  case P_POST_INDEX = '7c34dc92-cbbe-4419-8dbc-745818d76098';
+  case P_POST_STORE = '0ca9634c-3496-4059-bf86-5bec23c96b55';
+  case P_POST_SHOW = '832a2d7a-8b80-4988-9f1f-ff3ac72eb3ff';
+  case P_POST_UPDATE = 'eda2799a-4072-46a7-9a26-efa9a98036db';
+  case P_POST_DESTROY = '4097d5ff-e35c-4bff-a5b1-013ca1181762';
+
+  case P_POST_TYPE_INDEX = 'efa34c52-8c9a-444d-a82b-8bec109dbab5';
+  case P_POST_TYPE_STORE = '87cb77c4-565c-43ec-bffc-fbaf5077c2be';
+  case P_POST_TYPE_SHOW = '21dcd08f-e901-4277-98b3-23d5677ab41d';
+  case P_POST_TYPE_UPDATE = 'bfa36cef-71c4-4f08-89e6-d7e0c1c03ba4';
+  case P_POST_TYPE_DESTROY = 'cd00c62e-1ec4-4c61-b273-cdd6867a3212';
 }

@@ -4,6 +4,7 @@ services:
         build:
             context: .
             dockerfile: Dockerfile
+        image: bca32d67aa5336a0b50e59b948e308ab50377805fd9bd24529504d85366b78a4
         ports:
             - 8000:8000
         volumes:

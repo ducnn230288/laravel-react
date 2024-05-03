@@ -85,7 +85,7 @@ class ContentController extends Controller implements HasMiddleware
     $this->checkPermission(EPermissions::P_CONTENT_DESTROY);
     $content->delete();
     return response()->json([
-      'message' => 'Data deleted successfully'
+      'message' => 'Content deleted successfully'
     ]);
   }
 }

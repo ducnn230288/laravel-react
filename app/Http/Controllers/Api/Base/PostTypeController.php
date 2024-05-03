@@ -4,19 +4,19 @@ namespace App\Http\Controllers\Api\Base;
 
 use App\Http\Controllers\Controller;
 use App\Http\Enums\EPermissions;
-use App\Http\Resources\Base\ContentTypeResource;
-use App\Models\Base\ContentType;
+use App\Http\Resources\Base\PostTypeResource;
+use App\Models\Base\PostType;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 
-class ContentTypeController extends Controller implements HasMiddleware
+class PostTypeController extends Controller implements HasMiddleware
 {
   public function __construct()
   {
-    $this->relations = ['contents'];
+    $this->relations = ['posts'];
   }
   public static function middleware(): array
   {
@@ -30,49 +30,49 @@ class ContentTypeController extends Controller implements HasMiddleware
    */
   public function index(): AnonymousResourceCollection
   {
-    $this->checkPermission(EPermissions::P_CONTENT_TYPE_INDEX);
-    return ContentTypeResource::collection($this->loadRelationships(ContentType::query())->latest()->paginate());
+    $this->checkPermission(EPermissions::P_POST_TYPE_INDEX);
+    return PostTypeResource::collection($this->loadRelationships(PostType::query())->latest()->paginate());
   }
 
   /**
    * Store a newly created resource in storage.
    */
-  public function store(Request $request): ContentTypeResource
+  public function store(Request $request): PostTypeResource
   {
-    $this->checkPermission(EPermissions::P_CONTENT_TYPE_STORE);
-    $data = ContentType::create([
+    $this->checkPermission(EPermissions::P_POST_TYPE_STORE);
+    $data = PostType::create([
       ...$request->validate([
         'name' => 'required|string|max:255',
         'code' => 'required|string|max:255|unique:code_types',
         'description' => 'nullable|string',
       ]),
     ]);
-    return new ContentTypeResource($this->loadRelationships($data));
+    return new PostTypeResource($this->loadRelationships($data));
   }
 
   /**
    * Display the specified resource.
    */
-  public function show(string $code): ContentTypeResource
+  public function show(string $code): PostTypeResource
   {
-    $this->checkPermission(EPermissions::P_CONTENT_TYPE_SHOW);
-    return new ContentTypeResource($this->loadRelationships(ContentType::query()->where('code', $code)->first()));
+    $this->checkPermission(EPermissions::P_POST_TYPE_SHOW);
+    return new PostTypeResource($this->loadRelationships(PostType::query()->where('code', $code)->first()));
   }
 
   /**
    * Update the specified resource in storage.
    */
-  public function update(Request $request, string $code): ContentTypeResource
+  public function update(Request $request, string $code): PostTypeResource
   {
-    $this->checkPermission(EPermissions::P_CONTENT_TYPE_UPDATE);
-    $data = ContentType::query()->where('code', $code)->first();
+    $this->checkPermission(EPermissions::P_POST_TYPE_UPDATE);
+    $data = PostType::query()->where('code', $code)->first();
     $data->update(
       $request->validate([
         'name' => 'sometimes|string|max:255',
         'description' => 'nullable|string',
       ])
     );
-    return new ContentTypeResource($this->loadRelationships($data));
+    return new PostTypeResource($this->loadRelationships($data));
   }
 
   /**
@@ -80,10 +80,10 @@ class ContentTypeController extends Controller implements HasMiddleware
    */
   public function destroy(string $code): JsonResponse
   {
-    $this->checkPermission(EPermissions::P_CONTENT_TYPE_DESTROY);
-    ContentType::query()->where('code', $code)->first()->delete();
+    $this->checkPermission(EPermissions::P_POST_TYPE_DESTROY);
+    PostType::query()->where('code', $code)->first()->delete();
     return response()->json([
-      'message' => 'Content Type deleted successfully'
+      'message' => 'Post Type deleted successfully'
     ]);
   }
 }

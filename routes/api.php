@@ -20,3 +20,6 @@ Route::apiResource('codes', \App\Http\Controllers\Api\Base\CodeController::class
 
 Route::apiResource('contents/types', \App\Http\Controllers\Api\Base\ContentTypeController::class);
 Route::apiResource('contents', \App\Http\Controllers\Api\Base\ContentController::class);
+
+Route::apiResource('posts/types', \App\Http\Controllers\Api\Base\PostTypeController::class);
+Route::apiResource('posts', \App\Http\Controllers\Api\Base\PostController::class);

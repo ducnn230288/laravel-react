@@ -6,11 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Enums\EPermissions;
 use App\Http\Resources\Base\ParameterResource;
 use App\Models\Base\Parameter;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ParameterController extends Controller implements HasMiddleware
 {

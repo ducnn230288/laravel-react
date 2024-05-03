@@ -19,7 +19,7 @@ class DataResource extends JsonResource
         'name' => $this->name,
         'image' => $this->image,
         'order' => $this->order,
-        'type_data' => $this->type_data,
+        'type_code' => $this->type_code,
         'type' => new DataTypeResource($this->whenLoaded('type')),
       ];
     }

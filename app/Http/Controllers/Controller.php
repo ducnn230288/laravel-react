@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Enums\Permissions;
+use App\Http\Enums\EPermissions;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder as QueryBuilder;
@@ -10,10 +10,10 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
 abstract class Controller
 {
   public array $relations = [];
-  public function checkPermission(Permissions $permission)
+  public function checkPermission(EPermissions $ePermission)
   {
     $role = auth()->user()->load(['role'])->role;
-    if (!$role || (!$role->is_system_admin && !in_array($permission->value, $role->permissions))) return abort(403, 'You are not authorized');
+    if (!$role || (!$role->is_system_admin && !in_array($ePermission->value, $role->permissions))) return abort(403, 'You are not authorized');
   }
 
   public function loadRelationships(

@@ -22,7 +22,7 @@ class DataFactory extends Factory
         'name' => $this->faker->unique()->sentence(2),
         'image' => $this->faker->imageUrl,
         'order' => $this->faker->numberBetween(),
-        'type_data' => DataType::factory()
+        'type_code' => DataType::factory()
       ];
     }
 }

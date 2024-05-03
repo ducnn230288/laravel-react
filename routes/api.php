@@ -18,5 +18,5 @@ Route::apiResource('parameters', \App\Http\Controllers\Api\Base\ParameterControl
 Route::apiResource('codes/types', \App\Http\Controllers\Api\Base\CodeTypeController::class)->scoped(['code' => 'type']);
 Route::apiResource('codes', \App\Http\Controllers\Api\Base\CodeController::class);
 
-Route::apiResource('data/types', \App\Http\Controllers\Api\Base\CodeTypeController::class)->scoped(['data' => 'type']);
-Route::apiResource('data', \App\Http\Controllers\Api\Base\CodeController::class);
+Route::apiResource('data/types', \App\Http\Controllers\Api\Base\DataTypeController::class)->scoped(['data' => 'type2']);
+Route::apiResource('data', \App\Http\Controllers\Api\Base\DataController::class);

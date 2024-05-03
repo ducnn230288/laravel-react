@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\Base;
 
 use App\Http\Controllers\Controller;
-use App\Http\Enums\Permissions;
+use App\Http\Enums\EPermissions;
 use App\Http\Resources\Base\DataTypeResource;
 use App\Models\Base\DataType;
 use Illuminate\Http\Request;
@@ -16,7 +16,7 @@ class DataTypeController extends Controller implements HasMiddleware
 {
   public function __construct()
   {
-    $this->relations = ['codes'];
+    $this->relations = ['data'];
   }
   public static function middleware(): array
   {
@@ -30,7 +30,7 @@ class DataTypeController extends Controller implements HasMiddleware
    */
   public function index(): AnonymousResourceCollection
   {
-    $this->checkPermission(Permissions::P_DATA_TYPE_INDEX);
+    $this->checkPermission(EPermissions::P_DATA_TYPE_INDEX);
     $query = $this->loadRelationships(DataType::query());
     return DataTypeResource::collection($query->latest()->paginate());
   }
@@ -40,7 +40,7 @@ class DataTypeController extends Controller implements HasMiddleware
    */
   public function store(Request $request): DataTypeResource
   {
-    $this->checkPermission(Permissions::P_DATA_TYPE_STORE);
+    $this->checkPermission(EPermissions::P_DATA_TYPE_STORE);
     $event = DataType::create([
       ...$request->validate([
         'name' => 'required|string|max:255',
@@ -56,7 +56,7 @@ class DataTypeController extends Controller implements HasMiddleware
    */
   public function show(string $code): DataTypeResource
   {
-    $this->checkPermission(Permissions::P_DATA_TYPE_SHOW);
+    $this->checkPermission(EPermissions::P_DATA_TYPE_SHOW);
     return new DataTypeResource($this->loadRelationships(DataType::query()->where('code', $code)->first()));
   }
 
@@ -65,7 +65,7 @@ class DataTypeController extends Controller implements HasMiddleware
    */
   public function update(Request $request, string $code): DataTypeResource
   {
-    $this->checkPermission(Permissions::P_DATA_TYPE_UPDATE);
+    $this->checkPermission(EPermissions::P_DATA_TYPE_UPDATE);
     $codeType = DataType::query()->where('code', $code)->first();
     $codeType->update(
       $request->validate([
@@ -81,7 +81,7 @@ class DataTypeController extends Controller implements HasMiddleware
    */
   public function destroy(string $code): JsonResponse
   {
-    $this->checkPermission(Permissions::P_DATA_TYPE_DESTROY);
+    $this->checkPermission(EPermissions::P_DATA_TYPE_DESTROY);
     DataType::query()->where('code', $code)->first()->delete();
     return response()->json([
       'message' => 'Data Type deleted successfully'

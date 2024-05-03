@@ -2,34 +2,33 @@
 
 namespace Tests;
 
-use App\Http\Enums\Permissions;
 use App\Models\Base\User;
 use App\Models\Base\UserRole;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
-  protected function signIn(Role $role, $permissions = [])
+  protected function signIn(ERole $eRole, $permissions = [])
   {
-    switch ($role) {
-      case Role::SUPER_ADMIN:
+    switch ($eRole) {
+      case ERole::SUPER_ADMIN:
         UserRole::factory()->create(['name' => 'Super Admin', 'code' => 'SUPER-ADMIN', 'is_system_admin' => true, 'permissions' => []]);
         $user = User::factory()->create(['role_code' => 'SUPER-ADMIN', 'email' => 'super-admin@gmail.com']);
         $this->actingAs($user);
         return $user;
-      case Role::ADMIN:
-        UserRole::factory()->create(['name' => 'Admin', 'code' => 'ADMIN', 'is_system_admin' => false, 'permissions' => Permissions::values()]);
+      case ERole::ADMIN:
+        UserRole::factory()->create(['name' => 'Admin', 'code' => 'ADMIN', 'is_system_admin' => false, 'permissions' => $permissions]);
         $user = User::factory()->create(['role_code' => 'ADMIN', 'email' => 'admin@gmail.com']);
         $this->actingAs($user);
         return $user;
-      case Role::USER:
+      case ERole::USER:
         $user = User::factory()->create();
         $this->actingAs($user);
         return $user;
     }
   }
 }
-enum Role: string
+enum ERole: string
 {
   case ADMIN = 'ADMIN';
   case SUPER_ADMIN = 'SUPER-ADMIN';

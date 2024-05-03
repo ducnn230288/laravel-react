@@ -10,10 +10,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Data extends Model
 {
     use HasFactory, HasUuids;
-  protected $fillable = ['type_data', 'name', 'image', 'order'];
+  protected $fillable = ['type_code', 'name', 'image', 'order'];
 
   public function type(): BelongsTo
   {
-    return $this->belongsTo(DataType::class, 'data_code', 'code');
+    return $this->belongsTo(DataType::class, 'type_code', 'code');
   }
 }

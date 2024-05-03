@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Api\Base;
 
 use App\Http\Controllers\Controller;
-use App\Http\Enums\Permissions;
+use App\Http\Enums\EPermissions;
 use App\Http\Resources\Base\DataResource;
 use App\Models\Base\Data;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 class DataController extends Controller implements HasMiddleware
 {
@@ -31,7 +31,7 @@ class DataController extends Controller implements HasMiddleware
    */
   public function index(): AnonymousResourceCollection
   {
-    $this->checkPermission(Permissions::P_DATA_INDEX);
+    $this->checkPermission(EPermissions::P_DATA_INDEX);
     $query = $this->loadRelationships(Data::query());
     return DataResource::collection($query->latest()->paginate());
   }
@@ -41,13 +41,13 @@ class DataController extends Controller implements HasMiddleware
    */
   public function store(Request $request): DataResource
   {
-    $this->checkPermission(Permissions::P_DATA_STORE);
+    $this->checkPermission(EPermissions::P_DATA_STORE);
     $event = Data::create([
       ...$request->validate([
         'name' => 'required|string|max:255',
-        'type_data' => 'required|string|max:255',
+        'type_code' => 'required|string|max:255',
         'image' => 'nullable|string',
-        'order' => 'nullable|decimal:2',
+        'order' => 'nullable|integer',
       ]),
     ]);
     return new DataResource($this->loadRelationships($event));
@@ -56,36 +56,35 @@ class DataController extends Controller implements HasMiddleware
   /**
    * Display the specified resource.
    */
-  public function show(string $code) : DataResource
+  public function show(Data $data) : DataResource
   {
-    $this->checkPermission(Permissions::P_DATA_SHOW);
-    return new DataResource($this->loadRelationships(Data::query()->where('code', $code)->first()));
+    $this->checkPermission(EPermissions::P_DATA_SHOW);
+    return new DataResource($this->loadRelationships($data));
   }
 
   /**
    * Update the specified resource in storage.
    */
-  public function update(Request $request, string $code): DataResource
+  public function update(Request $request, Data $data): DataResource
   {
-    $this->checkPermission(Permissions::P_DATA_UPDATE);
-    $code = Data::query()->where('code', $code)->first();
-    $code->update(
+    $this->checkPermission(EPermissions::P_DATA_UPDATE);
+    $data->update(
       $request->validate([
         'name' => 'sometimes|string|max:255',
         'image' => 'nullable|string',
-        'order' => 'nullable|decimal:2',
+        'order' => 'nullable|integer',
       ])
     );
-    return new DataResource($this->loadRelationships($code));
+    return new DataResource($this->loadRelationships($data));
   }
 
   /**
    * Remove the specified resource from storage.
    */
-  public function destroy(string $code): JsonResponse
+  public function destroy(Data $data): JsonResponse
   {
-    $this->checkPermission(Permissions::P_CODE_DESTROY);
-    Data::query()->where('code', $code)->delete();
+    $this->checkPermission(EPermissions::P_DATA_DESTROY);
+    $data->delete();
     return response()->json([
       'message' => 'Data deleted successfully'
     ]);

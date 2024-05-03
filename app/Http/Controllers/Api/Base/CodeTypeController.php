@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\Base;
 
 use App\Http\Controllers\Controller;
-use App\Http\Enums\Permissions;
+use App\Http\Enums\EPermissions;
 use App\Http\Resources\Base\CodeTypeResource;
 use App\Models\Base\CodeType;
 use Illuminate\Http\JsonResponse;
@@ -30,7 +30,7 @@ class CodeTypeController extends Controller implements HasMiddleware
      */
     public function index(): AnonymousResourceCollection
     {
-      $this->checkPermission(Permissions::P_CODE_TYPE_INDEX);
+      $this->checkPermission(EPermissions::P_CODE_TYPE_INDEX);
         $query = $this->loadRelationships(CodeType::query());
         return CodeTypeResource::collection($query->latest()->paginate());
     }
@@ -40,7 +40,7 @@ class CodeTypeController extends Controller implements HasMiddleware
      */
     public function store(Request $request): CodeTypeResource
     {
-      $this->checkPermission(Permissions::P_CODE_TYPE_STORE);
+      $this->checkPermission(EPermissions::P_CODE_TYPE_STORE);
       $event = CodeType::create([
         ...$request->validate([
           'name' => 'required|string|max:255',
@@ -56,7 +56,7 @@ class CodeTypeController extends Controller implements HasMiddleware
      */
     public function show(string $code): CodeTypeResource
     {
-      $this->checkPermission(Permissions::P_CODE_TYPE_SHOW);
+      $this->checkPermission(EPermissions::P_CODE_TYPE_SHOW);
       return new CodeTypeResource($this->loadRelationships(CodeType::query()->where('code', $code)->first()));
     }
 
@@ -65,7 +65,7 @@ class CodeTypeController extends Controller implements HasMiddleware
      */
     public function update(Request $request, string $code): CodeTypeResource
     {
-      $this->checkPermission(Permissions::P_CODE_TYPE_UPDATE);
+      $this->checkPermission(EPermissions::P_CODE_TYPE_UPDATE);
       $codeType = CodeType::query()->where('code', $code)->first();
       $codeType->update(
         $request->validate([
@@ -81,7 +81,7 @@ class CodeTypeController extends Controller implements HasMiddleware
      */
     public function destroy(string $code): JsonResponse
     {
-      $this->checkPermission(Permissions::P_CODE_TYPE_DESTROY);
+      $this->checkPermission(EPermissions::P_CODE_TYPE_DESTROY);
       CodeType::query()->where('code', $code)->first()->delete();
       return response()->json([
         'message' => 'Code Type deleted successfully'

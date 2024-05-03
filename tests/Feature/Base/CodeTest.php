@@ -2,89 +2,102 @@
 
 namespace Base;
 
+use App\Http\Enums\EPermissions;
 use App\Models\Base\Code;
 use App\Models\Base\CodeType;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Tests\Role;
+use Tests\ERole;
 use Tests\TestCase;
 
 class CodeTest extends TestCase
 {
   use WithFaker, RefreshDatabase;
 
-  public function test_code_super_admin()
+  public function test_super_admin()
   {
-    $this->code(Role::SUPER_ADMIN);
+    $this->base(ERole::SUPER_ADMIN);
   }
 
-  public function test_code_admin()
+  public function test_admin()
   {
-    $this->code(Role::ADMIN);
+    $this->base(ERole::ADMIN, [
+      EPermissions::P_CODE_TYPE_INDEX->value,
+      EPermissions::P_CODE_TYPE_STORE->value,
+      EPermissions::P_CODE_TYPE_SHOW->value,
+      EPermissions::P_CODE_TYPE_UPDATE->value,
+      EPermissions::P_CODE_TYPE_DESTROY->value,
+
+      EPermissions::P_CODE_INDEX->value,
+      EPermissions::P_CODE_STORE->value,
+      EPermissions::P_CODE_SHOW->value,
+      EPermissions::P_CODE_UPDATE->value,
+      EPermissions::P_CODE_DESTROY->value,
+    ]);
   }
 
-  public function test_code_user()
+  public function test_user()
   {
-    $this->code(Role::USER);
+    $this->base(ERole::USER);
   }
 
-  public function code(Role $role): void
+  private function base(ERole $eRole, $permissions = []): void
   {
-    $this->signIn($role);
+    $this->signIn($eRole, $permissions);
 
-    $data = CodeType::factory()->raw();
-    $this->post('/api/codes/types/', $data)->assertStatus($role !== Role::USER ? 201 : 403);
-    if ($role !== Role::USER) $this->assertDatabaseHas('code_types', $data);
+    $type = CodeType::factory()->raw();
+    $this->post('/api/codes/types/', $type)->assertStatus($eRole !== ERole::USER ? 201 : 403);
+    if ($eRole !== ERole::USER) $this->assertDatabaseHas('code_types', $type);
 
-    $res = $this->get('/api/codes/types/')->assertStatus($role !== Role::USER ? 200 : 403);
-    if ($role !== Role::USER) {
+    $res = $this->get('/api/codes/types/')->assertStatus($eRole !== ERole::USER ? 200 : 403);
+    if ($eRole !== ERole::USER) {
+      $this->assertCount(1, $res['data']);
+      foreach($type as $key=>$value) {
+        $this->assertEquals($value, $res['data'][0][$key]);
+      }
+    }
+
+    $type = CodeType::factory()->raw(['code' => $type['code']]);
+    $this->put('/api/codes/types/' . $type['code'], $type)->assertStatus($eRole !== ERole::USER ? 200 : 403);
+    if ($eRole !== ERole::USER) $this->assertDatabaseHas('code_types', $type);
+
+    $data = Code::factory()->raw(['type_code' => $type['code']]);
+    $this->post('/api/codes/', $data)->assertStatus($eRole !== ERole::USER ? 201 : 403);
+    if ($eRole !== ERole::USER) $this->assertDatabaseHas('codes', $data);
+
+    $res = $this->get('/api/codes/')->assertStatus($eRole !== ERole::USER ? 200 : 403);
+    if ($eRole !== ERole::USER) {
       $this->assertCount(1, $res['data']);
       foreach($data as $key=>$value) {
         $this->assertEquals($value, $res['data'][0][$key]);
       }
     }
 
-    $data = CodeType::factory()->raw(['code' => $data['code']]);
-    $this->put('/api/codes/types/' . $data['code'], $data)->assertStatus($role !== Role::USER ? 200 : 403);
-    if ($role !== Role::USER) $this->assertDatabaseHas('code_types', $data);
-
-    $code = Code::factory()->raw(['type_code' => $data['code']]);
-    $this->post('/api/codes/', $code)->assertStatus($role !== Role::USER ? 201 : 403);
-    if ($role !== Role::USER) $this->assertDatabaseHas('codes', $code);
-
-    $res = $this->get('/api/codes/')->assertStatus($role !== Role::USER ? 200 : 403);
-    if ($role !== Role::USER) {
-      $this->assertCount(1, $res['data']);
-      foreach($code as $key=>$value) {
-        $this->assertEquals($value, $res['data'][0][$key]);
-      }
-    }
-
-    $res = $this->get('/api/codes/'. $code['code']. '?include=type')->assertStatus($role !== Role::USER ? 200 : 403);
-    if ($role !== Role::USER) {
-      foreach($code as $key=>$value) {
+    $res = $this->get('/api/codes/'. $data['code']. '?include=type')->assertStatus($eRole !== ERole::USER ? 200 : 403);
+    if ($eRole !== ERole::USER) {
+      foreach($data as $key=>$value) {
         $this->assertEquals($value, $res['data'][$key]);
       }
-      foreach($data as $key=>$value) {
+      foreach($type as $key=>$value) {
         $this->assertEquals($value, $res['data']['type'][$key]);
       }
     }
 
-    $code = Code::factory()->raw(['code' => $code['code'], 'type_code' => $data['code']]);
-    $this->put('/api/codes/' . $code['code'], $code)->assertStatus($role !== Role::USER ? 200 : 403);
-    if ($role !== Role::USER) $this->assertDatabaseHas('codes', $code);
+    $data = Code::factory()->raw(['code' => $data['code'], 'type_code' => $type['code']]);
+    $this->put('/api/codes/' . $data['code'], $data)->assertStatus($eRole !== ERole::USER ? 200 : 403);
+    if ($eRole !== ERole::USER) $this->assertDatabaseHas('codes', $data);
 
-    $res = $this->get('/api/codes/types/'. $data['code'] . '?include=codes')->assertStatus($role !== Role::USER ? 200 : 403);
-    if ($role !== Role::USER) {
-      foreach($code as $key=>$value) {
+    $res = $this->get('/api/codes/types/'. $type['code'] . '?include=codes')->assertStatus($eRole !== ERole::USER ? 200 : 403);
+    if ($eRole !== ERole::USER) {
+      foreach($data as $key=>$value) {
         $this->assertEquals($value, $res['data']['codes'][0][$key]);
       }
     }
 
-    $this->delete('/api/codes/' . $code['code'])->assertStatus($role !== Role::USER ? 200 : 403);
-    if ($role !== Role::USER) $this->assertDatabaseMissing('codes', $code);
+    $this->delete('/api/codes/' . $data['code'])->assertStatus($eRole !== ERole::USER ? 200 : 403);
+    if ($eRole !== ERole::USER) $this->assertDatabaseMissing('codes', $data);
 
-    $this->delete('/api/codes/types/' . $data['code'])->assertStatus($role !== Role::USER ? 200 : 403);
-    if ($role !== Role::USER) $this->assertDatabaseMissing('code_types', $data);
+    $this->delete('/api/codes/types/' . $type['code'])->assertStatus($eRole !== ERole::USER ? 200 : 403);
+    if ($eRole !== ERole::USER) $this->assertDatabaseMissing('code_types', $data);
   }
 }

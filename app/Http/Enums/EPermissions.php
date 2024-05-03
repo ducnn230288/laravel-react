@@ -4,7 +4,7 @@ namespace App\Http\Enums;
 
 use App\Http\Traits\EnumToArray;
 
-enum Permissions: string
+enum EPermissions: string
 {
   use EnumToArray;
   case P_USER_INDEX = 'ac0c4f13-776d-4b71-be4d-f9952734a319';

@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('data', function (Blueprint $table) {
           $table->engine = 'InnoDB';
           $table->uuid('id');
-          $table->string('type_data');
-          $table->foreign('type_data')->references('code')->on('data_types')->onDelete('cascade')->onUpdate('cascade');
+          $table->string('type_code');
+          $table->foreign('type_code')->references('code')->on('data_types')->onDelete('cascade')->onUpdate('cascade');
           $table->string('name');
           $table->string('image');
-          $table->decimal('order');
+          $table->integer('order');
           $table->timestamps();
         });
     }

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\Base;
 
 use App\Http\Controllers\Controller;
-use App\Http\Enums\Permissions;
+use App\Http\Enums\EPermissions;
 use App\Http\Resources\Base\UserRoleResource;
 use App\Models\Base\UserRole;
 use Illuminate\Http\JsonResponse;
@@ -30,7 +30,7 @@ class UserRoleController extends Controller implements HasMiddleware
      */
   public function index(): AnonymousResourceCollection
   {
-    $this->checkPermission(Permissions::P_USER_ROLE_INDEX);
+    $this->checkPermission(EPermissions::P_USER_ROLE_INDEX);
     $query = $this->loadRelationships(UserRole::query());
     return UserRoleResource::collection($query->latest()->paginate());
   }
@@ -40,7 +40,7 @@ class UserRoleController extends Controller implements HasMiddleware
      */
     public function store(Request $request): UserRoleResource
     {
-      $this->checkPermission(Permissions::P_USER_ROLE_STORE);
+      $this->checkPermission(EPermissions::P_USER_ROLE_STORE);
       $event = UserRole::create([
         ...$request->validate([
           'name' => 'required|string|max:255',
@@ -59,7 +59,7 @@ class UserRoleController extends Controller implements HasMiddleware
      */
     public function show(string $code): UserRoleResource
     {
-      $this->checkPermission(Permissions::P_USER_ROLE_SHOW);
+      $this->checkPermission(EPermissions::P_USER_ROLE_SHOW);
       return new UserRoleResource($this->loadRelationships(UserRole::query()->where('code', $code)->first()));
     }
 
@@ -68,7 +68,7 @@ class UserRoleController extends Controller implements HasMiddleware
      */
     public function update(Request $request, string $code): UserRoleResource
     {
-      $this->checkPermission(Permissions::P_USER_ROLE_UPDATE);
+      $this->checkPermission(EPermissions::P_USER_ROLE_UPDATE);
       $userRole = UserRole::query()->where('code', $code)->first();
       $userRole->update(
         $request->validate([
@@ -87,7 +87,7 @@ class UserRoleController extends Controller implements HasMiddleware
      */
     public function destroy(string $code): JsonResponse
     {
-      $this->checkPermission(Permissions::P_USER_ROLE_DESTROY);
+      $this->checkPermission(EPermissions::P_USER_ROLE_DESTROY);
       UserRole::query()->where('code', $code)->first()->delete();
       return response()->json([
         'message' => 'User role deleted successfully'

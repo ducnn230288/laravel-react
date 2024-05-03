@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\Base;
 
 use App\Http\Controllers\Controller;
-use App\Http\Enums\Permissions;
+use App\Http\Enums\EPermissions;
 use App\Http\Resources\Base\FileResource;
 use App\Models\Base\File;
 use Illuminate\Http\JsonResponse;
@@ -26,7 +26,7 @@ class FileController extends Controller implements HasMiddleware
      */
     public function index(): AnonymousResourceCollection
     {
-      $this->checkPermission(Permissions::P_FILE_INDEX);
+      $this->checkPermission(EPermissions::P_FILE_INDEX);
       $query = $this->loadRelationships(File::query());
       return FileResource::collection($query->latest()->paginate());
     }
@@ -36,7 +36,7 @@ class FileController extends Controller implements HasMiddleware
      */
     public function store(Request $request): FileResource
     {
-      $this->checkPermission(Permissions::P_FILE_STORE);
+      $this->checkPermission(EPermissions::P_FILE_STORE);
       $userId = $request->user()->id;
       $path = $request->file('file')->store($userId);
 
@@ -52,7 +52,7 @@ class FileController extends Controller implements HasMiddleware
      */
     public function show(File $file): FileResource
     {
-      $this->checkPermission(Permissions::P_FILE_SHOW);
+      $this->checkPermission(EPermissions::P_FILE_SHOW);
       return new FileResource($this->loadRelationships($file));
     }
 
@@ -61,7 +61,7 @@ class FileController extends Controller implements HasMiddleware
      */
     public function update(Request $request, File $file): FileResource
     {
-      $this->checkPermission(Permissions::P_FILE_UPDATE);
+      $this->checkPermission(EPermissions::P_FILE_UPDATE);
       $file->update(
         $request->validate([
           'description' => 'nullable|string',
@@ -76,7 +76,7 @@ class FileController extends Controller implements HasMiddleware
      */
     public function destroy(File $file): JsonResponse
     {
-      $this->checkPermission(Permissions::P_FILE_DESTROY);
+      $this->checkPermission(EPermissions::P_FILE_DESTROY);
       $file->delete();
       return response()->json([
         'message' => 'File deleted successfully'

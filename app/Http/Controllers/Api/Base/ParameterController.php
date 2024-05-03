@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\Base;
 
 use App\Http\Controllers\Controller;
-use App\Http\Enums\Permissions;
+use App\Http\Enums\EPermissions;
 use App\Http\Resources\Base\ParameterResource;
 use App\Models\Base\Parameter;
 use Illuminate\Http\Request;
@@ -26,7 +26,7 @@ class ParameterController extends Controller implements HasMiddleware
      */
   public function index(): AnonymousResourceCollection
   {
-    $this->checkPermission(Permissions::P_PARAMETER_INDEX);
+    $this->checkPermission(EPermissions::P_PARAMETER_INDEX);
     $query = $this->loadRelationships(Parameter::query());
     return ParameterResource::collection($query->latest()->paginate());
   }
@@ -36,7 +36,7 @@ class ParameterController extends Controller implements HasMiddleware
      */
   public function store(Request $request): ParameterResource
   {
-    $this->checkPermission(Permissions::P_PARAMETER_STORE);
+    $this->checkPermission(EPermissions::P_PARAMETER_STORE);
     $event = Parameter::create([
       ...$request->validate([
         'name' => 'required|string|max:255',
@@ -53,7 +53,7 @@ class ParameterController extends Controller implements HasMiddleware
    */
   public function show(string $code) : ParameterResource
   {
-    $this->checkPermission(Permissions::P_PARAMETER_SHOW);
+    $this->checkPermission(EPermissions::P_PARAMETER_SHOW);
     return new ParameterResource($this->loadRelationships(Parameter::query()->where('code', $code)->first()));
   }
 
@@ -62,7 +62,7 @@ class ParameterController extends Controller implements HasMiddleware
    */
   public function update(Request $request, string $code): ParameterResource
   {
-    $this->checkPermission(Permissions::P_PARAMETER_UPDATE);
+    $this->checkPermission(EPermissions::P_PARAMETER_UPDATE);
     $code = Parameter::query()->where('code', $code)->first();
     $code->update(
       $request->validate([
@@ -79,7 +79,7 @@ class ParameterController extends Controller implements HasMiddleware
    */
   public function destroy(string $code): JsonResponse
   {
-    $this->checkPermission(Permissions::P_PARAMETER_DESTROY);
+    $this->checkPermission(EPermissions::P_PARAMETER_DESTROY);
     Parameter::query()->where('code', $code)->delete();
     return response()->json([
       'message' => 'Parameter deleted successfully'

@@ -14,6 +14,6 @@ class DataType extends Model
 
   public function data(): HasMany
   {
-    return $this->hasMany(Data::class, 'data_code', 'code');
+    return $this->hasMany(Data::class, 'type_code', 'code');
   }
 }

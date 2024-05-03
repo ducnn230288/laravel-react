@@ -43,16 +43,16 @@ enum EPermissions: string
   case P_PARAMETER_UPDATE = '3d478437-949b-4ae7-9c21-79cabb1663a3';
   case P_PARAMETER_DESTROY = '275ebda7-3e03-4c93-b352-baa7705528aa';
 
-  case P_DATA_INDEX = '1db70aa0-7541-4433-b2f6-fbd7bf8bf7bb';
-  case P_DATA_STORE = 'c3ab9e11-7ba3-4afd-b5cb-c560362a3144';
-  case P_DATA_SHOW = '94751fbb-65e0-4efa-a124-ed3f641bcfcb';
-  case P_DATA_UPDATE = '99ea12da-5800-4d6d-9e73-60c016a267a9';
-  case P_DATA_DESTROY = '2e8c8772-2505-4683-b6fa-13fa2570eee7';
+  case P_CONTENT_INDEX = '1db70aa0-7541-4433-b2f6-fbd7bf8bf7bb';
+  case P_CONTENT_STORE = 'c3ab9e11-7ba3-4afd-b5cb-c560362a3144';
+  case P_CONTENT_SHOW = '94751fbb-65e0-4efa-a124-ed3f641bcfcb';
+  case P_CONTENT_UPDATE = '99ea12da-5800-4d6d-9e73-60c016a267a9';
+  case P_CONTENT_DESTROY = '2e8c8772-2505-4683-b6fa-13fa2570eee7';
 
-  case P_DATA_TYPE_INDEX = '2712ca04-7e7c-44b6-83c1-b8c7f332a0fb';
-  case P_DATA_TYPE_STORE = '03380c3a-3336-42f4-b8c2-e54084d35655';
-  case P_DATA_TYPE_SHOW = 'f4010557-b3bf-445a-a2fa-2199ce90725b';
-  case P_DATA_TYPE_UPDATE = '00e77095-35ea-4755-bbae-46a1ba78e46e';
-  case P_DATA_TYPE_DESTROY = '0e481286-bd5d-4203-a374-a8f8f8735f33';
+  case P_CONTENT_TYPE_INDEX = '2712ca04-7e7c-44b6-83c1-b8c7f332a0fb';
+  case P_CONTENT_TYPE_STORE = '03380c3a-3336-42f4-b8c2-e54084d35655';
+  case P_CONTENT_TYPE_SHOW = 'f4010557-b3bf-445a-a2fa-2199ce90725b';
+  case P_CONTENT_TYPE_UPDATE = '00e77095-35ea-4755-bbae-46a1ba78e46e';
+  case P_CONTENT_TYPE_DESTROY = '0e481286-bd5d-4203-a374-a8f8f8735f33';
 
 }

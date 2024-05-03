@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('data', function (Blueprint $table) {
-          $table->engine = 'InnoDB';
+        Schema::create('content_languages', function (Blueprint $table) {
           $table->uuid('id');
-          $table->string('type_code');
-          $table->foreign('type_code')->references('code')->on('data_types')->onDelete('cascade')->onUpdate('cascade');
+          $table->string('language');
           $table->string('name');
-          $table->string('image');
-          $table->integer('order');
-          $table->timestamps();
+          $table->text('description');
+          $table->string('position');
+          $table->text('content');
+          $table->foreignUuid('content_id');
+            $table->timestamps();
         });
     }
 
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('data');
+        Schema::dropIfExists('content_languages');
     }
 };

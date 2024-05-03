@@ -1,6 +1,6 @@
 <?php
 
-namespace Base;
+namespace Tests\Feature\Base;
 
 use App\Http\Enums\EPermissions;
 use App\Models\Base\Code;
@@ -43,8 +43,7 @@ class CodeTest extends TestCase
 
   private function base(ERole $eRole, $permissions = []): void
   {
-    $this->signIn($eRole, $permissions);
-
+    $auth = $this->signIn($eRole, $permissions);
     $type = CodeType::factory()->raw();
     $this->post('/api/codes/types/', $type)->assertStatus($eRole !== ERole::USER ? 201 : 403);
     if ($eRole !== ERole::USER) $this->assertDatabaseHas('code_types', $type);

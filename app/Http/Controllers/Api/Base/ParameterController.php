@@ -27,8 +27,7 @@ class ParameterController extends Controller implements HasMiddleware
   public function index(): AnonymousResourceCollection
   {
     $this->checkPermission(EPermissions::P_PARAMETER_INDEX);
-    $query = $this->loadRelationships(Parameter::query());
-    return ParameterResource::collection($query->latest()->paginate());
+    return ParameterResource::collection($this->loadRelationships(Parameter::query())->latest()->paginate());
   }
 
     /**
@@ -37,7 +36,7 @@ class ParameterController extends Controller implements HasMiddleware
   public function store(Request $request): ParameterResource
   {
     $this->checkPermission(EPermissions::P_PARAMETER_STORE);
-    $event = Parameter::create([
+    $data = Parameter::create([
       ...$request->validate([
         'name' => 'required|string|max:255',
         'code' => 'required|string|max:255|unique:parameters',
@@ -45,7 +44,7 @@ class ParameterController extends Controller implements HasMiddleware
         'en' => 'nullable|string',
       ]),
     ]);
-    return new ParameterResource($this->loadRelationships($event));
+    return new ParameterResource($this->loadRelationships($data));
   }
 
   /**
@@ -63,15 +62,15 @@ class ParameterController extends Controller implements HasMiddleware
   public function update(Request $request, string $code): ParameterResource
   {
     $this->checkPermission(EPermissions::P_PARAMETER_UPDATE);
-    $code = Parameter::query()->where('code', $code)->first();
-    $code->update(
+    $data = Parameter::query()->where('code', $code)->first();
+    $data->update(
       $request->validate([
         'name' => 'sometimes|string|max:255',
         'vn' => 'nullable|string',
         'en' => 'nullable|string',
       ])
     );
-    return new ParameterResource($this->loadRelationships($code));
+    return new ParameterResource($this->loadRelationships($data));
   }
 
   /**

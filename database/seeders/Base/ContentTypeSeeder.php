@@ -2,17 +2,17 @@
 
 namespace Database\Seeders\Base;
 
-use App\Models\Base\DataType;
+use App\Models\Base\ContentType;
 use Illuminate\Database\Seeder;
 
-class DataTypeSeeder extends Seeder
+class ContentTypeSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-      $datas = array(
+      $list = array(
         ['name' => 'Missions', 'code' => 'MISSIONS'],
         ['name' => 'Services', 'code' => 'SERVICES'],
         ['name' => 'Values', 'code' => 'VALUES'],
@@ -20,8 +20,8 @@ class DataTypeSeeder extends Seeder
         ['name' => 'techniques', 'code' => 'TECHNIQUES'],
         ['name' => 'Partners', 'code' => 'PARTNERS'],
       );
-      foreach ($datas as $data) {
-        DataType::factory()->create($data);
+      foreach ($list as $item) {
+        ContentType::factory()->create($item);
       }
     }
 }

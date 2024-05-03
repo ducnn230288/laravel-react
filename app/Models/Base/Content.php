@@ -7,13 +7,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Data extends Model
+class Content extends Model
 {
     use HasFactory, HasUuids;
   protected $fillable = ['type_code', 'name', 'image', 'order'];
 
   public function type(): BelongsTo
   {
-    return $this->belongsTo(DataType::class, 'type_code', 'code');
+    return $this->belongsTo(ContentType::class, 'type_code', 'code');
   }
 }

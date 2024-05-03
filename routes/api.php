@@ -15,8 +15,8 @@ Route::apiResource('files', \App\Http\Controllers\Api\Base\FileController::class
 Route::apiResource('parameters', \App\Http\Controllers\Api\Base\ParameterController::class);
 
 
-Route::apiResource('codes/types', \App\Http\Controllers\Api\Base\CodeTypeController::class)->scoped(['code' => 'type']);
+Route::apiResource('codes/types', \App\Http\Controllers\Api\Base\CodeTypeController::class);
 Route::apiResource('codes', \App\Http\Controllers\Api\Base\CodeController::class);
 
-Route::apiResource('data/types', \App\Http\Controllers\Api\Base\DataTypeController::class)->scoped(['data' => 'type2']);
-Route::apiResource('data', \App\Http\Controllers\Api\Base\DataController::class);
+Route::apiResource('contents/types', \App\Http\Controllers\Api\Base\ContentTypeController::class);
+Route::apiResource('contents', \App\Http\Controllers\Api\Base\ContentController::class);

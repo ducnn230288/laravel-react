@@ -2,14 +2,14 @@
 
 namespace Database\Factories\Base;
 
-use App\Models\Base\DataType;
+use App\Models\Base\ContentType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Base\Data>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Base\Content>
  */
-class DataFactory extends Factory
+class ContentFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -22,7 +22,7 @@ class DataFactory extends Factory
         'name' => $this->faker->unique()->sentence(2),
         'image' => $this->faker->imageUrl,
         'order' => $this->faker->numberBetween(),
-        'type_code' => DataType::factory()
+        'type_code' => ContentType::factory()
       ];
     }
 }

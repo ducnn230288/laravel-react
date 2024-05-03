@@ -11,12 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('data_types', function (Blueprint $table) {
+        Schema::create('contents', function (Blueprint $table) {
+          $table->engine = 'InnoDB';
           $table->uuid('id');
+          $table->string('type_code');
+          $table->foreign('type_code')->references('code')->on('content_types')->onDelete('cascade')->onUpdate('cascade');
           $table->string('name');
-          $table->string('code')->unique();
-          $table->text('description')->nullable();
-            $table->timestamps();
+          $table->string('image');
+          $table->integer('order');
+          $table->timestamps();
         });
     }
 
@@ -25,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('data_types');
+        Schema::dropIfExists('contents');
     }
 };

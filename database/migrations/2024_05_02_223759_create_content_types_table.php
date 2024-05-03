@@ -11,14 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('data_languages', function (Blueprint $table) {
+        Schema::create('content_types', function (Blueprint $table) {
           $table->uuid('id');
-          $table->string('language');
           $table->string('name');
-          $table->text('description');
-          $table->string('position');
-          $table->text('content');
-          $table->foreignUuid('data_id');
+          $table->string('code')->unique();
+          $table->text('description')->nullable();
             $table->timestamps();
         });
     }
@@ -28,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('data_languages');
+        Schema::dropIfExists('content_types');
     }
 };

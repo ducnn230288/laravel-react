@@ -31,8 +31,7 @@ class CodeTypeController extends Controller implements HasMiddleware
     public function index(): AnonymousResourceCollection
     {
       $this->checkPermission(EPermissions::P_CODE_TYPE_INDEX);
-        $query = $this->loadRelationships(CodeType::query());
-        return CodeTypeResource::collection($query->latest()->paginate());
+        return CodeTypeResource::collection($this->loadRelationships(CodeType::query())->latest()->paginate());
     }
 
     /**
@@ -41,14 +40,14 @@ class CodeTypeController extends Controller implements HasMiddleware
     public function store(Request $request): CodeTypeResource
     {
       $this->checkPermission(EPermissions::P_CODE_TYPE_STORE);
-      $event = CodeType::create([
+      $data = CodeType::create([
         ...$request->validate([
           'name' => 'required|string|max:255',
           'code' => 'required|string|max:255|unique:code_types',
           'description' => 'nullable|string',
         ]),
       ]);
-      return new CodeTypeResource($this->loadRelationships($event));
+      return new CodeTypeResource($this->loadRelationships($data));
     }
 
     /**
@@ -66,14 +65,14 @@ class CodeTypeController extends Controller implements HasMiddleware
     public function update(Request $request, string $code): CodeTypeResource
     {
       $this->checkPermission(EPermissions::P_CODE_TYPE_UPDATE);
-      $codeType = CodeType::query()->where('code', $code)->first();
-      $codeType->update(
+      $data = CodeType::query()->where('code', $code)->first();
+      $data->update(
         $request->validate([
           'name' => 'sometimes|string|max:255',
           'description' => 'nullable|string',
         ])
       );
-      return new CodeTypeResource($this->loadRelationships($codeType));
+      return new CodeTypeResource($this->loadRelationships($data));
     }
 
     /**

@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Storage;
 
 class FileController extends Controller implements HasMiddleware
 {
@@ -27,8 +28,7 @@ class FileController extends Controller implements HasMiddleware
     public function index(): AnonymousResourceCollection
     {
       $this->checkPermission(EPermissions::P_FILE_INDEX);
-      $query = $this->loadRelationships(File::query());
-      return FileResource::collection($query->latest()->paginate());
+      return FileResource::collection($this->loadRelationships(File::query())->latest()->paginate());
     }
 
     /**
@@ -40,11 +40,11 @@ class FileController extends Controller implements HasMiddleware
       $userId = $request->user()->id;
       $path = $request->file('file')->store($userId);
 
-      $event = File::create([
+      $data = File::create([
         'path' => $path,
         'user_id' => $userId
       ]);
-      return new FileResource($this->loadRelationships($event));
+      return new FileResource($this->loadRelationships($data));
     }
 
     /**
@@ -77,6 +77,7 @@ class FileController extends Controller implements HasMiddleware
     public function destroy(File $file): JsonResponse
     {
       $this->checkPermission(EPermissions::P_FILE_DESTROY);
+      Storage::delete($file->path);
       $file->delete();
       return response()->json([
         'message' => 'File deleted successfully'

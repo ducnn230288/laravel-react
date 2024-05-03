@@ -31,8 +31,7 @@ class UserRoleController extends Controller implements HasMiddleware
   public function index(): AnonymousResourceCollection
   {
     $this->checkPermission(EPermissions::P_USER_ROLE_INDEX);
-    $query = $this->loadRelationships(UserRole::query());
-    return UserRoleResource::collection($query->latest()->paginate());
+    return UserRoleResource::collection($this->loadRelationships(UserRole::query())->latest()->paginate());
   }
 
     /**
@@ -41,7 +40,7 @@ class UserRoleController extends Controller implements HasMiddleware
     public function store(Request $request): UserRoleResource
     {
       $this->checkPermission(EPermissions::P_USER_ROLE_STORE);
-      $event = UserRole::create([
+      $data = UserRole::create([
         ...$request->validate([
           'name' => 'required|string|max:255',
           'code' => 'required|string|max:255|unique:user_roles',
@@ -51,7 +50,7 @@ class UserRoleController extends Controller implements HasMiddleware
           'permissions.*' => 'distinct|uuid',
         ]),
       ]);
-      return new UserRoleResource($this->loadRelationships($event));
+      return new UserRoleResource($this->loadRelationships($data));
     }
 
     /**
@@ -69,8 +68,8 @@ class UserRoleController extends Controller implements HasMiddleware
     public function update(Request $request, string $code): UserRoleResource
     {
       $this->checkPermission(EPermissions::P_USER_ROLE_UPDATE);
-      $userRole = UserRole::query()->where('code', $code)->first();
-      $userRole->update(
+      $data = UserRole::query()->where('code', $code)->first();
+      $data->update(
         $request->validate([
           'name' => 'sometimes|string|max:255',
           'description' => 'nullable|string',
@@ -79,7 +78,7 @@ class UserRoleController extends Controller implements HasMiddleware
           'permissions.*' => 'distinct|uuid',
         ])
       );
-      return new UserRoleResource($this->loadRelationships($userRole));
+      return new UserRoleResource($this->loadRelationships($data));
     }
 
     /**

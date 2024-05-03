@@ -2,13 +2,13 @@
 
 namespace Database\Factories\Base;
 
+use App\Models\Base\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Base\DataType>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Base\File>
  */
-class DataTypeFactory extends Factory
+class FileFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,11 +17,11 @@ class DataTypeFactory extends Factory
      */
     public function definition(): array
     {
-      $name = $this->faker->unique()->sentence(2);
       return [
-        'name' => $name,
-        'code' => strtoupper(Str::slug($name)),
+        'path' => $this->faker->imageUrl(),
         'description' => $this->faker->text,
+        'is_active' => false,
+        'user_id' => User::factory(),
       ];
     }
 }

@@ -36,7 +36,7 @@ class ParameterTest extends TestCase
 
   private function base(ERole $eRole, $permissions = []): void
   {
-    $this->signIn($eRole, $permissions);
+    $auth = $this->signIn($eRole, $permissions);
 
     $data = Parameter::factory()->raw();
     $this->post('/api/parameters/', $data)->assertStatus($eRole !== ERole::USER ? 201 : 403);

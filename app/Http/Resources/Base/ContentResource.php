@@ -5,7 +5,7 @@ namespace App\Http\Resources\Base;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class DataResource extends JsonResource
+class ContentResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -20,7 +20,7 @@ class DataResource extends JsonResource
         'image' => $this->image,
         'order' => $this->order,
         'type_code' => $this->type_code,
-        'type' => new DataTypeResource($this->whenLoaded('type')),
+        'type' => new ContentTypeResource($this->whenLoaded('type')),
       ];
     }
 }

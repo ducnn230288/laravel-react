@@ -13,6 +13,7 @@ use Tests\TestCase;
 class UserTest extends TestCase
 {
   use WithFaker, RefreshDatabase;
+
   public function test_super_admin()
   {
     $this->base(ERole::SUPER_ADMIN);

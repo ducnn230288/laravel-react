@@ -32,8 +32,7 @@ class CodeController extends Controller implements HasMiddleware
     public function index(): AnonymousResourceCollection
     {
       $this->checkPermission(EPermissions::P_CODE_INDEX);
-      $query = $this->loadRelationships(Code::query());
-      return CodeResource::collection($query->latest()->paginate());
+      return CodeResource::collection($this->loadRelationships(Code::query())->latest()->paginate());
     }
 
     /**
@@ -42,7 +41,7 @@ class CodeController extends Controller implements HasMiddleware
     public function store(Request $request): CodeResource
     {
       $this->checkPermission(EPermissions::P_CODE_STORE);
-      $event = Code::create([
+      $data = Code::create([
         ...$request->validate([
           'name' => 'required|string|max:255',
           'type_code' => 'required|string|max:255',
@@ -50,7 +49,7 @@ class CodeController extends Controller implements HasMiddleware
           'description' => 'nullable|string',
         ]),
       ]);
-      return new CodeResource($this->loadRelationships($event));
+      return new CodeResource($this->loadRelationships($data));
     }
 
     /**
@@ -68,14 +67,14 @@ class CodeController extends Controller implements HasMiddleware
     public function update(Request $request, string $code): CodeResource
     {
       $this->checkPermission(EPermissions::P_CODE_UPDATE);
-      $code = Code::query()->where('code', $code)->first();
-      $code->update(
+      $data = Code::query()->where('code', $code)->first();
+      $data->update(
         $request->validate([
           'name' => 'sometimes|string|max:255',
           'description' => 'nullable|string',
         ])
       );
-      return new CodeResource($this->loadRelationships($code));
+      return new CodeResource($this->loadRelationships($data));
     }
 
     /**

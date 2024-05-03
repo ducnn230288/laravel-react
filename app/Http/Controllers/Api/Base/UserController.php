@@ -32,8 +32,7 @@ class UserController extends Controller implements HasMiddleware
   public function index(): AnonymousResourceCollection
   {
     $this->checkPermission(EPermissions::P_USER_INDEX);
-    $query = $this->loadRelationships(User::query());
-    return UserResource::collection($query->latest()->paginate());
+    return UserResource::collection($this->loadRelationships(User::query())->latest()->paginate());
   }
 
   /**
@@ -42,7 +41,7 @@ class UserController extends Controller implements HasMiddleware
   public function store(Request $request): UserResource
   {
     $this->checkPermission(EPermissions::P_USER_STORE);
-    $event = User::create([
+    $data = User::create([
       ...$request->validate([
         'name' => 'required|string|max:255',
         'password' => 'required|string|max:255',
@@ -50,7 +49,7 @@ class UserController extends Controller implements HasMiddleware
         'email' => 'required|string|unique:users',
       ]),
     ]);
-    return new UserResource($this->loadRelationships($event));
+    return new UserResource($this->loadRelationships($data));
   }
 
   /**

@@ -23,7 +23,7 @@ class AddressWardFactory extends Factory
         'name' => $name,
         'code' => strtoupper(Str::slug($name)),
         'description' => null,
-        'district_code' => AddressDistrict::factory()
+        'district_code' => AddressDistrict::factory()->create()->code
       ];
     }
 }

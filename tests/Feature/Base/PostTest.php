@@ -36,10 +36,10 @@ class PostTest extends TestCase
     ]);
   }
 
-//  public function test_user()
-//  {
-//    $this->base(ERole::USER);
-//  }
+  public function test_user()
+  {
+    $this->base(ERole::USER);
+  }
 
   private function base(ERole $eRole, $permissions = []): void
   {
@@ -71,8 +71,9 @@ class PostTest extends TestCase
         $this->assertEquals($value, $res['data'][0][$key]);
       }
     }
-    $id = ERole::USER ? $res['data'][0]['id'] : $auth['id'];
 
+    if ($eRole === ERole::USER) $data = Post::factory()->create()->getAttributes();
+    $id = $eRole !== ERole::USER ? $res['data'][0]['id'] : $data['id'];
     $res = $this->get('/api/posts/'. $id. '?include=type')->assertStatus($eRole !== ERole::USER ? 200 : 403);
     if ($eRole !== ERole::USER) {
       foreach($data as $key=>$value) {

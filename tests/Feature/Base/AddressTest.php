@@ -50,10 +50,10 @@ class AddressTest extends TestCase
     ]);
   }
 
-//  public function test_user()
-//  {
-//    $this->base(ERole::USER);
-//  }
+  public function test_user()
+  {
+    $this->base(ERole::USER);
+  }
 
   private function base(ERole $eRole, $permissions = []): void
   {
@@ -151,9 +151,9 @@ class AddressTest extends TestCase
         $this->assertEquals($value, $res['data'][0][$key]);
       }
     }
-    $id = ERole::USER ? $res['data'][0]['id'] : $auth['id'];
 
-    if ($eRole === ERole::USER) $address = Address::factory()->create(['user_id' => $auth['id'], 'province_code' => $province['code'], 'district_code' => $district['code'], 'ward_code' => $ward['code']])->getAttributes();
+    if ($eRole === ERole::USER) $address = Address::factory()->create(['user_id' => $auth['id']])->getAttributes();
+    $id = $eRole !== ERole::USER ? $res['data'][0]['id'] : $address['id'];
     $this->put('/api/addresses/' . $id, $address)->assertStatus($eRole !== ERole::USER ? 200 : 403);
     if ($eRole !== ERole::USER) $this->assertDatabaseHas('addresses', $address);
 

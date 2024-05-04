@@ -23,7 +23,7 @@ class AddressDistrictFactory extends Factory
         'name' => $name,
         'code' => strtoupper(Str::slug($name)),
         'description' => null,
-        'province_code' => AddressProvince::factory()
+        'province_code' => AddressProvince::factory()->create()->code
       ];
     }
 }

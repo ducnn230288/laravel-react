@@ -22,7 +22,7 @@ class ContentFactory extends Factory
         'name' => $this->faker->unique()->sentence(2),
         'image' => $this->faker->imageUrl,
         'order' => $this->faker->numberBetween(),
-        'type_code' => ContentType::factory()
+        'type_code' => ContentType::factory()->create()->code
       ];
     }
 }

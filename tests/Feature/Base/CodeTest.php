@@ -97,6 +97,6 @@ class CodeTest extends TestCase
     if ($eRole !== ERole::USER) $this->assertDatabaseMissing('codes', $data);
 
     $this->delete('/api/codes/types/' . $type['code'])->assertStatus($eRole !== ERole::USER ? 200 : 403);
-    if ($eRole !== ERole::USER) $this->assertDatabaseMissing('code_types', $data);
+    if ($eRole !== ERole::USER) $this->assertDatabaseMissing('code_types', $type);
   }
 }

@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Base\User;
+use Database\Seeders\Base\AddressSeeder;
 use Database\Seeders\Base\CodeSeeder;
 use Database\Seeders\Base\CodeTypeSeeder;
 use Database\Seeders\Base\ContentTypeSeeder;
@@ -28,5 +28,6 @@ class DatabaseSeeder extends Seeder
       $this->call(ParameterSeeder::class);
       $this->call(ContentTypeSeeder::class);
       $this->call(PostTypeSeeder::class);
+      $this->call(AddressSeeder::class);
     }
 }

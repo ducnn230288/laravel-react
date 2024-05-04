@@ -13,7 +13,7 @@ class CodeSeeder extends Seeder
      */
     public function run(): void
     {
-      $positions = array(
+      $list = array(
         ['name' => 'President & CEO', 'code' => 'PC', 'type_code' => 'POSITION'],
         ['name' => 'CCO', 'code' => 'CCO', 'type_code' => 'POSITION'],
         ['name' => 'Vice Director', 'code' => 'VD', 'type_code' => 'POSITION'],
@@ -29,8 +29,8 @@ class CodeSeeder extends Seeder
         ['name' => 'Business Analyst', 'code' => 'BA', 'type_code' => 'POSITION'],
         ['name' => 'Tester', 'code' => 'TEST', 'type_code' => 'POSITION'],
       );
-      foreach ($positions as $position) {
-        Code::factory()->create($position);
+      foreach ($list as $item) {
+        Code::factory()->create($item);
       }
     }
 }

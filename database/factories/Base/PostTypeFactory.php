@@ -21,7 +21,7 @@ class PostTypeFactory extends Factory
       return [
         'name' => $name,
         'code' => strtoupper(Str::slug($name)),
-        'description' => $this->faker->text,
+        'description' => null,
       ];
     }
 }

@@ -19,7 +19,7 @@ class FileFactory extends Factory
     {
       return [
         'path' => $this->faker->imageUrl(),
-        'description' => $this->faker->text,
+        'description' => null,
         'is_active' => false,
         'user_id' => User::factory(),
       ];

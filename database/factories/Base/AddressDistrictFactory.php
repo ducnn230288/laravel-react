@@ -2,14 +2,14 @@
 
 namespace Database\Factories\Base;
 
-use App\Models\Base\CodeType;
+use App\Models\Base\AddressProvince;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Base\Code>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Base\AddressDistrict>
  */
-class CodeFactory extends Factory
+class AddressDistrictFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -23,7 +23,7 @@ class CodeFactory extends Factory
         'name' => $name,
         'code' => strtoupper(Str::slug($name)),
         'description' => null,
-        'type_code' => CodeType::factory()
+        'province_code' => AddressProvince::factory()
       ];
     }
 }

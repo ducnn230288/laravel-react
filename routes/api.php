@@ -23,3 +23,8 @@ Route::apiResource('contents', \App\Http\Controllers\Api\Base\ContentController:
 
 Route::apiResource('posts/types', \App\Http\Controllers\Api\Base\PostTypeController::class);
 Route::apiResource('posts', \App\Http\Controllers\Api\Base\PostController::class);
+
+Route::apiResource('addresses/provinces', \App\Http\Controllers\Api\Base\AddressProvinceController::class);
+Route::apiResource('addresses/districts', \App\Http\Controllers\Api\Base\AddressDistrictController::class);
+Route::apiResource('addresses/wards', \App\Http\Controllers\Api\Base\AddressWardController::class);
+Route::apiResource('addresses', \App\Http\Controllers\Api\Base\AddressController::class);

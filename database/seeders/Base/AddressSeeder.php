@@ -6,7 +6,7 @@ use App\Models\Base\AddressDistrict;
 use App\Models\Base\AddressProvince;
 use App\Models\Base\AddressWard;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class AddressSeeder extends Seeder
 {
@@ -15,7 +15,7 @@ class AddressSeeder extends Seeder
      */
     public function run(): void
     {
-      $provinces = json_decode(Storage::disk('local')->get('province.json'));
+      $provinces = json_decode(File::get('database/json/provinces.json'));
       foreach ($provinces as $province) {
         $districts = $province->districts;
         unset($province->districts);

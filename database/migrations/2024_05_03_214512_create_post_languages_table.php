@@ -17,7 +17,7 @@ return new class extends Migration
           $table->string('name');
           $table->text('description');
           $table->string('slug');
-          $table->text('content');
+          $table->longText('content');
           $table->foreignUuid('post_id');
             $table->timestamps();
         });

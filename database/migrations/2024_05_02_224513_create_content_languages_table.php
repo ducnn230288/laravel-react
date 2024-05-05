@@ -17,7 +17,7 @@ return new class extends Migration
           $table->string('name');
           $table->text('description');
           $table->string('position');
-          $table->text('content');
+          $table->longText('content');
           $table->foreignUuid('content_id');
             $table->timestamps();
         });

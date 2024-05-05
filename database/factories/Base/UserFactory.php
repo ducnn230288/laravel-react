@@ -27,8 +27,8 @@ class UserFactory extends Factory
         return [
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
-            'password' => 'password',
-          'role_code' => UserRole::factory()
+            'password' => 'Password1!',
+            'role_code' => UserRole::factory()->create()->code
         ];
     }
 

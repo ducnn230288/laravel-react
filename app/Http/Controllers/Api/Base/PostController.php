@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Base;
 
 use App\Http\Controllers\Controller;
 use App\Http\Enums\EPermissions;
+use App\Http\Enums\ETokenAbility;
 use App\Http\Resources\Base\PostResource;
 use App\Models\Base\Post;
 use Illuminate\Http\JsonResponse;
@@ -22,7 +23,7 @@ class PostController extends Controller implements HasMiddleware
   public static function middleware(): array
   {
     return [
-      new Middleware('auth:sanctum'),
+      new Middleware(['auth:sanctum', 'ability:' . ETokenAbility::ACCESS_API->value]),
       new Middleware('throttle:60,1', only: ['store','update','destroy'])
     ];
   }
@@ -32,7 +33,8 @@ class PostController extends Controller implements HasMiddleware
   public function index(): AnonymousResourceCollection
   {
     $this->checkPermission(EPermissions::P_POST_INDEX);
-    return PostResource::collection($this->loadRelationships(Post::query())->latest()->paginate());
+    return PostResource::collection($this->loadRelationships(Post::query())->latest()->paginate())
+      ->additional(['message' => __('messages.Get List Success')]);
   }
 
   /**
@@ -47,7 +49,8 @@ class PostController extends Controller implements HasMiddleware
         'image' => 'nullable|string',
       ]),
     ]);
-    return new PostResource($this->loadRelationships($data));
+    return (new PostResource($this->loadRelationships($data)))
+      ->additional(['message' => __('messages.Create Success')]);
   }
 
   /**
@@ -56,7 +59,8 @@ class PostController extends Controller implements HasMiddleware
   public function show(Post $post) : PostResource
   {
     $this->checkPermission(EPermissions::P_POST_SHOW);
-    return new PostResource($this->loadRelationships($post));
+    return (new PostResource($this->loadRelationships($post)))
+      ->additional(['message' => __('messages.Get Detail Success')]);
   }
 
   /**
@@ -71,7 +75,8 @@ class PostController extends Controller implements HasMiddleware
         'image' => 'nullable|string',
       ])
     );
-    return new PostResource($this->loadRelationships($post));
+    return (new PostResource($this->loadRelationships($post)))
+      ->additional(['message' => __('messages.Update Success')]);
   }
 
   /**
@@ -81,9 +86,7 @@ class PostController extends Controller implements HasMiddleware
   {
     $this->checkPermission(EPermissions::P_POST_DESTROY);
     $post->delete();
-    return response()->json([
-      'message' => 'Post deleted successfully'
-    ]);
+    return response()->json(['message' => __('messages.Delete Success')]);
   }
 }
 

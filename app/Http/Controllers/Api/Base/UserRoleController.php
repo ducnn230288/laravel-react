@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Base;
 
 use App\Http\Controllers\Controller;
 use App\Http\Enums\EPermissions;
+use App\Http\Enums\ETokenAbility;
 use App\Http\Resources\Base\UserRoleResource;
 use App\Models\Base\UserRole;
 use Illuminate\Http\JsonResponse;
@@ -21,7 +22,7 @@ class UserRoleController extends Controller implements HasMiddleware
   public static function middleware(): array
   {
     return [
-      new Middleware('auth:sanctum'),
+      new Middleware(['auth:sanctum', 'ability:' . ETokenAbility::ACCESS_API->value]),
       new Middleware('throttle:60,1', only: ['store','update','destroy'])
     ];
   }
@@ -31,7 +32,8 @@ class UserRoleController extends Controller implements HasMiddleware
   public function index(): AnonymousResourceCollection
   {
     $this->checkPermission(EPermissions::P_USER_ROLE_INDEX);
-    return UserRoleResource::collection($this->loadRelationships(UserRole::query())->latest()->paginate());
+    return UserRoleResource::collection($this->loadRelationships(UserRole::query())->latest()->paginate())
+      ->additional(['message' => __('messages.Get List Success')]);
   }
 
     /**
@@ -45,12 +47,12 @@ class UserRoleController extends Controller implements HasMiddleware
           'name' => 'required|string|max:255',
           'code' => 'required|string|max:255|unique:user_roles',
           'description' => 'nullable|string',
-          'is_system_admin' => 'boolean',
           'permissions' => 'present|array',
           'permissions.*' => 'distinct|uuid',
         ]),
       ]);
-      return new UserRoleResource($this->loadRelationships($data));
+      return (new UserRoleResource($this->loadRelationships($data)))
+        ->additional(['message' => __('messages.Create Success')]);
     }
 
     /**
@@ -59,7 +61,8 @@ class UserRoleController extends Controller implements HasMiddleware
     public function show(string $code): UserRoleResource
     {
       $this->checkPermission(EPermissions::P_USER_ROLE_SHOW);
-      return new UserRoleResource($this->loadRelationships(UserRole::query()->where('code', $code)->first()));
+      return (new UserRoleResource($this->loadRelationships(UserRole::query()->where('code', $code)->first())))
+        ->additional(['message' => __('messages.Get Detail Success')]);
     }
 
     /**
@@ -73,12 +76,12 @@ class UserRoleController extends Controller implements HasMiddleware
         $request->validate([
           'name' => 'sometimes|string|max:255',
           'description' => 'nullable|string',
-          'is_system_admin' => 'boolean',
           'permissions' => 'sometimes|array',
           'permissions.*' => 'distinct|uuid',
         ])
       );
-      return new UserRoleResource($this->loadRelationships($data));
+      return (new UserRoleResource($this->loadRelationships($data)))
+        ->additional(['message' => __('messages.Update Success')]);
     }
 
     /**
@@ -88,8 +91,6 @@ class UserRoleController extends Controller implements HasMiddleware
     {
       $this->checkPermission(EPermissions::P_USER_ROLE_DESTROY);
       UserRole::query()->where('code', $code)->first()->delete();
-      return response()->json([
-        'message' => 'User role deleted successfully'
-      ]);
+      return response()->json(['message' => __('messages.Delete Success')]);
     }
 }

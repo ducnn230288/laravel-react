@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Base;
 
 use App\Http\Controllers\Controller;
 use App\Http\Enums\EPermissions;
+use App\Http\Enums\ETokenAbility;
 use App\Http\Resources\Base\CodeResource;
 use App\Models\Base\Code;
 use Illuminate\Http\JsonResponse;
@@ -22,7 +23,7 @@ class CodeController extends Controller implements HasMiddleware
   public static function middleware(): array
   {
     return [
-      new Middleware('auth:sanctum'),
+      new Middleware(['auth:sanctum', 'ability:' . ETokenAbility::ACCESS_API->value]),
       new Middleware('throttle:60,1', only: ['store','update','destroy'])
     ];
   }
@@ -32,7 +33,8 @@ class CodeController extends Controller implements HasMiddleware
     public function index(): AnonymousResourceCollection
     {
       $this->checkPermission(EPermissions::P_CODE_INDEX);
-      return CodeResource::collection($this->loadRelationships(Code::query())->latest()->paginate());
+      return CodeResource::collection($this->loadRelationships(Code::query())->latest()->paginate())
+        ->additional(['message' => __('messages.Get List Success')]);
     }
 
     /**
@@ -49,7 +51,8 @@ class CodeController extends Controller implements HasMiddleware
           'description' => 'nullable|string',
         ]),
       ]);
-      return new CodeResource($this->loadRelationships($data));
+      return (new CodeResource($this->loadRelationships($data)))
+        ->additional(['message' => __('messages.Create Success')]);
     }
 
     /**
@@ -58,7 +61,8 @@ class CodeController extends Controller implements HasMiddleware
     public function show(string $code) : CodeResource
     {
       $this->checkPermission(EPermissions::P_CODE_SHOW);
-      return new CodeResource($this->loadRelationships(Code::query()->where('code', $code)->first()));
+      return (new CodeResource($this->loadRelationships(Code::query()->where('code', $code)->first())))
+        ->additional(['message' => __('messages.Get Detail Success')]);
     }
 
     /**
@@ -74,7 +78,8 @@ class CodeController extends Controller implements HasMiddleware
           'description' => 'nullable|string',
         ])
       );
-      return new CodeResource($this->loadRelationships($data));
+      return (new CodeResource($this->loadRelationships($data)))
+        ->additional(['message' => __('messages.Update Success')]);
     }
 
     /**
@@ -84,8 +89,6 @@ class CodeController extends Controller implements HasMiddleware
     {
       $this->checkPermission(EPermissions::P_CODE_DESTROY);
       Code::query()->where('code', $code)->delete();
-      return response()->json([
-        'message' => 'Code deleted successfully'
-      ]);
+      return response()->json(['message' => __('messages.Delete Success')]);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Base;
 
 use App\Http\Controllers\Controller;
 use App\Http\Enums\EPermissions;
+use App\Http\Enums\ETokenAbility;
 use App\Http\Resources\Base\ParameterResource;
 use App\Models\Base\Parameter;
 use Illuminate\Http\JsonResponse;
@@ -17,7 +18,7 @@ class ParameterController extends Controller implements HasMiddleware
   public static function middleware(): array
   {
     return [
-      new Middleware('auth:sanctum'),
+      new Middleware(['auth:sanctum', 'ability:' . ETokenAbility::ACCESS_API->value]),
       new Middleware('throttle:60,1', only: ['store','update','destroy'])
     ];
   }
@@ -27,7 +28,8 @@ class ParameterController extends Controller implements HasMiddleware
   public function index(): AnonymousResourceCollection
   {
     $this->checkPermission(EPermissions::P_PARAMETER_INDEX);
-    return ParameterResource::collection($this->loadRelationships(Parameter::query())->latest()->paginate());
+    return ParameterResource::collection($this->loadRelationships(Parameter::query())->latest()->paginate())
+      ->additional(['message' => __('messages.Get List Success')]);
   }
 
     /**
@@ -44,7 +46,8 @@ class ParameterController extends Controller implements HasMiddleware
         'en' => 'nullable|string',
       ]),
     ]);
-    return new ParameterResource($this->loadRelationships($data));
+    return (new ParameterResource($this->loadRelationships($data)))
+      ->additional(['message' => __('messages.Create Success')]);
   }
 
   /**
@@ -53,7 +56,8 @@ class ParameterController extends Controller implements HasMiddleware
   public function show(string $code) : ParameterResource
   {
     $this->checkPermission(EPermissions::P_PARAMETER_SHOW);
-    return new ParameterResource($this->loadRelationships(Parameter::query()->where('code', $code)->first()));
+    return (new ParameterResource($this->loadRelationships(Parameter::query()->where('code', $code)->first())))
+      ->additional(['message' => __('messages.Get Detail Success')]);
   }
 
   /**
@@ -70,7 +74,8 @@ class ParameterController extends Controller implements HasMiddleware
         'en' => 'nullable|string',
       ])
     );
-    return new ParameterResource($this->loadRelationships($data));
+    return (new ParameterResource($this->loadRelationships($data)))
+      ->additional(['message' => __('messages.Update Success')]);
   }
 
   /**
@@ -80,8 +85,6 @@ class ParameterController extends Controller implements HasMiddleware
   {
     $this->checkPermission(EPermissions::P_PARAMETER_DESTROY);
     Parameter::query()->where('code', $code)->delete();
-    return response()->json([
-      'message' => 'Parameter deleted successfully'
-    ]);
+    return response()->json(['message' => __('messages.Delete Success')]);
   }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Base;
 
 use App\Http\Controllers\Controller;
 use App\Http\Enums\EPermissions;
+use App\Http\Enums\ETokenAbility;
 use App\Http\Resources\Base\FileResource;
 use App\Models\Base\File;
 use Illuminate\Http\JsonResponse;
@@ -18,7 +19,7 @@ class FileController extends Controller implements HasMiddleware
   public static function middleware(): array
   {
     return [
-      new Middleware('auth:sanctum'),
+      new Middleware(['auth:sanctum', 'ability:' . ETokenAbility::ACCESS_API->value]),
       new Middleware('throttle:60,1', only: ['store','update','destroy'])
     ];
   }
@@ -28,7 +29,8 @@ class FileController extends Controller implements HasMiddleware
     public function index(): AnonymousResourceCollection
     {
       $this->checkPermission(EPermissions::P_FILE_INDEX);
-      return FileResource::collection($this->loadRelationships(File::query())->latest()->paginate());
+      return FileResource::collection($this->loadRelationships(File::query())->latest()->paginate())
+        ->additional(['message' => __('messages.Get List Success')]);
     }
 
     /**
@@ -44,7 +46,8 @@ class FileController extends Controller implements HasMiddleware
         'path' => $path,
         'user_id' => $userId
       ]);
-      return new FileResource($this->loadRelationships($data));
+      return (new FileResource($this->loadRelationships($data)))
+        ->additional(['message' => __('messages.Create Success')]);
     }
 
     /**
@@ -53,7 +56,8 @@ class FileController extends Controller implements HasMiddleware
     public function show(File $file): FileResource
     {
       $this->checkPermission(EPermissions::P_FILE_SHOW);
-      return new FileResource($this->loadRelationships($file));
+      return (new FileResource($this->loadRelationships($file)))
+        ->additional(['message' => __('messages.Get Detail Success')]);
     }
 
     /**
@@ -68,7 +72,8 @@ class FileController extends Controller implements HasMiddleware
           'is_active' => 'sometimes',
         ])
       );
-      return new FileResource($this->loadRelationships($file));
+      return (new FileResource($this->loadRelationships($file)))
+        ->additional(['message' => __('messages.Update Success')]);
     }
 
     /**
@@ -79,8 +84,6 @@ class FileController extends Controller implements HasMiddleware
       $this->checkPermission(EPermissions::P_FILE_DESTROY);
       Storage::delete($file->path);
       $file->delete();
-      return response()->json([
-        'message' => 'File deleted successfully'
-      ]);
+      return response()->json(['message' => __('messages.Delete Success')]);
     }
 }

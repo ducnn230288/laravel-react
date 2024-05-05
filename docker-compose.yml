@@ -4,9 +4,9 @@ services:
         build:
             context: .
             dockerfile: Dockerfile
-        image: bca32d67aa5336a0b50e59b948e308ab50377805fd9bd24529504d85366b78a4
+        image: d903fc5bdd5e4f2853224f0ddf61b2fe293bbd7976644545017b2be29c2de412
         ports:
-            - 8000:8000
+            - 3000:3000
         volumes:
             - .:/app
             - /app/vendor

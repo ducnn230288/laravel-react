@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Enums\ETokenAbility;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -7,8 +8,11 @@ use Illuminate\Support\Facades\Route;
 //    return $request->user();
 //})->middleware('auth:sanctum');
 
-Route::post('/login', [\App\Http\Controllers\Api\Base\AuthController::class, 'login']);
-Route::post('/logout', [\App\Http\Controllers\Api\Base\AuthController::class, 'logout'])->middleware('auth:sanctum');
+Route::post('/auth/login', [\App\Http\Controllers\Api\Base\AuthController::class, 'login']);
+Route::post('/auth/logout', [\App\Http\Controllers\Api\Base\AuthController::class, 'logout'])->middleware('auth:sanctum', 'ability:' . ETokenAbility::ACCESS_API->value);
+Route::middleware('auth:sanctum', 'ability:' . ETokenAbility::ISSUE_ACCESS_TOKEN->value)->group(function () {
+  Route::get('/auth/refresh-token', [\App\Http\Controllers\Api\Base\AuthController::class, 'refreshToken']);
+});
 Route::apiResource('users/roles', \App\Http\Controllers\Api\Base\UserRoleController::class);
 Route::apiResource('users', \App\Http\Controllers\Api\Base\UserController::class);
 Route::apiResource('files', \App\Http\Controllers\Api\Base\FileController::class);

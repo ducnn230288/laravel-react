@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Base;
 
 use App\Http\Controllers\Controller;
 use App\Http\Enums\EPermissions;
+use App\Http\Enums\ETokenAbility;
 use App\Http\Resources\Base\AddressWardResource;
 use App\Models\Base\AddressWard;
 use Illuminate\Http\JsonResponse;
@@ -21,7 +22,7 @@ class AddressWardController extends Controller implements HasMiddleware
   public static function middleware(): array
   {
     return [
-      new Middleware('auth:sanctum'),
+      new Middleware(['auth:sanctum', 'ability:' . ETokenAbility::ACCESS_API->value]),
       new Middleware('throttle:60,1', only: ['store','update','destroy'])
     ];
   }
@@ -31,7 +32,8 @@ class AddressWardController extends Controller implements HasMiddleware
   public function index(): AnonymousResourceCollection
   {
     $this->checkPermission(EPermissions::P_ADDRESS_WARD_INDEX);
-    return AddressWardResource::collection($this->loadRelationships(AddressWard::query())->latest()->paginate());
+    return AddressWardResource::collection($this->loadRelationships(AddressWard::query())->latest()->paginate())
+      ->additional(['message' => __('messages.Get List Success')]);
   }
 
   /**
@@ -48,7 +50,8 @@ class AddressWardController extends Controller implements HasMiddleware
         'description' => 'nullable|string',
       ]),
     ]);
-    return new AddressWardResource($this->loadRelationships($data));
+    return (new AddressWardResource($this->loadRelationships($data)))
+      ->additional(['message' => __('messages.Create Success')]);
   }
 
   /**
@@ -57,7 +60,8 @@ class AddressWardController extends Controller implements HasMiddleware
   public function show(string $code): AddressWardResource
   {
     $this->checkPermission(EPermissions::P_ADDRESS_WARD_SHOW);
-    return new AddressWardResource($this->loadRelationships(AddressWard::query()->where('code', $code)->first()));
+    return (new AddressWardResource($this->loadRelationships(AddressWard::query()->where('code', $code)->first())))
+      ->additional(['message' => __('messages.Get Detail Success')]);
   }
 
   /**
@@ -73,7 +77,8 @@ class AddressWardController extends Controller implements HasMiddleware
         'description' => 'nullable|string',
       ])
     );
-    return new AddressWardResource($this->loadRelationships($data));
+    return (new AddressWardResource($this->loadRelationships($data)))
+      ->additional(['message' => __('messages.Update Success')]);
   }
 
   /**
@@ -83,8 +88,6 @@ class AddressWardController extends Controller implements HasMiddleware
   {
     $this->checkPermission(EPermissions::P_ADDRESS_WARD_DESTROY);
     AddressWard::query()->where('code', $code)->first()->delete();
-    return response()->json([
-      'message' => 'Code Type deleted successfully'
-    ]);
+    return response()->json(['message' => __('messages.Delete Success')]);
   }
 }

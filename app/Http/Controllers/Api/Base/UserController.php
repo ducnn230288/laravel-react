@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Base;
 
 use App\Http\Controllers\Controller;
 use App\Http\Enums\EPermissions;
+use App\Http\Enums\ETokenAbility;
 use App\Http\Resources\Base\UserResource;
 use App\Models\Base\User;
 use Illuminate\Http\JsonResponse;
@@ -22,7 +23,7 @@ class UserController extends Controller implements HasMiddleware
   public static function middleware(): array
   {
     return [
-      new Middleware('auth:sanctum'),
+      new Middleware(['auth:sanctum', 'ability:' . ETokenAbility::ACCESS_API->value]),
       new Middleware('throttle:60,1', only: ['store','update','destroy'])
     ];
   }
@@ -32,7 +33,8 @@ class UserController extends Controller implements HasMiddleware
   public function index(): AnonymousResourceCollection
   {
     $this->checkPermission(EPermissions::P_USER_INDEX);
-    return UserResource::collection($this->loadRelationships(User::query())->latest()->paginate());
+    return UserResource::collection($this->loadRelationships(User::query())->latest()->paginate())
+      ->additional(['message' => __('messages.Get List Success')]);
   }
 
   /**
@@ -49,7 +51,8 @@ class UserController extends Controller implements HasMiddleware
         'email' => 'required|string|unique:users',
       ]),
     ]);
-    return new UserResource($this->loadRelationships($data));
+    return (new UserResource($this->loadRelationships($data)))
+      ->additional(['message' => __('messages.Create Success')]);
   }
 
   /**
@@ -58,7 +61,8 @@ class UserController extends Controller implements HasMiddleware
   public function show(User $user): UserResource
   {
     $this->checkPermission(EPermissions::P_USER_SHOW);
-    return new UserResource($this->loadRelationships($user));
+    return (new UserResource($this->loadRelationships($user)))
+      ->additional(['message' => __('messages.Get Detail Success')]);
   }
 
   /**
@@ -75,7 +79,8 @@ class UserController extends Controller implements HasMiddleware
         'email' => 'sometimes|string|unique:users',
       ])
     );
-    return new UserResource($this->loadRelationships($user));
+    return (new UserResource($this->loadRelationships($user)))
+      ->additional(['message' => __('messages.Update Success')]);
   }
 
   /**
@@ -85,8 +90,6 @@ class UserController extends Controller implements HasMiddleware
   {
     $this->checkPermission(EPermissions::P_USER_DESTROY);
     $user->delete();
-    return response()->json([
-      'message' => 'User deleted successfully'
-    ]);
+    return response()->json(['message' => __('messages.Delete Success')]);
   }
 }

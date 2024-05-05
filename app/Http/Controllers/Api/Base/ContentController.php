@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Base;
 
 use App\Http\Controllers\Controller;
 use App\Http\Enums\EPermissions;
+use App\Http\Enums\ETokenAbility;
 use App\Http\Resources\Base\ContentResource;
 use App\Models\Base\Content;
 use Illuminate\Http\JsonResponse;
@@ -22,7 +23,7 @@ class ContentController extends Controller implements HasMiddleware
   public static function middleware(): array
   {
     return [
-      new Middleware('auth:sanctum'),
+      new Middleware(['auth:sanctum', 'ability:' . ETokenAbility::ACCESS_API->value]),
       new Middleware('throttle:60,1', only: ['store','update','destroy'])
     ];
   }
@@ -32,7 +33,8 @@ class ContentController extends Controller implements HasMiddleware
   public function index(): AnonymousResourceCollection
   {
     $this->checkPermission(EPermissions::P_CONTENT_INDEX);
-    return ContentResource::collection($this->loadRelationships(Content::query())->latest()->paginate());
+    return ContentResource::collection($this->loadRelationships(Content::query())->latest()->paginate())
+      ->additional(['message' => __('messages.Get List Success')]);
   }
 
   /**
@@ -49,7 +51,8 @@ class ContentController extends Controller implements HasMiddleware
         'order' => 'nullable|integer',
       ]),
     ]);
-    return new ContentResource($this->loadRelationships($data));
+    return (new ContentResource($this->loadRelationships($data)))
+      ->additional(['message' => __('messages.Create Success')]);
   }
 
   /**
@@ -58,7 +61,8 @@ class ContentController extends Controller implements HasMiddleware
   public function show(Content $content) : ContentResource
   {
     $this->checkPermission(EPermissions::P_CONTENT_SHOW);
-    return new ContentResource($this->loadRelationships($content));
+    return (new ContentResource($this->loadRelationships($content)))
+      ->additional(['message' => __('messages.Get Detail Success')]);
   }
 
   /**
@@ -74,7 +78,8 @@ class ContentController extends Controller implements HasMiddleware
         'order' => 'nullable|integer',
       ])
     );
-    return new ContentResource($this->loadRelationships($content));
+    return (new ContentResource($this->loadRelationships($content)))
+      ->additional(['message' => __('messages.Update Success')]);
   }
 
   /**
@@ -84,8 +89,6 @@ class ContentController extends Controller implements HasMiddleware
   {
     $this->checkPermission(EPermissions::P_CONTENT_DESTROY);
     $content->delete();
-    return response()->json([
-      'message' => 'Content deleted successfully'
-    ]);
+    return response()->json(['message' => __('messages.Delete Success')]);
   }
 }

@@ -17,3 +17,7 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+client/test/result
+client/build
+client/node_modules
+client/package-lock.json

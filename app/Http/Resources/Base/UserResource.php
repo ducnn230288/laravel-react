@@ -14,12 +14,22 @@ class UserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-      return [
+      $user = [
         'id' => $this->id,
         'name' => $this->name,
         'email' => $this->email,
         'role_code' => $this->role_code,
+        'created_at' => $this->created_at,
         'role' => new UserRoleResource($this->whenLoaded('role')),
       ];
+      return !!$this->token ? [
+        'token' => $this->whenHas('token'),
+        'refresh-token' => $this->whenHas('refresh-token'),
+        'user' => $user
+      ] : $user;
+//      $this->mergeWhen($this->token, [
+//        'first-secret' => 'value',
+//        'second-secret' => 'value',
+//      ]),
     }
 }

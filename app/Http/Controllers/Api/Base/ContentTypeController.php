@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Base;
 
 use App\Http\Controllers\Controller;
 use App\Http\Enums\EPermissions;
+use App\Http\Enums\ETokenAbility;
 use App\Http\Resources\Base\ContentTypeResource;
 use App\Models\Base\ContentType;
 use Illuminate\Http\JsonResponse;
@@ -21,7 +22,7 @@ class ContentTypeController extends Controller implements HasMiddleware
   public static function middleware(): array
   {
     return [
-      new Middleware('auth:sanctum'),
+      new Middleware(['auth:sanctum', 'ability:' . ETokenAbility::ACCESS_API->value]),
       new Middleware('throttle:60,1', only: ['store','update','destroy'])
     ];
   }
@@ -31,7 +32,8 @@ class ContentTypeController extends Controller implements HasMiddleware
   public function index(): AnonymousResourceCollection
   {
     $this->checkPermission(EPermissions::P_CONTENT_TYPE_INDEX);
-    return ContentTypeResource::collection($this->loadRelationships(ContentType::query())->latest()->paginate());
+    return ContentTypeResource::collection($this->loadRelationships(ContentType::query())->latest()->paginate())
+      ->additional(['message' => __('messages.Get List Success')]);
   }
 
   /**
@@ -47,7 +49,8 @@ class ContentTypeController extends Controller implements HasMiddleware
         'description' => 'nullable|string',
       ]),
     ]);
-    return new ContentTypeResource($this->loadRelationships($data));
+    return (new ContentTypeResource($this->loadRelationships($data)))
+      ->additional(['message' => __('messages.Create Success')]);
   }
 
   /**
@@ -56,7 +59,8 @@ class ContentTypeController extends Controller implements HasMiddleware
   public function show(string $code): ContentTypeResource
   {
     $this->checkPermission(EPermissions::P_CONTENT_TYPE_SHOW);
-    return new ContentTypeResource($this->loadRelationships(ContentType::query()->where('code', $code)->first()));
+    return (new ContentTypeResource($this->loadRelationships(ContentType::query()->where('code', $code)->first())))
+      ->additional(['message' => __('messages.Get Detail Success')]);
   }
 
   /**
@@ -72,7 +76,8 @@ class ContentTypeController extends Controller implements HasMiddleware
         'description' => 'nullable|string',
       ])
     );
-    return new ContentTypeResource($this->loadRelationships($data));
+    return (new ContentTypeResource($this->loadRelationships($data)))
+      ->additional(['message' => __('messages.Update Success')]);
   }
 
   /**
@@ -82,8 +87,6 @@ class ContentTypeController extends Controller implements HasMiddleware
   {
     $this->checkPermission(EPermissions::P_CONTENT_TYPE_DESTROY);
     ContentType::query()->where('code', $code)->first()->delete();
-    return response()->json([
-      'message' => 'Content Type deleted successfully'
-    ]);
+    return response()->json(['message' => __('messages.Delete Success')]);
   }
 }

@@ -120,7 +120,7 @@ const Page = () => {
               columns={_column.table()}
               rightHeader={
                 <div className={'flex gap-2'}>
-                  {user?.role?.permissions?.includes(keyRole.P_CODE_CREATE) && (
+                  {user?.role?.permissions?.includes(keyRole.P_CODE_STORE) && (
                     <Button
                       icon={<Plus className="icon-cud !h-5 !w-5" />}
                       text={t('routes.admin.Layout.Add')}

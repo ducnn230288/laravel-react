@@ -125,7 +125,7 @@ const Page = () => {
                           </button>
                         </ToolTip>
                       )}
-                      {user?.role?.permissions?.includes(keyRole.P_POST_TYPE_DELETE) && !data.isPrimary && (
+                      {user?.role?.permissions?.includes(keyRole.P_POST_TYPE_DESTROY) && !data.isPrimary && (
                         <ToolTip title={t('routes.admin.Layout.Delete')}>
                           <PopConfirm
                             title={t('components.datatable.areYouSureWant')}
@@ -172,7 +172,7 @@ const Page = () => {
               columns={_column.table()}
               rightHeader={
                 <div className={'flex gap-2'}>
-                  {user?.role?.permissions?.includes(keyRole.P_POST_CREATE) && (
+                  {user?.role?.permissions?.includes(keyRole.P_POST_STORE) && (
                     <Button
                       icon={<Plus className="icon-cud !h-5 !w-5" />}
                       text={t('components.button.New')}

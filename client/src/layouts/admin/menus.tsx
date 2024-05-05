@@ -13,7 +13,7 @@ const Layout: IMenu[] = [
   {
     icon: <User className="h-6 w-6" />,
     name: 'User',
-    permission: keyRole.P_USER_LISTED,
+    permission: keyRole.P_USER_INDEX,
     queryParams: { filter: '{"roleCode":"super_admin"}' },
   },
   {
@@ -22,22 +22,22 @@ const Layout: IMenu[] = [
     child: [
       {
         name: 'Code',
-        permission: keyRole.P_CODE_LISTED,
+        permission: keyRole.P_CODE_INDEX,
         queryParams: { filter: '{"type":"position"}' },
       },
       {
         name: 'Data',
-        permission: keyRole.P_DATA_LISTED,
+        permission: keyRole.P_CONTENT_INDEX,
         queryParams: { filter: '{"type":"partner"}' },
       },
       {
         name: 'Post',
-        permission: keyRole.P_POST_LISTED,
+        permission: keyRole.P_POST_INDEX,
         queryParams: { filter: '{"type":"projects"}' },
       },
       {
         name: 'Parameter',
-        permission: keyRole.P_PARAMETER_LISTED,
+        permission: keyRole.P_PARAMETER_INDEX,
         queryParams: { code: 'phone' },
       },
     ],

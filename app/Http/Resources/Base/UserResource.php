@@ -18,9 +18,13 @@ class UserResource extends JsonResource
         'id' => $this->id,
         'name' => $this->name,
         'email' => $this->email,
-        'role_code' => $this->role_code,
+        'avatar' => $this->avatar,
+        'phone_number' => $this->phone_number,
         'created_at' => $this->created_at,
+        'role_code' => $this->role_code,
         'role' => new UserRoleResource($this->whenLoaded('role')),
+        'position_code' => $this->position_code,
+        'position' => new CodeResource($this->whenLoaded('position')),
       ];
       return !!$this->token ? [
         'token' => $this->whenHas('token'),

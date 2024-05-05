@@ -9,6 +9,7 @@ export const API = {
       cache: 'no-cache',
       credentials: 'same-origin',
       headers: {
+        'Accept': 'application/json',
         'Content-Type': 'application/json',
         authorization: localStorage.getItem(keyToken) ? 'Bearer ' + localStorage.getItem(keyToken) : '',
         'Accept-Language': localStorage.getItem('i18nextLng') || '',

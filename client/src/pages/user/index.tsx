@@ -132,6 +132,11 @@ const Page = () => {
               className={'container mx-auto'}
               facade={userFacade}
               ref={dataTableRef}
+              defaultRequest={{
+                page: 1,
+                perPage: 1,
+                include: 'role,position'
+              }}
               onRow={() => ({
                 // onDoubleClick: () => userFacade.getById({ id: data.id }),
               })}
@@ -141,7 +146,7 @@ const Page = () => {
               columns={_column.table()}
               rightHeader={
                 <div className={'flex gap-2'}>
-                  {user?.role?.permissions?.includes(keyRole.P_USER_CREATE) && (
+                  {user?.role?.permissions?.includes(keyRole.P_USER_STORE) && (
                     <Button
                       icon={<Plus className="icon-cud !h-5 !w-5" />}
                       text={t('components.button.New')}

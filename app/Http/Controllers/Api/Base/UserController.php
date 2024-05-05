@@ -17,7 +17,7 @@ class UserController extends Controller implements HasMiddleware
 {
   public function __construct()
   {
-    $this->relations = ['role'];
+    $this->relations = ['role', 'position'];
   }
 
   public static function middleware(): array
@@ -46,9 +46,12 @@ class UserController extends Controller implements HasMiddleware
     $data = User::create([
       ...$request->validate([
         'name' => 'required|string|max:255',
+        'avatar' => 'string|max:255',
         'password' => 'required|string|max:255',
         'role_code' => 'required|string|max:255',
+        'position_code' => 'required|string|max:255',
         'email' => 'required|string|unique:users',
+        'phone_number' => 'required|string|unique:users',
       ]),
     ]);
     return (new UserResource($this->loadRelationships($data)))
@@ -74,9 +77,12 @@ class UserController extends Controller implements HasMiddleware
     $user->update(
       $request->validate([
         'name' => 'sometimes|string|max:255',
+        'avatar' => 'sometimes|string|max:255',
         'password' => 'sometimes|string|max:255',
         'role_code' => 'sometimes|string|max:255',
+        'position_code' => 'sometimes|string|max:255',
         'email' => 'sometimes|string|unique:users',
+        'phone_number' => 'sometimes|string|unique:users',
       ])
     );
     return (new UserResource($this->loadRelationships($user)))

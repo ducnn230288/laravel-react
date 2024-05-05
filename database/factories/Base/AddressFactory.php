@@ -22,9 +22,9 @@ class AddressFactory extends Factory
     {
       return [
         'address' => $this->faker->text,
-        'province_code' => AddressProvince::factory()->create()->code,
-        'district_code' => AddressDistrict::factory()->create()->code,
-        'ward_code' => AddressWard::factory()->create()->code,
+        'province_code' => fn () => AddressProvince::factory()->create()->code,
+        'district_code' => fn () => AddressDistrict::factory()->create()->code,
+        'ward_code' => fn () => AddressWard::factory()->create()->code,
       ];
     }
 }

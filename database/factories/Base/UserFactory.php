@@ -2,6 +2,7 @@
 
 namespace Database\Factories\Base;
 
+use App\Models\Base\Code;
 use App\Models\Base\UserRole;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -28,7 +29,10 @@ class UserFactory extends Factory
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'password' => 'Password1!',
-            'role_code' => UserRole::factory()->create()->code
+            'avatar' => $this->faker->imageUrl(),
+            'phone_number' => $this->faker->phoneNumber,
+            'role_code' => fn () => UserRole::factory()->create()->code,
+            'position_code' => fn () => Code::factory()->create()->code,
         ];
     }
 

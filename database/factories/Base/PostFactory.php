@@ -19,7 +19,7 @@ class PostFactory extends Factory
     {
       return [
         'image' => $this->faker->imageUrl,
-        'type_code' => PostType::factory()->create()->code
+        'type_code' => fn () => PostType::factory()->create()->code
       ];
     }
 }

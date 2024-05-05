@@ -99,7 +99,7 @@ export default {
                   </button>
                 </ToolTip>
               )}
-              {user?.role?.permissions?.includes(keyRole.P_POST_DELETE) && (
+              {user?.role?.permissions?.includes(keyRole.P_POST_DESTROY) && (
                 <ToolTip title={t('routes.admin.Layout.Delete')}>
                   <PopConfirm
                     title={t('components.datatable.areYouSureWant')}

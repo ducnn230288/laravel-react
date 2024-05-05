@@ -61,7 +61,7 @@ export default {
           align: ETableAlign.center,
           render: (text: string, data) => (
             <div className={'flex gap-2'}>
-              {user?.role?.permissions?.includes(keyRole.P_DATA_UPDATE) && (
+              {user?.role?.permissions?.includes(keyRole.P_CONTENT_UPDATE) && (
                 <ToolTip title={t(data.isDisabled ? 'components.datatable.Disabled' : 'components.datatable.Enabled')}>
                   <PopConfirm
                     title={t(
@@ -85,7 +85,7 @@ export default {
                   </PopConfirm>
                 </ToolTip>
               )}
-              {user?.role?.permissions?.includes(keyRole.P_DATA_UPDATE) && (
+              {user?.role?.permissions?.includes(keyRole.P_CONTENT_UPDATE) && (
                 <ToolTip title={t('routes.admin.Layout.Edit')}>
                   <button
                     title={t('routes.admin.Layout.Edit') || ''}
@@ -95,7 +95,7 @@ export default {
                   </button>
                 </ToolTip>
               )}
-              {user?.role?.permissions?.includes(keyRole.P_DATA_DELETE) && (
+              {user?.role?.permissions?.includes(keyRole.P_CONTENT_DESTROY) && (
                 <ToolTip title={t('routes.admin.Layout.Delete')}>
                   <PopConfirm
                     title={t('components.datatable.areYouSureWant')}

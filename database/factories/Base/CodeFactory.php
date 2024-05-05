@@ -23,7 +23,7 @@ class CodeFactory extends Factory
         'name' => $name,
         'code' => strtoupper(Str::slug($name)),
         'description' => null,
-        'type_code' => CodeType::factory()->create()->code
+        'type_code' => fn () => CodeType::factory()->create()->code
       ];
     }
 }

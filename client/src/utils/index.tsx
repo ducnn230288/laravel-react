@@ -21,6 +21,7 @@ export const cleanObjectKeyNull = (obj: { [selector: string]: any }) => {
       if (
         obj[propName] === null ||
         obj[propName] === undefined ||
+        obj[propName] === '' ||
         (typeof obj[propName] === 'object' && Object.keys(obj[propName]).length === 0)
       ) {
         delete obj[propName];

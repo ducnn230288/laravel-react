@@ -104,7 +104,7 @@ export const DataTable = forwardRef(
       } else refPageSizeOptions.current = pageSizeOptions;
       params.current = cleanObjectKeyNull({
         ...params.current,
-        sorts: JSON.stringify(params.current.sorts),
+        sort: Object.entries(params.current.sort|| {}).map(([key, value]) => `${key},${value}`).join(''),
         filter: JSON.stringify(params.current.filter),
       });
       if (facade) {
@@ -147,7 +147,7 @@ export const DataTable = forwardRef(
         localStorage.setItem(idTable.current, JSON.stringify(request));
         params.current = { ...request };
         if (save) {
-          if (request.sorts && typeof request.sorts === 'object') request.sorts = JSON.stringify(request.sorts);
+          if (request.sort && typeof request.sort === 'object') request.sort = Object.entries(params.current.sort|| {}).map(([key, value]) => `${key},${value}`).join('');
           if (request.filter && typeof request.filter === 'object') request.filter = JSON.stringify(request.filter);
           changeNavigate &&
             navigate(
@@ -162,8 +162,8 @@ export const DataTable = forwardRef(
 
     if (params.current.filter && typeof params.current.filter === 'string')
       params.current.filter = JSON.parse(params.current.filter);
-    if (params.current.sorts && typeof params.current.sorts === 'string')
-      params.current.sorts = JSON.parse(params.current.sorts);
+    if (params.current.sort && typeof params.current.sort === 'string')
+      params.current.sort = {[params.current.sort.split(',')[0]]: params.current.sort.split(',')[1]};
 
     const groupButton = (confirm: any, clearFilters: any, key: any, value: any) => (
       <div className="grid grid-cols-2 gap-2 sm:mt-1 mt-2">
@@ -368,10 +368,10 @@ export const DataTable = forwardRef(
           }
           delete item.filter;
         }
-        const sorts = params.current?.sorts as any;
-        if (item?.sorter && sorts && sorts[col!.name!])
+        const sort = params.current?.sort as any;
+        if (item?.sorter && sort && sort[col!.name!])
           item.defaultSortOrder =
-            sorts[col!.name!] === 'ASC' ? 'ascend' : sorts[col!.name!] === 'DESC' ? 'descend' : '';
+            sort[col!.name!] === 'asc' ? 'ascend' : sort[col!.name!] === 'desc' ? 'descend' : '';
         if (item && !item?.onCell)
           item.onCell = (record) => ({
             className: record?.id && record?.id === (id || facade?.data?.id) ? '!bg-teal-100' : '',
@@ -388,27 +388,27 @@ export const DataTable = forwardRef(
     const handleTableChange = (
       pagination?: { page?: number; perPage?: number },
       filters = {},
-      sorts?: SorterResult<any>,
+      sort?: SorterResult<any>,
       tempFullTextSearch?: string,
     ) => {
       let tempPageIndex = pagination?.page || params.current.page;
       const tempPageSize = pagination?.perPage || params.current.perPage;
 
       const tempSort =
-        sorts && sorts?.field && sorts?.order
+        sort && sort?.field && sort?.order
           ? {
-              [sorts.field as string]: sorts.order === 'ascend' ? 'ASC' : sorts.order === 'descend' ? 'DESC' : '',
+              [sort.field as string]: sort.order === 'ascend' ? 'asc' : sort.order === 'descend' ? 'desc' : '',
             }
-          : sorts?.field
+          : sort?.field
             ? null
-            : sorts;
+            : sort;
 
       if (tempFullTextSearch !== params.current.fullTextSearch) tempPageIndex = 1;
       const tempParams = cleanObjectKeyNull({
         ...params.current,
         page: tempPageIndex,
         perPage: tempPageSize,
-        sorts: JSON.stringify(tempSort),
+        sort: Object.entries(tempSort|| {}).map(([key, value]) => `${key},${value}`).join(''),
         filter: JSON.stringify(cleanObjectKeyNull(filters)),
         fullTextSearch: tempFullTextSearch,
       });
@@ -446,7 +446,7 @@ export const DataTable = forwardRef(
                         handleTableChange(
                           undefined,
                           params.current.filter,
-                          params.current.sorts as SorterResult<any>,
+                          params.current.sort as SorterResult<any>,
                           (document.getElementById(idTable.current + '_input_search') as HTMLInputElement).value.trim(),
                         ),
                       500,
@@ -456,7 +456,7 @@ export const DataTable = forwardRef(
                     handleTableChange(
                       undefined,
                       params.current.filter,
-                      params.current.sorts as SorterResult<any>,
+                      params.current.sort as SorterResult<any>,
                       (document.getElementById(idTable.current + '_input_search') as HTMLInputElement).value.trim(),
                     )
                   }
@@ -470,7 +470,7 @@ export const DataTable = forwardRef(
                         handleTableChange(
                           undefined,
                           params.current.filter,
-                          params.current.sorts as SorterResult<any>,
+                          params.current.sort as SorterResult<any>,
                           '',
                         );
                       }
@@ -486,7 +486,7 @@ export const DataTable = forwardRef(
                           handleTableChange(
                             undefined,
                             params.current.filter,
-                            params.current.sorts as SorterResult<any>,
+                            params.current.sort as SorterResult<any>,
                             '',
                           );
                         }
@@ -502,7 +502,7 @@ export const DataTable = forwardRef(
             {!!rightHeader && <div className={'mt-2 sm:mt-0'}>{rightHeader}</div>}
           </div>
         )}
-        {subHeader && subHeader(result?.count)}
+        {subHeader && subHeader(result?.meta?.total)}
         {!!showList && (
           <DndContext
             modifiers={[restrictToHorizontalAxis]}
@@ -546,8 +546,8 @@ export const DataTable = forwardRef(
               summary={summary}
               pagination={false}
               dataSource={loopData(data)}
-              onChange={(pagination, filters, sorts) =>
-                handleTableChange(undefined, filters, sorts as SorterResult<any>, params.current.fullTextSearch)
+              onChange={(pagination, filters, sort) =>
+                handleTableChange(undefined, filters, sort as SorterResult<any>, params.current.fullTextSearch)
               }
               scroll={scroll.current}
               size="small"
@@ -555,7 +555,7 @@ export const DataTable = forwardRef(
             />
             {refPageSizeOptions.current && showPagination && (
               <Pagination
-                total={result?.count}
+                total={result?.meta?.total}
                 page={params.current!.page!}
                 perPage={params.current!.perPage!}
                 pageSizeOptions={refPageSizeOptions.current}
@@ -565,7 +565,7 @@ export const DataTable = forwardRef(
                   handleTableChange(
                     pagination,
                     params.current.filter,
-                    params.current.sorts as SorterResult<any>,
+                    params.current.sort as SorterResult<any>,
                     params.current.fullTextSearch,
                   )
                 }

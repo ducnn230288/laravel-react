@@ -22,8 +22,8 @@ export const routerLinks = (name: string, type?: string) => {
     [selector: string]: string;
   } = {
     Auth: '/auth',
-    CodeType: '/code/type',
-    Code: '/code',
+    CodeType: '/codes/types',
+    Code: '/codes',
     UserRole: '/users/roles',
     User: '/users',
     Data: '/data',

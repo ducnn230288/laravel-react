@@ -3,7 +3,14 @@ export class Responses<T> {
     public statusCode?: 200 | 201 | 500 | 404,
     public message?: string,
     public data?: T,
-    public count?: number,
+    public meta?: {
+      current_page: number,
+      from: number,
+      last_page: number,
+      per_page: number,
+      to: number,
+      total: number,
+    },
   ) {}
 }
 
@@ -22,7 +29,7 @@ export class PaginationQuery<T = object> {
     public perPage?: number,
     public page?: number,
     public filter?: string | T,
-    public sorts?: string | T,
+    public sort?: string | T,
     public extend?: string | T,
     public skip?: string | T,
     public fullTextSearch?: string,

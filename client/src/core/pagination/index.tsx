@@ -39,8 +39,8 @@ export const Pagination: any = ({
     return Math.ceil(total / pageSize);
   };
 
-  const onPageSizeChange = (size: number) => {
-    queryParams({ perPage: size, page });
+  const onPageSizeChange = (perPage: number) => {
+    queryParams({ perPage, page });
     buildIndexes();
   };
 

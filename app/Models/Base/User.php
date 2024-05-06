@@ -9,11 +9,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Mehradsadeghi\FilterQueryString\FilterQueryString;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasUuids;
-
+    use HasApiTokens, HasFactory, Notifiable, HasUuids, FilterQueryString;
+  protected $filters = ['sort', 'like', 'in', 'between'];
     /**
      * The attributes that are mass assignable.
      *

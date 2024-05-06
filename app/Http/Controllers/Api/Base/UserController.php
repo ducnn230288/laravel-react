@@ -30,10 +30,11 @@ class UserController extends Controller implements HasMiddleware
   /**
    * Display a listing of the resource.
    */
-  public function index(): AnonymousResourceCollection
+  public function index(Request $request): AnonymousResourceCollection
   {
     $this->checkPermission(EPermissions::P_USER_INDEX);
-    return UserResource::collection($this->loadRelationships(User::query())->latest()->paginate())
+    $paginate = User::filter()->latest();
+    return UserResource::collection($this->loadRelationships($paginate)->paginate($request->get('perPage')))
       ->additional(['message' => __('messages.Get List Success')]);
   }
 

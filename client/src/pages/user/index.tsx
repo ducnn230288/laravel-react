@@ -31,12 +31,12 @@ const Page = () => {
       userRoleFacade?.result?.data?.length &&
       !userRoleFacade?.result?.data?.filter((item) => item.code === request.filter.roleCode).length
     ) {
-      navigate({
-        pathname: `/${lang}${routerLinks('User')}`,
-        search: `?${createSearchParams({ filter: '{"roleCode":"super_admin"}' })}`,
-      });
-      request.filter.roleCode = 'super_admin';
-      dataTableRef?.current?.onChange(request);
+      // navigate({
+      //   pathname: `/${lang}${routerLinks('User')}`,
+      //   search: `?${createSearchParams({ filter: '{"roleCode":"super_admin"}' })}`,
+      // });
+      // request.filter.roleCode = 'super_admin';
+      // dataTableRef?.current?.onChange(request);
     }
   }, [userRoleFacade?.result]);
 

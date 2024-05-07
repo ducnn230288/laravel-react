@@ -1,5 +1,12 @@
 import React, { forwardRef, Ref, useEffect, useImperativeHandle, useRef } from 'react';
-import { LegendComponentOption, TitleOption, TooltipOption, XAXisOption, YAXisOption } from 'echarts/types/dist/shared';
+import {
+  LegendComponentOption,
+  TitleOption,
+  TooltipOption,
+  XAXisOption,
+  YAXisOption,
+  GridOption,
+} from 'echarts/types/dist/shared';
 import { EChartsType, SeriesOption } from 'echarts';
 
 import { ETypeChart } from '@models';
@@ -22,6 +29,12 @@ export const EChart = forwardRef(({ option, style = { height: '20rem' } }: Type,
       let yAxis: YAXisOption | YAXisOption[] | undefined = {
         splitLine: { lineStyle: { type: 'dashed' } },
         scale: true,
+      };
+      let grid: GridOption = {
+        left: '30px',
+        right: '30px',
+        bottom: '30px',
+        containLabel: true,
       };
       switch (option.type) {
         case ETypeChart.bar:
@@ -99,9 +112,6 @@ export const EChart = forwardRef(({ option, style = { height: '20rem' } }: Type,
             name: item.name,
             type: 'bar',
             stack: 'total',
-            label: {
-              show: true,
-            },
             data: item.value,
           }));
           break;
@@ -172,6 +182,9 @@ export const EChart = forwardRef(({ option, style = { height: '20rem' } }: Type,
             type: 'scatter',
             symbolSize: 10,
           }));
+          console.log();
+          grid.bottom =
+            30 * Math.ceil(option.series.length / (document.getElementById(_id.current)!.clientWidth / 73)) + 'px';
           break;
         case ETypeChart.bubble:
           tooltip = {
@@ -215,9 +228,9 @@ export const EChart = forwardRef(({ option, style = { height: '20rem' } }: Type,
       if (!_myChart.current)
         setTimeout(() => {
           _myChart.current = echarts.init(document.getElementById(_id.current));
-          _myChart.current.setOption({ title, xAxis, yAxis, series, tooltip, legend });
+          _myChart.current.setOption({ title, xAxis, yAxis, series, tooltip, legend, grid });
         });
-      else _myChart.current.setOption({ title, xAxis, yAxis, series, tooltip, legend }, true);
+      else _myChart.current.setOption({ title, xAxis, yAxis, series, tooltip, legend, grid }, true);
     }
   }, [option]);
   const formatNumber = (num: number) => {

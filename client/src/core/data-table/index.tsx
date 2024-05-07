@@ -346,30 +346,30 @@ export const DataTable = forwardRef(
 
           switch (item?.filter?.type) {
             case ETableFilterType.radio:
-              typeKeys.current[item.filter?.name || col!.name!] = 'radio';
+              typeKeys.current[col!.name!] = 'radio';
               item = {
                 ...item,
                 ...getColumnSearchRadio(
                   item.filter.list as CheckboxOptionType[],
-                  item.filter?.name || col!.name!,
+                  col!.name!,
                   item.filter.get,
                 ),
               };
               break;
             case ETableFilterType.checkbox:
-              typeKeys.current[item.filter?.name || col!.name!] = 'checkbox';
+              typeKeys.current[col!.name!] = 'checkbox';
               item = {
                 ...item,
-                ...getColumnSearchCheckbox(item.filter.list, item.filter.name || col.name, item.filter.get),
+                ...getColumnSearchCheckbox(item.filter.list, col.name, item.filter.get),
               };
               break;
             case ETableFilterType.date:
-              typeKeys.current[item.filter?.name || col!.name!] = 'date';
-              item = { ...item, ...getColumnSearchDate(item.filter.name || col.name) };
+              typeKeys.current[col!.name!] = 'date';
+              item = { ...item, ...getColumnSearchDate(col.name) };
               break;
             default:
-              typeKeys.current[item.filter?.name || col!.name!] = 'search';
-              item = { ...item, ...getColumnSearchInput(item?.filter?.name || col.name) };
+              typeKeys.current[col!.name!] = 'search';
+              item = { ...item, ...getColumnSearchInput(col.name) };
           }
           delete item.filter;
         }
@@ -389,7 +389,6 @@ export const DataTable = forwardRef(
           ...item,
         };
       });
-    console.log(typeKeys.current)
 
     const handleTableChange = (
       pagination?: { page?: number; perPage?: number },
@@ -413,7 +412,7 @@ export const DataTable = forwardRef(
 
       const tempParams = cleanObjectKeyNull({
         ...params.current,
-        // ...formatFilter(filters),
+        ...formatFilter(filters),
         page: tempPageIndex,
         perPage: tempPageSize,
         sort: Object.entries(tempSort|| {}).filter(([key, value]) => !!value).map(([key, value]) => `${key},${value}`).join(''),
@@ -434,11 +433,11 @@ export const DataTable = forwardRef(
               data.like.push(`${key},${value}`)
               break;
             case ETableFilterType.date:
-              data.between.push(`${key}${value.map((item: string) => `,${item}`)}`)
+              data.between.push(`${key}${value.map((item: string) => `,${item}`).join('')}`)
               break;
             case ETableFilterType.radio:
             case ETableFilterType.checkbox:
-              data.in.push(`${key}${value.map((item: string) => `,${item}`)}`)
+              data.in.push(`${key}${value.map((item: string) => `,${item}`).join('')}`)
               break;
           }
         }

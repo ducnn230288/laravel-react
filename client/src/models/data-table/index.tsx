@@ -34,7 +34,6 @@ export class TableItemFilter {
   type?: ETableFilterType;
   list?: TableItemFilterList[];
   get?: TableGet;
-  name?: string;
 }
 
 export class TableGet {

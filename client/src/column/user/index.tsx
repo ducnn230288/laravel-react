@@ -29,12 +29,11 @@ export default {
       },
       {
         title: 'routes.admin.user.Position',
-        name: 'position',
+        name: 'position_code',
         tableItem: {
           width: 200,
           filter: {
             type: ETableFilterType.checkbox,
-            name: 'position_code',
             get: {
               facade: CodeFacade,
               format: (item: any) => ({
@@ -49,7 +48,7 @@ export default {
             },
           },
           sorter: true,
-          render: (item) => item?.name,
+          render: (_, data) => data?.position?.name,
         },
       },
       {

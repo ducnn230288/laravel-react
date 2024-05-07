@@ -34,7 +34,7 @@ export default {
           width: 200,
           filter: {
             type: ETableFilterType.checkbox,
-            name: 'positionCode',
+            name: 'position_code',
             get: {
               facade: CodeFacade,
               format: (item: any) => ({
@@ -71,7 +71,7 @@ export default {
       },
       {
         title: 'routes.admin.user.Phone Number',
-        name: 'phoneNumber',
+        name: 'phone_number',
         tableItem: {
           filter: { type: ETableFilterType.search },
           sorter: true,

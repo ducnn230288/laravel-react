@@ -28,7 +28,7 @@ class UserResource extends JsonResource
       ];
       return !!$this->token ? [
         'token' => $this->whenHas('token'),
-        'refresh-token' => $this->whenHas('refresh-token'),
+        'refreshToken' => $this->whenHas('refresh-token'),
         'user' => $user
       ] : $user;
 //      $this->mergeWhen($this->token, [

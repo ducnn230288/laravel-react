@@ -28,7 +28,7 @@ export class PaginationQuery<T = object> {
   constructor(
     public perPage?: number,
     public page?: number,
-    public filter?: string | T,
+    public like?: string | T,
     public sort?: string | T,
     public extend?: string | T,
     public skip?: string | T,

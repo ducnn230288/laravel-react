@@ -1,6 +1,7 @@
 import { keyRefreshToken, keyToken, linkApi, routerLinks } from '@utils';
 import { Message } from '@core/message';
 import { Responses } from '@models';
+import queryString from "query-string";
 
 export const API = {
   init: () =>
@@ -26,12 +27,7 @@ export const API = {
   ) => {
     config.headers = { ...config.headers, ...headers };
 
-    const linkParam = Object.keys(params)
-      .map(
-        (key) =>
-          key + '=' + encodeURIComponent(typeof params[key] === 'object' ? JSON.stringify(params[key]) : params[key]),
-      )
-      .join('&');
+    const linkParam = queryString.stringify(params, {arrayFormat: 'index'});
     const response = await fetch(
       (url.includes('https://') || url.includes('http://') ? '' : linkApi) + url + (linkParam && '?' + linkParam),
       config,

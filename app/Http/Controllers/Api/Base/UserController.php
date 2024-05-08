@@ -74,17 +74,20 @@ class UserController extends Controller implements HasMiddleware
   public function update(Request $request, User $user): UserResource
   {
     $this->checkPermission(EPermissions::P_USER_UPDATE);
-    $user->update(
-      $request->validate([
-        'name' => 'sometimes|string|max:255',
-        'avatar' => 'sometimes|string|max:255',
-        'password' => 'sometimes|string|max:255',
-        'role_code' => 'sometimes|string|max:255',
-        'position_code' => 'sometimes|string|max:255',
-        'email' => 'sometimes|string|unique:users',
-        'phone_number' => 'sometimes|string|unique:users',
-      ])
-    );
+    $data = $request->validate([
+      'name' => 'string|max:255',
+      'avatar' => 'string|max:255',
+      'password' => 'string|max:255',
+      'role_code' => 'string|max:255',
+      'position_code' => 'string|max:255',
+      'email' => 'string|unique:users,email,'.$user->id,
+      'phone_number' => 'string|unique:users,phone_number,'.$user->id,
+      'disabled_at' => 'bool'
+    ]);
+    if ($data) {
+      if (isset($data['disabled_at'])) $data['disabled_at'] = $data['disabled_at'] ? now() : null;
+      $user->update($data);
+    }
     return (new UserResource($this->loadRelationships($user)))
       ->additional(['message' => __('messages.Update Success')]);
   }

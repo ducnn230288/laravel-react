@@ -21,3 +21,4 @@ client/test/result
 client/build
 client/node_modules
 client/package-lock.json
+composer.lock

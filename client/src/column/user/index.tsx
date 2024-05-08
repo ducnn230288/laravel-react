@@ -29,7 +29,7 @@ export default {
       },
       {
         title: 'routes.admin.user.Position',
-        name: 'position_code',
+        name: 'positionCode',
         tableItem: {
           width: 200,
           filter: {
@@ -70,7 +70,7 @@ export default {
       },
       {
         title: 'routes.admin.user.Phone Number',
-        name: 'phone_number',
+        name: 'phoneNumber',
         tableItem: {
           filter: { type: ETableFilterType.search },
           sorter: true,
@@ -101,7 +101,7 @@ export default {
                         ? 'components.datatable.areYouSureWantDisable'
                         : 'components.datatable.areYouSureWantEnable',
                     )}
-                    onConfirm={() => userFacade.putDisable({ id: data.id, disable: !data.isDisabled })}
+                    onConfirm={() => userFacade.put({ id: data.id, disabledAt: !data.disabledAt })}
                   >
                     <button
                       title={
@@ -209,17 +209,6 @@ export default {
         },
       },
       {
-        title: 'routes.admin.user.Date of birth',
-        name: 'dob',
-        formItem: {
-          type: EFormType.date,
-          rules: [{ type: EFormRuleType.required }],
-          disabledDate: (current) => {
-            return current && current >= dayjs().startOf('day');
-          },
-        },
-      },
-      {
         title: 'routes.admin.user.Position',
         name: 'positionCode',
         formItem: {
@@ -237,14 +226,6 @@ export default {
               value: item.code,
             }),
           },
-        },
-      },
-      {
-        title: 'routes.admin.user.Start Date',
-        name: 'startDate',
-        formItem: {
-          type: EFormType.date,
-          rules: [{ type: EFormRuleType.required }],
         },
       },
       {

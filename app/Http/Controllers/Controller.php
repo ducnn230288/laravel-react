@@ -14,10 +14,12 @@ abstract class Controller
   public function checkPermission(EPermissions $ePermission)
   {
     $role = auth()->user()->load(['role'])->role;
-    if (!$role || (!$role->is_system_admin && !in_array($ePermission->value, $role->permissions))) return abort(403, 'You are not authorized');
+    if (!$role || (!$role->is_system_admin && !in_array($ePermission->value, $role->permissions)))
+      return abort(403, __('messages.You are not authorized'));
   }
   public function filter(Model|QueryBuilder|EloquentBuilder $for, ?array $relations = null) : Model|QueryBuilder|EloquentBuilder
   {
+    $this->select($for);
     $this->like($for);
     $this->in($for);
     $this->between($for);
@@ -43,6 +45,16 @@ abstract class Controller
     if (!$include) return false;
     $relations = array_map('trim', explode(',', $include));
     return in_array($relation, $relations);
+  }
+
+  protected function select(Model|QueryBuilder|EloquentBuilder $for) : Model|QueryBuilder|EloquentBuilder
+  {
+    $select = \request()->query('select');
+    if ($select) {
+      $select = array_map(fn ($item) => Str::snake(trim($item)), explode(',', $select));
+      $for->select(...$select);
+    }
+    return $for;
   }
 
   protected function sort(Model|QueryBuilder|EloquentBuilder $for) : Model|QueryBuilder|EloquentBuilder

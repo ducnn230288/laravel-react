@@ -8,4 +8,5 @@ return [
   "Update Success" => "Cập nhật thành công",
   "Delete Success" => "Xóa thành công",
   "Data id not found" => "Dữ liệu {id} không tìm thấy",
+  "You are not authorized" => "Bạn không được ủy quyền",
 ];

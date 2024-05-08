@@ -45,7 +45,7 @@ export class Action<T extends CommonEntity, Y = EStatusState> {
     this.putDisable = createAsyncThunk(
       name + '/putDisable',
       async ({ id, disable }: { id: string; disable: boolean }) => {
-        const { data, message } = await API.put<T>(`${routerLinks(name, 'api')}/${id}/disable/${disable}`, {});
+        const { data, message } = await API.put<T>(`${routerLinks(name, 'api')}/${id}`, { disabledAt: disable });
         if (message) await Message.success({ text: message });
         return data;
       },

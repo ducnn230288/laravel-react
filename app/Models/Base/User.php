@@ -6,15 +6,15 @@ namespace App\Models\Base;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Mehradsadeghi\FilterQueryString\FilterQueryString;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasUuids, FilterQueryString;
-  protected $filters = ['sort', 'like', 'in', 'between'];
+    use HasApiTokens, HasFactory, Notifiable, HasUuids, SoftDeletes;
+    public static $snakeAttributes = true;
     /**
      * The attributes that are mass assignable.
      *
@@ -28,6 +28,7 @@ class User extends Authenticatable
         'phone_number',
         'role_code',
         'position_code',
+        'disabled_at',
     ];
 
     /**

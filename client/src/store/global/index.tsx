@@ -38,7 +38,7 @@ const action = {
   login: createAsyncThunk(name + '/login', async (values: { password: string; email: string }) => {
     const { data, message } = await API.post<{ user: User; token: string; refreshToken: string }>(
       `${routerLinks(name, 'api')}/login`,
-      values,
+      values, { include: 'role'}
     );
     if (data) {
       if (message) await Message.success({ text: message });
@@ -86,6 +86,7 @@ export class User extends CommonEntity {
     public role?: UserRole,
     public createdAt?: string,
     public updatedAt?: string,
+    public disabledAt?: boolean,
   ) {
     super();
   }

@@ -135,7 +135,7 @@ const Page = () => {
               defaultRequest={{
                 page: 1,
                 perPage: 1,
-                include: 'role,position'
+                include: 'position'
               }}
               onRow={() => ({
                 // onDoubleClick: () => userFacade.getById({ id: data.id }),

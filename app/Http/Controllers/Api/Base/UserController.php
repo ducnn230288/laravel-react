@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\Base;
 use App\Http\Controllers\Controller;
 use App\Http\Enums\EPermissions;
 use App\Http\Enums\ETokenAbility;
+use App\Http\Requests\Base\StoreUserRequest;
+use App\Http\Requests\Base\UpdateUserRequest;
 use App\Http\Resources\Base\UserResource;
 use App\Models\Base\User;
 use Illuminate\Http\JsonResponse;
@@ -41,20 +43,10 @@ class UserController extends Controller implements HasMiddleware
   /**
    * Store a newly created resource in storage.
    */
-  public function store(Request $request): UserResource
+  public function store(StoreUserRequest $request): UserResource
   {
     Gate::authorize(EPermissions::P_USER_STORE->name);
-    $data = User::create([
-      ...$request->validate([
-        'name' => 'required|string|max:255',
-        'avatar' => 'string|max:255',
-        'password' => 'required|string|max:255',
-        'role_code' => 'required|string|max:255',
-        'position_code' => 'required|string|max:255',
-        'email' => 'required|string|unique:users',
-        'phone_number' => 'required|string|unique:users',
-      ]),
-    ]);
+    $data = User::create($request->validated());
     return (new UserResource($this->loadRelationships($data)))
       ->additional(['message' => __('messages.Create Success')]);
   }
@@ -72,19 +64,10 @@ class UserController extends Controller implements HasMiddleware
   /**
    * Update the specified resource in storage.
    */
-  public function update(Request $request, User $user): UserResource
+  public function update(UpdateUserRequest $request, User $user): UserResource
   {
     Gate::authorize(EPermissions::P_USER_UPDATE->name);
-    $data = $request->validate([
-      'name' => 'string|max:255',
-      'avatar' => 'string|max:255',
-      'password' => 'string|max:255',
-      'role_code' => 'string|max:255',
-      'position_code' => 'string|max:255',
-      'email' => 'string|unique:users,email,'.$user->id,
-      'phone_number' => 'string|unique:users,phone_number,'.$user->id,
-      'disabled_at' => 'bool'
-    ]);
+    $data = $request->validated();
     if ($data) {
       if (isset($data['disabled_at'])) $data['disabled_at'] = $data['disabled_at'] ? now() : null;
       $user->update($data);

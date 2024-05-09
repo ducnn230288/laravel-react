@@ -52,15 +52,6 @@ export default {
         },
       },
       {
-        title: 'routes.admin.user.Role',
-        name: 'role',
-        tableItem: {
-          width: 110,
-          sorter: true,
-          render: (item) => item?.name,
-        },
-      },
-      {
         title: 'Email',
         name: 'email',
         tableItem: {
@@ -89,7 +80,7 @@ export default {
       {
         title: 'routes.admin.user.Action',
         tableItem: {
-          width: 90,
+          width: 100,
           align: ETableAlign.center,
           render: (text: string, data) => (
             <div className={'flex gap-2'}>

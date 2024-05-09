@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Gate;
 
 class AddressController extends Controller implements HasMiddleware
 {
@@ -32,7 +33,7 @@ class AddressController extends Controller implements HasMiddleware
    */
   public function index(): AnonymousResourceCollection
   {
-    $this->checkPermission(EPermissions::P_ADDRESS_INDEX);
+    Gate::authorize(EPermissions::P_ADDRESS_INDEX->name);
     return AddressResource::collection($this->loadRelationships(Address::query())->latest()->paginate())
       ->additional(['message' => __('messages.Get List Success')]);
   }
@@ -42,7 +43,7 @@ class AddressController extends Controller implements HasMiddleware
    */
   public function store(Request $request): AddressResource
   {
-    $this->checkPermission(EPermissions::P_ADDRESS_STORE);
+    Gate::authorize(EPermissions::P_ADDRESS_STORE->name);
     $data = Address::create([
       ...$request->validate([
         'address' => 'required|string|max:255',
@@ -61,7 +62,7 @@ class AddressController extends Controller implements HasMiddleware
    */
   public function show(Address $address) : AddressResource
   {
-    $this->checkPermission(EPermissions::P_ADDRESS_SHOW);
+    Gate::authorize(EPermissions::P_ADDRESS_SHOW->name);
     return (new AddressResource($this->loadRelationships($address)))
       ->additional(['message' => __('messages.Get Detail Success')]);
   }
@@ -71,7 +72,7 @@ class AddressController extends Controller implements HasMiddleware
    */
   public function update(Request $request, Address $address): AddressResource
   {
-    $this->checkPermission(EPermissions::P_ADDRESS_UPDATE);
+    Gate::authorize(EPermissions::P_ADDRESS_UPDATE->name);
     $address->update(
       $request->validate([
         'address' => 'required|string|max:255',
@@ -89,7 +90,7 @@ class AddressController extends Controller implements HasMiddleware
    */
   public function destroy(Address $address): JsonResponse
   {
-    $this->checkPermission(EPermissions::P_ADDRESS_DESTROY);
+    Gate::authorize(EPermissions::P_ADDRESS_DESTROY->name);
     $address->delete();
     return response()->json(['message' => __('messages.Delete Success')]);
   }

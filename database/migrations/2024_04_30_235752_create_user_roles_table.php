@@ -18,6 +18,7 @@ return new class extends Migration
           $table->boolean('is_system_admin')->default(false);
           $table->text('description')->nullable();
           $table->jsonb('permissions');
+          $table->softDeletes();
           $table->timestamps();
         });
     }

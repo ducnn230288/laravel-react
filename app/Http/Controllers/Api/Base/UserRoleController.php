@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Gate;
 
 class UserRoleController extends Controller implements HasMiddleware
 {
@@ -31,7 +32,7 @@ class UserRoleController extends Controller implements HasMiddleware
      */
   public function index(): AnonymousResourceCollection
   {
-    $this->checkPermission(EPermissions::P_USER_ROLE_INDEX);
+    Gate::authorize(EPermissions::P_USER_ROLE_INDEX->name);
     return UserRoleResource::collection($this->loadRelationships(UserRole::query())->latest()->paginate())
       ->additional(['message' => __('messages.Get List Success')]);
   }
@@ -41,7 +42,7 @@ class UserRoleController extends Controller implements HasMiddleware
      */
     public function store(Request $request): UserRoleResource
     {
-      $this->checkPermission(EPermissions::P_USER_ROLE_STORE);
+      Gate::authorize(EPermissions::P_USER_ROLE_STORE->name);
       $data = UserRole::create([
         ...$request->validate([
           'name' => 'required|string|max:255',
@@ -60,7 +61,7 @@ class UserRoleController extends Controller implements HasMiddleware
      */
     public function show(string $code): UserRoleResource
     {
-      $this->checkPermission(EPermissions::P_USER_ROLE_SHOW);
+      Gate::authorize(EPermissions::P_USER_ROLE_SHOW->name);
       return (new UserRoleResource($this->loadRelationships(UserRole::query()->where('code', $code)->first())))
         ->additional(['message' => __('messages.Get Detail Success')]);
     }
@@ -70,7 +71,7 @@ class UserRoleController extends Controller implements HasMiddleware
      */
     public function update(Request $request, string $code): UserRoleResource
     {
-      $this->checkPermission(EPermissions::P_USER_ROLE_UPDATE);
+      Gate::authorize(EPermissions::P_USER_ROLE_UPDATE->name);
       $data = UserRole::query()->where('code', $code)->first();
       $data->update(
         $request->validate([
@@ -89,7 +90,7 @@ class UserRoleController extends Controller implements HasMiddleware
      */
     public function destroy(string $code): JsonResponse
     {
-      $this->checkPermission(EPermissions::P_USER_ROLE_DESTROY);
+      Gate::authorize(EPermissions::P_USER_ROLE_DESTROY->name);
       UserRole::query()->where('code', $code)->first()->delete();
       return response()->json(['message' => __('messages.Delete Success')]);
     }

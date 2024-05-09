@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller implements HasMiddleware
 {
@@ -32,7 +33,7 @@ class PostController extends Controller implements HasMiddleware
    */
   public function index(): AnonymousResourceCollection
   {
-    $this->checkPermission(EPermissions::P_POST_INDEX);
+    Gate::authorize(EPermissions::P_POST_INDEX->name);
     return PostResource::collection($this->loadRelationships(Post::query())->latest()->paginate())
       ->additional(['message' => __('messages.Get List Success')]);
   }
@@ -42,7 +43,7 @@ class PostController extends Controller implements HasMiddleware
    */
   public function store(Request $request): PostResource
   {
-    $this->checkPermission(EPermissions::P_POST_STORE);
+    Gate::authorize(EPermissions::P_POST_STORE->name);
     $data = Post::create([
       ...$request->validate([
         'type_code' => 'required|string|max:255',
@@ -58,7 +59,7 @@ class PostController extends Controller implements HasMiddleware
    */
   public function show(Post $post) : PostResource
   {
-    $this->checkPermission(EPermissions::P_POST_SHOW);
+    Gate::authorize(EPermissions::P_POST_SHOW->name);
     return (new PostResource($this->loadRelationships($post)))
       ->additional(['message' => __('messages.Get Detail Success')]);
   }
@@ -68,7 +69,7 @@ class PostController extends Controller implements HasMiddleware
    */
   public function update(Request $request, Post $post): PostResource
   {
-    $this->checkPermission(EPermissions::P_POST_UPDATE);
+    Gate::authorize(EPermissions::P_POST_UPDATE->name);
     $post->update(
       $request->validate([
         'type_code' => 'sometimes|string|max:255',
@@ -84,7 +85,7 @@ class PostController extends Controller implements HasMiddleware
    */
   public function destroy(Post $post): JsonResponse
   {
-    $this->checkPermission(EPermissions::P_POST_DESTROY);
+    Gate::authorize(EPermissions::P_POST_DESTROY->name);
     $post->delete();
     return response()->json(['message' => __('messages.Delete Success')]);
   }

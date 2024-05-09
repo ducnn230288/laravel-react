@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Gate;
 
 class ParameterController extends Controller implements HasMiddleware
 {
@@ -27,7 +28,7 @@ class ParameterController extends Controller implements HasMiddleware
      */
   public function index(): AnonymousResourceCollection
   {
-    $this->checkPermission(EPermissions::P_PARAMETER_INDEX);
+    Gate::authorize(EPermissions::P_PARAMETER_INDEX->name);
     return ParameterResource::collection($this->loadRelationships(Parameter::query())->latest()->paginate())
       ->additional(['message' => __('messages.Get List Success')]);
   }
@@ -37,7 +38,7 @@ class ParameterController extends Controller implements HasMiddleware
      */
   public function store(Request $request): ParameterResource
   {
-    $this->checkPermission(EPermissions::P_PARAMETER_STORE);
+    Gate::authorize(EPermissions::P_PARAMETER_STORE->name);
     $data = Parameter::create([
       ...$request->validate([
         'name' => 'required|string|max:255',
@@ -55,7 +56,7 @@ class ParameterController extends Controller implements HasMiddleware
    */
   public function show(string $code) : ParameterResource
   {
-    $this->checkPermission(EPermissions::P_PARAMETER_SHOW);
+    Gate::authorize(EPermissions::P_PARAMETER_SHOW->name);
     return (new ParameterResource($this->loadRelationships(Parameter::query()->where('code', $code)->first())))
       ->additional(['message' => __('messages.Get Detail Success')]);
   }
@@ -65,7 +66,7 @@ class ParameterController extends Controller implements HasMiddleware
    */
   public function update(Request $request, string $code): ParameterResource
   {
-    $this->checkPermission(EPermissions::P_PARAMETER_UPDATE);
+    Gate::authorize(EPermissions::P_PARAMETER_UPDATE->name);
     $data = Parameter::query()->where('code', $code)->first();
     $data->update(
       $request->validate([
@@ -83,7 +84,7 @@ class ParameterController extends Controller implements HasMiddleware
    */
   public function destroy(string $code): JsonResponse
   {
-    $this->checkPermission(EPermissions::P_PARAMETER_DESTROY);
+    Gate::authorize(EPermissions::P_PARAMETER_DESTROY->name);
     Parameter::query()->where('code', $code)->delete();
     return response()->json(['message' => __('messages.Delete Success')]);
   }

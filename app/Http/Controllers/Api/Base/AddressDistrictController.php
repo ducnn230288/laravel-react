@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Gate;
 
 class AddressDistrictController extends Controller implements HasMiddleware
 {
@@ -31,7 +32,7 @@ class AddressDistrictController extends Controller implements HasMiddleware
    */
   public function index(): AnonymousResourceCollection
   {
-    $this->checkPermission(EPermissions::P_ADDRESS_DISTRICT_INDEX);
+    Gate::authorize(EPermissions::P_ADDRESS_DISTRICT_INDEX->name);
     return AddressDistrictResource::collection($this->loadRelationships(AddressDistrict::query())->latest()->paginate())
       ->additional(['message' => __('messages.Get List Success')]);
   }
@@ -41,7 +42,7 @@ class AddressDistrictController extends Controller implements HasMiddleware
    */
   public function store(Request $request): AddressDistrictResource
   {
-    $this->checkPermission(EPermissions::P_ADDRESS_DISTRICT_STORE);
+    Gate::authorize(EPermissions::P_ADDRESS_DISTRICT_STORE->name);
     $data = AddressDistrict::create([
       ...$request->validate([
         'name' => 'required|string|max:255',
@@ -59,7 +60,7 @@ class AddressDistrictController extends Controller implements HasMiddleware
    */
   public function show(string $code): AddressDistrictResource
   {
-    $this->checkPermission(EPermissions::P_ADDRESS_DISTRICT_SHOW);
+    Gate::authorize(EPermissions::P_ADDRESS_DISTRICT_SHOW->name);
     return (new AddressDistrictResource($this->loadRelationships(AddressDistrict::query()->where('code', $code)->first())))
       ->additional(['message' => __('messages.Get Detail Success')]);
   }
@@ -69,7 +70,7 @@ class AddressDistrictController extends Controller implements HasMiddleware
    */
   public function update(Request $request, string $code): AddressDistrictResource
   {
-    $this->checkPermission(EPermissions::P_ADDRESS_DISTRICT_UPDATE);
+    Gate::authorize(EPermissions::P_ADDRESS_DISTRICT_UPDATE->name);
     $data = AddressDistrict::query()->where('code', $code)->first();
     $data->update(
       $request->validate([
@@ -86,7 +87,7 @@ class AddressDistrictController extends Controller implements HasMiddleware
    */
   public function destroy(string $code): JsonResponse
   {
-    $this->checkPermission(EPermissions::P_ADDRESS_DISTRICT_DESTROY);
+    Gate::authorize(EPermissions::P_ADDRESS_DISTRICT_DESTROY->name);
     AddressDistrict::query()->where('code', $code)->first()->delete();
     return response()->json(['message' => __('messages.Delete Success')]);
   }

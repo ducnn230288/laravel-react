@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Gate;
 
 class CodeController extends Controller implements HasMiddleware
 {
@@ -32,7 +33,7 @@ class CodeController extends Controller implements HasMiddleware
      */
     public function index(): AnonymousResourceCollection
     {
-      $this->checkPermission(EPermissions::P_CODE_INDEX);
+      Gate::authorize(EPermissions::P_CODE_INDEX->name);
       return CodeResource::collection($this->loadRelationships(Code::query())->latest()->paginate())
         ->additional(['message' => __('messages.Get List Success')]);
     }
@@ -42,7 +43,7 @@ class CodeController extends Controller implements HasMiddleware
      */
     public function store(Request $request): CodeResource
     {
-      $this->checkPermission(EPermissions::P_CODE_STORE);
+      Gate::authorize(EPermissions::P_CODE_STORE->name);
       $data = Code::create([
         ...$request->validate([
           'name' => 'required|string|max:255',
@@ -60,7 +61,7 @@ class CodeController extends Controller implements HasMiddleware
      */
     public function show(string $code) : CodeResource
     {
-      $this->checkPermission(EPermissions::P_CODE_SHOW);
+      Gate::authorize(EPermissions::P_CODE_SHOW->name);
       return (new CodeResource($this->loadRelationships(Code::query()->where('code', $code)->first())))
         ->additional(['message' => __('messages.Get Detail Success')]);
     }
@@ -70,7 +71,7 @@ class CodeController extends Controller implements HasMiddleware
      */
     public function update(Request $request, string $code): CodeResource
     {
-      $this->checkPermission(EPermissions::P_CODE_UPDATE);
+      Gate::authorize(EPermissions::P_CODE_UPDATE->name);
       $data = Code::query()->where('code', $code)->first();
       $data->update(
         $request->validate([
@@ -87,7 +88,7 @@ class CodeController extends Controller implements HasMiddleware
      */
     public function destroy(string $code): JsonResponse
     {
-      $this->checkPermission(EPermissions::P_CODE_DESTROY);
+      Gate::authorize(EPermissions::P_CODE_DESTROY->name);
       Code::query()->where('code', $code)->delete();
       return response()->json(['message' => __('messages.Delete Success')]);
     }

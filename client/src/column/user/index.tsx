@@ -94,10 +94,10 @@ export default {
           render: (text: string, data) => (
             <div className={'flex gap-2'}>
               {user?.role?.permissions?.includes(keyRole.P_USER_UPDATE) && (
-                <ToolTip title={t(data.isDisabled ? 'components.datatable.Disabled' : 'components.datatable.Enabled')}>
+                <ToolTip title={t(data.disabledAt ? 'components.datatable.Disabled' : 'components.datatable.Enabled')}>
                   <PopConfirm
                     title={t(
-                      !data.isDisabled
+                      !data.disabledAt
                         ? 'components.datatable.areYouSureWantDisable'
                         : 'components.datatable.areYouSureWantEnable',
                     )}
@@ -105,10 +105,10 @@ export default {
                   >
                     <button
                       title={
-                        t(data.isDisabled ? 'components.datatable.Disabled' : 'components.datatable.Enabled') || ''
+                        t(data.disabledAt ? 'components.datatable.Disabled' : 'components.datatable.Enabled') || ''
                       }
                     >
-                      {data.isDisabled ? (
+                      {data.disabledAt ? (
                         <Disable className="icon-cud bg-yellow-700 hover:bg-yellow-500" />
                       ) : (
                         <Check className="icon-cud bg-green-600 hover:bg-green-400" />

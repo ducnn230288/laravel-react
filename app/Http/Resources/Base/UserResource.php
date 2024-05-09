@@ -4,6 +4,7 @@ namespace App\Http\Resources\Base;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Str;
 
 class UserResource extends JsonResource
 {
@@ -19,16 +20,17 @@ class UserResource extends JsonResource
         'name' => $this->whenHas('name'),
         'email' => $this->whenHas('email'),
         'avatar' => $this->whenHas('avatar'),
-        'phoneNumber' => $this->whenHas('phone_number'),
-        'created_at' => $this->whenHas('created_at'),
-        'roleCode' => $this->whenHas('role_code'),
+        Str::camel('phone_number') => $this->whenHas('phone_number'),
+        Str::camel('created_at') => $this->whenHas('created_at'),
+        Str::camel('disabled_at') => $this->whenHas('disabled_at'),
+        Str::camel('role_code') => $this->whenHas('role_code'),
         'role' => new UserRoleResource($this->whenLoaded('role')),
-        'positionCode' => $this->whenHas('position_code'),
+        Str::camel('position_code') => $this->whenHas('position_code'),
         'position' => new CodeResource($this->whenLoaded('position')),
       ];
       return !!$this->token ? [
         'token' => $this->whenHas('token'),
-        'refreshToken' => $this->whenHas('refresh-token'),
+        Str::camel('refresh-token') => $this->whenHas('refresh-token'),
         'user' => $user
       ] : $user;
 //      $this->mergeWhen($this->token, [

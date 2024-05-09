@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Gate;
 
 class ContentTypeController extends Controller implements HasMiddleware
 {
@@ -31,7 +32,7 @@ class ContentTypeController extends Controller implements HasMiddleware
    */
   public function index(): AnonymousResourceCollection
   {
-    $this->checkPermission(EPermissions::P_CONTENT_TYPE_INDEX);
+    Gate::authorize(EPermissions::P_CONTENT_TYPE_INDEX->name);
     return ContentTypeResource::collection($this->loadRelationships(ContentType::query())->latest()->paginate())
       ->additional(['message' => __('messages.Get List Success')]);
   }
@@ -41,7 +42,7 @@ class ContentTypeController extends Controller implements HasMiddleware
    */
   public function store(Request $request): ContentTypeResource
   {
-    $this->checkPermission(EPermissions::P_CONTENT_TYPE_STORE);
+    Gate::authorize(EPermissions::P_CONTENT_TYPE_STORE->name);
     $data = ContentType::create([
       ...$request->validate([
         'name' => 'required|string|max:255',
@@ -58,7 +59,7 @@ class ContentTypeController extends Controller implements HasMiddleware
    */
   public function show(string $code): ContentTypeResource
   {
-    $this->checkPermission(EPermissions::P_CONTENT_TYPE_SHOW);
+    Gate::authorize(EPermissions::P_CONTENT_TYPE_SHOW->name);
     return (new ContentTypeResource($this->loadRelationships(ContentType::query()->where('code', $code)->first())))
       ->additional(['message' => __('messages.Get Detail Success')]);
   }
@@ -68,7 +69,7 @@ class ContentTypeController extends Controller implements HasMiddleware
    */
   public function update(Request $request, string $code): ContentTypeResource
   {
-    $this->checkPermission(EPermissions::P_CONTENT_TYPE_UPDATE);
+    Gate::authorize(EPermissions::P_CONTENT_TYPE_UPDATE->name);
     $data = ContentType::query()->where('code', $code)->first();
     $data->update(
       $request->validate([
@@ -85,7 +86,7 @@ class ContentTypeController extends Controller implements HasMiddleware
    */
   public function destroy(string $code): JsonResponse
   {
-    $this->checkPermission(EPermissions::P_CONTENT_TYPE_DESTROY);
+    Gate::authorize(EPermissions::P_CONTENT_TYPE_DESTROY->name);
     ContentType::query()->where('code', $code)->first()->delete();
     return response()->json(['message' => __('messages.Delete Success')]);
   }

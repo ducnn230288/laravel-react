@@ -22,7 +22,6 @@ class UserRoleFactory extends Factory
         'name' => $name,
         'code' => strtoupper(Str::slug($name)),
         'description' => null,
-        'is_system_admin' => false,
         'permissions' => array($this->faker->uuid)
       ];
     }

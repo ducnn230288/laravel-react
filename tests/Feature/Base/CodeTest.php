@@ -13,7 +13,11 @@ use Tests\TestCase;
 class CodeTest extends TestCase
 {
   use WithFaker, RefreshDatabase;
-
+  protected function setUp(): void
+  {
+    parent::setUp();
+    $this->withoutMiddleware(\App\Http\Middleware\FrontendCaseMiddleware::class);
+  }
   public function test_super_admin()
   {
     $this->base(ERole::SUPER_ADMIN);
@@ -50,9 +54,9 @@ class CodeTest extends TestCase
 
     $res = $this->get('/api/codes/types/')->assertStatus($eRole !== ERole::USER ? 200 : 403);
     if ($eRole !== ERole::USER) {
-      $this->assertCount(1, $res['data']);
+      $this->assertCount(2, $res['data']);
       foreach($type as $key=>$value) {
-        $this->assertEquals($value, $res['data'][0][$key]);
+        $this->assertEquals($value, $res['data'][1][$key]);
       }
     }
 
@@ -66,9 +70,9 @@ class CodeTest extends TestCase
 
     $res = $this->get('/api/codes/')->assertStatus($eRole !== ERole::USER ? 200 : 403);
     if ($eRole !== ERole::USER) {
-      $this->assertCount(1, $res['data']);
+      $this->assertCount(2, $res['data']);
       foreach($data as $key=>$value) {
-        $this->assertEquals($value, $res['data'][0][$key]);
+        $this->assertEquals($value, $res['data'][1][$key]);
       }
     }
 

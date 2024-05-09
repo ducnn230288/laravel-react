@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Gate;
 
 class AddressProvinceController extends Controller implements HasMiddleware
 {
@@ -31,7 +32,7 @@ class AddressProvinceController extends Controller implements HasMiddleware
    */
   public function index(): AnonymousResourceCollection
   {
-    $this->checkPermission(EPermissions::P_ADDRESS_PROVINCE_INDEX);
+    Gate::authorize(EPermissions::P_ADDRESS_PROVINCE_INDEX->name);
     return AddressProvinceResource::collection($this->loadRelationships(AddressProvince::query())->latest()->paginate())
       ->additional(['message' => __('messages.Get List Success')]);
   }
@@ -41,7 +42,7 @@ class AddressProvinceController extends Controller implements HasMiddleware
    */
   public function store(Request $request): AddressProvinceResource
   {
-    $this->checkPermission(EPermissions::P_ADDRESS_PROVINCE_STORE);
+    Gate::authorize(EPermissions::P_ADDRESS_PROVINCE_STORE->name);
     $data = AddressProvince::create([
       ...$request->validate([
         'name' => 'required|string|max:255',
@@ -58,7 +59,7 @@ class AddressProvinceController extends Controller implements HasMiddleware
    */
   public function show(string $code): AddressProvinceResource
   {
-    $this->checkPermission(EPermissions::P_ADDRESS_PROVINCE_SHOW);
+    Gate::authorize(EPermissions::P_ADDRESS_PROVINCE_SHOW->name);
     return (new AddressProvinceResource($this->loadRelationships(AddressProvince::query()->where('code', $code)->first())))
       ->additional(['message' => __('messages.Get Detail Success')]);
   }
@@ -68,7 +69,7 @@ class AddressProvinceController extends Controller implements HasMiddleware
    */
   public function update(Request $request, string $code): AddressProvinceResource
   {
-    $this->checkPermission(EPermissions::P_ADDRESS_PROVINCE_UPDATE);
+    Gate::authorize(EPermissions::P_ADDRESS_PROVINCE_UPDATE->name);
     $data = AddressProvince::query()->where('code', $code)->first();
     $data->update(
       $request->validate([
@@ -85,7 +86,7 @@ class AddressProvinceController extends Controller implements HasMiddleware
    */
   public function destroy(string $code): JsonResponse
   {
-    $this->checkPermission(EPermissions::P_ADDRESS_PROVINCE_DESTROY);
+    Gate::authorize(EPermissions::P_ADDRESS_PROVINCE_DESTROY->name);
     AddressProvince::query()->where('code', $code)->first()->delete();
     return response()->json(['message' => __('messages.Delete Success')]);
   }

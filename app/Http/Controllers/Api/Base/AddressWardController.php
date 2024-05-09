@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Gate;
 
 class AddressWardController extends Controller implements HasMiddleware
 {
@@ -31,7 +32,7 @@ class AddressWardController extends Controller implements HasMiddleware
    */
   public function index(): AnonymousResourceCollection
   {
-    $this->checkPermission(EPermissions::P_ADDRESS_WARD_INDEX);
+    Gate::authorize(EPermissions::P_ADDRESS_WARD_INDEX->name);
     return AddressWardResource::collection($this->loadRelationships(AddressWard::query())->latest()->paginate())
       ->additional(['message' => __('messages.Get List Success')]);
   }
@@ -41,7 +42,7 @@ class AddressWardController extends Controller implements HasMiddleware
    */
   public function store(Request $request): AddressWardResource
   {
-    $this->checkPermission(EPermissions::P_ADDRESS_WARD_STORE);
+    Gate::authorize(EPermissions::P_ADDRESS_WARD_STORE->name);
     $data = AddressWard::create([
       ...$request->validate([
         'name' => 'required|string|max:255',
@@ -59,7 +60,7 @@ class AddressWardController extends Controller implements HasMiddleware
    */
   public function show(string $code): AddressWardResource
   {
-    $this->checkPermission(EPermissions::P_ADDRESS_WARD_SHOW);
+    Gate::authorize(EPermissions::P_ADDRESS_WARD_SHOW->name);
     return (new AddressWardResource($this->loadRelationships(AddressWard::query()->where('code', $code)->first())))
       ->additional(['message' => __('messages.Get Detail Success')]);
   }
@@ -69,7 +70,7 @@ class AddressWardController extends Controller implements HasMiddleware
    */
   public function update(Request $request, string $code): AddressWardResource
   {
-    $this->checkPermission(EPermissions::P_ADDRESS_WARD_UPDATE);
+    Gate::authorize(EPermissions::P_ADDRESS_WARD_UPDATE->name);
     $data = AddressWard::query()->where('code', $code)->first();
     $data->update(
       $request->validate([
@@ -86,7 +87,7 @@ class AddressWardController extends Controller implements HasMiddleware
    */
   public function destroy(string $code): JsonResponse
   {
-    $this->checkPermission(EPermissions::P_ADDRESS_WARD_DESTROY);
+    Gate::authorize(EPermissions::P_ADDRESS_WARD_DESTROY->name);
     AddressWard::query()->where('code', $code)->first()->delete();
     return response()->json(['message' => __('messages.Delete Success')]);
   }

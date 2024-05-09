@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 
-class FrontendCase
+class FrontendCaseMiddleware
 {
   public const CASE_SNAKE = 'snake';
   public const CASE_CAMEL = 'camel';

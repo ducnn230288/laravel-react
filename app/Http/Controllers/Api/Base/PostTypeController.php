@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Gate;
 
 class PostTypeController extends Controller implements HasMiddleware
 {
@@ -31,7 +32,7 @@ class PostTypeController extends Controller implements HasMiddleware
    */
   public function index(): AnonymousResourceCollection
   {
-    $this->checkPermission(EPermissions::P_POST_TYPE_INDEX);
+    Gate::authorize(EPermissions::P_POST_TYPE_INDEX->name);
     return PostTypeResource::collection($this->loadRelationships(PostType::query())->latest()->paginate())
       ->additional(['message' => __('messages.Get List Success')]);
   }
@@ -41,7 +42,7 @@ class PostTypeController extends Controller implements HasMiddleware
    */
   public function store(Request $request): PostTypeResource
   {
-    $this->checkPermission(EPermissions::P_POST_TYPE_STORE);
+    Gate::authorize(EPermissions::P_POST_TYPE_STORE->name);
     $data = PostType::create([
       ...$request->validate([
         'name' => 'required|string|max:255',
@@ -58,7 +59,7 @@ class PostTypeController extends Controller implements HasMiddleware
    */
   public function show(string $code): PostTypeResource
   {
-    $this->checkPermission(EPermissions::P_POST_TYPE_SHOW);
+    Gate::authorize(EPermissions::P_POST_TYPE_SHOW->name);
     return (new PostTypeResource($this->loadRelationships(PostType::query()->where('code', $code)->first())))
       ->additional(['message' => __('messages.Get Detail Success')]);
   }
@@ -68,7 +69,7 @@ class PostTypeController extends Controller implements HasMiddleware
    */
   public function update(Request $request, string $code): PostTypeResource
   {
-    $this->checkPermission(EPermissions::P_POST_TYPE_UPDATE);
+    Gate::authorize(EPermissions::P_POST_TYPE_UPDATE->name);
     $data = PostType::query()->where('code', $code)->first();
     $data->update(
       $request->validate([
@@ -85,7 +86,7 @@ class PostTypeController extends Controller implements HasMiddleware
    */
   public function destroy(string $code): JsonResponse
   {
-    $this->checkPermission(EPermissions::P_POST_TYPE_DESTROY);
+    Gate::authorize(EPermissions::P_POST_TYPE_DESTROY->name);
     PostType::query()->where('code', $code)->first()->delete();
     return response()->json(['message' => __('messages.Delete Success')]);
   }

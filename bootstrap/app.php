@@ -14,8 +14,8 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-      $middleware->append(\App\Http\Middleware\Localization::class);
-      $middleware->append(\App\Http\Middleware\FrontendCase::class);
+      $middleware->append(\App\Http\Middleware\LocalizationMiddleware::class);
+      $middleware->append(\App\Http\Middleware\FrontendCaseMiddleware::class);
       $middleware->alias([
         'abilities' => CheckAbilities::class,
         'ability' => CheckForAnyAbility::class,

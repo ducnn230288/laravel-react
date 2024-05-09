@@ -14,7 +14,7 @@ const Layout: IMenu[] = [
     icon: <User className="h-6 w-6" />,
     name: 'User',
     permission: keyRole.P_USER_INDEX,
-    queryParams: { filter: '{"roleCode":"super_admin"}' },
+    queryParams: { roleCode: 'SUPER-ADMIN' },
   },
   {
     icon: <Cog className="h-6 w-6" />,

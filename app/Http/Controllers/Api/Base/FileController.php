@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 
 class FileController extends Controller implements HasMiddleware
@@ -28,7 +29,7 @@ class FileController extends Controller implements HasMiddleware
      */
     public function index(): AnonymousResourceCollection
     {
-      $this->checkPermission(EPermissions::P_FILE_INDEX);
+      Gate::authorize(EPermissions::P_FILE_INDEX->name);
       return FileResource::collection($this->loadRelationships(File::query())->latest()->paginate())
         ->additional(['message' => __('messages.Get List Success')]);
     }
@@ -38,7 +39,7 @@ class FileController extends Controller implements HasMiddleware
      */
     public function store(Request $request): FileResource
     {
-      $this->checkPermission(EPermissions::P_FILE_STORE);
+      Gate::authorize(EPermissions::P_FILE_STORE->name);
       $userId = $request->user()->id;
       $path = $request->file('file')->store($userId);
 
@@ -55,7 +56,7 @@ class FileController extends Controller implements HasMiddleware
      */
     public function show(File $file): FileResource
     {
-      $this->checkPermission(EPermissions::P_FILE_SHOW);
+      Gate::authorize(EPermissions::P_FILE_SHOW->name);
       return (new FileResource($this->loadRelationships($file)))
         ->additional(['message' => __('messages.Get Detail Success')]);
     }
@@ -65,7 +66,7 @@ class FileController extends Controller implements HasMiddleware
      */
     public function update(Request $request, File $file): FileResource
     {
-      $this->checkPermission(EPermissions::P_FILE_UPDATE);
+      Gate::authorize(EPermissions::P_FILE_UPDATE->name);
       $file->update(
         $request->validate([
           'description' => 'nullable|string',
@@ -81,7 +82,7 @@ class FileController extends Controller implements HasMiddleware
      */
     public function destroy(File $file): JsonResponse
     {
-      $this->checkPermission(EPermissions::P_FILE_DESTROY);
+      Gate::authorize(EPermissions::P_FILE_DESTROY->name);
       Storage::delete($file->path);
       $file->delete();
       return response()->json(['message' => __('messages.Delete Success')]);

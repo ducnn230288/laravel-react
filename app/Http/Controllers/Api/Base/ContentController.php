@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Gate;
 
 class ContentController extends Controller implements HasMiddleware
 {
@@ -32,7 +33,7 @@ class ContentController extends Controller implements HasMiddleware
    */
   public function index(): AnonymousResourceCollection
   {
-    $this->checkPermission(EPermissions::P_CONTENT_INDEX);
+    Gate::authorize(EPermissions::P_CONTENT_INDEX->name);
     return ContentResource::collection($this->loadRelationships(Content::query())->latest()->paginate())
       ->additional(['message' => __('messages.Get List Success')]);
   }
@@ -42,7 +43,7 @@ class ContentController extends Controller implements HasMiddleware
    */
   public function store(Request $request): ContentResource
   {
-    $this->checkPermission(EPermissions::P_CONTENT_STORE);
+    Gate::authorize(EPermissions::P_CONTENT_STORE->name);
     $data = Content::create([
       ...$request->validate([
         'name' => 'required|string|max:255',
@@ -60,7 +61,7 @@ class ContentController extends Controller implements HasMiddleware
    */
   public function show(Content $content) : ContentResource
   {
-    $this->checkPermission(EPermissions::P_CONTENT_SHOW);
+    Gate::authorize(EPermissions::P_CONTENT_SHOW->name);
     return (new ContentResource($this->loadRelationships($content)))
       ->additional(['message' => __('messages.Get Detail Success')]);
   }
@@ -70,7 +71,7 @@ class ContentController extends Controller implements HasMiddleware
    */
   public function update(Request $request, Content $content): ContentResource
   {
-    $this->checkPermission(EPermissions::P_CONTENT_UPDATE);
+    Gate::authorize(EPermissions::P_CONTENT_UPDATE->name);
     $content->update(
       $request->validate([
         'name' => 'sometimes|string|max:255',
@@ -87,7 +88,7 @@ class ContentController extends Controller implements HasMiddleware
    */
   public function destroy(Content $content): JsonResponse
   {
-    $this->checkPermission(EPermissions::P_CONTENT_DESTROY);
+    Gate::authorize(EPermissions::P_CONTENT_DESTROY->name);
     $content->delete();
     return response()->json(['message' => __('messages.Delete Success')]);
   }

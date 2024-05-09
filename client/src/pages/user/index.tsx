@@ -29,14 +29,14 @@ const Page = () => {
   useEffect(() => {
     if (
       userRoleFacade?.result?.data?.length &&
-      !userRoleFacade?.result?.data?.filter((item) => item.code === request.filter.roleCode).length
+      !userRoleFacade?.result?.data?.filter((item) => item.code === request.roleCode).length
     ) {
-      // navigate({
-      //   pathname: `/${lang}${routerLinks('User')}`,
-      //   search: `?${createSearchParams({ filter: '{"roleCode":"super_admin"}' })}`,
-      // });
-      // request.filter.roleCode = 'super_admin';
-      // dataTableRef?.current?.onChange(request);
+      navigate({
+        pathname: `/${lang}${routerLinks('User')}`,
+        search: `?${createSearchParams({ roleCode: 'SUPER-ADMIN' })}`,
+      });
+      request.roleCode = 'SUPER-ADMIN';
+      dataTableRef?.current?.onChange(request);
     }
   }, [userRoleFacade?.result]);
 
@@ -56,7 +56,7 @@ const Page = () => {
     }
   }, [userFacade.status]);
   const request = JSON.parse(userFacade?.queryParams || '{}');
-  if (!request.filter || typeof request?.filter === 'string') request.filter = JSON.parse(request?.filter || '{}');
+  console.log(request);
   const { t } = useTranslation();
   const dataTableRef = useRef<TableRefObject>(null);
   return (
@@ -64,10 +64,10 @@ const Page = () => {
       <DrawerForm
         facade={userFacade}
         columns={_column.form()}
-        title={t(userFacade.data ? 'pages.User/Edit' : 'pages.User/Add', { roleCode: request.filter.roleCode })}
+        title={t(userFacade.data ? 'pages.User/Edit' : 'pages.User/Add', { roleCode: request.roleCode })}
         onSubmit={(values) => {
-          if (userFacade.data) userFacade.put({ ...values, id: userFacade.data.id, roleCode: request.filter.roleCode });
-          else userFacade.post({ ...values, roleCode: request.filter.roleCode });
+          if (userFacade.data) userFacade.put({ ...values, id: userFacade.data.id, roleCode: request.roleCode });
+          else userFacade.post({ ...values, roleCode: request.roleCode });
         }}
       />
       <div className="col-span-12 md:col-span-4 lg:col-span-3 -intro-x">
@@ -94,13 +94,13 @@ const Page = () => {
                 titleRender={(data: any) => (
                   <div
                     className={classNames(
-                      { 'bg-gray-100': request.filter.roleCode === data.value },
+                      { 'bg-gray-100': request.roleCode === data.value },
                       'item text-gray-700 font-medium hover:bg-gray-100 flex justify-between items-center border-b border-gray-100 w-full text-left  group',
                     )}
                   >
                     <div
                       onClick={() => {
-                        request.filter.roleCode = data.value;
+                        request.roleCode = data.value;
                         dataTableRef?.current?.onChange(request);
                       }}
                       className="truncate cursor-pointer flex-1 hover:text-teal-900 item-text px-3 py-1"
@@ -113,11 +113,11 @@ const Page = () => {
             </div>
             <div className="p-2 sm:p-0 block sm:hidden">
               <Select
-                value={request.filter.roleCode}
+                value={request.roleCode}
                 className={'w-full'}
                 options={userRoleFacade?.result?.data?.map((data) => ({ label: data.name, value: data.code }))}
                 onChange={(e) => {
-                  request.filter.roleCode = e;
+                  request.roleCode = e;
                   dataTableRef?.current?.onChange(request);
                 }}
               />

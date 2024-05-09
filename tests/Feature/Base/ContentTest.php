@@ -13,7 +13,11 @@ use Tests\TestCase;
 class ContentTest extends TestCase
 {
   use WithFaker, RefreshDatabase;
-
+  protected function setUp(): void
+  {
+    parent::setUp();
+    $this->withoutMiddleware(\App\Http\Middleware\FrontendCaseMiddleware::class);
+  }
   public function test_super_admin()
   {
     $this->base(ERole::SUPER_ADMIN);

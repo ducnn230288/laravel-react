@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller implements HasMiddleware
 {
@@ -32,7 +33,7 @@ class UserController extends Controller implements HasMiddleware
    */
   public function index(Request $request): AnonymousResourceCollection
   {
-    $this->checkPermission(EPermissions::P_USER_INDEX);
+    Gate::authorize(EPermissions::P_USER_INDEX->name);
     return UserResource::collection($this->filter(User::query())->paginate($request->get('perPage')))
       ->additional(['message' => __('messages.Get List Success')]);
   }
@@ -42,7 +43,7 @@ class UserController extends Controller implements HasMiddleware
    */
   public function store(Request $request): UserResource
   {
-    $this->checkPermission(EPermissions::P_USER_STORE);
+    Gate::authorize(EPermissions::P_USER_STORE->name);
     $data = User::create([
       ...$request->validate([
         'name' => 'required|string|max:255',
@@ -63,7 +64,7 @@ class UserController extends Controller implements HasMiddleware
    */
   public function show(User $user): UserResource
   {
-    $this->checkPermission(EPermissions::P_USER_SHOW);
+    Gate::authorize(EPermissions::P_USER_SHOW->name);
     return (new UserResource($this->loadRelationships($user)))
       ->additional(['message' => __('messages.Get Detail Success')]);
   }
@@ -73,7 +74,7 @@ class UserController extends Controller implements HasMiddleware
    */
   public function update(Request $request, User $user): UserResource
   {
-    $this->checkPermission(EPermissions::P_USER_UPDATE);
+    Gate::authorize(EPermissions::P_USER_UPDATE->name);
     $data = $request->validate([
       'name' => 'string|max:255',
       'avatar' => 'string|max:255',
@@ -97,7 +98,7 @@ class UserController extends Controller implements HasMiddleware
    */
   public function destroy(User $user): JsonResponse
   {
-    $this->checkPermission(EPermissions::P_USER_DESTROY);
+    Gate::authorize(EPermissions::P_USER_DESTROY->name);
     $user->delete();
     return response()->json(['message' => __('messages.Delete Success')]);
   }

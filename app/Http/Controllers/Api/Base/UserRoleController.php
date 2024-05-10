@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\Base;
 use App\Http\Controllers\Controller;
 use App\Http\Enums\EPermissions;
 use App\Http\Enums\ETokenAbility;
+use App\Http\Requests\Base\StoreUserRoleRequest;
+use App\Http\Requests\Base\UpdateRoleUserRequest;
 use App\Http\Resources\Base\UserRoleResource;
 use App\Models\Base\UserRole;
 use Illuminate\Http\JsonResponse;
@@ -40,18 +42,10 @@ class UserRoleController extends Controller implements HasMiddleware
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): UserRoleResource
+    public function store(StoreUserRoleRequest $request): UserRoleResource
     {
       Gate::authorize(EPermissions::P_USER_ROLE_STORE->name);
-      $data = UserRole::create([
-        ...$request->validate([
-          'name' => 'required|string|max:255',
-          'code' => 'required|string|max:255|unique:user_roles',
-          'description' => 'nullable|string',
-          'permissions' => 'present|array',
-          'permissions.*' => 'distinct|uuid',
-        ]),
-      ]);
+      $data = UserRole::create([...$request->validated()]);
       return (new UserRoleResource($this->loadRelationships($data)))
         ->additional(['message' => __('messages.Create Success')]);
     }
@@ -69,18 +63,11 @@ class UserRoleController extends Controller implements HasMiddleware
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $code): UserRoleResource
+    public function update(UpdateRoleUserRequest $request, string $code): UserRoleResource
     {
       Gate::authorize(EPermissions::P_USER_ROLE_UPDATE->name);
       $data = UserRole::query()->where('code', $code)->first();
-      $data->update(
-        $request->validate([
-          'name' => 'sometimes|string|max:255',
-          'description' => 'nullable|string',
-          'permissions' => 'sometimes|array',
-          'permissions.*' => 'distinct|uuid',
-        ])
-      );
+      $data->update($request->validated());
       return (new UserRoleResource($this->loadRelationships($data)))
         ->additional(['message' => __('messages.Update Success')]);
     }

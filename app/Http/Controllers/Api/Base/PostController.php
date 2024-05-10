@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\Base;
 use App\Http\Controllers\Controller;
 use App\Http\Enums\EPermissions;
 use App\Http\Enums\ETokenAbility;
+use App\Http\Requests\Base\StorePostRequest;
+use App\Http\Requests\Base\UpdatePostRequest;
 use App\Http\Resources\Base\PostResource;
 use App\Models\Base\Post;
 use Illuminate\Http\JsonResponse;
@@ -41,15 +43,10 @@ class PostController extends Controller implements HasMiddleware
   /**
    * Store a newly created resource in storage.
    */
-  public function store(Request $request): PostResource
+  public function store(StorePostRequest $request): PostResource
   {
     Gate::authorize(EPermissions::P_POST_STORE->name);
-    $data = Post::create([
-      ...$request->validate([
-        'type_code' => 'required|string|max:255',
-        'image' => 'nullable|string',
-      ]),
-    ]);
+    $data = Post::create([...$request->validated()]);
     return (new PostResource($this->loadRelationships($data)))
       ->additional(['message' => __('messages.Create Success')]);
   }
@@ -67,15 +64,10 @@ class PostController extends Controller implements HasMiddleware
   /**
    * Update the specified resource in storage.
    */
-  public function update(Request $request, Post $post): PostResource
+  public function update(UpdatePostRequest $request, Post $post): PostResource
   {
     Gate::authorize(EPermissions::P_POST_UPDATE->name);
-    $post->update(
-      $request->validate([
-        'type_code' => 'sometimes|string|max:255',
-        'image' => 'nullable|string',
-      ])
-    );
+    $post->update($request->validated());
     return (new PostResource($this->loadRelationships($post)))
       ->additional(['message' => __('messages.Update Success')]);
   }

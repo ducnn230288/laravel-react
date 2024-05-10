@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\Base;
 use App\Http\Controllers\Controller;
 use App\Http\Enums\EPermissions;
 use App\Http\Enums\ETokenAbility;
+use App\Http\Requests\Base\StoreAddressWardRequest;
+use App\Http\Requests\Base\UpdateAddressWardRequest;
 use App\Http\Resources\Base\AddressWardResource;
 use App\Models\Base\AddressWard;
 use Illuminate\Http\JsonResponse;
@@ -40,17 +42,10 @@ class AddressWardController extends Controller implements HasMiddleware
   /**
    * Store a newly created resource in storage.
    */
-  public function store(Request $request): AddressWardResource
+  public function store(StoreAddressWardRequest $request): AddressWardResource
   {
     Gate::authorize(EPermissions::P_ADDRESS_WARD_STORE->name);
-    $data = AddressWard::create([
-      ...$request->validate([
-        'name' => 'required|string|max:255',
-        'code' => 'required|string|max:255|unique:address_wards',
-        'district_code' => 'required|string|max:255',
-        'description' => 'nullable|string',
-      ]),
-    ]);
+    $data = AddressWard::create([...$request->validated()]);
     return (new AddressWardResource($this->loadRelationships($data)))
       ->additional(['message' => __('messages.Create Success')]);
   }
@@ -68,16 +63,11 @@ class AddressWardController extends Controller implements HasMiddleware
   /**
    * Update the specified resource in storage.
    */
-  public function update(Request $request, string $code): AddressWardResource
+  public function update(UpdateAddressWardRequest $request, string $code): AddressWardResource
   {
     Gate::authorize(EPermissions::P_ADDRESS_WARD_UPDATE->name);
     $data = AddressWard::query()->where('code', $code)->first();
-    $data->update(
-      $request->validate([
-        'name' => 'sometimes|string|max:255',
-        'description' => 'nullable|string',
-      ])
-    );
+    $data->update($request->validated());
     return (new AddressWardResource($this->loadRelationships($data)))
       ->additional(['message' => __('messages.Update Success')]);
   }

@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\Base;
 use App\Http\Controllers\Controller;
 use App\Http\Enums\EPermissions;
 use App\Http\Enums\ETokenAbility;
+use App\Http\Requests\Base\StoreContentRequest;
+use App\Http\Requests\Base\UpdateContentRequest;
 use App\Http\Resources\Base\ContentResource;
 use App\Models\Base\Content;
 use Illuminate\Http\JsonResponse;
@@ -41,17 +43,10 @@ class ContentController extends Controller implements HasMiddleware
   /**
    * Store a newly created resource in storage.
    */
-  public function store(Request $request): ContentResource
+  public function store(StoreContentRequest $request): ContentResource
   {
     Gate::authorize(EPermissions::P_CONTENT_STORE->name);
-    $data = Content::create([
-      ...$request->validate([
-        'name' => 'required|string|max:255',
-        'type_code' => 'required|string|max:255',
-        'image' => 'nullable|string',
-        'order' => 'nullable|integer',
-      ]),
-    ]);
+    $data = Content::create([...$request->validated()]);
     return (new ContentResource($this->loadRelationships($data)))
       ->additional(['message' => __('messages.Create Success')]);
   }
@@ -69,16 +64,10 @@ class ContentController extends Controller implements HasMiddleware
   /**
    * Update the specified resource in storage.
    */
-  public function update(Request $request, Content $content): ContentResource
+  public function update(UpdateContentRequest $request, Content $content): ContentResource
   {
     Gate::authorize(EPermissions::P_CONTENT_UPDATE->name);
-    $content->update(
-      $request->validate([
-        'name' => 'sometimes|string|max:255',
-        'image' => 'nullable|string',
-        'order' => 'nullable|integer',
-      ])
-    );
+    $content->update($request->validated());
     return (new ContentResource($this->loadRelationships($content)))
       ->additional(['message' => __('messages.Update Success')]);
   }

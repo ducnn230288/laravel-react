@@ -56,7 +56,6 @@ const Page = () => {
     }
   }, [userFacade.status]);
   const request = JSON.parse(userFacade?.queryParams || '{}');
-  console.log(request);
   const { t } = useTranslation();
   const dataTableRef = useRef<TableRefObject>(null);
   return (

@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\Base;
 use App\Http\Controllers\Controller;
 use App\Http\Enums\EPermissions;
 use App\Http\Enums\ETokenAbility;
+use App\Http\Requests\Base\StoreAddressDistrictRequest;
+use App\Http\Requests\Base\UpdateAddressDistrictRequest;
 use App\Http\Resources\Base\AddressDistrictResource;
 use App\Models\Base\AddressDistrict;
 use Illuminate\Http\JsonResponse;
@@ -40,17 +42,10 @@ class AddressDistrictController extends Controller implements HasMiddleware
   /**
    * Store a newly created resource in storage.
    */
-  public function store(Request $request): AddressDistrictResource
+  public function store(StoreAddressDistrictRequest $request): AddressDistrictResource
   {
     Gate::authorize(EPermissions::P_ADDRESS_DISTRICT_STORE->name);
-    $data = AddressDistrict::create([
-      ...$request->validate([
-        'name' => 'required|string|max:255',
-        'code' => 'required|string|max:255|unique:address_districts',
-        'province_code' => 'required|string|max:255',
-        'description' => 'nullable|string',
-      ]),
-    ]);
+    $data = AddressDistrict::create([...$request->validated()]);
     return (new AddressDistrictResource($this->loadRelationships($data)))
       ->additional(['message' => __('messages.Create Success')]);
   }
@@ -68,16 +63,11 @@ class AddressDistrictController extends Controller implements HasMiddleware
   /**
    * Update the specified resource in storage.
    */
-  public function update(Request $request, string $code): AddressDistrictResource
+  public function update(UpdateAddressDistrictRequest $request, string $code): AddressDistrictResource
   {
     Gate::authorize(EPermissions::P_ADDRESS_DISTRICT_UPDATE->name);
     $data = AddressDistrict::query()->where('code', $code)->first();
-    $data->update(
-      $request->validate([
-        'name' => 'sometimes|string|max:255',
-        'description' => 'nullable|string',
-      ])
-    );
+    $data->update($request->validated());
     return (new AddressDistrictResource($this->loadRelationships($data)))
       ->additional(['message' => __('messages.Update Success')]);
   }

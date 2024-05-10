@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\Base;
 use App\Http\Controllers\Controller;
 use App\Http\Enums\EPermissions;
 use App\Http\Enums\ETokenAbility;
+use App\Http\Requests\Base\StoreAddressProvinceRequest;
+use App\Http\Requests\Base\UpdateAddressProvinceRequest;
 use App\Http\Resources\Base\AddressProvinceResource;
 use App\Models\Base\AddressProvince;
 use Illuminate\Http\JsonResponse;
@@ -40,16 +42,10 @@ class AddressProvinceController extends Controller implements HasMiddleware
   /**
    * Store a newly created resource in storage.
    */
-  public function store(Request $request): AddressProvinceResource
+  public function store(StoreAddressProvinceRequest $request): AddressProvinceResource
   {
     Gate::authorize(EPermissions::P_ADDRESS_PROVINCE_STORE->name);
-    $data = AddressProvince::create([
-      ...$request->validate([
-        'name' => 'required|string|max:255',
-        'code' => 'required|string|max:255|unique:address_provinces',
-        'description' => 'nullable|string',
-      ]),
-    ]);
+    $data = AddressProvince::create([...$request->validated()]);
     return (new AddressProvinceResource($this->loadRelationships($data)))
       ->additional(['message' => __('messages.Create Success')]);
   }
@@ -67,16 +63,11 @@ class AddressProvinceController extends Controller implements HasMiddleware
   /**
    * Update the specified resource in storage.
    */
-  public function update(Request $request, string $code): AddressProvinceResource
+  public function update(UpdateAddressProvinceRequest $request, string $code): AddressProvinceResource
   {
     Gate::authorize(EPermissions::P_ADDRESS_PROVINCE_UPDATE->name);
     $data = AddressProvince::query()->where('code', $code)->first();
-    $data->update(
-      $request->validate([
-        'name' => 'sometimes|string|max:255',
-        'description' => 'nullable|string',
-      ])
-    );
+    $data->update($request->validated());
     return (new AddressProvinceResource($this->loadRelationships($data)))
       ->additional(['message' => __('messages.Update Success')]);
   }

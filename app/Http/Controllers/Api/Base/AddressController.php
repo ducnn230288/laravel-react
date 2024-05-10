@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\Base;
 use App\Http\Controllers\Controller;
 use App\Http\Enums\EPermissions;
 use App\Http\Enums\ETokenAbility;
+use App\Http\Requests\Base\StoreAddressRequest;
+use App\Http\Requests\Base\UpdateAddressRequest;
 use App\Http\Resources\Base\AddressResource;
 use App\Models\Base\Address;
 use Illuminate\Http\JsonResponse;
@@ -41,16 +43,11 @@ class AddressController extends Controller implements HasMiddleware
   /**
    * Store a newly created resource in storage.
    */
-  public function store(Request $request): AddressResource
+  public function store(StoreAddressRequest $request): AddressResource
   {
     Gate::authorize(EPermissions::P_ADDRESS_STORE->name);
     $data = Address::create([
-      ...$request->validate([
-        'address' => 'required|string|max:255',
-        'province_code' => 'required|string|max:255',
-        'district_code' => 'required|string|max:255',
-        'ward_code' => 'required|string|max:255',
-      ]),
+      ...$request->validated(),
       'user_id' => $request->user()->id,
     ]);
     return (new AddressResource($this->loadRelationships($data)))
@@ -70,17 +67,10 @@ class AddressController extends Controller implements HasMiddleware
   /**
    * Update the specified resource in storage.
    */
-  public function update(Request $request, Address $address): AddressResource
+  public function update(UpdateAddressRequest $request, Address $address): AddressResource
   {
     Gate::authorize(EPermissions::P_ADDRESS_UPDATE->name);
-    $address->update(
-      $request->validate([
-        'address' => 'required|string|max:255',
-        'province_code' => 'required|string|max:255',
-        'district_code' => 'required|string|max:255',
-        'ward_code' => 'required|string|max:255',
-      ])
-    );
+    $address->update($request->validated());
     return (new AddressResource($this->loadRelationships($address)))
       ->additional(['message' => __('messages.Update Success')]);
   }

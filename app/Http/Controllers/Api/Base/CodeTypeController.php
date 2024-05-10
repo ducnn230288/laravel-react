@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\Base;
 use App\Http\Controllers\Controller;
 use App\Http\Enums\EPermissions;
 use App\Http\Enums\ETokenAbility;
+use App\Http\Requests\Base\StoreCodeTypeRequest;
+use App\Http\Requests\Base\UpdateCodeTypeRequest;
 use App\Http\Resources\Base\CodeTypeResource;
 use App\Models\Base\CodeType;
 use Illuminate\Http\JsonResponse;
@@ -40,16 +42,10 @@ class CodeTypeController extends Controller implements HasMiddleware
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): CodeTypeResource
+    public function store(StoreCodeTypeRequest $request): CodeTypeResource
     {
       Gate::authorize(EPermissions::P_CODE_TYPE_STORE->name);
-      $data = CodeType::create([
-        ...$request->validate([
-          'name' => 'required|string|max:255',
-          'code' => 'required|string|max:255|unique:code_types',
-          'description' => 'nullable|string',
-        ]),
-      ]);
+      $data = CodeType::create([...$request->validated()]);
       return (new CodeTypeResource($this->loadRelationships($data)))
         ->additional(['message' => __('messages.Create Success')]);
     }
@@ -67,16 +63,11 @@ class CodeTypeController extends Controller implements HasMiddleware
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $code): CodeTypeResource
+    public function update(UpdateCodeTypeRequest $request, string $code): CodeTypeResource
     {
       Gate::authorize(EPermissions::P_CODE_TYPE_UPDATE->name);
       $data = CodeType::query()->where('code', $code)->first();
-      $data->update(
-        $request->validate([
-          'name' => 'sometimes|string|max:255',
-          'description' => 'nullable|string',
-        ])
-      );
+      $data->update($request->validated());
       return (new CodeTypeResource($this->loadRelationships($data)))
         ->additional(['message' => __('messages.Update Success')]);
     }

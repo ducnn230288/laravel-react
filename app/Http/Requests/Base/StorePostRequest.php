@@ -24,6 +24,11 @@ class StorePostRequest extends FormRequest
         return [
           'type_code' => 'required|string|max:255',
           'image' => 'nullable|string',
+          'languages.*.language' => 'required|string',
+          'languages.*.name' => 'required|string|max:255',
+          'languages.*.slug' => 'required|string|max:255',
+          'languages.*.description' => 'required|nullable|string',
+          'languages.*.content' => 'nullable|string',
         ];
     }
 }

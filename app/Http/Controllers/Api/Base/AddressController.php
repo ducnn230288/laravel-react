@@ -10,7 +10,6 @@ use App\Http\Requests\Base\UpdateAddressRequest;
 use App\Http\Resources\Base\AddressResource;
 use App\Models\Base\Address;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
@@ -36,7 +35,7 @@ class AddressController extends Controller implements HasMiddleware
   public function index(): AnonymousResourceCollection
   {
     Gate::authorize(EPermissions::P_ADDRESS_INDEX->name);
-    return AddressResource::collection($this->loadRelationships(Address::query())->latest()->paginate())
+    return AddressResource::collection($this->filter(Address::query())->paginate(\request()->query('perPage')))
       ->additional(['message' => __('messages.Get List Success')]);
   }
 

@@ -10,7 +10,6 @@ use App\Http\Requests\Base\UpdateUserRequest;
 use App\Http\Resources\Base\UserResource;
 use App\Models\Base\User;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
@@ -33,10 +32,10 @@ class UserController extends Controller implements HasMiddleware
   /**
    * Display a listing of the resource.
    */
-  public function index(Request $request): AnonymousResourceCollection
+  public function index(): AnonymousResourceCollection
   {
     Gate::authorize(EPermissions::P_USER_INDEX->name);
-    return UserResource::collection($this->filter(User::query())->paginate($request->get('perPage')))
+    return UserResource::collection($this->filter(User::query())->paginate(\request()->query('perPage')))
       ->additional(['message' => __('messages.Get List Success')]);
   }
 

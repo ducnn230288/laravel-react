@@ -10,7 +10,6 @@ use App\Http\Requests\Base\UpdateCodeTypeRequest;
 use App\Http\Resources\Base\CodeTypeResource;
 use App\Models\Base\CodeType;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
@@ -35,7 +34,7 @@ class CodeTypeController extends Controller implements HasMiddleware
     public function index(): AnonymousResourceCollection
     {
       Gate::authorize(EPermissions::P_CODE_TYPE_INDEX->name);
-        return CodeTypeResource::collection($this->loadRelationships(CodeType::query())->latest()->paginate())
+        return CodeTypeResource::collection($this->filter(CodeType::query())->paginate(\request()->query('perPage')))
           ->additional(['message' => __('messages.Get List Success')]);
     }
 

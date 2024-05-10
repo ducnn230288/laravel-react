@@ -10,7 +10,6 @@ use App\Http\Requests\Base\UpdateParameterRequest;
 use App\Http\Resources\Base\ParameterResource;
 use App\Models\Base\Parameter;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
@@ -31,7 +30,7 @@ class ParameterController extends Controller implements HasMiddleware
   public function index(): AnonymousResourceCollection
   {
     Gate::authorize(EPermissions::P_PARAMETER_INDEX->name);
-    return ParameterResource::collection($this->loadRelationships(Parameter::query())->latest()->paginate())
+    return ParameterResource::collection($this->filter(Parameter::query())->paginate(\request()->query('perPage')))
       ->additional(['message' => __('messages.Get List Success')]);
   }
 

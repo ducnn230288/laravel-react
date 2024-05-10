@@ -18,7 +18,6 @@ Route::apiResource('users', \App\Http\Controllers\Api\Base\UserController::class
 Route::apiResource('files', \App\Http\Controllers\Api\Base\FileController::class);
 Route::apiResource('parameters', \App\Http\Controllers\Api\Base\ParameterController::class);
 
-
 Route::apiResource('codes/types', \App\Http\Controllers\Api\Base\CodeTypeController::class);
 Route::apiResource('codes', \App\Http\Controllers\Api\Base\CodeController::class);
 

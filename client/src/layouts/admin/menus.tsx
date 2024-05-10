@@ -33,7 +33,7 @@ const Layout: IMenu[] = [
       {
         name: 'Post',
         permission: keyRole.P_POST_INDEX,
-        queryParams: { filter: '{"type":"projects"}' },
+        queryParams: { typeCode: 'PROJECTS' },
       },
       {
         name: 'Parameter',

@@ -10,7 +10,6 @@ use App\Http\Requests\Base\UpdateAddressWardRequest;
 use App\Http\Resources\Base\AddressWardResource;
 use App\Models\Base\AddressWard;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
@@ -35,7 +34,7 @@ class AddressWardController extends Controller implements HasMiddleware
   public function index(): AnonymousResourceCollection
   {
     Gate::authorize(EPermissions::P_ADDRESS_WARD_INDEX->name);
-    return AddressWardResource::collection($this->loadRelationships(AddressWard::query())->latest()->paginate())
+    return AddressWardResource::collection($this->filter(AddressWard::query())->paginate(\request()->query('perPage')))
       ->additional(['message' => __('messages.Get List Success')]);
   }
 

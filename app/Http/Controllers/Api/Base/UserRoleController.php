@@ -10,7 +10,6 @@ use App\Http\Requests\Base\UpdateRoleUserRequest;
 use App\Http\Resources\Base\UserRoleResource;
 use App\Models\Base\UserRole;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
@@ -35,7 +34,7 @@ class UserRoleController extends Controller implements HasMiddleware
   public function index(): AnonymousResourceCollection
   {
     Gate::authorize(EPermissions::P_USER_ROLE_INDEX->name);
-    return UserRoleResource::collection($this->loadRelationships(UserRole::query())->latest()->paginate())
+    return UserRoleResource::collection($this->filter(UserRole::query())->paginate(\request()->query('perPage')))
       ->additional(['message' => __('messages.Get List Success')]);
   }
 

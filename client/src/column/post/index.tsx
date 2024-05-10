@@ -137,7 +137,7 @@ export default {
         },
       },
       {
-        name: 'translations',
+        name: 'languages',
         title: '',
         formItem: {
           type: EFormType.tab,

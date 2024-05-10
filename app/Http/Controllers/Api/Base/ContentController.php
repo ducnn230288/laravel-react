@@ -10,7 +10,6 @@ use App\Http\Requests\Base\UpdateContentRequest;
 use App\Http\Resources\Base\ContentResource;
 use App\Models\Base\Content;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
@@ -36,7 +35,7 @@ class ContentController extends Controller implements HasMiddleware
   public function index(): AnonymousResourceCollection
   {
     Gate::authorize(EPermissions::P_CONTENT_INDEX->name);
-    return ContentResource::collection($this->loadRelationships(Content::query())->latest()->paginate())
+    return ContentResource::collection($this->filter(Content::query())->paginate(\request()->query('perPage')))
       ->additional(['message' => __('messages.Get List Success')]);
   }
 

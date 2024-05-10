@@ -10,7 +10,6 @@ use App\Http\Requests\Base\UpdateAddressProvinceRequest;
 use App\Http\Resources\Base\AddressProvinceResource;
 use App\Models\Base\AddressProvince;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
@@ -35,7 +34,7 @@ class AddressProvinceController extends Controller implements HasMiddleware
   public function index(): AnonymousResourceCollection
   {
     Gate::authorize(EPermissions::P_ADDRESS_PROVINCE_INDEX->name);
-    return AddressProvinceResource::collection($this->loadRelationships(AddressProvince::query())->latest()->paginate())
+    return AddressProvinceResource::collection($this->filter(AddressProvince::query())->paginate(\request()->query('perPage')))
       ->additional(['message' => __('messages.Get List Success')]);
   }
 

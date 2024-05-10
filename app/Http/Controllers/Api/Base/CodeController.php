@@ -10,7 +10,6 @@ use App\Http\Requests\Base\UpdateCodeRequest;
 use App\Http\Resources\Base\CodeResource;
 use App\Models\Base\Code;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
@@ -36,7 +35,7 @@ class CodeController extends Controller implements HasMiddleware
     public function index(): AnonymousResourceCollection
     {
       Gate::authorize(EPermissions::P_CODE_INDEX->name);
-      return CodeResource::collection($this->loadRelationships(Code::query())->latest()->paginate())
+      return CodeResource::collection($this->filter(Code::query())->paginate(\request()->query('perPage')))
         ->additional(['message' => __('messages.Get List Success')]);
     }
 

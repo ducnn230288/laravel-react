@@ -10,7 +10,6 @@ use App\Http\Requests\Base\UpdatePostTypeRequest;
 use App\Http\Resources\Base\PostTypeResource;
 use App\Models\Base\PostType;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
@@ -35,7 +34,7 @@ class PostTypeController extends Controller implements HasMiddleware
   public function index(): AnonymousResourceCollection
   {
     Gate::authorize(EPermissions::P_POST_TYPE_INDEX->name);
-    return PostTypeResource::collection($this->loadRelationships(PostType::query())->latest()->paginate())
+    return PostTypeResource::collection($this->filter(PostType::query())->paginate(\request()->query('perPage')))
       ->additional(['message' => __('messages.Get List Success')]);
   }
 

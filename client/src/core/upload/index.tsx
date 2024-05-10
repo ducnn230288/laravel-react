@@ -2,7 +2,7 @@ import React, { Fragment, PropsWithChildren, useEffect, useRef, useState } from 
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 
-import { API, keyToken, uuidv4 } from '@utils';
+import {API, linkFile, keyToken, uuidv4} from '@utils';
 import { Arrow, Paste, Times, UploadSVG } from '@svgs';
 import { Button } from '../button';
 import { Message } from '../message';
@@ -16,8 +16,8 @@ export const Upload = ({
   method = 'post',
   maxSize = 40,
   multiple = true,
-  action = '/file',
-  keyImage = 'url',
+  action = '/files',
+  keyImage = 'path',
   accept = 'image/*',
   validation = async () => true,
 }: Type) => {
@@ -130,6 +130,7 @@ export const Upload = ({
                   return item;
                 })
               : [{ ...data, status: 'done' }];
+            console.log(data);
             isLoading.current = false;
             set_listFiles(files);
             onChange && (await onChange(files));
@@ -234,13 +235,13 @@ export const Upload = ({
               'bg-yellow-100': file.status === 'error',
             })}
           >
-            <a href={file[keyImage] ? file[keyImage] : file} className="glightbox">
+            <a href={linkFile + (file[keyImage] ? file[keyImage] : file)} className="glightbox">
               <img
                 className={classNames('object-cover object-center h-24', {
                   'w-full': multiple,
                   'w-24': !multiple,
                 })}
-                src={file[keyImage] ? file[keyImage] : file}
+                src={linkFile + (file[keyImage] ? file[keyImage] : file)}
                 alt={file.name}
               />
             </a>

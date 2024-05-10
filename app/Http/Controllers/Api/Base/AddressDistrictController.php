@@ -10,7 +10,6 @@ use App\Http\Requests\Base\UpdateAddressDistrictRequest;
 use App\Http\Resources\Base\AddressDistrictResource;
 use App\Models\Base\AddressDistrict;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
@@ -35,7 +34,7 @@ class AddressDistrictController extends Controller implements HasMiddleware
   public function index(): AnonymousResourceCollection
   {
     Gate::authorize(EPermissions::P_ADDRESS_DISTRICT_INDEX->name);
-    return AddressDistrictResource::collection($this->loadRelationships(AddressDistrict::query())->latest()->paginate())
+    return AddressDistrictResource::collection($this->filter(AddressDistrict::query())->paginate(\request()->query('perPage')))
       ->additional(['message' => __('messages.Get List Success')]);
   }
 

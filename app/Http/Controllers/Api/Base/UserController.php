@@ -66,11 +66,7 @@ class UserController extends Controller implements HasMiddleware
   public function update(UpdateUserRequest $request, User $user): UserResource
   {
     Gate::authorize(EPermissions::P_USER_UPDATE->name);
-    $data = $request->validated();
-    if ($data) {
-      if (isset($data['disabled_at'])) $data['disabled_at'] = $data['disabled_at'] ? now() : null;
-      $user->update($data);
-    }
+    $user->update($request->validated());
     return (new UserResource($this->loadRelationships($user)))
       ->additional(['message' => __('messages.Update Success')]);
   }

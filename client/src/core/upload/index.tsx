@@ -2,7 +2,7 @@ import React, { Fragment, PropsWithChildren, useEffect, useRef, useState } from 
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 
-import {API, linkFile, keyToken, uuidv4} from '@utils';
+import {API, keyToken, uuidv4} from '@utils';
 import { Arrow, Paste, Times, UploadSVG } from '@svgs';
 import { Button } from '../button';
 import { Message } from '../message';
@@ -235,13 +235,13 @@ export const Upload = ({
               'bg-yellow-100': file.status === 'error',
             })}
           >
-            <a href={linkFile + (file[keyImage] ? file[keyImage] : file)} className="glightbox">
+            <a href={file[keyImage] ? file[keyImage] : file} className="glightbox">
               <img
                 className={classNames('object-cover object-center h-24', {
                   'w-full': multiple,
                   'w-24': !multiple,
                 })}
-                src={linkFile + (file[keyImage] ? file[keyImage] : file)}
+                src={file[keyImage] ? file[keyImage] : file}
                 alt={file.name}
               />
             </a>

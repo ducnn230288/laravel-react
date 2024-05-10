@@ -27,7 +27,7 @@ class StorePostRequest extends FormRequest
           'languages.*.language' => 'required|string',
           'languages.*.name' => 'required|string|max:255',
           'languages.*.slug' => 'required|string|max:255',
-          'languages.*.description' => 'required|nullable|string',
+          'languages.*.description' => 'nullable|string',
           'languages.*.content' => 'nullable|string',
         ];
     }

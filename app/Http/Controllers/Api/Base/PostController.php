@@ -9,17 +9,19 @@ use App\Http\Requests\Base\StorePostRequest;
 use App\Http\Requests\Base\UpdatePostRequest;
 use App\Http\Resources\Base\PostResource;
 use App\Models\Base\Post;
+use App\Models\Base\PostLanguage;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller implements HasMiddleware
 {
   public function __construct()
   {
-    $this->relations = ['type'];
+    $this->relations = ['type', 'languages'];
   }
 
   public static function middleware(): array
@@ -45,8 +47,8 @@ class PostController extends Controller implements HasMiddleware
   public function store(StorePostRequest $request): PostResource
   {
     Gate::authorize(EPermissions::P_POST_STORE->name);
-    $data = Post::create([...$request->validated()]);
-    return (new PostResource($this->loadRelationships($data)))
+    $post = $this->savePost($request->validated());
+    return (new PostResource($this->loadRelationships($post)))
       ->additional(['message' => __('messages.Create Success')]);
   }
 
@@ -79,6 +81,21 @@ class PostController extends Controller implements HasMiddleware
     Gate::authorize(EPermissions::P_POST_DESTROY->name);
     $post->delete();
     return response()->json(['message' => __('messages.Delete Success')]);
+  }
+
+  /**
+   * @param mixed $data
+   * @return mixed
+   */
+  public function savePost(mixed $data): mixed
+  {
+    return DB::transaction(function () use ($data) {
+      $post = Post::create([...$data]);
+      foreach ($data['languages'] as $language) {
+        PostLanguage::create([...$language, 'post_id' => $post->id]);
+      }
+      return $post;
+    });
   }
 }
 

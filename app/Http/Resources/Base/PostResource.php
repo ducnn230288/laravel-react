@@ -19,6 +19,7 @@ class PostResource extends JsonResource
         'image' => $this->image,
         'type_code' => $this->type_code,
         'type' => new ContentTypeResource($this->whenLoaded('type')),
+        'languages' => PostLanguageResource::collection($this->whenLoaded('languages'))
       ];
     }
 }

@@ -51,7 +51,7 @@ const Page = () => {
   }, [postTypeFacade.status]);
 
   const request = JSON.parse(postFacade.queryParams || '{}');
-  if (!request.filter || typeof request?.filter === 'string') request.filter = JSON.parse(request?.filter || '{}');
+  console.log(request);
   const { t } = useTranslation();
   const dataTableRef = useRef<TableRefObject>(null);
 
@@ -70,10 +70,10 @@ const Page = () => {
         size={'large'}
         facade={postFacade}
         columns={_column.form(postFacade.data?.id)}
-        title={t(postFacade.data ? 'pages.Post/Edit' : 'pages.Post/Add', { type: request.filter.type })}
+        title={t(postFacade.data ? 'pages.Post/Edit' : 'pages.Post/Add', { type: request.typeCode })}
         onSubmit={(values) => {
-          if (postFacade.data) postFacade.put({ ...values, id: postFacade.data.id, type: request.filter.type });
-          else postFacade.post({ ...values, type: request.filter.type });
+          if (postFacade.data) postFacade.put({ ...values, id: postFacade.data.id, typeCode: request.typeCode });
+          else postFacade.post({ ...values, typeCode: request.typeCode });
         }}
       />
       <div className="col-span-12 md:col-span-4 lg:col-span-3 -intro-x">
@@ -100,13 +100,13 @@ const Page = () => {
                 titleRender={(data: any) => (
                   <div
                     className={classNames(
-                      { 'bg-gray-100': request.filter.type === data.code },
+                      { 'bg-gray-100': request.typeCode === data.code },
                       'item text-gray-700 font-medium hover:bg-gray-100 flex justify-between items-center border-b border-gray-100 w-full text-left  group',
                     )}
                   >
                     <div
                       onClick={() => {
-                        request.filter.type = data.code;
+                        request.typeCode = data.code;
                         dataTableRef?.current?.onChange(request);
                       }}
                       className="truncate cursor-pointer flex-1 hover:text-teal-900 item-text px-3 py-1"
@@ -147,12 +147,12 @@ const Page = () => {
             </div>
             <div className="p-2 sm:p-0 block sm:hidden">
               <TreeSelect
-                value={request.filter.type}
+                value={request.typeCode}
                 className={'w-full'}
                 treeData={postTypeFacade.tree}
                 onChange={(e) => {
-                  if (request.filter.type !== e) request.filter.type = e;
-                  else delete request.filter.type;
+                  if (request.typeCode !== e) request.typeCode = e;
+                  else delete request.typeCode;
                   dataTableRef?.current?.onChange(request);
                 }}
               />

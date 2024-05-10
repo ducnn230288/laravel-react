@@ -16,7 +16,7 @@ return new class extends Migration
           $table->uuid('id');
           $table->string('type_code');
           $table->foreign('type_code')->references('code')->on('post_types')->onDelete('cascade')->onUpdate('cascade');
-          $table->string('image');
+          $table->string('image')->nullable();
             $table->timestamps();
         });
     }

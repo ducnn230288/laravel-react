@@ -15,9 +15,9 @@ return new class extends Migration
           $table->uuid('id');
           $table->string('language');
           $table->string('name');
-          $table->text('description');
           $table->string('slug');
-          $table->longText('content');
+          $table->text('description')->nullable();
+          $table->longText('content')->nullable();
           $table->foreignUuid('post_id');
             $table->timestamps();
         });

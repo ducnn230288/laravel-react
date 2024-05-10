@@ -15,7 +15,15 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, HasUuids, SoftDeletes;
     public static $snakeAttributes = true;
-    /**
+    protected static function boot(): void
+    {
+      parent::boot();
+      self::updating(function ($data) {
+        if (isset($data['disabled_at'])) $data['disabled_at'] = $data['disabled_at'] ? now() : null;
+      });
+    }
+
+  /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>

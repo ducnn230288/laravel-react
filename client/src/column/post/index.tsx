@@ -25,10 +25,10 @@ export default {
           sorter: true,
           render: (_: string, item: any) => (
             <Avatar
-              src={item.thumbnailUrl}
+              src={item.image}
               text={
-                (item.translations.length &&
-                  item.translations?.filter((item: any) => item?.language === localStorage.getItem('i18nextLng'))[0]
+                (item.languages?.length &&
+                  item.languages?.filter((item: any) => item?.language === localStorage.getItem('i18nextLng'))[0]
                     .name) ||
                 ''
               }
@@ -43,8 +43,8 @@ export default {
           filter: { type: ETableFilterType.search },
           sorter: true,
           render: (_: string, item: any) =>
-            item.translations.length
-              ? item.translations?.filter((item: any) => item?.language === localStorage.getItem('i18nextLng'))[0].slug
+            item.languages?.length
+              ? item.languages?.filter((item: any) => item?.language === localStorage.getItem('i18nextLng'))[0].slug
               : '',
         },
       },
@@ -66,21 +66,21 @@ export default {
           render: (text: string, data) => (
             <div className={'flex gap-2'}>
               {user?.role?.permissions?.includes(keyRole.P_POST_UPDATE) && (
-                <ToolTip title={t(data.isDisabled ? 'components.datatable.Disabled' : 'components.datatable.Enabled')}>
+                <ToolTip title={t(data.disabledAt ? 'components.datatable.Disabled' : 'components.datatable.Enabled')}>
                   <PopConfirm
                     title={t(
-                      !data.isDisabled
+                      !data.disabledAt
                         ? 'components.datatable.areYouSureWantDisable'
                         : 'components.datatable.areYouSureWantEnable',
                     )}
-                    onConfirm={() => postFacade.putDisable({ id: data.id, disable: !data.isDisabled })}
+                    onConfirm={() => postFacade.put({ id: data.id, disabledAt: !data.disabledAt })}
                   >
                     <button
                       title={
-                        t(data.isDisabled ? 'components.datatable.Disabled' : 'components.datatable.Enabled') || ''
+                        t(data.disabledAt ? 'components.datatable.Disabled' : 'components.datatable.Enabled') || ''
                       }
                     >
-                      {data.isDisabled ? (
+                      {data.disabledAt ? (
                         <Disable className="icon-cud bg-yellow-700 hover:bg-yellow-500" />
                       ) : (
                         <Check className="icon-cud bg-green-600 hover:bg-green-400" />
@@ -93,7 +93,7 @@ export default {
                 <ToolTip title={t('routes.admin.Layout.Edit')}>
                   <button
                     title={t('routes.admin.Layout.Edit') || ''}
-                    onClick={() => postFacade.getById({ id: data.id })}
+                    onClick={() => postFacade.getById({ id: data.id, params: {include: 'languages'} })}
                   >
                     <Edit className="icon-cud bg-teal-900 hover:bg-teal-700" />
                   </button>
@@ -130,7 +130,7 @@ export default {
       },
       {
         title: 'Thumbnail Url',
-        name: 'thumbnailUrl',
+        name: 'image',
         formItem: {
           col: 6,
           type: EFormType.upload,
@@ -155,8 +155,8 @@ export default {
                 col: 6,
                 rules: [{ type: EFormRuleType.required }],
                 onBlur: (value, form, name) => {
-                  if (value && !form.getFieldValue(['translations', name[0], 'slug'])) {
-                    form.setFieldValue(['translations', name[0], 'slug'], slug(value));
+                  if (value && !form.getFieldValue(['languages', name[0], 'slug'])) {
+                    form.setFieldValue(['languages', name[0], 'slug'], slug(value));
                   }
                 },
               },

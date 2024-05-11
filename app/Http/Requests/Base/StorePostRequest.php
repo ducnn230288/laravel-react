@@ -25,8 +25,8 @@ class StorePostRequest extends FormRequest
           'type_code' => 'required|string|max:255',
           'image' => 'nullable|string',
           'languages.*.language' => 'required|string',
-          'languages.*.name' => 'required|string|max:255',
-          'languages.*.slug' => 'required|string|max:255',
+          'languages.*.name' => 'required|string|max:255|unique:post_languages,name',
+          'languages.*.slug' => 'required|string|max:255|unique:post_languages,slug',
           'languages.*.description' => 'nullable|string',
           'languages.*.content' => 'nullable|string',
         ];

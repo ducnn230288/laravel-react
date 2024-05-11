@@ -57,7 +57,9 @@ class FileTest extends TestCase
 
     if ($eRole === ERole::USER) $data = File::factory()->create(['user_id' => $auth['id']])->getAttributes();
     $this->put('/api/files/' . $data['id'], $data)->assertStatus($eRole !== ERole::USER ? 200 : 403);
-    if ($eRole !== ERole::USER) $this->assertDatabaseHas('files', $data);
+    if ($eRole !== ERole::USER) {
+      $this->assertDatabaseHas('files', [...$data, 'path' => str_replace(env('APP_URL', 'http://localhost').':'.env('APP_PORT', '3000').'/storage/', '', $data['path'])]);
+    }
 
     $res = $this->get('/api/files/'. $data['id'])->assertStatus($eRole !== ERole::USER ? 200 : 403);
     if ($eRole !== ERole::USER) {

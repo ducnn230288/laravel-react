@@ -16,7 +16,7 @@ export const convertFormValue = (columns: FormModel[], values: { [selector: stri
             break;
           case EFormType.upload:
             if (values[item.name] && typeof values[item.name] === 'object' && exportData) {
-              if (!item.formItem?.mode && values[item.name].length > 0) values[item.name] = values[item.name][0].url;
+              if (!item.formItem?.mode && values[item.name].length > 0) values[item.name] = values[item.name][0].path;
               else if (values[item.name].length > 1) {
                 values[item.name] = values[item.name].filter((_item: any) => _item.status === 'done' || !_item.status);
               } else if (values[item.name].length == 0 && item.formItem?.mode != EFormModeSelect.multiple) {

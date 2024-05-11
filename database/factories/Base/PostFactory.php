@@ -2,6 +2,7 @@
 
 namespace Database\Factories\Base;
 
+use App\Models\Base\PostLanguage;
 use App\Models\Base\PostType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 

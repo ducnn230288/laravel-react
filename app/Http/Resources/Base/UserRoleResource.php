@@ -20,7 +20,6 @@ class UserRoleResource extends JsonResource
         'code' => $this->code,
         'description' => $this->description,
         'permissions' => $this->permissions,
-        'is_system_admin' => $this->is_system_admin,
         'users' => UserResource::collection($this->whenLoaded('users'))
       ];
     }

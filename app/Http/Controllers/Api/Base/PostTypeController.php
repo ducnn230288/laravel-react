@@ -19,7 +19,7 @@ class PostTypeController extends Controller implements HasMiddleware
 {
   public function __construct()
   {
-    $this->relations = ['posts'];
+    $this->relations = ['posts', 'children'];
   }
   public static function middleware(): array
   {
@@ -34,7 +34,7 @@ class PostTypeController extends Controller implements HasMiddleware
   public function index(): AnonymousResourceCollection
   {
     Gate::authorize(EPermissions::P_POST_TYPE_INDEX->name);
-    return PostTypeResource::collection($this->filter(PostType::query())->paginate(\request()->query('perPage')))
+    return PostTypeResource::collection($this->filter(PostType::query())->get())
       ->additional(['message' => __('messages.Get List Success')]);
   }
 

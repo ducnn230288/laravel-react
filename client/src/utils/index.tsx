@@ -56,7 +56,7 @@ export const loopMapSelect = (array?: any[], label = 'name', value = 'id'): Chec
     ? array.map((item) => ({
         label: item[label],
         value: item[value],
-        isLeaf: !item.children.length,
+        isLeaf: !item.children?.length,
         children: item.children ? loopMapSelect(item.children, label, value) : undefined,
       }))
     : [];

@@ -21,10 +21,10 @@ return new class extends Migration
           $table->string('phone_number');
           $table->string('role_code');
           $table->string('position_code');
+          $table->rememberToken();
+          $table->softDeletes();
           $table->string('disabled_at')->nullable();
-            $table->rememberToken();
-            $table->softDeletes();
-            $table->timestamps();
+          $table->timestamps();
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

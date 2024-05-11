@@ -13,8 +13,8 @@ export const PostFacade = () => {
     ...useTypedSelector((state) => state[action.name] as State<Post>),
     set: (values: State<Post>) => dispatch(action.set(values)),
     get: (params: PaginationQuery<Post>) => dispatch(action.get(params)),
-    getById: ({ id, keyState = 'isVisible' }: { id: string; keyState?: keyof State<Post> }) =>
-      dispatch(action.getById({ id, keyState })),
+    getById: ({ id, keyState = 'isVisible', params }: { id: string; keyState?: keyof State<Post>, params?: PaginationQuery<Post> }) =>
+      dispatch(action.getById({ id, keyState, params })),
     post: (values: Post) => dispatch(action.post(values)),
     put: (values: Post) => dispatch(action.put(values)),
     putDisable: (values: { id: string; disable: boolean }) => dispatch(action.putDisable(values)),
@@ -26,20 +26,14 @@ export class Post extends CommonEntity {
     public type?: string,
     public thumbnailUrl?: string,
     public item?: PostType,
-    public createdAt?: string,
-    public updatedAt?: string,
-    public translations?: {
+    public languages?: {
       language?: string;
       name: string;
       description?: string;
       slug: string;
-      content?: {
-        blocks: Record<string, object>[];
-      };
+      content?: string;
       postId?: string;
       post?: Post;
-      createdAt?: string;
-      updatedAt?: string;
     }[],
   ) {
     super();

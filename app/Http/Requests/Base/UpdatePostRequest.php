@@ -21,9 +21,25 @@ class UpdatePostRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-          'type_code' => 'sometimes|string|max:255',
-          'image' => 'nullable|string',
-        ];
+      $validation_rules = [
+        'type_code' => 'required_if:disabled_at,|string|max:255',
+        'image' => 'nullable|string',
+        'languages' => 'required_if:disabled_at,|array',
+        'disabled_at' => 'boolean',
+      ];
+      $request = $this->json()->all();
+      if (isset($request['languages'])) {
+        for ($i = 0; $i < count($request['languages']); $i++) {
+          $validation_rules += [
+            "languages.$i.id" => 'required_if:disabled_at,|string',
+            "languages.$i.language" => 'required_if:disabled_at,|string',
+            "languages.$i.name" => 'required_if:disabled_at,|string|max:255',
+            "languages.$i.slug" => 'required_if:disabled_at,|string|max:255|unique:post_languages,slug,'. $request['languages'][$i]['id'],
+            "languages.$i.description" => 'nullable|string',
+            "languages.$i.content" => 'nullable|string',
+          ];
+        }
+      }
+      return $validation_rules;
     }
 }

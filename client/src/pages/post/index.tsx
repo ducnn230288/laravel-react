@@ -19,7 +19,7 @@ const Page = () => {
   const { user } = GlobalFacade();
   const postTypeFacade = PostTypeFacade();
   useEffect(() => {
-    if (!postTypeFacade.tree) postTypeFacade.getTree();
+    if (!postTypeFacade.result?.data) postTypeFacade.get({include: 'children', postTypeId: ''});
     return () => {
       postFacade.set({ isLoading: true, status: EStatusState.idle });
     };
@@ -45,13 +45,12 @@ const Page = () => {
       case EStatusState.postFulfilled:
       case EStatusState.putFulfilled:
       case EStatusState.deleteFulfilled:
-        postTypeFacade.getTree();
+        postTypeFacade.get(JSON.parse(postTypeFacade.queryParams || '{}'));
         break;
     }
   }, [postTypeFacade.status]);
 
   const request = JSON.parse(postFacade.queryParams || '{}');
-  console.log(request);
   const { t } = useTranslation();
   const dataTableRef = useRef<TableRefObject>(null);
 
@@ -59,10 +58,10 @@ const Page = () => {
     <div className={'container mx-auto grid grid-cols-12 gap-3 px-2.5 pt-2.5'}>
       <DrawerForm
         facade={postTypeFacade}
-        columns={_columnType.form(postTypeFacade.data?.id, postTypeFacade.tree)}
+        columns={_columnType.form(postTypeFacade.data?.id, postTypeFacade.result?.data)}
         title={t(postTypeFacade.data ? 'pages.Post/Edit' : 'pages.Post/Add', { type: '' })}
         onSubmit={(values) => {
-          if (postTypeFacade.data) postTypeFacade.put({ ...values, id: postTypeFacade.data.id });
+          if (postTypeFacade.data) postTypeFacade.put({ ...values, id: postTypeFacade.data.code });
           else postTypeFacade.post({ ...values });
         }}
       />
@@ -96,7 +95,7 @@ const Page = () => {
                 autoExpandParent
                 defaultExpandAll
                 switcherIcon={<Arrow className={'w-4 h-4'} />}
-                treeData={postTypeFacade.tree}
+                treeData={postTypeFacade.result?.data}
                 titleRender={(data: any) => (
                   <div
                     className={classNames(
@@ -119,7 +118,7 @@ const Page = () => {
                           <button
                             className={'opacity-0 group-hover:opacity-100 transition-all duration-300 '}
                             title={t('routes.admin.Layout.Edit') || ''}
-                            onClick={() => postTypeFacade.getById({ id: data.id })}
+                            onClick={() => postTypeFacade.getById({ id: data.code })}
                           >
                             <Edit className="icon-cud bg-teal-900 hover:bg-teal-700" />
                           </button>
@@ -129,7 +128,7 @@ const Page = () => {
                         <ToolTip title={t('routes.admin.Layout.Delete')}>
                           <PopConfirm
                             title={t('components.datatable.areYouSureWant')}
-                            onConfirm={() => postTypeFacade.delete(data.id!)}
+                            onConfirm={() => postTypeFacade.delete(data.code!)}
                           >
                             <button
                               className={'opacity-0 group-hover:opacity-100 transition-all duration-300'}
@@ -149,7 +148,7 @@ const Page = () => {
               <TreeSelect
                 value={request.typeCode}
                 className={'w-full'}
-                treeData={postTypeFacade.tree}
+                treeData={postTypeFacade.result?.data}
                 onChange={(e) => {
                   if (request.typeCode !== e) request.typeCode = e;
                   else delete request.typeCode;
@@ -169,6 +168,7 @@ const Page = () => {
               paginationDescription={(from: number, to: number, total: number) =>
                 t('routes.admin.Layout.Pagination', { from, to, total })
               }
+              defaultRequest={{include: 'languages'}}
               columns={_column.table()}
               rightHeader={
                 <div className={'flex gap-2'}>

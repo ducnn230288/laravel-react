@@ -20,6 +20,8 @@ return new class extends Migration
           $table->longText('content')->nullable();
           $table->foreignUuid('post_id');
             $table->timestamps();
+          $table->softDeletes();
+          $table->string('disabled_at')->nullable();
         });
     }
 

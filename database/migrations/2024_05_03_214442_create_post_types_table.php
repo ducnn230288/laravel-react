@@ -13,9 +13,12 @@ return new class extends Migration
     {
         Schema::create('post_types', function (Blueprint $table) {
           $table->uuid('id');
+          $table->uuid('post_type_id')->nullable();
           $table->string('name');
           $table->string('code')->unique();
           $table->text('description')->nullable();
+          $table->softDeletes();
+          $table->string('disabled_at')->nullable();
             $table->timestamps();
         });
     }

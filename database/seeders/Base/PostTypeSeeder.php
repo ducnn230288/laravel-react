@@ -13,11 +13,16 @@ class PostTypeSeeder extends Seeder
     public function run(): void
     {
       $list = array(
-        ['name' => 'News', 'code' => 'NEWS'],
+        ['name' => 'News', 'code' => 'NEWS', 'children' => array(['name' => 'News1', 'code' => 'NEWS1'])],
         ['name' => 'Projects', 'code' => 'PROJECTS'],
       );
       foreach ($list as $item) {
-        PostType::factory()->create($item);
+        $parent = PostType::factory()->create(['name' => $item['name'], 'code' => $item['code']]);
+        if (isset($item['children'])) {
+          foreach ($item['children'] as $child) {
+            PostType::factory()->create([...$child, 'post_type_id' => $parent['id']]);
+          }
+        }
       }
     }
 }

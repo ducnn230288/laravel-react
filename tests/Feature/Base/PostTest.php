@@ -4,6 +4,7 @@ namespace Tests\Feature\Base;
 
 use App\Http\Enums\EPermissions;
 use App\Models\Base\Post;
+use App\Models\Base\PostLanguage;
 use App\Models\Base\PostType;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -65,8 +66,12 @@ class PostTest extends TestCase
     if ($eRole !== ERole::USER) $this->assertDatabaseHas('post_types', $type);
 
     $data = Post::factory()->raw(['type_code' => $type['code']]);
+    $data['languages'] = array(PostLanguage::factory()->raw());
     $this->post('/api/posts/', $data)->assertStatus($eRole !== ERole::USER ? 201 : 403);
-    if ($eRole !== ERole::USER) $this->assertDatabaseHas('posts', $data);
+    if ($eRole !== ERole::USER) {
+      unset($data['languages']);
+      $this->assertDatabaseHas('posts', $data);
+    }
 
     $res = $this->get('/api/posts/')->assertStatus($eRole !== ERole::USER ? 200 : 403);
     if ($eRole !== ERole::USER) {
@@ -89,8 +94,12 @@ class PostTest extends TestCase
     }
 
     $data = Post::factory()->raw(['type_code' => $type['code']]);
+    $data['languages'] = array(PostLanguage::factory()->raw());
     $this->put('/api/posts/' . $id, $data)->assertStatus($eRole !== ERole::USER ? 200 : 403);
-    if ($eRole !== ERole::USER) $this->assertDatabaseHas('posts', $data);
+    if ($eRole !== ERole::USER) {
+      unset($data['languages']);
+      $this->assertDatabaseHas('posts', $data);
+    }
 
     $res = $this->get('/api/posts/types/'. $type['code'] . '?include=posts')->assertStatus($eRole !== ERole::USER ? 200 : 403);
     if ($eRole !== ERole::USER) {

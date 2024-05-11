@@ -11,7 +11,7 @@ export class Action<T extends CommonEntity, Y = EStatusState> {
   public get: AsyncThunk<Responses<T[]>, PaginationQuery<T>, object>;
   public getById: AsyncThunk<
     { data: T | undefined; keyState: keyof State<T, Y> },
-    { id: string; keyState: keyof State<T, Y> },
+    { id: string; keyState: keyof State<T, Y>, params?: PaginationQuery<T>  },
     object
   >;
   public post: AsyncThunk<T | undefined, T, object>;
@@ -27,8 +27,8 @@ export class Action<T extends CommonEntity, Y = EStatusState> {
     );
     this.getById = createAsyncThunk(
       name + '/getById',
-      async ({ id, keyState = 'isVisible' }: { id: string; keyState: keyof State<T, Y> }) => {
-        const { data } = await API.get<T>(`${routerLinks(name, 'api')}/${id}`);
+      async ({ id, keyState = 'isVisible', params }: { id: string; keyState: keyof State<T, Y>, params?: PaginationQuery<T> }) => {
+        const { data } = await API.get<T>(`${routerLinks(name, 'api')}/${id}`, params);
         return { data, keyState };
       },
     );

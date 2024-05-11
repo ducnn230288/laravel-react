@@ -130,7 +130,6 @@ export const Upload = ({
                   return item;
                 })
               : [{ ...data, status: 'done' }];
-            console.log(data);
             isLoading.current = false;
             set_listFiles(files);
             onChange && (await onChange(files));

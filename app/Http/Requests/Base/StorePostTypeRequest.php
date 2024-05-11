@@ -25,6 +25,7 @@ class StorePostTypeRequest extends FormRequest
           'name' => 'required|string|max:255',
           'code' => 'required|string|max:255|unique:code_types',
           'description' => 'nullable|string',
+          'post_type_id' => 'nullable|string',
         ];
     }
 }

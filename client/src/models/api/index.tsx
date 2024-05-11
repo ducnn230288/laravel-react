@@ -17,22 +17,18 @@ export class Responses<T> {
 export class CommonEntity {
   constructor(
     public id?: string,
-    public created_at?: string,
-    public updated_at?: string,
-    public isDeleted?: string,
-    public isDisabled?: string,
+    public createdAt?: string,
+    public disabledAt?: boolean,
   ) {}
 }
 
-export class PaginationQuery<T = object> {
-  constructor(
-    public perPage?: number,
-    public page?: number,
-    public like?: string | T,
-    public sort?: string | T,
-    public extend?: string | T,
-    public skip?: string | T,
-    public fullTextSearch?: string,
-    public include?: string,
-  ) {}
+export interface PaginationQuery<T = object>{
+    perPage?: number;
+    page?: number;
+    like?: string | T;
+    sort?: string | T;
+    extend?: string | T;
+    skip?: string | T;
+    fullTextSearch?: string;
+    include?: string;
 }

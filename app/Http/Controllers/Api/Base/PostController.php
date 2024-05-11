@@ -68,7 +68,7 @@ class PostController extends Controller implements HasMiddleware
   public function update(UpdatePostRequest $request, Post $post): PostResource
   {
     Gate::authorize(EPermissions::P_POST_UPDATE->name);
-    $post->update($request->validated());
+    $this->updatePost($request->validated(), $post);
     return (new PostResource($this->loadRelationships($post)))
       ->additional(['message' => __('messages.Update Success')]);
   }
@@ -79,7 +79,12 @@ class PostController extends Controller implements HasMiddleware
   public function destroy(Post $post): JsonResponse
   {
     Gate::authorize(EPermissions::P_POST_DESTROY->name);
-    $post->delete();
+    DB::transaction(function () use ($post) {
+      foreach ($post->with('languages')->first()->languages as $language) {
+        $language->delete();
+      }
+      $post->delete();
+    });
     return response()->json(['message' => __('messages.Delete Success')]);
   }
 
@@ -93,6 +98,24 @@ class PostController extends Controller implements HasMiddleware
       $post = Post::create([...$data]);
       foreach ($data['languages'] as $language) {
         PostLanguage::create([...$language, 'post_id' => $post->id]);
+      }
+      return $post;
+    });
+  }
+
+  /**
+   * @param mixed $data
+   * @param mixed $post
+   * @return mixed
+   */
+  public function updatePost(mixed $data, mixed $post): mixed
+  {
+    return DB::transaction(function () use ($data, $post) {
+      $post->update($data);
+      if (isset($data['languages'])) {
+        foreach ($data['languages'] as $language) {
+          PostLanguage::find($language['id'])->update($language);
+        }
       }
       return $post;
     });

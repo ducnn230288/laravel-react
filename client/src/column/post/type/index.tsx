@@ -25,7 +25,7 @@ export default {
       },
       {
         title: 'Là nhánh con',
-        name: 'idChildren',
+        name: 'post_type_id',
         formItem: {
           type: id ? EFormType.hidden : EFormType.treeSelect,
           list: loopMapSelect(tree),

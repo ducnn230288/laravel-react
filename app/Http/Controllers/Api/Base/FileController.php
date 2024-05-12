@@ -7,6 +7,7 @@ use App\Http\Enums\EPermissions;
 use App\Http\Enums\ETokenAbility;
 use App\Http\Resources\Base\FileResource;
 use App\Models\Base\File;
+use App\Services\FileService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -80,11 +81,10 @@ class FileController extends Controller implements HasMiddleware
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(File $file): JsonResponse
+    public function destroy(string $path, FileService $fileService): JsonResponse
     {
       Gate::authorize(EPermissions::P_FILE_DESTROY->name);
-      Storage::delete($file->path);
-      $file->delete();
+      $fileService->destroy($path);
       return response()->json(['message' => __('messages.Delete Success')]);
     }
 }

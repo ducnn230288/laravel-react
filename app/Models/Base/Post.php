@@ -2,6 +2,8 @@
 
 namespace App\Models\Base;
 
+use App\Observers\Base\PostObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,17 +12,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+#[ObservedBy([PostObserver::class])]
 class Post extends Model
 {
   use HasFactory, HasUuids, SoftDeletes;
   protected $fillable = ['type_code', 'image', 'created_at', 'disabled_at'];
-  protected static function boot(): void
-  {
-    parent::boot();
-    self::updating(function ($data) {
-      if (isset($data['disabled_at'])) $data['disabled_at'] = $data['disabled_at'] ? now() : null;
-    });
-  }
   public function type(): BelongsTo
   {
     return $this->belongsTo(PostType::class, 'type_code', 'code');

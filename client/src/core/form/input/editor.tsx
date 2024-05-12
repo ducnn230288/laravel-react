@@ -39,11 +39,11 @@ const Component = ({
         ],
       });
       editor.onChange = onChange;
-      editor.onImageUploadBefore = (files: any, info: any, uploadHandler: any) => {
+      editor.onImageUploadBefore = (files: any, info: any, core: any, uploadHandler: any) => {
         const bodyFormData = new FormData();
         bodyFormData.append('file', files[0]);
         API.responsible(
-          `/file`,
+          `/files`,
           {},
           {
             ...API.init(),
@@ -58,7 +58,7 @@ const Component = ({
           uploadHandler({
             result: [
               {
-                url: data.url,
+                url: data.path,
                 name: files[0].name,
                 size: files[0].size,
               },

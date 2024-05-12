@@ -7,13 +7,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class AddressDistrict extends Model
 {
-    use HasFactory, HasUuids;
+    use HasFactory, HasUuids, SoftDeletes;
 
-  protected $fillable = ['name', 'description', 'code', 'province_code'];
-
+  protected $fillable = ['name', 'description', 'code', 'province_code','disabled_at'];
+  protected static function boot(): void
+  {
+    parent::boot();
+    self::updating(function ($data) {
+      if (isset($data['disabled_at'])) $data['disabled_at'] = $data['disabled_at'] ? now() : null;
+    });
+  }
   public function wards(): HasMany
   {
     return $this->hasMany(AddressWard::class, 'district_code', 'code');

@@ -7,13 +7,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Address extends Model
 {
-    use HasFactory, HasUuids;
+    use HasFactory, HasUuids, SoftDeletes;
 
-  protected $fillable = ['address', 'province_code', 'district_code', 'ward_code', 'user_id'];
-
+  protected $fillable = ['address', 'province_code', 'district_code', 'ward_code', 'user_id', 'disabled_at'];
+  protected static function boot(): void
+  {
+    parent::boot();
+    self::updating(function ($data) {
+      if (isset($data['disabled_at'])) $data['disabled_at'] = $data['disabled_at'] ? now() : null;
+    });
+  }
   public function province(): BelongsTo
   {
     return $this->belongsTo(AddressProvince::class, 'province_code', 'code');

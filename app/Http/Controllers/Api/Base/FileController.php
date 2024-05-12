@@ -7,14 +7,13 @@ use App\Http\Enums\EPermissions;
 use App\Http\Enums\ETokenAbility;
 use App\Http\Resources\Base\FileResource;
 use App\Models\Base\File;
-use App\Services\FileService;
+use App\Services\Base\FileService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Storage;
 
 class FileController extends Controller implements HasMiddleware
 {

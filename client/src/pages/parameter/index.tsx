@@ -33,11 +33,12 @@ const Page = () => {
     ) {
       navigate({
         pathname: `/${lang}${routerLinks('Parameter')}`,
-        search: `?${createSearchParams({ code: 'address' })}`,
+        search: `?${createSearchParams({ code: 'ADDRESS' })}`,
       });
     }
   }, [parameterFacade.result]);
-
+  console.log(request.code);
+  console.log(parameterFacade.result?.data);
   const { t } = useTranslation();
   return (
     <div className={'container mx-auto grid grid-cols-12 gap-3 px-2.5 pt-2.5'}>
@@ -55,11 +56,7 @@ const Page = () => {
                 defaultExpandAll
                 switcherIcon={<Arrow className={'w-4 h-4'} />}
                 treeData={parameterFacade.result?.data?.map((item: any) => ({
-                  title: item?.code
-                    .toLowerCase()
-                    .split(' ')
-                    .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
-                    .join(' '),
+                  title: item?.name,
                   key: item?.code,
                   value: item?.code,
                   isLeaf: true,
@@ -69,7 +66,7 @@ const Page = () => {
                 titleRender={(data: any) => (
                   <div
                     className={classNames(
-                      { 'bg-gray-100': request.code === data.code },
+                      { 'bg-gray-100': request.code === data.key },
                       'item text-gray-700 font-medium hover:bg-gray-100 flex justify-between items-center border-b border-gray-100 w-full text-left  group',
                     )}
                   >
@@ -134,7 +131,7 @@ const Page = () => {
                     },
                   },
                 ]}
-                handSubmit={(values) => parameterFacade.put({ ...values, id: parameterFacade.data!.id })}
+                handSubmit={(values) => parameterFacade.put({ ...values, id: parameterFacade.data!.code })}
                 disableSubmit={parameterFacade.isLoading}
               />
             </Spin>

@@ -1,55 +1,34 @@
 import React, { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Select, Spin, Tree } from 'antd';
-import { useNavigate } from 'react-router';
 import classNames from 'classnames';
-import { createSearchParams } from 'react-router-dom';
 
 import { Button } from '@core/button';
 import { DataTable } from '@core/data-table';
 import { keyRole, lang, renderTitleBreadcrumbs, routerLinks } from '@utils';
-import { DataFacade, DataTypeFacade, GlobalFacade } from '@store';
+import { ContentFacade, ContentTypeFacade, GlobalFacade } from '@store';
 import { Arrow, Plus } from '@svgs';
 import { EStatusState, TableRefObject } from '@models';
-import _column from '@column/data';
+import _column from '@column/content';
 import { DrawerForm } from '@core/drawer';
 
 const Page = () => {
   const { user } = GlobalFacade();
-  const dataTypeFacade = DataTypeFacade();
+  const contentTypeFacade = ContentTypeFacade();
   useEffect(() => {
-    if (!dataTypeFacade.result?.data) dataTypeFacade.get({});
+    if (!contentTypeFacade.result?.data) contentTypeFacade.get({});
     return () => {
-      dataFacade.set({ isLoading: true, status: EStatusState.idle });
+      contentFacade.set({ isLoading: true, status: EStatusState.idle });
     };
   }, []);
 
-  const navigate = useNavigate();
+  const contentFacade = ContentFacade();
   useEffect(() => {
-    switch (dataTypeFacade.status) {
-      case EStatusState.getFulfilled:
-        if (
-          dataTypeFacade?.result?.data?.length &&
-          !dataTypeFacade?.result?.data?.filter((item) => item.code === request.filter.type).length
-        ) {
-          navigate({
-            pathname: `/${lang}${routerLinks('Data')}`,
-            search: `?${createSearchParams({ filter: '{"type":"partner"}' })}`,
-          });
-          request.filter.type = 'partner';
-          dataTableRef?.current?.onChange(request);
-        }
-        break;
-    }
-  }, [dataTypeFacade?.result]);
-
-  const dataFacade = DataFacade();
-  useEffect(() => {
-    renderTitleBreadcrumbs(t('pages.Data'), [
+    renderTitleBreadcrumbs(t('pages.Content'), [
       { title: t('titles.Setting'), link: '' },
-      { title: t('titles.Data'), link: '' },
+      { title: t('titles.Content'), link: '' },
     ]);
-    switch (dataFacade.status) {
+    switch (contentFacade.status) {
       case EStatusState.putFulfilled:
       case EStatusState.putDisableFulfilled:
       case EStatusState.postFulfilled:
@@ -57,22 +36,21 @@ const Page = () => {
         dataTableRef?.current?.onChange(request);
         break;
     }
-  }, [dataFacade.status]);
+  }, [contentFacade.status]);
 
-  const request = JSON.parse(dataFacade.queryParams || '{}');
-  if (!request.filter || typeof request?.filter === 'string') request.filter = JSON.parse(request?.filter || '{}');
+  const request = JSON.parse(contentFacade.queryParams || '{}');
   const { t } = useTranslation();
   const dataTableRef = useRef<TableRefObject>(null);
   return (
     <div className={'container mx-auto grid grid-cols-12 gap-3 px-2.5 pt-2.5'}>
       <DrawerForm
-        size={request.filter.type !== 'partner' && request.filter.type !== 'tech' ? 'large' : undefined}
-        facade={dataFacade}
-        columns={_column.form(request.filter.type)}
-        title={t(dataFacade.data ? 'pages.Data/Edit' : 'pages.Data/Add', { type: request.filter.type })}
+        size={request.typeCode !== 'partner' && request.typeCode !== 'tech' ? 'large' : undefined}
+        facade={contentFacade}
+        columns={_column.form(request.typeCode)}
+        title={t(contentFacade.data ? 'pages.Content/Edit' : 'pages.Content/Add', { type: request.typeCode })}
         onSubmit={(values) => {
-          if (dataFacade.data) dataFacade.put({ ...values, id: dataFacade.data.id, type: request.filter.type });
-          else dataFacade.post({ ...values, type: request.filter.type });
+          if (contentFacade.data?.id) contentFacade.put({ ...values, id: contentFacade.data.id, typeCode: request.typeCode });
+          else contentFacade.post({ ...values, typeCode: request.typeCode });
         }}
       />
       <div className="col-span-12 md:col-span-4 lg:col-span-3 -intro-x">
@@ -80,7 +58,7 @@ const Page = () => {
           <div className="h-14 flex justify-between items-center border-b border-gray-100 px-4 py-2">
             <h3 className={'font-bold text-lg'}>Data Type</h3>
           </div>
-          <Spin spinning={dataTypeFacade.isLoading}>
+          <Spin spinning={contentTypeFacade.isLoading}>
             <div className="h-[calc(100vh-12rem)] overflow-y-auto relative scroll hidden sm:block">
               <Tree
                 blockNode
@@ -88,7 +66,7 @@ const Page = () => {
                 autoExpandParent
                 defaultExpandAll
                 switcherIcon={<Arrow className={'w-4 h-4'} />}
-                treeData={dataTypeFacade.result?.data?.map((item: any) => ({
+                treeData={contentTypeFacade.result?.data?.map((item: any) => ({
                   title: item?.name,
                   key: item?.code,
                   value: item?.code,
@@ -99,13 +77,13 @@ const Page = () => {
                 titleRender={(data: any) => (
                   <div
                     className={classNames(
-                      { 'bg-gray-100': request.filter.type === data.value },
+                      { 'bg-gray-100': request.typeCode === data.value },
                       'item text-gray-700 font-medium hover:bg-gray-100 flex justify-between items-center border-b border-gray-100 w-full text-left  group',
                     )}
                   >
                     <div
                       onClick={() => {
-                        request.filter.type = data.value;
+                        request.typeCode = data.value;
                         dataTableRef?.current?.onChange(request);
                       }}
                       className="truncate cursor-pointer flex-1 hover:text-teal-900 item-text px-3 py-1"
@@ -118,11 +96,11 @@ const Page = () => {
             </div>
             <div className="p-2 sm:p-0 block sm:hidden">
               <Select
-                value={request.filter.type}
+                value={request.typeCode}
                 className={'w-full'}
-                options={dataTypeFacade.result?.data?.map((data) => ({ label: data.name, value: data.code }))}
+                options={contentTypeFacade.result?.data?.map((data) => ({ label: data.name, value: data.code }))}
                 onChange={(e) => {
-                  request.filter.type = e;
+                  request.typeCode = e;
                   dataTableRef?.current?.onChange(request);
                 }}
               />
@@ -134,11 +112,12 @@ const Page = () => {
         <div className="shadow rounded-xl w-full overflow-auto bg-white">
           <div className="sm:min-h-[calc(100vh-8.5rem)] overflow-y-auto p-3">
             <DataTable
-              facade={dataFacade}
+              facade={contentFacade}
               ref={dataTableRef}
               paginationDescription={(from: number, to: number, total: number) =>
                 t('routes.admin.Layout.Pagination', { from, to, total })
               }
+              defaultRequest={{include: 'languages'}}
               columns={_column.table()}
               rightHeader={
                 <div className={'flex gap-2'}>
@@ -146,7 +125,7 @@ const Page = () => {
                     <Button
                       icon={<Plus className="icon-cud !h-5 !w-5" />}
                       text={t('components.button.New')}
-                      onClick={() => dataFacade.set({ data: undefined, isVisible: true })}
+                      onClick={() => contentFacade.set({ data: undefined, isVisible: true })}
                     />
                   )}
                 </div>

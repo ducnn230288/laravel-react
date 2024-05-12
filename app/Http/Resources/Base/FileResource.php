@@ -4,6 +4,7 @@ namespace App\Http\Resources\Base;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Str;
 
 class FileResource extends JsonResource
 {
@@ -15,10 +16,10 @@ class FileResource extends JsonResource
     public function toArray(Request $request): array
     {
       return [
-        'id' => $this->id,
-        'path' => $this->path,
-        'description' => $this->description,
-        'is_active' => $this->is_active,
+        'id' => $this->whenHas('id'),
+        'path' => $this->whenHas('path'),
+        'description' => $this->whenHas('description'),
+        Str::camel('is_active') => $this->whenHas('is_active'),
       ];
     }
 }

@@ -25,6 +25,7 @@ class UpdateParameterRequest extends FormRequest
           'name' => 'sometimes|string|max:255',
           'vn' => 'nullable|string',
           'en' => 'nullable|string',
+          'disabled_at' => 'boolean',
         ];
     }
 }

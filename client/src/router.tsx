@@ -52,8 +52,8 @@ const pages = [
         component: React.lazy(() => import('@pages/code')),
       },
       {
-        path: routerLinks('Data'),
-        component: React.lazy(() => import('@pages/data')),
+        path: routerLinks('Content'),
+        component: React.lazy(() => import('@pages/content')),
       },
       {
         path: routerLinks('Post'),

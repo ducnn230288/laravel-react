@@ -66,7 +66,7 @@
     "MyProfile": "Thông tin cá nhân",
     "Setting": "Thiết lập",
     "Code": "Mã",
-    "Data": "Dữ liệu",
+    "Content": "Nội dung",
     "Post": "Post",
     "Parameter": "Tham số"
   },
@@ -84,9 +84,9 @@
     "Code": "Danh sách Mã",
     "Code/Add":"Thêm mới mã {{type}}",
     "Code/Edit":"Chỉnh sửa mã {{type}}",
-    "Data": "Danh sách Dữ liệu",
-    "Data/Add": "Tạo mới dữ liệu {{type}}",
-    "Data/Edit": "Chỉnh sửa dữ liệu {{type}}",
+    "Content": "Danh sách Nội dung",
+    "Data/Add": "Tạo mới nội dung {{type}}",
+    "Data/Edit": "Chỉnh sửa nội dung {{type}}",
     "Post": "Danh sách post",
     "Post/Add": "Tạo mới post {{type}}",
     "Post/Edit": "Chỉnh sửa post {{type}}",
@@ -193,9 +193,9 @@
         "New Type": "Thêm mới loại",
         "Name": "Tên mã"
       },
-      "Data": {
-        "Type": "Loại dữ liệu",
-        "Name": "Tên dữ liệu",
+      "Content": {
+        "Type": "Loại nội dung",
+        "Name": "Tên nội dung",
         "Order": "Order",
         "Image": "Ảnh",
         "Created At": "Ngày tạo"

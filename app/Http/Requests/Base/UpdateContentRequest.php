@@ -21,10 +21,24 @@ class UpdateContentRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-          'name' => 'sometimes|string|max:255',
-          'image' => 'nullable|string',
-          'order' => 'nullable|integer',
-        ];
+      $validation_rules = [
+        'name' => 'sometimes|string|max:255',
+        'image' => 'nullable|string',
+        'order' => 'nullable|integer',
+        'disabled_at' => 'boolean',
+      ];
+      $request = $this->json()->all();
+      if (isset($request['languages'])) {
+        for ($i = 0; $i < count($request['languages']); $i++) {
+          $validation_rules += [
+            "languages.$i.id" => 'required_if:disabled_at,|string',
+            "languages.$i.language" => 'required_if:disabled_at,|string',
+            "languages.$i.name" => 'required_if:disabled_at,|string|max:255',
+            "languages.$i.description" => 'nullable|string',
+            "languages.$i.content" => 'nullable|string',
+          ];
+        }
+      }
+      return $validation_rules;
     }
 }

@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class UserRole extends Model
 {
     use HasFactory, HasUuids;
-  protected $fillable = ['name', 'description', 'code', 'permissions'];
+  protected $fillable = ['name', 'description', 'code', 'permissions', 'disabled_at'];
 
   protected $casts = [
     'permissions' => Json::class,

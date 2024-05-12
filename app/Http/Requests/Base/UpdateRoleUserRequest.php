@@ -26,6 +26,7 @@ class UpdateRoleUserRequest extends FormRequest
           'description' => 'nullable|string',
           'permissions' => 'array',
           'permissions.*' => 'distinct|uuid',
+          'disabled_at' => 'boolean',
         ];
     }
 }

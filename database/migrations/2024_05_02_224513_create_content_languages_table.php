@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('content_languages', function (Blueprint $table) {
           $table->uuid('id');
           $table->string('language');
-          $table->string('name');
-          $table->text('description');
-          $table->longText('content');
+          $table->string('name')->nullable();
+          $table->text('description')->nullable();
+          $table->longText('content')->nullable();
           $table->foreignUuid('content_id');
             $table->timestamps();
         });

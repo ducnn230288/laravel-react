@@ -4,6 +4,7 @@ namespace App\Http\Resources\Base;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Str;
 
 class AddressResource extends JsonResource
 {
@@ -15,16 +16,17 @@ class AddressResource extends JsonResource
     public function toArray(Request $request): array
     {
       return [
-        'id' => $this->id,
-        'address' => $this->address,
-        'province_code' => $this->province_code,
+        'id' => $this->whenHas('id'),
+        'address' => $this->whenHas('address'),
+        Str::camel('province_code') => $this->whenHas('province_code'),
         'province' => new AddressProvinceResource($this->whenLoaded('province')),
-        'district_code' => $this->district_code,
+        Str::camel('district_code') => $this->whenHas('district_code'),
         'district' => new AddressDistrictResource($this->whenLoaded('district')),
-        'ward_code' => $this->ward_code,
+        Str::camel('ward_code') => $this->whenHas('ward_code'),
         'ward' => new AddressProvinceResource($this->whenLoaded('ward')),
-        'user_id' => $this->user_id,
+        Str::camel('user_id') => $this->whenHas('user_id'),
         'user' => new UserResource($this->whenLoaded('user')),
+        Str::camel('disabled_at') => $this->whenHas('disabled_at'),
       ];
     }
 }

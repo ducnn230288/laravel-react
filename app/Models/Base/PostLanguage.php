@@ -3,7 +3,7 @@
 namespace App\Models\Base;
 
 use App\Observers\Base\PostLanguageObserver;
-use App\Services\FileService;
+use App\Services\Base\FileService;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class PostLanguage extends Model
 {
   use HasFactory, HasUuids;
-  protected $fillable = ['language', 'name', 'description', 'slug', 'content', 'post_id'];
+  protected $fillable = ['language', 'name', 'description', 'slug', 'content', 'post_id', 'disabled_at'];
   protected FileService $fileService;
   protected function content(): Attribute
   {

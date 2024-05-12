@@ -4,7 +4,7 @@ import { ToolTip } from '@core/tooltip';
 import { PopConfirm } from '@core/pop-confirm';
 import { Check, Disable, Edit, Trash } from '@svgs';
 import React from 'react';
-import { DataFacade, GlobalFacade } from '@store';
+import { ContentFacade, GlobalFacade } from '@store';
 import { useTranslation } from 'react-i18next';
 import { keyRole } from '@utils';
 import { Avatar } from '@core/avatar';
@@ -13,11 +13,11 @@ export default {
   table: (): DataTableModel[] => {
     const { formatDate, user } = GlobalFacade();
     const { t } = useTranslation();
-    const dataFacade = DataFacade();
+    const contentFacade = ContentFacade();
 
     return [
       {
-        title: 'routes.admin.Data.Name',
+        title: 'routes.admin.Content.Name',
         name: 'name',
         tableItem: {
           filter: { type: ETableFilterType.search },
@@ -27,8 +27,8 @@ export default {
               src={item.image}
               text={
                 text ||
-                (item.translations.length &&
-                  item.translations?.filter((item: any) => item?.language === localStorage.getItem('i18nextLng'))[0]
+                (item.languages?.length &&
+                  item.languages?.filter((item: any) => item?.language === localStorage.getItem('i18nextLng'))[0]
                     .name) ||
                 ''
               }
@@ -37,7 +37,7 @@ export default {
         },
       },
       {
-        title: 'routes.admin.Data.Order',
+        title: 'routes.admin.Content.Order',
         name: 'order',
         tableItem: {
           filter: { type: ETableFilterType.search },
@@ -62,21 +62,21 @@ export default {
           render: (text: string, data) => (
             <div className={'flex gap-2'}>
               {user?.role?.permissions?.includes(keyRole.P_CONTENT_UPDATE) && (
-                <ToolTip title={t(data.isDisabled ? 'components.datatable.Disabled' : 'components.datatable.Enabled')}>
+                <ToolTip title={t(data.disabledAt ? 'components.datatable.Disabled' : 'components.datatable.Enabled')}>
                   <PopConfirm
                     title={t(
-                      !data.isDisabled
+                      !data.disabledAt
                         ? 'components.datatable.areYouSureWantDisable'
                         : 'components.datatable.areYouSureWantEnable',
                     )}
-                    onConfirm={() => dataFacade.putDisable({ id: data.id, disable: !data.isDisabled })}
+                    onConfirm={() => contentFacade.put({ id: data.id, disabledAt: !data.disabledAt })}
                   >
                     <button
                       title={
-                        t(data.isDisabled ? 'components.datatable.Disabled' : 'components.datatable.Enabled') || ''
+                        t(data.disabledAt ? 'components.datatable.Disabled' : 'components.datatable.Enabled') || ''
                       }
                     >
-                      {data.isDisabled ? (
+                      {data.disabledAt ? (
                         <Disable className="icon-cud bg-yellow-700 hover:bg-yellow-500" />
                       ) : (
                         <Check className="icon-cud bg-green-600 hover:bg-green-400" />
@@ -89,7 +89,7 @@ export default {
                 <ToolTip title={t('routes.admin.Layout.Edit')}>
                   <button
                     title={t('routes.admin.Layout.Edit') || ''}
-                    onClick={() => dataFacade.getById({ id: data.id })}
+                    onClick={() => contentFacade.getById({ id: data.id, params: {include: 'languages'} })}
                   >
                     <Edit className="icon-cud bg-teal-900 hover:bg-teal-700" />
                   </button>
@@ -99,7 +99,7 @@ export default {
                 <ToolTip title={t('routes.admin.Layout.Delete')}>
                   <PopConfirm
                     title={t('components.datatable.areYouSureWant')}
-                    onConfirm={() => dataFacade.delete(data.id)}
+                    onConfirm={() => contentFacade.delete(data.id)}
                   >
                     <button title={t('routes.admin.Layout.Delete') || ''}>
                       <Trash className="icon-cud bg-red-600 hover:bg-red-400" />
@@ -121,7 +121,7 @@ export default {
         formItem: type === 'partner' || type === 'tech' ? {} : undefined,
       },
       {
-        title: 'routes.admin.Data.Order',
+        title: 'routes.admin.Content.Order',
         name: 'order',
         formItem: {
           col: type === 'partner' || type === 'tech' ? 12 : 6,
@@ -129,7 +129,7 @@ export default {
         },
       },
       {
-        title: 'routes.admin.Data.Image',
+        title: 'routes.admin.Content.Image',
         name: 'image',
         formItem: {
           col: type === 'partner' || type === 'tech' ? 12 : 6,
@@ -137,7 +137,7 @@ export default {
         },
       },
       {
-        name: 'translations',
+        name: 'languages',
         title: '',
         formItem:
           type === 'partner' || type === 'tech'

@@ -2,8 +2,7 @@
 
 namespace App\Observers\Base;
 
-use App\Models\Base\Post;
-use App\Services\FileService;
+use App\Services\Base\FileService;
 
 class PostObserver
 {
@@ -12,22 +11,22 @@ class PostObserver
   {
     $this->fileService = $fileService;
   }
-  public function created(Post $post): void
+  public function created($post): void
   {
     if (isset($post['image'])) $this->fileService->active($post['image'], true);
 
   }
-  public function updating(Post $post): void
+  public function updating($post): void
   {
     if (isset($post['disabled_at'])) $post['disabled_at'] = $post['disabled_at'] ? now() : null;
   }
-  public function updated(Post $post): void
+  public function updated($post): void
   {
     $oldImage = $post->getOriginal('image');
     if ($oldImage && $oldImage !== $post['image']) $this->fileService->destroy($oldImage);
     if (isset($post['image'])) $this->fileService->active($post['image'], true);
   }
-    public function deleted(Post $post): void
+    public function deleted($post): void
     {
       if (isset($post['image'])) $this->fileService->destroy($post['image']);
     }

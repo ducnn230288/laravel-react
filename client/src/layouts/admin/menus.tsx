@@ -23,12 +23,12 @@ const Layout: IMenu[] = [
       {
         name: 'Code',
         permission: keyRole.P_CODE_INDEX,
-        queryParams: { filter: '{"type":"position"}' },
+        queryParams: { typeCode: 'POSITION' },
       },
       {
-        name: 'Data',
+        name: 'Content',
         permission: keyRole.P_CONTENT_INDEX,
-        queryParams: { filter: '{"type":"partner"}' },
+        queryParams: { typeCode: 'MEMBERS' },
       },
       {
         name: 'Post',
@@ -38,7 +38,7 @@ const Layout: IMenu[] = [
       {
         name: 'Parameter',
         permission: keyRole.P_PARAMETER_INDEX,
-        queryParams: { code: 'phone' },
+        queryParams: { code: 'ADDRESS' },
       },
     ],
   },

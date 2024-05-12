@@ -9,6 +9,7 @@ use App\Http\Requests\Base\StoreContentRequest;
 use App\Http\Requests\Base\UpdateContentRequest;
 use App\Http\Resources\Base\ContentResource;
 use App\Models\Base\Content;
+use App\Services\Base\ContentService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controllers\HasMiddleware;
@@ -17,9 +18,11 @@ use Illuminate\Support\Facades\Gate;
 
 class ContentController extends Controller implements HasMiddleware
 {
-  public function __construct()
+  protected ContentService $contentService;
+  public function __construct(ContentService $contentService)
   {
-    $this->relations = ['type'];
+    $this->relations = ['type', 'languages'];
+    $this->contentService = $contentService;
   }
 
   public static function middleware(): array
@@ -45,7 +48,7 @@ class ContentController extends Controller implements HasMiddleware
   public function store(StoreContentRequest $request): ContentResource
   {
     Gate::authorize(EPermissions::P_CONTENT_STORE->name);
-    $data = Content::create([...$request->validated()]);
+    $data = $this->contentService->save($request->validated());
     return (new ContentResource($this->loadRelationships($data)))
       ->additional(['message' => __('messages.Create Success')]);
   }
@@ -66,7 +69,7 @@ class ContentController extends Controller implements HasMiddleware
   public function update(UpdateContentRequest $request, Content $content): ContentResource
   {
     Gate::authorize(EPermissions::P_CONTENT_UPDATE->name);
-    $content->update($request->validated());
+    $this->contentService->update($request->validated(), $content);
     return (new ContentResource($this->loadRelationships($content)))
       ->additional(['message' => __('messages.Update Success')]);
   }

@@ -3,7 +3,7 @@
 namespace App\Models\Base;
 
 use App\Observers\Base\PostObserver;
-use App\Services\FileService;
+use App\Services\Base\FileService;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;

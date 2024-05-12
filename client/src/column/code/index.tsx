@@ -51,21 +51,21 @@ export default {
           render: (text: string, data) => (
             <div className={'flex gap-2'}>
               {user?.role?.permissions?.includes(keyRole.P_CODE_UPDATE) && (
-                <ToolTip title={t(data.isDisabled ? 'components.datatable.Disabled' : 'components.datatable.Enabled')}>
+                <ToolTip title={t(data.disabledAt ? 'components.datatable.Disabled' : 'components.datatable.Enabled')}>
                   <PopConfirm
                     title={t(
-                      !data.isDisabled
+                      !data.disabledAt
                         ? 'components.datatable.areYouSureWantDisable'
                         : 'components.datatable.areYouSureWantEnable',
                     )}
-                    onConfirm={() => codeFacade.putDisable({ id: data.id, disable: !data.isDisabled })}
+                    onConfirm={() => codeFacade.put({ id: data.code, disabledAt: !data.disabledAt })}
                   >
                     <button
                       title={
-                        t(data.isDisabled ? 'components.datatable.Disabled' : 'components.datatable.Enabled') || ''
+                        t(data.disabledAt ? 'components.datatable.Disabled' : 'components.datatable.Enabled') || ''
                       }
                     >
-                      {data.isDisabled ? (
+                      {data.disabledAt ? (
                         <Disable className="icon-cud bg-yellow-700 hover:bg-yellow-500" />
                       ) : (
                         <Check className="icon-cud bg-green-600 hover:bg-green-400" />
@@ -78,7 +78,7 @@ export default {
                 <ToolTip title={t('routes.admin.Layout.Edit')}>
                   <button
                     title={t('routes.admin.Layout.Edit') || ''}
-                    onClick={() => codeFacade.getById({ id: data.id })}
+                    onClick={() => codeFacade.getById({ id: data.code })}
                   >
                     <Edit className="icon-cud bg-teal-900 hover:bg-teal-700" />
                   </button>
@@ -88,7 +88,7 @@ export default {
                 <ToolTip title={t('routes.admin.Layout.Delete')}>
                   <PopConfirm
                     title={t('components.datatable.areYouSureWant')}
-                    onConfirm={() => codeFacade.delete(data.id)}
+                    onConfirm={() => codeFacade.delete(data.code)}
                   >
                     <button title={t('routes.admin.Layout.Delete') || ''}>
                       <Trash className="icon-cud bg-red-600 hover:bg-red-400" />
@@ -108,7 +108,6 @@ export default {
         title: 'routes.admin.Code.Name',
         name: 'name',
         formItem: {
-          col: 6,
           rules: [{ type: EFormRuleType.required }],
           onBlur: (value, form) => {
             if (value && !form.getFieldValue('code')) {
@@ -121,7 +120,7 @@ export default {
         title: 'titles.Code',
         name: 'code',
         formItem: {
-          col: 6,
+          condition: (_: string, form, __: number, values: any) => !values?.id,
           rules: [{ type: EFormRuleType.required }, { type: EFormRuleType.max, value: 100 }],
         },
       },

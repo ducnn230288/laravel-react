@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Str;
 
-class UserRoleResource extends JsonResource
+class ContentLanguageResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,12 +17,12 @@ class UserRoleResource extends JsonResource
     {
       return [
         'id' => $this->whenHas('id'),
+        'language' => $this->whenHas('language'),
         'name' => $this->whenHas('name'),
-        'code' => $this->whenHas('code'),
         'description' => $this->whenHas('description'),
-        'permissions' => $this->whenHas('permissions'),
+        'content' => $this->whenHas('content'),
+        'parent' => new ContentResource($this->whenLoaded('content')),
         Str::camel('disabled_at') => $this->whenHas('disabled_at'),
-        'users' => UserResource::collection($this->whenLoaded('users'))
       ];
     }
 }

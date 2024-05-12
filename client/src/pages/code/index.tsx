@@ -39,7 +39,6 @@ const Page = () => {
   }, [codeFacade.status]);
 
   const request = JSON.parse(codeFacade.queryParams || '{}');
-  if (!request.filter || typeof request?.filter === 'string') request.filter = JSON.parse(request?.filter || '{}');
   const { t } = useTranslation();
   const dataTableRef = useRef<TableRefObject>(null);
   return (
@@ -47,10 +46,10 @@ const Page = () => {
       <DrawerForm
         facade={codeFacade}
         columns={_column.form()}
-        title={t(codeFacade.data ? 'pages.Code/Edit' : 'pages.Code/Add', { type: request.filter.type })}
+        title={t(codeFacade.data ? 'pages.Code/Edit' : 'pages.Code/Add', { type: request.typeCode })}
         onSubmit={(values) => {
-          if (codeFacade.data) codeFacade.put({ ...values, id: codeFacade.data.id, type: request.filter.type });
-          else codeFacade.post({ ...values, type: request.filter.type });
+          if (codeFacade.data) codeFacade.put({ ...values, id: codeFacade.data.code, typeCode: request.typeCode });
+          else codeFacade.post({ ...values, typeCode: request.typeCode });
         }}
       />
       <div className="col-span-12 md:col-span-4 lg:col-span-3 -intro-x">
@@ -77,13 +76,13 @@ const Page = () => {
                 titleRender={(data: any) => (
                   <div
                     className={classNames(
-                      { 'bg-gray-100': request.filter.type === data.value },
+                      { 'bg-gray-100': request.typeCode === data.value },
                       'item text-gray-700 font-medium hover:bg-gray-100 flex justify-between items-center border-b border-gray-100 w-full text-left  group',
                     )}
                   >
                     <div
                       onClick={() => {
-                        request.filter.type = data.value;
+                        request.typeCode = data.value;
                         dataTableRef?.current?.onChange(request);
                       }}
                       className="truncate cursor-pointer flex-1 hover:text-teal-900 item-text px-3 py-1"
@@ -96,11 +95,11 @@ const Page = () => {
             </div>
             <div className="p-2 sm:p-0 block sm:hidden">
               <Select
-                value={request.filter.type}
+                value={request.typeCode}
                 className={'w-full'}
                 options={codeTypeFacade.result?.data?.map((data) => ({ label: data.name, value: data.code }))}
                 onChange={(e) => {
-                  request.filter.type = e;
+                  request.typeCode = e;
                   dataTableRef?.current?.onChange(request);
                 }}
               />

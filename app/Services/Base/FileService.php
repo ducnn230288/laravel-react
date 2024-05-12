@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Base;
 
 use App\Models\Base\File;
 use Illuminate\Support\Facades\Storage;
@@ -11,9 +11,9 @@ class FileService
    * @param string|null $value
    * @param bool $isGetAbsolutePath
    * @param callable|null $callback
-   * @return string
+   * @return string|null
    */
-  public function convertSrcImage(?string $value, ?bool $isGetAbsolutePath = false, ?callable $callback = null): string
+  public function convertSrcImage(?string $value, ?bool $isGetAbsolutePath = false, ?callable $callback = null): string | null
   {
     if ($value) {
       $images = $this->getPathImageHTML($value);

@@ -9,7 +9,7 @@ use App\Http\Requests\Base\StorePostRequest;
 use App\Http\Requests\Base\UpdatePostRequest;
 use App\Http\Resources\Base\PostResource;
 use App\Models\Base\Post;
-use App\Models\Base\PostLanguage;
+use App\Services\Base\PostService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controllers\HasMiddleware;
@@ -19,9 +19,11 @@ use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller implements HasMiddleware
 {
-  public function __construct()
+  protected PostService $postService;
+  public function __construct(PostService $postService)
   {
     $this->relations = ['type', 'languages'];
+    $this->postService = $postService;
   }
 
   public static function middleware(): array
@@ -47,8 +49,8 @@ class PostController extends Controller implements HasMiddleware
   public function store(StorePostRequest $request): PostResource
   {
     Gate::authorize(EPermissions::P_POST_STORE->name);
-    $post = $this->savePost($request->validated());
-    return (new PostResource($this->loadRelationships($post)))
+    $data = $this->postService->save($request->validated());
+    return (new PostResource($this->loadRelationships($data)))
       ->additional(['message' => __('messages.Create Success')]);
   }
 
@@ -68,7 +70,7 @@ class PostController extends Controller implements HasMiddleware
   public function update(UpdatePostRequest $request, Post $post): PostResource
   {
     Gate::authorize(EPermissions::P_POST_UPDATE->name);
-    $this->updatePost($request->validated(), $post);
+    $this->postService->update($request->validated(), $post);
     return (new PostResource($this->loadRelationships($post)))
       ->additional(['message' => __('messages.Update Success')]);
   }
@@ -88,37 +90,6 @@ class PostController extends Controller implements HasMiddleware
     return response()->json(['message' => __('messages.Delete Success')]);
   }
 
-  /**
-   * @param mixed $data
-   * @return mixed
-   */
-  public function savePost(mixed $data): mixed
-  {
-    return DB::transaction(function () use ($data) {
-      $post = Post::create([...$data]);
-      foreach ($data['languages'] as $language) {
-        PostLanguage::create([...$language, 'post_id' => $post->id]);
-      }
-      return $post;
-    });
-  }
 
-  /**
-   * @param mixed $data
-   * @param mixed $post
-   * @return mixed
-   */
-  public function updatePost(mixed $data, mixed $post): mixed
-  {
-    return DB::transaction(function () use ($data, $post) {
-      $post->update($data);
-      if (isset($data['languages'])) {
-        foreach ($data['languages'] as $language) {
-          PostLanguage::find($language['id'])->update($language);
-        }
-      }
-      return $post;
-    });
-  }
 }
 

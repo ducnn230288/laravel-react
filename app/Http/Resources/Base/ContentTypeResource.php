@@ -4,6 +4,7 @@ namespace App\Http\Resources\Base;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Str;
 
 class ContentTypeResource extends JsonResource
 {
@@ -15,11 +16,12 @@ class ContentTypeResource extends JsonResource
     public function toArray(Request $request): array
     {
       return [
-        'id' => $this->id,
-        'name' => $this->name,
-        'code' => $this->code,
-        'description' => $this->description,
-        'contents' => ContentResource::collection($this->whenLoaded('contents'))
+        'id' => $this->whenHas('id'),
+        'name' => $this->whenHas('name'),
+        'code' => $this->whenHas('code'),
+        'description' => $this->whenHas('description'),
+        'contents' => ContentResource::collection($this->whenLoaded('contents')),
+        Str::camel('disabled_at') => $this->whenHas('disabled_at'),
       ];
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Resources\Base;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Str;
 
 class PostLanguageResource extends JsonResource
 {
@@ -22,6 +23,7 @@ class PostLanguageResource extends JsonResource
         'description' => $this->whenHas('description'),
         'content' => $this->whenHas('content'),
         'post' => new PostResource($this->whenLoaded('post')),
+        Str::camel('disabled_at') => $this->whenHas('disabled_at'),
       ];
     }
 }

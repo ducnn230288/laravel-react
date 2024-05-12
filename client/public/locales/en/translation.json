@@ -66,7 +66,7 @@
     "MyProfile": "My Profile",
     "Setting": "Setting",
     "Code": "Code",
-    "Data": "Data",
+    "Content": "Content",
     "Post": "Post",
     "Parameter": "Parameter"
   },
@@ -76,17 +76,17 @@
     "User/List": "List User",
     "User/Add": "Add new User {{roleCode}}",
     "User/Edit": "Edit User {{roleCode}}",
-    "MyProfile": "My Profile",
     "Login": "Login",
     "Dashboard": "Dashboard",
     "User": "User",
+    "MyProfile": "My Profile",
     "Setting": "Setting",
     "Code": "List Code",
     "Code/Add":"Add new Code {{type}}",
     "Code/Edit":"Edit Code {{type}}",
-    "Data": "List Data",
-    "Data/Add": "Add new Data {{type}}",
-    "Data/Edit": "Edit Data {{type}}",
+    "Content": "List Content",
+    "Content/Add": "Add new Content {{type}}",
+    "Content/Edit": "Edit Content {{type}}",
     "Post": "List Post",
     "Post/Add": "Add new Post {{type}}",
     "Post/Edit": "Edit Post {{type}}",
@@ -193,9 +193,9 @@
         "New Type": "New Type",
         "Name": "Name Code"
       },
-      "Data": {
-        "Type": "Type Data",
-        "Name": "Name Data",
+      "Content": {
+        "Type": "Type Content",
+        "Name": "Name Content",
         "Order": "Order",
         "Image": "Image",
         "Created At": "Created At"

@@ -15,6 +15,7 @@ class PostObserver
   public function created(Post $post): void
   {
     if (isset($post['image'])) $this->fileService->active($post['image'], true);
+
   }
   public function updating(Post $post): void
   {

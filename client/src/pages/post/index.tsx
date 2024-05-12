@@ -71,7 +71,7 @@ const Page = () => {
         columns={_column.form(postFacade.data?.id)}
         title={t(postFacade.data ? 'pages.Post/Edit' : 'pages.Post/Add', { type: request.typeCode })}
         onSubmit={(values) => {
-          if (postFacade.data) postFacade.put({ ...values, id: postFacade.data.id, typeCode: request.typeCode });
+          if (postFacade?.data?.id) postFacade.put({ ...values, id: postFacade.data.id, typeCode: request.typeCode });
           else postFacade.post({ ...values, typeCode: request.typeCode });
         }}
       />

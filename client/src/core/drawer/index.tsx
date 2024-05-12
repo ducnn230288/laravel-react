@@ -30,6 +30,7 @@ export const DrawerForm = forwardRef(
 
     return (
       <Drawer
+        keyboard={false}
         size={size}
         footer={
           <div className={classNames('gap-3 flex mt-2 items-center sm:flex-row justify-end')}>

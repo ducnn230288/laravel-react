@@ -8,6 +8,7 @@ use App\Models\Base\PostLanguage;
 use App\Models\Base\PostType;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Str;
 use Tests\ERole;
 use Tests\TestCase;
 
@@ -57,7 +58,7 @@ class PostTest extends TestCase
     if ($eRole !== ERole::USER) {
       $this->assertCount(1, $res['data']);
       foreach($type as $key=>$value) {
-        $this->assertEquals($value, $res['data'][0][$key]);
+        $this->assertEquals($value, $res['data'][0][Str::camel($key)]);
       }
     }
 
@@ -77,7 +78,7 @@ class PostTest extends TestCase
     if ($eRole !== ERole::USER) {
       $this->assertCount(1, $res['data']);
       foreach($data as $key=>$value) {
-        $this->assertEquals($value, $res['data'][0][$key]);
+        $this->assertEquals($value, $res['data'][0][Str::camel($key)]);
       }
     }
 
@@ -86,15 +87,22 @@ class PostTest extends TestCase
     $res = $this->get('/api/posts/'. $id. '?include=type')->assertStatus($eRole !== ERole::USER ? 200 : 403);
     if ($eRole !== ERole::USER) {
       foreach($data as $key=>$value) {
-        $this->assertEquals($value, $res['data'][$key]);
+        $this->assertEquals($value, $res['data'][Str::camel($key)]);
       }
       foreach($type as $key=>$value) {
-        $this->assertEquals($value, $res['data']['type'][$key]);
+        $this->assertEquals($value, $res['data']['type'][Str::camel($key)]);
       }
     }
 
     $data = Post::factory()->raw(['type_code' => $type['code']]);
-    $data['languages'] = array(PostLanguage::factory()->raw());
+    if (property_exists($res, 'data')) {
+      $data['languages'] = [];
+      array_push(
+        $data['languages'],
+        PostLanguage::factory()->raw(["id" => $res['data']['languages'][0]['id']]),
+        PostLanguage::factory()->raw(["id" => $res['data']['languages'][1]['id']])
+      );
+    }
     $this->put('/api/posts/' . $id, $data)->assertStatus($eRole !== ERole::USER ? 200 : 403);
     if ($eRole !== ERole::USER) {
       unset($data['languages']);
@@ -104,7 +112,7 @@ class PostTest extends TestCase
     $res = $this->get('/api/posts/types/'. $type['code'] . '?include=posts')->assertStatus($eRole !== ERole::USER ? 200 : 403);
     if ($eRole !== ERole::USER) {
       foreach($data as $key=>$value) {
-        $this->assertEquals($value, $res['data']['posts'][0][$key]);
+        $this->assertEquals($value, $res['data']['posts'][0][Str::camel($key)]);
       }
     }
 

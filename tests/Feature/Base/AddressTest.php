@@ -9,6 +9,7 @@ use App\Models\Base\AddressProvince;
 use App\Models\Base\AddressWard;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Str;
 use Tests\ERole;
 use Tests\TestCase;
 
@@ -82,21 +83,22 @@ class AddressTest extends TestCase
     $this->post('/api/addresses/districts/', $district)->assertStatus($eRole !== ERole::USER ? 201 : 403);
     if ($eRole !== ERole::USER) $this->assertDatabaseHas('address_districts', $district);
 
-    $res = $this->get('/api/addresses/districts/')->assertStatus($eRole !== ERole::USER ? 200 : 403);
+    $res = $this->get('/api/addresses/districts?include=province')->assertStatus($eRole !== ERole::USER ? 200 : 403);
     if ($eRole !== ERole::USER) {
       $this->assertCount(1, $res['data']);
+
       foreach($district as $key=>$value) {
-        $this->assertEquals($value, $res['data'][0][$key]);
+        $this->assertEquals($value, $res['data'][0][Str::camel($key)]);
       }
     }
 
     $res = $this->get('/api/addresses/districts/'. $district['code']. '?include=province')->assertStatus($eRole !== ERole::USER ? 200 : 403);
     if ($eRole !== ERole::USER) {
       foreach($district as $key=>$value) {
-        $this->assertEquals($value, $res['data'][$key]);
+        $this->assertEquals($value, $res['data'][Str::camel($key)]);
       }
       foreach($province as $key=>$value) {
-        $this->assertEquals($value, $res['data']['province'][$key]);
+        $this->assertEquals($value, $res['data']['province'][Str::camel($key)]);
       }
     }
 
@@ -107,7 +109,7 @@ class AddressTest extends TestCase
     $res = $this->get('/api/addresses/provinces/'. $province['code'] . '?include=districts')->assertStatus($eRole !== ERole::USER ? 200 : 403);
     if ($eRole !== ERole::USER) {
       foreach($district as $key=>$value) {
-        $this->assertEquals($value, $res['data']['districts'][0][$key]);
+        $this->assertEquals($value, $res['data']['districts'][0][Str::camel($key)]);
       }
     }
 
@@ -119,17 +121,17 @@ class AddressTest extends TestCase
     if ($eRole !== ERole::USER) {
       $this->assertCount(1, $res['data']);
       foreach($ward as $key=>$value) {
-        $this->assertEquals($value, $res['data'][0][$key]);
+        $this->assertEquals($value, $res['data'][0][Str::camel($key)]);
       }
     }
 
     $res = $this->get('/api/addresses/wards/'. $ward['code']. '?include=district')->assertStatus($eRole !== ERole::USER ? 200 : 403);
     if ($eRole !== ERole::USER) {
       foreach($ward as $key=>$value) {
-        $this->assertEquals($value, $res['data'][$key]);
+        $this->assertEquals($value, $res['data'][Str::camel($key)]);
       }
       foreach($district as $key=>$value) {
-        $this->assertEquals($value, $res['data']['district'][$key]);
+        $this->assertEquals($value, $res['data']['district'][Str::camel($key)]);
       }
     }
 
@@ -140,7 +142,7 @@ class AddressTest extends TestCase
     $res = $this->get('/api/addresses/districts/'. $district['code'] . '?include=wards')->assertStatus($eRole !== ERole::USER ? 200 : 403);
     if ($eRole !== ERole::USER) {
       foreach($ward as $key=>$value) {
-        $this->assertEquals($value, $res['data']['wards'][0][$key]);
+        $this->assertEquals($value, $res['data']['wards'][0][Str::camel($key)]);
       }
     }
 
@@ -152,7 +154,7 @@ class AddressTest extends TestCase
     if ($eRole !== ERole::USER) {
       $this->assertCount(1, $res['data']);
       foreach($address as $key=>$value) {
-        $this->assertEquals($value, $res['data'][0][$key]);
+        $this->assertEquals($value, $res['data'][0][Str::camel($key)]);
       }
     }
 
@@ -164,7 +166,7 @@ class AddressTest extends TestCase
     $res = $this->get('/api/addresses/'. $id)->assertStatus($eRole !== ERole::USER ? 200 : 403);
     if ($eRole !== ERole::USER) {
       foreach($address as $key=>$value) {
-        $this->assertEquals($value, $res['data'][$key]);
+        $this->assertEquals($value, $res['data'][Str::camel($key)]);
       }
     }
     $this->delete('/api/addresses/' . $id)->assertStatus($eRole !== ERole::USER ? 200 : 403);

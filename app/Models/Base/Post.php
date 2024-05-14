@@ -2,7 +2,7 @@
 
 namespace App\Models\Base;
 
-use App\Observers\Base\PostObserver;
+use App\Observers\Base\CImageObserver;
 use App\Services\Base\FileService;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[ObservedBy([PostObserver::class])]
+#[ObservedBy([CImageObserver::class])]
 class Post extends Model
 {
   use HasFactory, HasUuids;

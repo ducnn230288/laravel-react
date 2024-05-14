@@ -103,10 +103,10 @@ class UserTest extends TestCase
     }
 
     $this->delete('/api/users/' . $id)->assertStatus($eRole !== ERole::USER ? 200 : 403);
-    if ($eRole !== ERole::USER) $this->assertSoftDeleted('users', $data);
+    if ($eRole !== ERole::USER) $this->assertDatabaseMissing('users', $data);
 
     $role['permissions'] = json_encode($role['permissions']);
     $this->delete('/api/users/roles/' . $role['code'])->assertStatus($eRole !== ERole::USER ? 200 : 403);
-    if ($eRole !== ERole::USER) $this->assertSoftDeleted('user_roles', $role);
+    if ($eRole !== ERole::USER) $this->assertDatabaseMissing('user_roles', $role);
   }
 }

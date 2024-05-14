@@ -2,7 +2,7 @@
 
 namespace App\Models\Base;
 
-use App\Observers\Base\PostLanguageObserver;
+use App\Observers\Base\CContentObserver;
 use App\Services\Base\FileService;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-#[ObservedBy([PostLanguageObserver::class])]
+#[ObservedBy([CContentObserver::class])]
 class PostLanguage extends Model
 {
   use HasFactory, HasUuids;

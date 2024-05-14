@@ -5,7 +5,7 @@ namespace App\Observers\Base;
 use App\Models\Base\PostLanguage;
 use App\Services\Base\FileService;
 
-class PostLanguageObserver
+class CContentObserver
 {
   protected FileService $fileService;
   public function __construct(FileService $fileService)

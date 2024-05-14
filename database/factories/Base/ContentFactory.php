@@ -2,6 +2,7 @@
 
 namespace Database\Factories\Base;
 
+use App\Models\Base\ContentLanguage;
 use App\Models\Base\ContentType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -22,7 +23,7 @@ class ContentFactory extends Factory
         'name' => $this->faker->unique()->sentence(2),
         'image' => $this->faker->imageUrl,
         'order' => $this->faker->numberBetween(),
-        'type_code' => fn () => ContentType::factory()->create()->code
+        'type_code' => fn () => ContentType::factory()->create()->code,
       ];
     }
 }

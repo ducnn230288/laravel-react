@@ -7,6 +7,7 @@ use App\Models\Base\Code;
 use App\Models\Base\CodeType;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Str;
 use Tests\ERole;
 use Tests\TestCase;
 
@@ -56,7 +57,7 @@ class CodeTest extends TestCase
     if ($eRole !== ERole::USER) {
       $this->assertCount(2, $res['data']);
       foreach($type as $key=>$value) {
-        $this->assertEquals($value, $res['data'][1][$key]);
+        $this->assertEquals($value, $res['data'][1][Str::camel($key)]);
       }
     }
 
@@ -72,17 +73,17 @@ class CodeTest extends TestCase
     if ($eRole !== ERole::USER) {
       $this->assertCount(2, $res['data']);
       foreach($data as $key=>$value) {
-        $this->assertEquals($value, $res['data'][1][$key]);
+        $this->assertEquals($value, $res['data'][1][Str::camel($key)]);
       }
     }
 
     $res = $this->get('/api/codes/'. $data['code']. '?include=type')->assertStatus($eRole !== ERole::USER ? 200 : 403);
     if ($eRole !== ERole::USER) {
       foreach($data as $key=>$value) {
-        $this->assertEquals($value, $res['data'][$key]);
+        $this->assertEquals($value, $res['data'][Str::camel($key)]);
       }
       foreach($type as $key=>$value) {
-        $this->assertEquals($value, $res['data']['type'][$key]);
+        $this->assertEquals($value, $res['data']['type'][Str::camel($key)]);
       }
     }
 
@@ -93,7 +94,7 @@ class CodeTest extends TestCase
     $res = $this->get('/api/codes/types/'. $type['code'] . '?include=codes')->assertStatus($eRole !== ERole::USER ? 200 : 403);
     if ($eRole !== ERole::USER) {
       foreach($data as $key=>$value) {
-        $this->assertEquals($value, $res['data']['codes'][0][$key]);
+        $this->assertEquals($value, $res['data']['codes'][0][Str::camel($key)]);
       }
     }
 

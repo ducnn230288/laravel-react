@@ -28,7 +28,7 @@ class StoreContentRequest extends FormRequest
           'order' => 'nullable|integer',
           'languages' => 'required|array',
           'languages.*.language' => 'required|string',
-          'languages.*.name' => 'required|string|max:255|unique:post_languages,name',
+          'languages.*.name' => 'required|string|max:255',
           'languages.*.description' => 'nullable|string',
           'languages.*.content' => 'nullable|string',
         ];

@@ -4,9 +4,11 @@ namespace Tests\Feature\Base;
 
 use App\Http\Enums\EPermissions;
 use App\Models\Base\Content;
+use App\Models\Base\ContentLanguage;
 use App\Models\Base\ContentType;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Str;
 use Tests\ERole;
 use Tests\TestCase;
 
@@ -56,7 +58,7 @@ class ContentTest extends TestCase
     if ($eRole !== ERole::USER) {
       $this->assertCount(1, $res['data']);
       foreach($type as $key=>$value) {
-        $this->assertEquals($value, $res['data'][0][$key]);
+        $this->assertEquals($value, $res['data'][0][Str::camel($key)]);
       }
     }
 
@@ -65,37 +67,53 @@ class ContentTest extends TestCase
     if ($eRole !== ERole::USER) $this->assertDatabaseHas('content_types', $type);
 
     $data = Content::factory()->raw(['type_code' => $type['code']]);
+    $data['languages'] = ContentLanguage::factory(2)->raw();
+
     $this->post('/api/contents/', $data)->assertStatus($eRole !== ERole::USER ? 201 : 403);
-    if ($eRole !== ERole::USER) $this->assertDatabaseHas('contents', $data);
+    if ($eRole !== ERole::USER) {
+      unset($data['languages']);
+      $this->assertDatabaseHas('contents', $data);
+    }
 
     $res = $this->get('/api/contents/')->assertStatus($eRole !== ERole::USER ? 200 : 403);
     if ($eRole !== ERole::USER) {
       $this->assertCount(1, $res['data']);
       foreach($data as $key=>$value) {
-        $this->assertEquals($value, $res['data'][0][$key]);
+        $this->assertEquals($value, $res['data'][0][Str::camel($key)]);
       }
     }
 
     if ($eRole === ERole::USER) $data = Content::factory()->create()->getAttributes();
     $id = $eRole !== ERole::USER ? $res['data'][0]['id'] : $data['id'];
-    $res = $this->get('/api/contents/'. $id. '?include=type')->assertStatus($eRole !== ERole::USER ? 200 : 403);
+    $res = $this->get('/api/contents/'. $id. '?include=type,languages')->assertStatus($eRole !== ERole::USER ? 200 : 403);
     if ($eRole !== ERole::USER) {
       foreach($data as $key=>$value) {
-        $this->assertEquals($value, $res['data'][$key]);
+        $this->assertEquals($value, $res['data'][Str::camel($key)]);
       }
       foreach($type as $key=>$value) {
-        $this->assertEquals($value, $res['data']['type'][$key]);
+        $this->assertEquals($value, $res['data']['type'][Str::camel($key)]);
       }
     }
 
     $data = Content::factory()->raw(['type_code' => $type['code']]);
+    if (property_exists($res, 'data')) {
+      $data['languages'] = [];
+      array_push(
+        $data['languages'],
+        ContentLanguage::factory()->raw(["id" => $res['data']['languages'][0]['id']]),
+        ContentLanguage::factory()->raw(["id" => $res['data']['languages'][1]['id']])
+      );
+    }
     $this->put('/api/contents/' . $id, $data)->assertStatus($eRole !== ERole::USER ? 200 : 403);
-    if ($eRole !== ERole::USER) $this->assertDatabaseHas('contents', $data);
+    if ($eRole !== ERole::USER) {
+      unset($data['languages']);
+      $this->assertDatabaseHas('contents', $data);
+    }
 
     $res = $this->get('/api/contents/types/'. $type['code'] . '?include=contents')->assertStatus($eRole !== ERole::USER ? 200 : 403);
     if ($eRole !== ERole::USER) {
       foreach($data as $key=>$value) {
-        $this->assertEquals($value, $res['data']['contents'][0][$key]);
+        $this->assertEquals($value, $res['data']['contents'][0][Str::camel($key)]);
       }
     }
 

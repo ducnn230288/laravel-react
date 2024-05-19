@@ -22,6 +22,8 @@ return new class extends Migration
           $table->foreign('ward_code')->references('code')->on('address_wards')->onDelete('cascade')->onUpdate('cascade');
           $table->foreignUuid('user_id');
           $table->timestamps();
+          $table->softDeletes();
+          $table->timestamp('disabled_at')->nullable();
         });
     }
 

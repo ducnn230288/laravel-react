@@ -20,7 +20,7 @@ return new class extends Migration
           $table->jsonb('permissions');
           $table->timestamps();
           $table->softDeletes();
-          $table->string('disabled_at')->nullable();
+          $table->timestamp('disabled_at')->nullable();
         });
     }
 

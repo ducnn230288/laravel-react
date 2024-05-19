@@ -20,6 +20,7 @@ class UserResource extends JsonResource
         'name' => $this->whenHas('name'),
         'email' => $this->whenHas('email'),
         'avatar' => $this->whenHas('avatar'),
+        'dob' => $this->whenHas('dob'),
         Str::camel('phone_number') => $this->whenHas('phone_number'),
         Str::camel('created_at') => $this->whenHas('created_at'),
         Str::camel('disabled_at') => $this->whenHas('disabled_at'),

@@ -21,9 +21,10 @@ return new class extends Migration
           $table->string('phone_number');
           $table->string('role_code');
           $table->string('position_code');
+          $table->timestamp('dob')->nullable();
           $table->rememberToken();
           $table->softDeletes();
-          $table->string('disabled_at')->nullable();
+          $table->timestamp('disabled_at')->nullable();
           $table->timestamps();
         });
 

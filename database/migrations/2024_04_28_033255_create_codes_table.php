@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('code');
             $table->text('description')->nullable();
             $table->timestamps();
+          $table->softDeletes();
+          $table->timestamp('disabled_at')->nullable();
         });
     }
 

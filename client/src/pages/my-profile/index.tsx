@@ -147,8 +147,7 @@ const Page = () => {
                               facade: CodeFacade,
                               params: (fullTextSearch: string) => ({
                                 fullTextSearch,
-                                filter: { type: 'position' },
-                                extend: {},
+                                typeCode: 'position'
                               }),
                               format: (item) => ({
                                 label: item.name,

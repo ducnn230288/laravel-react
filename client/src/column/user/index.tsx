@@ -170,7 +170,7 @@ export default {
       },
       {
         title: 'columns.auth.register.retypedPassword',
-        name: 'retypedPassword',
+        name: 'passwordConfirmation',
         formItem: {
           placeholder: 'columns.auth.register.retypedPassword',
           type: EFormType.password,
@@ -200,6 +200,17 @@ export default {
         },
       },
       {
+        title: 'routes.admin.user.Date of birth',
+        name: 'dob',
+        formItem: {
+          type: EFormType.date,
+          rules: [{ type: EFormRuleType.required }],
+          disabledDate: (current) => {
+            return current && current >= dayjs().startOf('day');
+          },
+        },
+      },
+      {
         title: 'routes.admin.user.Position',
         name: 'positionCode',
         formItem: {
@@ -209,8 +220,7 @@ export default {
             facade: CodeFacade,
             params: (fullTextSearch: string) => ({
               fullTextSearch,
-              filter: { type: 'position' },
-              extend: {},
+              typeCode: 'position',
             }),
             format: (item) => ({
               label: item.name,

@@ -61,6 +61,12 @@ class UserTest extends TestCase
       }
     }
 
+    if ($eRole !== ERole::USER) {
+      $this->assertNull($res['data'][0][Str::camel('disabled_at')]);
+      $res = $this->put('/api/users/roles/' . $res['data'][0]['code'], ['disabled_at' => true])->assertStatus($eRole !== ERole::USER ? 200 : 403);
+      $this->assertNotNull($res['data'][Str::camel('disabled_at')]);
+    }
+
     $role = UserRole::factory()->raw(['code' => $role['code']]);
     $this->put('/api/users/roles/' . $role['code'], $role)->assertStatus($eRole !== ERole::USER ? 200 : 403);
     if ($eRole !== ERole::USER) $this->assertDatabaseHas('user_roles', [...$role, 'permissions' => json_encode($role['permissions'])]);
@@ -89,6 +95,10 @@ class UserTest extends TestCase
         $this->assertEquals($value, $res['data']['role'][$key]);
       }
     }
+
+    if ($eRole !== ERole::USER) $this->assertNull($res['data'][Str::camel('disabled_at')]);
+    $res = $this->put('/api/users/' . $id, ['disabled_at' => true])->assertStatus($eRole !== ERole::USER ? 200 : 403);
+    if ($eRole !== ERole::USER) $this->assertNotNull($res['data'][Str::camel('disabled_at')]);
 
     $data = User::factory()->raw(['role_code' => $role['code']]);
     $this->put('/api/users/' . $id, $data)->assertStatus($eRole !== ERole::USER ? 200 : 403);

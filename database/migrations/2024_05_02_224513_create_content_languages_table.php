@@ -19,6 +19,8 @@ return new class extends Migration
           $table->longText('content')->nullable();
           $table->foreignUuid('content_id');
             $table->timestamps();
+          $table->softDeletes();
+          $table->timestamp('disabled_at')->nullable();
         });
     }
 

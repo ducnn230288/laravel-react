@@ -19,6 +19,8 @@ return new class extends Migration
           $table->string('province_code');
           $table->foreign('province_code')->references('code')->on('address_provinces')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
+          $table->softDeletes();
+          $table->timestamp('disabled_at')->nullable();
         });
     }
 

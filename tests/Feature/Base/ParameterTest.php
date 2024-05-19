@@ -6,6 +6,7 @@ use App\Http\Enums\EPermissions;
 use App\Models\Base\Parameter;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Str;
 use Tests\ERole;
 use Tests\TestCase;
 
@@ -53,6 +54,10 @@ class ParameterTest extends TestCase
         $this->assertEquals($value, $res['data'][0][$key]);
       }
     }
+
+    if ($eRole !== ERole::USER) $this->assertNull($res['data'][0][Str::camel('disabled_at')]);
+    $res = $this->put('/api/parameters/' . $data['code'], ['disabled_at' => true])->assertStatus($eRole !== ERole::USER ? 200 : 403);
+    if ($eRole !== ERole::USER) $this->assertNotNull($res['data'][Str::camel('disabled_at')]);
 
     $data = Parameter::factory()->raw(['code' => $data['code']]);
     $this->put('/api/parameters/' . $data['code'], $data)->assertStatus($eRole !== ERole::USER ? 200 : 403);

@@ -61,6 +61,12 @@ class CodeTest extends TestCase
       }
     }
 
+    if ($eRole !== ERole::USER) {
+      $this->assertNull($res['data'][1][Str::camel('disabled_at')]);
+      $res = $this->put('/api/codes/types/' . $res['data'][1]['code'], ['disabled_at' => true])->assertStatus($eRole !== ERole::USER ? 200 : 403);
+      $this->assertNotNull($res['data'][Str::camel('disabled_at')]);
+    }
+
     $type = CodeType::factory()->raw(['code' => $type['code']]);
     $this->put('/api/codes/types/' . $type['code'], $type)->assertStatus($eRole !== ERole::USER ? 200 : 403);
     if ($eRole !== ERole::USER) $this->assertDatabaseHas('code_types', $type);
@@ -86,6 +92,10 @@ class CodeTest extends TestCase
         $this->assertEquals($value, $res['data']['type'][Str::camel($key)]);
       }
     }
+
+    if ($eRole !== ERole::USER) $this->assertNull($res['data'][Str::camel('disabled_at')]);
+    $res = $this->put('/api/codes/' . $data['code']. '?include=type', ['disabled_at' => true])->assertStatus($eRole !== ERole::USER ? 200 : 403);
+    if ($eRole !== ERole::USER) $this->assertNotNull($res['data'][Str::camel('disabled_at')]);
 
     $data = Code::factory()->raw(['code' => $data['code'], 'type_code' => $type['code']]);
     $this->put('/api/codes/' . $data['code'], $data)->assertStatus($eRole !== ERole::USER ? 200 : 403);

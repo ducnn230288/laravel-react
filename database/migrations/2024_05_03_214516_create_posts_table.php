@@ -17,9 +17,9 @@ return new class extends Migration
           $table->string('type_code');
           $table->foreign('type_code')->references('code')->on('post_types')->onDelete('cascade')->onUpdate('cascade');
           $table->string('image')->nullable();
+          $table->timestamps();
           $table->softDeletes();
-          $table->string('disabled_at')->nullable();
-            $table->timestamps();
+          $table->timestamp('disabled_at')->nullable();
         });
     }
 

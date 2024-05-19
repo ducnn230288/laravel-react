@@ -21,7 +21,7 @@ return new class extends Migration
           $table->foreignUuid('post_id');
             $table->timestamps();
           $table->softDeletes();
-          $table->string('disabled_at')->nullable();
+          $table->timestamp('disabled_at')->nullable();
         });
     }
 

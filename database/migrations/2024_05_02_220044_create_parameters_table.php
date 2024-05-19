@@ -18,6 +18,8 @@ return new class extends Migration
           $table->text('vn');
           $table->text('en');
             $table->timestamps();
+          $table->softDeletes();
+          $table->timestamp('disabled_at')->nullable();
         });
     }
 

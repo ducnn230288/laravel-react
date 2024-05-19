@@ -75,6 +75,12 @@ class AddressTest extends TestCase
       }
     }
 
+    if ($eRole !== ERole::USER) {
+      $this->assertNull($res['data'][0][Str::camel('disabled_at')]);
+      $res = $this->put('/api/addresses/provinces/' . $res['data'][0]['code'], ['disabled_at' => true])->assertStatus($eRole !== ERole::USER ? 200 : 403);
+      $this->assertNotNull($res['data'][Str::camel('disabled_at')]);
+    }
+
     $province = AddressProvince::factory()->raw(['code' => $province['code']]);
     $this->put('/api/addresses/provinces/' . $province['code'], $province)->assertStatus($eRole !== ERole::USER ? 200 : 403);
     if ($eRole !== ERole::USER) $this->assertDatabaseHas('address_provinces', $province);
@@ -101,6 +107,10 @@ class AddressTest extends TestCase
         $this->assertEquals($value, $res['data']['province'][Str::camel($key)]);
       }
     }
+
+    if ($eRole !== ERole::USER) $this->assertNull($res['data'][Str::camel('disabled_at')]);
+    $res = $this->put('/api/addresses/districts/' . $district['code'], ['disabled_at' => true])->assertStatus($eRole !== ERole::USER ? 200 : 403);
+    if ($eRole !== ERole::USER) $this->assertNotNull($res['data'][Str::camel('disabled_at')]);
 
     $district = AddressDistrict::factory()->raw(['code' => $district['code'], 'province_code' => $province['code']]);
     $this->put('/api/addresses/districts/' . $district['code'], $district)->assertStatus($eRole !== ERole::USER ? 200 : 403);
@@ -134,6 +144,10 @@ class AddressTest extends TestCase
         $this->assertEquals($value, $res['data']['district'][Str::camel($key)]);
       }
     }
+
+    if ($eRole !== ERole::USER) $this->assertNull($res['data'][Str::camel('disabled_at')]);
+    $res = $this->put('/api/addresses/wards/' . $ward['code'], ['disabled_at' => true])->assertStatus($eRole !== ERole::USER ? 200 : 403);
+    if ($eRole !== ERole::USER) $this->assertNotNull($res['data'][Str::camel('disabled_at')]);
 
     $ward = AddressWard::factory()->raw(['code' => $ward['code'], 'district_code' => $district['code']]);
     $this->put('/api/addresses/wards/' . $ward['code'], $ward)->assertStatus($eRole !== ERole::USER ? 200 : 403);

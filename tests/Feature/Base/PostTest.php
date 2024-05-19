@@ -62,6 +62,12 @@ class PostTest extends TestCase
       }
     }
 
+    if ($eRole !== ERole::USER) {
+      $this->assertNull($res['data'][0][Str::camel('disabled_at')]);
+      $res = $this->put('/api/posts/types/' . $res['data'][0]['code'], ['disabled_at' => true])->assertStatus($eRole !== ERole::USER ? 200 : 403);
+      $this->assertNotNull($res['data'][Str::camel('disabled_at')]);
+    }
+
     $type = PostType::factory()->raw(['code' => $type['code']]);
     $this->put('/api/posts/types/' . $type['code'], $type)->assertStatus($eRole !== ERole::USER ? 200 : 403);
     if ($eRole !== ERole::USER) $this->assertDatabaseHas('post_types', $type);
@@ -93,6 +99,10 @@ class PostTest extends TestCase
         $this->assertEquals($value, $res['data']['type'][Str::camel($key)]);
       }
     }
+
+    if ($eRole !== ERole::USER) $this->assertNull($res['data'][Str::camel('disabled_at')]);
+    $res = $this->put('/api/posts/' . $id, ['disabled_at' => true])->assertStatus($eRole !== ERole::USER ? 200 : 403);
+    if ($eRole !== ERole::USER) $this->assertNotNull($res['data'][Str::camel('disabled_at')]);
 
     $data = Post::factory()->raw(['type_code' => $type['code']]);
     if (property_exists($res, 'data')) {

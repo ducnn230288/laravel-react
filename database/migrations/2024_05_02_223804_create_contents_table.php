@@ -20,6 +20,8 @@ return new class extends Migration
           $table->string('image')->nullable();
           $table->integer('order')->nullable();
           $table->timestamps();
+          $table->softDeletes();
+          $table->timestamp('disabled_at')->nullable();
         });
     }
 

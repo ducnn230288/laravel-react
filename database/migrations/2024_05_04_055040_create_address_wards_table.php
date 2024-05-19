@@ -19,6 +19,8 @@ return new class extends Migration
           $table->string('district_code');
           $table->foreign('district_code')->references('code')->on('address_districts')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
+          $table->softDeletes();
+          $table->timestamp('disabled_at')->nullable();
         });
     }
 

@@ -30,7 +30,8 @@ class ParameterController extends Controller implements HasMiddleware
   public function index(): AnonymousResourceCollection
   {
     Gate::authorize(EPermissions::P_PARAMETER_INDEX->name);
-    return ParameterResource::collection($this->filter(Parameter::query())->paginate(\request()->query('perPage')))
+    $perPage = intval(\request()->query('perPage'));
+    return ParameterResource::collection($this->filter(Parameter::query())->paginate($perPage))
       ->additional(['message' => __('messages.Get List Success')]);
   }
 

@@ -38,7 +38,8 @@ class ContentController extends Controller implements HasMiddleware
   public function index(): AnonymousResourceCollection
   {
     Gate::authorize(EPermissions::P_CONTENT_INDEX->name);
-    return ContentResource::collection($this->filter(Content::query())->paginate(\request()->query('perPage')))
+    $perPage = intval(\request()->query('perPage'));
+    return ContentResource::collection($this->filter(Content::query())->paginate($perPage))
       ->additional(['message' => __('messages.Get List Success')]);
   }
 

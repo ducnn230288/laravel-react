@@ -29,7 +29,7 @@ class UserResource extends JsonResource
         Str::camel('position_code') => $this->whenHas('position_code'),
         'position' => new CodeResource($this->whenLoaded('position')),
       ];
-      return !!$this->token ? [
+      return isset($this->token) ? [
         'token' => $this->whenHas('token'),
         Str::camel('refresh-token') => $this->whenHas('refresh-token'),
         'user' => $user

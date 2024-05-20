@@ -34,7 +34,8 @@ class UserRoleController extends Controller implements HasMiddleware
   public function index(): AnonymousResourceCollection
   {
     Gate::authorize(EPermissions::P_USER_ROLE_INDEX->name);
-    return UserRoleResource::collection($this->filter(UserRole::query())->paginate(\request()->query('perPage')))
+    $perPage = intval(\request()->query('perPage'));
+    return UserRoleResource::collection($this->filter(UserRole::query())->paginate($perPage))
       ->additional(['message' => __('messages.Get List Success')]);
   }
 

@@ -35,7 +35,8 @@ class AddressController extends Controller implements HasMiddleware
   public function index(): AnonymousResourceCollection
   {
     Gate::authorize(EPermissions::P_ADDRESS_INDEX->name);
-    return AddressResource::collection($this->filter(Address::query())->paginate(\request()->query('perPage')))
+    $perPage = intval(\request()->query('perPage'));
+    return AddressResource::collection($this->filter(Address::query())->paginate($perPage))
       ->additional(['message' => __('messages.Get List Success')]);
   }
 

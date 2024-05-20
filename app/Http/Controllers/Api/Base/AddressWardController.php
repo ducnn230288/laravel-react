@@ -34,7 +34,8 @@ class AddressWardController extends Controller implements HasMiddleware
   public function index(): AnonymousResourceCollection
   {
     Gate::authorize(EPermissions::P_ADDRESS_WARD_INDEX->name);
-    return AddressWardResource::collection($this->filter(AddressWard::query())->paginate(\request()->query('perPage')))
+    $perPage = intval(\request()->query('perPage'));
+    return AddressWardResource::collection($this->filter(AddressWard::query())->paginate($perPage))
       ->additional(['message' => __('messages.Get List Success')]);
   }
 

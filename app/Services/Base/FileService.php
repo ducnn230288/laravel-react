@@ -68,16 +68,7 @@ class FileService
    */
   public function isRelativePath(string $path): bool
   {
-    return !str_starts_with($path, env('APP_URL', 'http://localhost'));
-  }
-
-  /**
-   * @param string $path
-   * @return bool
-   */
-  public function isHaveHttp(string $path): bool
-  {
-    return str_starts_with($path, 'http');
+    return !str_starts_with($path, env('APP_URL', 'http://localhost')) && !str_starts_with($path, 'http://') && !str_starts_with($path, 'https://');
   }
 
   /**
@@ -86,7 +77,7 @@ class FileService
    */
   public function getAbsolutePath(string $path): string
   {
-    if ($this->isRelativePath($path) && !$this->isRelativePath($path)) $path = env('APP_URL', 'http://localhost').':'.env('APP_PORT', '3000').'/storage/' . $path;
+    if ($this->isRelativePath($path)) $path = env('APP_URL', 'http://localhost').':'.env('APP_PORT', '3000').'/storage/' . $path;
     return $path;
 
   }
@@ -97,7 +88,7 @@ class FileService
    */
   public function getRelativePath(string $path): string
   {
-    if (!$this->isRelativePath($path) && !$this->isRelativePath($path)) $path = str_replace(env('APP_URL', 'http://localhost') . ':' . env('APP_PORT', '3000') . '/storage/', '', $path);
+    if (!$this->isRelativePath($path)) $path = str_replace(env('APP_URL', 'http://localhost') . ':' . env('APP_PORT', '3000') . '/storage/', '', $path);
     return $path;
   }
 

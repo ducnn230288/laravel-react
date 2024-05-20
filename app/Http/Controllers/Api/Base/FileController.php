@@ -30,7 +30,8 @@ class FileController extends Controller implements HasMiddleware
     public function index(): AnonymousResourceCollection
     {
       Gate::authorize(EPermissions::P_FILE_INDEX->name);
-      return FileResource::collection($this->filter(File::query())->paginate(\request()->query('perPage')))
+      $perPage = intval(\request()->query('perPage'));
+      return FileResource::collection($this->filter(File::query())->paginate($perPage))
         ->additional(['message' => __('messages.Get List Success')]);
     }
 

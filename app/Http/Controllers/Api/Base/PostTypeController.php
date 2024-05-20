@@ -34,7 +34,8 @@ class PostTypeController extends Controller implements HasMiddleware
   public function index(): AnonymousResourceCollection
   {
     Gate::authorize(EPermissions::P_POST_TYPE_INDEX->name);
-    return PostTypeResource::collection($this->filter(PostType::query())->get())
+    $perPage = intval(\request()->query('perPage'));
+    return PostTypeResource::collection($this->filter(PostType::query())->paginate($perPage))
       ->additional(['message' => __('messages.Get List Success')]);
   }
 

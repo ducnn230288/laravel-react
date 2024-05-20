@@ -35,7 +35,8 @@ class CodeController extends Controller implements HasMiddleware
     public function index(): AnonymousResourceCollection
     {
       Gate::authorize(EPermissions::P_CODE_INDEX->name);
-      return CodeResource::collection($this->filter(Code::query())->paginate(\request()->query('perPage')))
+      $perPage = intval(\request()->query('perPage'));
+      return CodeResource::collection($this->filter(Code::query())->paginate($perPage))
         ->additional(['message' => __('messages.Get List Success')]);
     }
 

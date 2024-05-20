@@ -13,10 +13,10 @@ class CContentObserver
     $this->fileService = $fileService;
   }
 
-  public function created($postLanguage): void
+  public function created(mixed $contentLanguage): void
   {
-    $postLanguage['content'] = $this->fileService->convertSrcImage(
-      value: $postLanguage['content'],
+    $contentLanguage['content'] = $this->fileService->convertSrcImage(
+      value: $contentLanguage['content'],
       callback: fn ($path) => $this->fileService->active($path, true)
     );
   }
@@ -24,11 +24,11 @@ class CContentObserver
     /**
      * Handle the PostLanguage "updated" event.
      */
-    public function updated($postLanguage): void
+    public function updated(mixed $contentLanguage): void
     {
-      $oldImages = $this->fileService->getSrcImages($postLanguage->getOriginal('content'));
-      $postLanguage['content'] = $this->fileService->convertSrcImage(
-        value: $postLanguage['content'],
+      $oldImages = $this->fileService->getSrcImages($contentLanguage->getOriginal('content'));
+      $contentLanguage['content'] = $this->fileService->convertSrcImage(
+        value: $contentLanguage['content'],
         callback: function ($path) use ($oldImages) {
           if (($key = array_search($path, $oldImages)) !== false)
             unset($oldImages[$key]);
@@ -41,9 +41,9 @@ class CContentObserver
     /**
      * Handle the PostLanguage "deleted" event.
      */
-    public function deleted($postLanguage): void
+    public function deleted(mixed $contentLanguage): void
     {
-      $oldImages = $this->fileService->getSrcImages($postLanguage['content']);
+      $oldImages = $this->fileService->getSrcImages($contentLanguage['content']);
       foreach ($oldImages as $oldImage) $this->fileService->destroy($oldImage);
     }
 }

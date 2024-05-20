@@ -34,7 +34,8 @@ class ContentTypeController extends Controller implements HasMiddleware
   public function index(): AnonymousResourceCollection
   {
     Gate::authorize(EPermissions::P_CONTENT_TYPE_INDEX->name);
-    return ContentTypeResource::collection($this->filter(ContentType::query())->paginate(\request()->query('perPage')))
+    $perPage = intval(\request()->query('perPage'));
+    return ContentTypeResource::collection($this->filter(ContentType::query())->paginate($perPage))
       ->additional(['message' => __('messages.Get List Success')]);
   }
 

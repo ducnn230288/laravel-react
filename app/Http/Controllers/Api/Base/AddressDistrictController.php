@@ -34,7 +34,8 @@ class AddressDistrictController extends Controller implements HasMiddleware
   public function index(): AnonymousResourceCollection
   {
     Gate::authorize(EPermissions::P_ADDRESS_DISTRICT_INDEX->name);
-    return AddressDistrictResource::collection($this->filter(AddressDistrict::query())->paginate(\request()->query('perPage')))
+    $perPage = intval(\request()->query('perPage'));
+    return AddressDistrictResource::collection($this->filter(AddressDistrict::query())->paginate($perPage))
       ->additional(['message' => __('messages.Get List Success')]);
   }
 

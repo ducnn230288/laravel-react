@@ -35,7 +35,8 @@ class UserController extends Controller implements HasMiddleware
   public function index(): AnonymousResourceCollection
   {
     Gate::authorize(EPermissions::P_USER_INDEX->name);
-    return UserResource::collection($this->filter(User::query())->paginate(\request()->query('perPage')))
+    $perPage = intval(\request()->query('perPage'));
+    return UserResource::collection($this->filter(User::query())->paginate($perPage))
       ->additional(['message' => __('messages.Get List Success')]);
   }
 

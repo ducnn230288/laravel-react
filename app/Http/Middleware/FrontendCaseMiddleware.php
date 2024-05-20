@@ -38,7 +38,7 @@ class FrontendCaseMiddleware
       return $response;
     }
 
-  private function convertKeysToCase(string $case, $data)
+  private function convertKeysToCase(string $case, array $data) : array
   {
     if (!is_array($data)) {
       return $data;

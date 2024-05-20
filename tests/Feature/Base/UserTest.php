@@ -72,7 +72,7 @@ class UserTest extends TestCase
     if ($eRole !== ERole::USER) $this->assertDatabaseHas('user_roles', [...$role, 'permissions' => json_encode($role['permissions'])]);
 
     $data = User::factory()->raw(['role_code' => $role['code']]);
-    $this->post('/api/users/', $data)->assertStatus($eRole !== ERole::USER ? 201 : 403);
+    $this->post('/api/users/', [...$data, 'password_confirmation' => 'Password1!'])->assertStatus($eRole !== ERole::USER ? 201 : 403);
     unset($data['password']);
     if ($eRole !== ERole::USER) $this->assertDatabaseHas('users', $data);
 
@@ -101,7 +101,7 @@ class UserTest extends TestCase
     if ($eRole !== ERole::USER) $this->assertNotNull($res['data'][Str::camel('disabled_at')]);
 
     $data = User::factory()->raw(['role_code' => $role['code']]);
-    $this->put('/api/users/' . $id, $data)->assertStatus($eRole !== ERole::USER ? 200 : 403);
+    $this->put('/api/users/' . $id, [...$data, 'password_confirmation' => 'Password1!'])->assertStatus($eRole !== ERole::USER ? 200 : 403);
     unset($data['password']);
     if ($eRole !== ERole::USER) $this->assertDatabaseHas('users', $data);
 

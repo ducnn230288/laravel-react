@@ -31,7 +31,7 @@ class UserFactory extends Factory
             'password' => 'Password1!',
             'avatar' => $this->faker->imageUrl(),
             'phone_number' => $this->faker->phoneNumber,
-            'dob' => $this->faker->dateTimeBetween(),
+            'dob' => \Carbon\Carbon::createFromTimeStamp($this->faker->dateTimeBetween()->getTimestamp()),
             'role_code' => fn () => UserRole::factory()->create()->code,
             'position_code' => fn () => Code::factory()->create()->code,
         ];

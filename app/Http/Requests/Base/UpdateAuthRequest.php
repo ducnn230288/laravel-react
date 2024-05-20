@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Base;
 
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateAuthRequest extends FormRequest
@@ -25,8 +26,16 @@ class UpdateAuthRequest extends FormRequest
           'name' => 'string|max:255',
           'position_code' => 'string|max:255',
           'dob' => 'nullable|date',
-          'email' => 'string|unique:users,email,'.$this->user->id,
-          'phone_number' => 'string|unique:users,phone_number,'.$this->user->id,
+          'email' => 'string|unique:users,email,'.auth()->id(),
+          'phone_number' => 'string|unique:users,phone_number,'.auth()->id(),
         ];
     }
+
+  protected function prepareForValidation(): void
+  {
+    if (isset($this->dob))
+      $this->merge([
+        'dob' => Carbon::createFromTimeString($this->dob)->format('Y-m-d')
+      ]);
+  }
 }

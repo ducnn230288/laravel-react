@@ -141,7 +141,7 @@ const Page = () => {
                           name: 'positionCode',
                           formItem: {
                             col: 6,
-                            type: EFormType.selectTable,
+                            // type: EFormType.selectTable,
                             rules: [{ type: EFormRuleType.required }],
                             get: {
                               facade: CodeFacade,

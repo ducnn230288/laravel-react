@@ -3,7 +3,6 @@
 namespace App\Policies;
 
 use App\Http\Enums\EPermissions;
-use App\Models\Base\User;
 use Illuminate\Support\Facades\Gate;
 
 class PermissionPolicies

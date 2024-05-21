@@ -2,11 +2,12 @@ import React, { Fragment } from 'react';
 import { t } from 'i18next';
 import dayjs from 'dayjs';
 import 'dayjs/locale/vi';
-import { Gantt } from '@core/gantt';
-import { EChart } from '@core/echart';
-import { EditTable } from '@core/edit-table';
-import { ETypeChart, MEditTable } from '@models';
-import { formatDataChart } from '@utils';
+
+import { EChart } from '@/library/echart';
+import { EditTable } from '@/library/edit-table';
+import { Gantt } from '@/library/gantt';
+import { ETypeChart, MEditTable } from '@/models';
+import { formatDataChart } from '@/utils';
 
 const Page = () => {
   const task = [

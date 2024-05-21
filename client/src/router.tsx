@@ -1,34 +1,34 @@
 import React, { Suspense } from 'react';
 import { HashRouter, Navigate, Outlet, Route, Routes } from 'react-router-dom';
-
 import { Spin } from 'antd';
-import { routerLinks, lang, keyToken } from '@utils';
+
+import { routerLinks, lang, keyToken } from '@/utils';
 
 const pages = [
   {
-    layout: React.lazy(() => import('@layouts/auth')),
+    layout: React.lazy(() => import('@/layouts/auth')),
     isPublic: true,
     child: [
       {
         path: routerLinks('Login'),
-        component: React.lazy(() => import('@pages/login')),
+        component: React.lazy(() => import('@/pages/base/login')),
       },
       {
         path: routerLinks('ForgetPassword'),
-        component: React.lazy(() => import('@pages/forget-password')),
+        component: React.lazy(() => import('@/pages/base/forget-password')),
       },
       {
         path: routerLinks('VerifyForotPassword'),
-        component: React.lazy(() => import('@pages/forget-password/otp')),
+        component: React.lazy(() => import('@/pages/base/forget-password/otp')),
       },
       {
         path: routerLinks('SetPassword'),
-        component: React.lazy(() => import('@pages/forget-password/otp/set-password')),
+        component: React.lazy(() => import('@/pages/base/forget-password/otp/set-password')),
       },
     ],
   },
   {
-    layout: React.lazy(() => import('@layouts/admin')),
+    layout: React.lazy(() => import('@/layouts/admin')),
     isPublic: false,
     child: [
       {
@@ -37,31 +37,31 @@ const pages = [
       },
       {
         path: routerLinks('MyProfile'),
-        component: React.lazy(() => import('@pages/my-profile')),
+        component: React.lazy(() => import('@/pages/base/my-profile')),
       },
       {
         path: routerLinks('Dashboard'),
-        component: React.lazy(() => import('@pages/dashboard')),
+        component: React.lazy(() => import('@/pages/dashboard')),
       },
       {
         path: routerLinks('Parameter'),
-        component: React.lazy(() => import('@pages/parameter')),
+        component: React.lazy(() => import('@/pages/base/parameter')),
       },
       {
         path: routerLinks('Code'),
-        component: React.lazy(() => import('@pages/code')),
+        component: React.lazy(() => import('@/pages/base/code')),
       },
       {
         path: routerLinks('Content'),
-        component: React.lazy(() => import('@pages/content')),
+        component: React.lazy(() => import('@/pages/base/content')),
       },
       {
         path: routerLinks('Post'),
-        component: React.lazy(() => import('@pages/post')),
+        component: React.lazy(() => import('@/pages/base/post')),
       },
       {
         path: routerLinks('User'),
-        component: React.lazy(() => import('@pages/user')),
+        component: React.lazy(() => import('@/pages/base/user')),
       },
     ], // 💬 generate link to here
   },

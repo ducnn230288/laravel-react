@@ -1,5 +1,5 @@
 import { CheckboxOptionType, FormInstance } from 'antd';
-import { TableGet } from '../data-table';
+import { TableGet } from '@/models';
 
 export enum EFormType {
   onlyNumber = 'only_number',

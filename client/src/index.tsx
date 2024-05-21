@@ -6,8 +6,9 @@ import { initReactI18next } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { ConfigProvider } from 'antd';
 
-import { GlobalFacade, setupStore } from '@store';
-import { reportWebVitals, lang } from '@utils';
+import { GlobalFacade, setupStore } from '@/services';
+import { reportWebVitals, lang } from '@/utils';
+
 import Router from './router';
 
 const fallbackLng = localStorage.getItem('i18nextLng');

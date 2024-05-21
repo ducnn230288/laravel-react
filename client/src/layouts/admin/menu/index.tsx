@@ -5,7 +5,7 @@ import { useNavigate, useLocation } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { createSearchParams } from 'react-router-dom';
 
-import { routerLinks, lang, uuidv4 } from '@utils';
+import { routerLinks, lang, uuidv4 } from '@/utils';
 import listMenu from '../menus';
 import './index.less';
 

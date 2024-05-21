@@ -1,7 +1,6 @@
 import React, { PropsWithChildren, useEffect } from 'react';
 
-import { GlobalFacade } from '@store';
-
+import { GlobalFacade } from '@/services';
 import './index.less';
 
 const Layout = ({ children }: PropsWithChildren) => {

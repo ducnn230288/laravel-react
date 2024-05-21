@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import { EFormModeSelect, EFormType, FormModel } from '@models';
+
+import { EFormModeSelect, EFormType, FormModel } from '@/models';
 dayjs.extend(utc);
 
 export const convertFormValue = (columns: FormModel[], values: { [selector: string]: any }, exportData = true) => {

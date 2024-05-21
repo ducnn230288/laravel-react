@@ -1,6 +1,8 @@
 {
-  "extends": "./tsconfig.paths.json",
   "compilerOptions": {
+    "paths": {
+      "@/*": ["./src/*"]
+    },
     "target": "ES2022",
     "module": "ES2022",
     "useDefineForClassFields": true,

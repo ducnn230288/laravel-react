@@ -1,7 +1,8 @@
-import { keyRefreshToken, keyToken, linkApi, routerLinks } from '@utils';
-import { Message } from '@core/message';
-import { Responses } from '@models';
 import queryString from "query-string";
+
+import { keyRefreshToken, keyToken, linkApi, routerLinks } from '@/utils';
+import { Message } from '@/library/message';
+import { Responses } from '@/models';
 
 export const API = {
   init: () =>

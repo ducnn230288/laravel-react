@@ -1,12 +1,13 @@
 import { CheckboxOptionType } from 'antd';
-import { keyToken, language, languages, linkApi } from './variable';
-// @ts-ignore
 import { io } from 'socket.io-client';
 import * as ReactDOMServer from 'react-dom/server';
 import React, { Fragment } from 'react';
 import classNames from 'classnames';
-import { Arrow } from '@svgs';
-import { ETypeChart } from '@models';
+
+import { Arrow } from '@/assets/svg';
+import { ETypeChart } from '@/models';
+
+import { keyToken, language, languages, linkApi } from './variable';
 
 export * from './init/reportWebVitals';
 export * from './api';

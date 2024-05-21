@@ -1,9 +1,9 @@
 import React from 'react';
 import { URLSearchParamsInit } from 'react-router-dom/dist/dom';
 
-import { keyRole } from '@utils';
+import { keyRole } from '@/utils';
+import { Calendar, Cog, User } from '@/assets/svg';
 import './index.less';
-import { Calendar, Cog, User } from '@svgs';
 
 const Layout: IMenu[] = [
   {

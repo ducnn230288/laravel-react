@@ -4,10 +4,12 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import classNames from 'classnames';
 import { useLocation } from 'react-router-dom';
-import { Avatar } from '@core/avatar';
-import { GlobalFacade } from '@store';
-import { Key, Out, User, Arrow, Logo } from '@svgs';
-import { routerLinks, lang } from '@utils';
+
+import { Avatar } from '@/library/avatar';
+import { GlobalFacade } from '@/services';
+import { Key, Out, User, Arrow, Logo } from '@/assets/svg';
+import { routerLinks, lang } from '@/utils';
+
 import './index.less';
 import Menu from './menu';
 

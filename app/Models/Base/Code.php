@@ -10,12 +10,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Code extends Model
 {
     use HasFactory, HasUuids;
-    protected $fillable = ['name', 'description', 'code', 'type_code', 'disabled_at'];
+    protected $fillable = ['name', 'description', 'code', 'type_code', 'is_disable'];
   protected static function boot(): void
   {
     parent::boot();
     self::updating(function ($data) {
-      if (isset($data['disabled_at'])) $data['disabled_at'] = $data['disabled_at'] ? now() : null;
+      if (isset($data['is_disable'])) {
+        $data['disabled_at'] = $data['is_disable'] ? now() : null;
+        unset($data['is_disable']);
+      }
     });
   }
     public function type(): BelongsTo

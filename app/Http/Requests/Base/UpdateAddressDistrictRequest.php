@@ -24,7 +24,7 @@ class UpdateAddressDistrictRequest extends FormRequest
         return [
           'name' => 'sometimes|string|max:255',
           'description' => 'nullable|string',
-          'disabled_at' => 'boolean',
+          'is_disable' => 'boolean',
         ];
     }
 }

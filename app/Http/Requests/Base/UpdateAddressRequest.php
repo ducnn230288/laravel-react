@@ -26,7 +26,7 @@ class UpdateAddressRequest extends FormRequest
           'province_code' => 'required|string|max:255',
           'district_code' => 'required|string|max:255',
           'ward_code' => 'required|string|max:255',
-          'disabled_at' => 'boolean',
+          'is_disable' => 'boolean',
         ];
     }
 }

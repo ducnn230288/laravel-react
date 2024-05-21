@@ -55,9 +55,9 @@ class ParameterTest extends TestCase
       }
     }
 
-    if ($eRole !== ERole::USER) $this->assertNull($res['data'][0][Str::camel('disabled_at')]);
-    $res = $this->put('/api/parameters/' . $data['code'], ['disabled_at' => true])->assertStatus($eRole !== ERole::USER ? 200 : 403);
-    if ($eRole !== ERole::USER) $this->assertNotNull($res['data'][Str::camel('disabled_at')]);
+    if ($eRole !== ERole::USER) $this->assertFalse($res['data'][0][Str::camel('is_disable')]);
+    $res = $this->put('/api/parameters/' . $data['code'], ['is_disable' => true])->assertStatus($eRole !== ERole::USER ? 200 : 403);
+    if ($eRole !== ERole::USER) $this->assertTrue($res['data'][Str::camel('is_disable')]);
 
     $data = Parameter::factory()->raw(['code' => $data['code']]);
     $this->put('/api/parameters/' . $data['code'], $data)->assertStatus($eRole !== ERole::USER ? 200 : 403);

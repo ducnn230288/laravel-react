@@ -60,7 +60,7 @@ class AuthController extends Controller implements HasMiddleware
    */
   public function profile(): UserResource
   {
-    return (new UserResource(auth()->user()->load('role')))
+    return (new UserResource(auth()->user()->load(['role', 'position'])))
       ->additional(['message' => __('messages.Get Detail Success')]);
   }
 

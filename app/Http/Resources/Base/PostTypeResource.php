@@ -22,9 +22,9 @@ class PostTypeResource extends JsonResource
         'description' => $this->whenHas('description'),
         Str::camel('posts_count') => $this->whenHas('posts_count'),
         Str::camel('post_type_id') => $this->whenHas('post_type_id'),
-        Str::camel('disabled_at') => $this->whenHas('disabled_at'),
         'posts' => PostResource::collection($this->whenLoaded('posts')),
         'children' => PostTypeResource::collection($this->whenLoaded('children')),
+        Str::camel('is_disable') => !!$this->disabled_at,
       ];
     }
 }

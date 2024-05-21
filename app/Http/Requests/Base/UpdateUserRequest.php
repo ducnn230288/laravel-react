@@ -30,7 +30,7 @@ class UpdateUserRequest extends FormRequest
           'position_code' => 'string|max:255',
           'email' => 'string|unique:users,email,'.$this->user->id,
           'phone_number' => 'string|unique:users,phone_number,'.$this->user->id,
-          'disabled_at' => 'bool'
+          'is_disable' => 'bool'
         ];
     }
 }

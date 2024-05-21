@@ -18,7 +18,10 @@ class User extends Authenticatable
     {
       parent::boot();
       self::updating(function ($data) {
-        if (isset($data['disabled_at'])) $data['disabled_at'] = $data['disabled_at'] ? now() : null;
+        if (isset($data['is_disable'])) {
+          $data['disabled_at'] = $data['is_disable'] ? now() : null;
+          unset($data['is_disable']);
+        }
       });
     }
 
@@ -36,7 +39,7 @@ class User extends Authenticatable
         'phone_number',
         'role_code',
         'position_code',
-        'disabled_at',
+        'is_disable',
     ];
 
     /**

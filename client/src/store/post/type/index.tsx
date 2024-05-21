@@ -16,11 +16,10 @@ export const PostTypeFacade = () => {
     ...useTypedSelector((state) => state[action.name] as State<PostType>),
     set: (values: State<PostType>) => dispatch(action.set(values)),
     get: (params: PaginationQueryPostType) => dispatch(action.get(params)),
-    getById: ({ id, keyState = 'isVisible' }: { id: string; keyState?: keyof State<PostType> }) =>
-      dispatch(action.getById({ id, keyState })),
+    getById: ({ id, keyState = 'isVisible', params }: { id: string; keyState?: keyof State<PostType>, params?: PaginationQuery<PostType> }) =>
+      dispatch(action.getById({ id, keyState, params })),
     post: (values: PostType) => dispatch(action.post(values)),
     put: (values: PostType) => dispatch(action.put(values)),
-    putDisable: (values: { id: string; disable: boolean }) => dispatch(action.putDisable(values)),
     delete: (id: string) => dispatch(action.delete(id)),
   };
 };

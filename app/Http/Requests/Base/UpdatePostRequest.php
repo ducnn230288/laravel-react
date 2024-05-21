@@ -25,7 +25,7 @@ class UpdatePostRequest extends FormRequest
         'type_code' => 'required_if:disabled_at,|string|max:255',
         'image' => 'nullable|string',
         'languages' => 'required_if:disabled_at,|array',
-        'disabled_at' => 'boolean',
+        'is_disable' => 'boolean',
       ];
       $request = $this->json()->all();
       if (isset($request['languages'])) {

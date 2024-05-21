@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import {useAppDispatch, useTypedSelector, Action, Slice, State} from '@store';
+import {useAppDispatch, useTypedSelector, Action, Slice, State, Parameter} from '@store';
 import { CommonEntity, PaginationQuery } from '@models';
 import { ContentType } from './type';
 
@@ -17,7 +17,6 @@ export const ContentFacade = () => {
       dispatch(action.getById({ id, keyState, params })),
     post: (values: Content) => dispatch(action.post(values)),
     put: (values: Content) => dispatch(action.put(values)),
-    putDisable: (values: { id: string; disable: boolean }) => dispatch(action.putDisable(values)),
     delete: (id: string) => dispatch(action.delete(id)),
   };
 };

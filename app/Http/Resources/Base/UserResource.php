@@ -23,11 +23,11 @@ class UserResource extends JsonResource
         'dob' => $this->whenHas('dob'),
         Str::camel('phone_number') => $this->whenHas('phone_number'),
         Str::camel('created_at') => $this->whenHas('created_at'),
-        Str::camel('disabled_at') => $this->whenHas('disabled_at'),
         Str::camel('role_code') => $this->whenHas('role_code'),
         'role' => new UserRoleResource($this->whenLoaded('role')),
         Str::camel('position_code') => $this->whenHas('position_code'),
         'position' => new CodeResource($this->whenLoaded('position')),
+        Str::camel('is_disable') => !!$this->disabled_at,
       ];
       return isset($this->token) ? [
         'token' => $this->whenHas('token'),

@@ -18,7 +18,7 @@ export class CommonEntity {
   constructor(
     public id?: string,
     public createdAt?: string,
-    public disabledAt?: boolean,
+    public isDisable?: boolean,
   ) {}
 }
 

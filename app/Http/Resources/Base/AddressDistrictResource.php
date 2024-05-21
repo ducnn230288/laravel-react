@@ -23,7 +23,7 @@ class AddressDistrictResource extends JsonResource
         Str::camel('province_code') => $this->whenHas('province_code'),
         'province' => new AddressProvinceResource($this->whenLoaded('province')),
         'wards' => AddressWardResource::collection($this->whenLoaded('wards')),
-        Str::camel('disabled_at') => $this->whenHas('disabled_at'),
+        Str::camel('is_disable') => !!$this->disabled_at,
       ];
     }
 }

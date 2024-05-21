@@ -86,7 +86,7 @@ export class User extends CommonEntity {
     public role?: UserRole,
     public createdAt?: string,
     public updatedAt?: string,
-    public disabledAt?: boolean,
+    public isDisable?: boolean,
   ) {
     super();
   }

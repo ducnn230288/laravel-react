@@ -11,12 +11,15 @@ class Address extends Model
 {
     use HasFactory, HasUuids;
 
-  protected $fillable = ['address', 'province_code', 'district_code', 'ward_code', 'user_id', 'disabled_at'];
+  protected $fillable = ['address', 'province_code', 'district_code', 'ward_code', 'user_id', 'is_disable'];
   protected static function boot(): void
   {
     parent::boot();
     self::updating(function ($data) {
-      if (isset($data['disabled_at'])) $data['disabled_at'] = $data['disabled_at'] ? now() : null;
+      if (isset($data['is_disable'])) {
+        $data['disabled_at'] = $data['is_disable'] ? now() : null;
+        unset($data['is_disable']);
+      }
     });
   }
   public function province(): BelongsTo

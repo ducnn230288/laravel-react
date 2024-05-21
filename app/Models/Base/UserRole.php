@@ -11,8 +11,17 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class UserRole extends Model
 {
     use HasFactory, HasUuids;
-  protected $fillable = ['name', 'description', 'code', 'permissions', 'disabled_at'];
-
+  protected $fillable = ['name', 'description', 'code', 'permissions', 'is_disable'];
+  protected static function boot(): void
+  {
+    parent::boot();
+    self::updating(function ($data) {
+      if (isset($data['is_disable'])) {
+        $data['disabled_at'] = $data['is_disable'] ? now() : null;
+        unset($data['is_disable']);
+      }
+    });
+  }
   protected $casts = [
     'permissions' => Json::class,
   ];

@@ -41,7 +41,7 @@ const Component = ({ mode, onChange, placeholder, disabled, get, value }: Type) 
   const _list = [..._temp.data, ...(facade?.result.data || [])]
     .map(get!.format!)
     .filter((item: any) => !value || item.value === value);
-
+  console.log(_list);
   return (
     <div ref={refSelect} className={classNames('relative', { 'bg-gray-100': disabled })}>
       <Dropdown

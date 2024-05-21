@@ -25,7 +25,7 @@ class UpdatePostTypeRequest extends FormRequest
           'name' => 'sometimes|string|max:255',
           'description' => 'nullable|string',
           'post_type_id' => 'nullable|string',
-          'disabled_at' => 'boolean',
+          'is_disable' => 'boolean',
         ];
     }
 }

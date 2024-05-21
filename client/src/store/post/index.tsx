@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { useAppDispatch, useTypedSelector, Action, Slice, State } from '@store';
+import {useAppDispatch, useTypedSelector, Action, Slice, State, UserRole} from '@store';
 import { CommonEntity, PaginationQuery } from '@models';
 import { PostType } from './type';
 
@@ -17,7 +17,6 @@ export const PostFacade = () => {
       dispatch(action.getById({ id, keyState, params })),
     post: (values: Post) => dispatch(action.post(values)),
     put: (values: Post) => dispatch(action.put(values)),
-    putDisable: (values: { id: string; disable: boolean }) => dispatch(action.putDisable(values)),
     delete: (id: string) => dispatch(action.delete(id)),
   };
 };

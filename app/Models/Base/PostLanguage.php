@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class PostLanguage extends Model
 {
   use HasFactory, HasUuids;
-  protected $fillable = ['language', 'name', 'description', 'slug', 'content', 'post_id', 'disabled_at'];
+  protected $fillable = ['language', 'name', 'description', 'slug', 'content', 'post_id', 'is_disable'];
   protected FileService $fileService;
   protected function content(): Attribute
   {

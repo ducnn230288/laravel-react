@@ -141,7 +141,7 @@ const Page = () => {
                           name: 'positionCode',
                           formItem: {
                             col: 6,
-                            // type: EFormType.selectTable,
+                            type: EFormType.selectTable,
                             rules: [{ type: EFormRuleType.required }],
                             get: {
                               facade: CodeFacade,
@@ -150,8 +150,8 @@ const Page = () => {
                                 typeCode: 'position'
                               }),
                               format: (item) => ({
-                                label: item.name,
-                                value: item.code,
+                                label: item?.name,
+                                value: item?.code,
                               }),
                               data: () => data?.position,
                               column: [
@@ -171,17 +171,7 @@ const Page = () => {
                                     filter: { type: ETableFilterType.search },
                                     sorter: true,
                                   },
-                                },
-                                {
-                                  title: 'Created',
-                                  name: 'createdAt',
-                                  tableItem: {
-                                    width: 120,
-                                    filter: { type: ETableFilterType.date },
-                                    sorter: true,
-                                    render: (text) => dayjs(text).format(formatDate),
-                                  },
-                                },
+                                }
                               ],
                             },
                           },

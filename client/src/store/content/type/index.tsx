@@ -12,11 +12,10 @@ export const ContentTypeFacade = () => {
     ...useTypedSelector((state) => state[action.name] as State<ContentType>),
     set: (values: State<ContentType>) => dispatch(action.set(values)),
     get: (params: PaginationQuery<ContentType>) => dispatch(action.get(params)),
-    getById: ({ id, keyState = 'isVisible' }: { id: string; keyState?: keyof State<ContentType> }) =>
-      dispatch(action.getById({ id, keyState })),
+    getById: ({ id, keyState = 'isVisible', params }: { id: string; keyState?: keyof State<ContentType>, params?: PaginationQuery<ContentType> }) =>
+      dispatch(action.getById({ id, keyState, params })),
     post: (values: ContentType) => dispatch(action.post(values)),
     put: (values: ContentType) => dispatch(action.put(values)),
-    putDisable: (values: { id: string; disable: boolean }) => dispatch(action.putDisable(values)),
     delete: (id: string) => dispatch(action.delete(id)),
   };
 };

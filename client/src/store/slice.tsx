@@ -113,20 +113,6 @@ export class Slice<T extends CommonEntity, Y = EStatusState> {
           state.isLoading = false;
         })
 
-        .addCase(action.putDisable.pending, (state) => {
-          state.isLoading = true;
-          state.status = EStatusState.putDisablePending;
-        })
-        .addCase(action.putDisable.fulfilled, (state, action) => {
-          state.isVisible = false;
-          state.status = action.payload ? EStatusState.putDisableFulfilled : EStatusState.idle;
-          state.isLoading = false;
-        })
-        .addCase(action.putDisable.rejected, (state) => {
-          state.status = EStatusState.putDisableRejected;
-          state.isLoading = false;
-        })
-
         .addCase(action.delete.pending, (state) => {
           state.isLoading = true;
           state.status = EStatusState.deletePending;

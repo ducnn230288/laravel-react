@@ -12,11 +12,10 @@ export const CodeTypeFacade = () => {
     ...(useTypedSelector((state) => state[action.name]) as State<CodeType>),
     set: (values: State<CodeType>) => dispatch(action.set(values)),
     get: (params: PaginationQuery<CodeType>) => dispatch(action.get(params)),
-    getById: ({ id, keyState = 'isVisible' }: { id: string; keyState?: keyof State<CodeType> }) =>
-      dispatch(action.getById({ id, keyState })),
+    getById: ({ id, keyState = 'isVisible', params }: { id: string; keyState?: keyof State<CodeType>, params?: PaginationQuery<CodeType> }) =>
+      dispatch(action.getById({ id, keyState, params })),
     post: (values: CodeType) => dispatch(action.post(values)),
     put: (values: CodeType) => dispatch(action.put(values)),
-    putDisable: (values: { id: string; disable: boolean }) => dispatch(action.putDisable(values)),
     delete: (id: string) => dispatch(action.delete(id)),
   };
 };

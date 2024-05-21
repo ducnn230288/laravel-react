@@ -17,7 +17,10 @@ class CImageObserver
   }
   public function updating(mixed $data): void
   {
-    if (isset($data['disabled_at'])) $data['disabled_at'] = $data['disabled_at'] ? now() : null;
+    if (isset($data['is_disable'])) {
+      $data['disabled_at'] = $data['is_disable'] ? now() : null;
+      unset($data['is_disable']);
+    }
   }
   public function updated(mixed $data): void
   {

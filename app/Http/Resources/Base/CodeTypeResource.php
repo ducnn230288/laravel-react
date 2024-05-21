@@ -21,7 +21,7 @@ class CodeTypeResource extends JsonResource
         'code' => $this->whenHas('code'),
         'description' => $this->whenHas('description'),
         'codes' => CodeResource::collection($this->whenLoaded('codes')),
-        Str::camel('disabled_at') => $this->whenHas('disabled_at'),
+        Str::camel('is_disable') => !!$this->disabled_at,
       ];
     }
 }

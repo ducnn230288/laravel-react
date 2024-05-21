@@ -62,21 +62,21 @@ export default {
           render: (text: string, data) => (
             <div className={'flex gap-2'}>
               {user?.role?.permissions?.includes(keyRole.P_CONTENT_UPDATE) && (
-                <ToolTip title={t(data.disabledAt ? 'components.datatable.Disabled' : 'components.datatable.Enabled')}>
+                <ToolTip title={t(data.isDisable ? 'components.datatable.Disabled' : 'components.datatable.Enabled')}>
                   <PopConfirm
                     title={t(
-                      !data.disabledAt
+                      !data.isDisable
                         ? 'components.datatable.areYouSureWantDisable'
                         : 'components.datatable.areYouSureWantEnable',
                     )}
-                    onConfirm={() => contentFacade.put({ id: data.id, disabledAt: !data.disabledAt })}
+                    onConfirm={() => contentFacade.put({ id: data.id, isDisable: !data.isDisable })}
                   >
                     <button
                       title={
-                        t(data.disabledAt ? 'components.datatable.Disabled' : 'components.datatable.Enabled') || ''
+                        t(data.isDisable ? 'components.datatable.Disabled' : 'components.datatable.Enabled') || ''
                       }
                     >
-                      {data.disabledAt ? (
+                      {data.isDisable ? (
                         <Disable className="icon-cud bg-yellow-700 hover:bg-yellow-500" />
                       ) : (
                         <Check className="icon-cud bg-green-600 hover:bg-green-400" />

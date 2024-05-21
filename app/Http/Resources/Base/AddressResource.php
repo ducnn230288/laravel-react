@@ -26,7 +26,7 @@ class AddressResource extends JsonResource
         'ward' => new AddressProvinceResource($this->whenLoaded('ward')),
         Str::camel('user_id') => $this->whenHas('user_id'),
         'user' => new UserResource($this->whenLoaded('user')),
-        Str::camel('disabled_at') => $this->whenHas('disabled_at'),
+        Str::camel('is_disable') => !!$this->disabled_at,
       ];
     }
 }

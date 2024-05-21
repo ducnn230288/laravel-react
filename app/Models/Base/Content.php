@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Content extends Model
 {
     use HasFactory, HasUuids;
-  protected $fillable = ['type_code', 'name', 'image', 'order', 'disabled_at'];
+  protected $fillable = ['type_code', 'name', 'image', 'order', 'is_disable'];
   protected FileService $fileService;
   protected function image(): Attribute
   {

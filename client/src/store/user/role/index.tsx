@@ -17,11 +17,10 @@ export const UserRoleFacade = () => {
     ...useTypedSelector((state) => state[action.name] as State<UserRole>),
     set: (values: State<UserRole>) => dispatch(action.set(values)),
     get: (params: PaginationQuery<UserRole>) => dispatch(action.get(params)),
-    getById: ({ id, keyState = 'isVisible' }: { id: string; keyState?: keyof State<UserRole> }) =>
-      dispatch(action.getById({ id, keyState })),
+    getById: ({ id, keyState = 'isVisible', params }: { id: string; keyState?: keyof State<UserRole>, params?: PaginationQuery<UserRole> }) =>
+      dispatch(action.getById({ id, keyState, params })),
     post: (values: UserRole) => dispatch(action.post(values)),
     put: (values: UserRole) => dispatch(action.put(values)),
-    putDisable: (values: { id: string; disable: boolean }) => dispatch(action.putDisable(values)),
     delete: (id: string) => dispatch(action.delete(id)),
     getPermission: () => dispatch(action.getPermission()),
   };

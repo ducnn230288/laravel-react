@@ -10,12 +10,15 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class ContentType extends Model
 {
     use HasFactory, HasUuids;
-  protected $fillable = ['code', 'name', 'description', 'disabled_at'];
+  protected $fillable = ['code', 'name', 'description', 'is_disable'];
   protected static function boot(): void
   {
     parent::boot();
     self::updating(function ($data) {
-      if (isset($data['disabled_at'])) $data['disabled_at'] = $data['disabled_at'] ? now() : null;
+      if (isset($data['is_disable'])) {
+        $data['disabled_at'] = $data['is_disable'] ? now() : null;
+        unset($data['is_disable']);
+      }
     });
   }
 

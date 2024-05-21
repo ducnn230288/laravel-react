@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { useAppDispatch, useTypedSelector, Action, Slice, State } from '@store';
+import {useAppDispatch, useTypedSelector, Action, Slice, State, PostType} from '@store';
 import { CommonEntity, PaginationQuery } from '@models';
 
 const name = 'Parameter';
@@ -12,11 +12,10 @@ export const ParameterFacade = () => {
     ...useTypedSelector((state) => state[action.name] as State<Parameter>),
     set: (values: State<Parameter>) => dispatch(action.set(values)),
     get: (params: PaginationQuery<Parameter>) => dispatch(action.get(params)),
-    getById: ({ id, keyState = 'isVisible' }: { id: string; keyState?: keyof State<Parameter> }) =>
-      dispatch(action.getById({ id, keyState })),
+    getById: ({ id, keyState = 'isVisible', params }: { id: string; keyState?: keyof State<Parameter>, params?: PaginationQuery<Parameter> }) =>
+      dispatch(action.getById({ id, keyState, params })),
     post: (values: Parameter) => dispatch(action.post(values)),
     put: (values: Parameter) => dispatch(action.put(values)),
-    putDisable: (values: { id: string; disable: boolean }) => dispatch(action.putDisable(values)),
     delete: (id: string) => dispatch(action.delete(id)),
   };
 };

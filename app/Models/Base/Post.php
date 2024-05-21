@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Post extends Model
 {
   use HasFactory, HasUuids;
-  protected $fillable = ['type_code', 'image', 'created_at', 'disabled_at'];
+  protected $fillable = ['type_code', 'image', 'created_at', 'is_disable'];
   protected FileService $fileService;
   protected function image(): Attribute
   {

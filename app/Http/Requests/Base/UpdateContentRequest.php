@@ -25,7 +25,7 @@ class UpdateContentRequest extends FormRequest
         'name' => 'sometimes|string|max:255',
         'image' => 'nullable|string',
         'order' => 'nullable|integer',
-        'disabled_at' => 'boolean',
+        'is_disable' => 'boolean',
       ];
       $request = $this->json()->all();
       if (isset($request['languages'])) {

@@ -5,8 +5,8 @@ import dayjs from 'dayjs';
 import i18n from 'i18next';
 
 import { Message } from '@/library/message';
-import { CommonEntity } from '@/models';
-import { useAppDispatch, useTypedSelector, UserRole, Code } from '@/services';
+import { ICommonEntity } from '@/interfaces';
+import { useAppDispatch, useTypedSelector, IUserRole, ICode } from '@/services';
 import { API, keyRefreshToken, keyToken, keyUser, lang, routerLinks } from '@/utils';
 
 const name = 'Auth';
@@ -20,11 +20,11 @@ const action = {
     return true;
   }),
   profile: createAsyncThunk(name + '/profile', async () => {
-    const { data } = await API.get<User>(`${routerLinks(name, 'api')}/profile`);
+    const { data } = await API.get<IUser>(`${routerLinks(name, 'api')}/profile`);
     return data || {};
   }),
-  putProfile: createAsyncThunk(name + '/putProfile', async (values: User) => {
-    const { data, message } = await API.put<{ user: User; token: string; refreshToken: string }>(
+  putProfile: createAsyncThunk(name + '/putProfile', async (values: IUser) => {
+    const { data, message } = await API.put<{ user: IUser; token: string; refreshToken: string }>(
       `${routerLinks(name, 'api')}/profile`,
       values,
     );
@@ -36,7 +36,7 @@ const action = {
     return data!.user;
   }),
   login: createAsyncThunk(name + '/login', async (values: { password: string; email: string }) => {
-    const { data, message } = await API.post<{ user: User; token: string; refreshToken: string }>(
+    const { data, message } = await API.post<{ user: IUser; token: string; refreshToken: string }>(
       `${routerLinks(name, 'api')}/login`,
       values,
       { include: 'role' },
@@ -71,26 +71,22 @@ interface ResetPassword {
   email?: string;
   otp?: string;
 }
-export class User extends CommonEntity {
-  constructor(
-    public name?: string,
-    public avatar?: string,
-    public password?: string,
-    public email?: string,
-    public phoneNumber?: string,
-    public dob?: string,
-    public description?: string,
-    public positionCode?: string,
-    public position?: Code,
-    public retypedPassword?: string,
-    public roleCode?: string,
-    public role?: UserRole,
-    public createdAt?: string,
-    public updatedAt?: string,
-    public isDisable?: boolean,
-  ) {
-    super();
-  }
+export interface IUser extends ICommonEntity {
+  name?: string;
+  avatar?: string;
+  password?: string;
+  email?: string;
+  phoneNumber?: string;
+  dob?: string;
+  description?: string;
+  positionCode?: string;
+  position?: ICode;
+  retypedPassword?: string;
+  roleCode?: string;
+  role?: IUserRole;
+  createdAt?: string;
+  updatedAt?: string;
+  isDisable?: boolean;
 }
 const checkLanguage = (language: string) => {
   const formatDate = language === 'vn' ? 'DD-MM-YYYY' : 'DD-MM-YYYY';
@@ -274,8 +270,8 @@ export const globalSlice = createSlice({
 
 interface State {
   [selector: string]: any;
-  user?: User;
-  data?: ResetPassword & User;
+  user?: IUser;
+  data?: ResetPassword & IUser;
   routeLanguage?: Record<string, string>;
   isLoading?: boolean;
   isVisible?: boolean;
@@ -285,14 +281,14 @@ interface State {
   language?: string;
   locale?: typeof viVN | typeof enUS;
 }
-export const GlobalFacade = () => {
+export const SGlobal = () => {
   const dispatch = useAppDispatch();
   return {
     ...(useTypedSelector((state) => state[action.name]) as State),
     set: (values: State) => dispatch(action.set(values)),
     logout: () => dispatch(action.logout()),
     profile: () => dispatch(action.profile()),
-    putProfile: (values: User) => dispatch(action.putProfile(values)),
+    putProfile: (values: IUser) => dispatch(action.putProfile(values)),
     login: (values: { password: string; email: string }) => dispatch(action.login(values)),
     forgottenPassword: (values: { email: string }) => dispatch(action.forgottenPassword(values)),
     otpConfirmation: (values: { email: string; otp: string }) => dispatch(action.otpConfirmation(values)),

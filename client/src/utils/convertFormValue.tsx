@@ -1,10 +1,11 @@
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
-import { EFormModeSelect, EFormType, FormModel } from '@/models';
+import { EFormModeSelect, EFormType } from '@/enums';
+import { IForm } from '@/interfaces';
 dayjs.extend(utc);
 
-export const convertFormValue = (columns: FormModel[], values: { [selector: string]: any }, exportData = true) => {
+export const convertFormValue = (columns: IForm[], values: { [selector: string]: any }, exportData = true) => {
   columns
     .filter((item) => !!item && !!item.formItem)
     .map((item) => {
@@ -28,7 +29,7 @@ export const convertFormValue = (columns: FormModel[], values: { [selector: stri
           case EFormType.date:
             if (values[item.name]) {
               if (exportData) {
-                values[item.name] = values[item.name].utc().format('YYYY-MM-DDTHH:mm:ss[Z]');
+                values[item.name] = values[item.name].utc().format('YYYY-MM-DD HH:mm:ss');
               } else values[item.name] = dayjs(values[item.name]);
             }
             break;
@@ -36,8 +37,8 @@ export const convertFormValue = (columns: FormModel[], values: { [selector: stri
             if (!!values[item.name] || typeof item.name === 'object') {
               if (exportData) {
                 values[item.name] = [
-                  values[item.name][0].startOf('day').utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
-                  values[item.name][1].endOf('day').utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+                  values[item.name][0].startOf('day').utc().format('YYYY-MM-DD HH:mm:ss'),
+                  values[item.name][1].endOf('day').utc().format('YYYY-MM-DD HH:mm:ss'),
                 ];
               } else values[item.name] = [dayjs(values[item.name][0]), dayjs(values[item.name][1])];
             }

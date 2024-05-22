@@ -114,7 +114,7 @@ export const Message = {
       }
     }),
 };
-type Type = {
+interface Type {
   text: string;
   title?: any;
   input?: 'text' | 'number';
@@ -129,4 +129,4 @@ type Type = {
   showCancelButton?: boolean;
   showConfirmButton?: boolean;
   padding?: number;
-};
+}

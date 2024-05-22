@@ -2,7 +2,7 @@ import queryString from "query-string";
 
 import { keyRefreshToken, keyToken, linkApi, routerLinks } from '@/utils';
 import { Message } from '@/library/message';
-import { Responses } from '@/models';
+import { IResponses } from '@/interfaces';
 
 export const API = {
   init: () =>
@@ -33,7 +33,7 @@ export const API = {
       (url.includes('https://') || url.includes('http://') ? '' : linkApi) + url + (linkParam && '?' + linkParam),
       config,
     );
-    const res: Responses<T> = await response.json();
+    const res: IResponses<T> = await response.json();
     if (response.ok) return res;
     if (
       response.status === 401 &&
@@ -45,7 +45,7 @@ export const API = {
       if (token) {
         config.headers = { ...config.headers, authorization: token };
         const response = await fetch(linkApi + url + (linkParam && '?' + linkParam), config);
-        return (await response.json()) as Responses<T>;
+        return (await response.json()) as IResponses<T>;
       }
     } else if (res.message) {
       if (!throwText) await Message.error({ text: res.message });

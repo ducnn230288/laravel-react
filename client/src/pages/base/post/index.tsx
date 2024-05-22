@@ -10,15 +10,16 @@ import { DrawerForm } from '@/library/drawer';
 import { PopConfirm } from '@/library/pop-confirm';
 import { ToolTip } from '@/library/tooltip';
 
-import { EStatusState, TableRefObject } from '@/models';
-import { GlobalFacade, PostService, PostTypeService } from '@/services';
+import { EStatusState } from '@/enums';
+import { ITableRefObject } from '@/interfaces';
+import { SGlobal, PostService, PostTypeService } from '@/services';
 import { keyRole, renderTitleBreadcrumbs } from '@/utils';
 
 import _column from './column';
 import _columnType from './column/type';
 
 const Page = () => {
-  const { user } = GlobalFacade();
+  const sGlobal = SGlobal();
   const postTypeService = PostTypeService();
   useEffect(() => {
     if (!postTypeService.result?.data) postTypeService.get({ include: 'children', postTypeId: '' });
@@ -53,7 +54,7 @@ const Page = () => {
 
   const request = JSON.parse(postService.queryParams || '{}');
   const { t } = useTranslation();
-  const dataTableRef = useRef<TableRefObject>(null);
+  const dataTableRef = useRef<ITableRefObject>(null);
 
   return (
     <div className={'container mx-auto grid grid-cols-12 gap-3 px-2.5 pt-2.5'}>
@@ -115,7 +116,7 @@ const Page = () => {
                       {data.name}
                     </div>
                     <div className="w-16 flex justify-end gap-1">
-                      {user?.role?.permissions?.includes(keyRole.P_POST_TYPE_UPDATE) && (
+                      {sGlobal.user?.role?.permissions?.includes(keyRole.P_POST_TYPE_UPDATE) && (
                         <ToolTip title={t('routes.admin.Layout.Edit')}>
                           <button
                             className={'opacity-0 group-hover:opacity-100 transition-all duration-300 '}
@@ -126,7 +127,7 @@ const Page = () => {
                           </button>
                         </ToolTip>
                       )}
-                      {user?.role?.permissions?.includes(keyRole.P_POST_TYPE_DESTROY) && !data.isPrimary && (
+                      {sGlobal.user?.role?.permissions?.includes(keyRole.P_POST_TYPE_DESTROY) && !data.isPrimary && (
                         <ToolTip title={t('routes.admin.Layout.Delete')}>
                           <PopConfirm
                             title={t('components.datatable.areYouSureWant')}
@@ -174,7 +175,7 @@ const Page = () => {
               columns={_column.table()}
               rightHeader={
                 <div className={'flex gap-2'}>
-                  {user?.role?.permissions?.includes(keyRole.P_POST_STORE) && (
+                  {sGlobal.user?.role?.permissions?.includes(keyRole.P_POST_STORE) && (
                     <Button
                       icon={<Plus className="icon-cud !h-5 !w-5" />}
                       text={t('components.button.New')}

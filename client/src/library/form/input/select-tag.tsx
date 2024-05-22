@@ -71,7 +71,7 @@ const Component = ({ tag, onChange, form, value, disabled, maxTagCount, placehol
     />
   );
 };
-type Type = {
+interface Type {
   tag?: {
     avatar: string;
     label: string;
@@ -85,5 +85,5 @@ type Type = {
   disabled: boolean;
   maxTagCount: number | 'responsive';
   placeholder: string;
-};
+}
 export default Component;

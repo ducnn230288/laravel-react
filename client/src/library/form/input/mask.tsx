@@ -2,7 +2,7 @@ import React, { forwardRef, Fragment, Ref, useEffect, useImperativeHandle, useRe
 import classNames from 'classnames';
 import { FormInstance } from 'antd';
 
-import { TableItemFilterList } from '@/models';
+import { ITableItemFilterList } from '@/interfaces';
 import { Button } from '../../button';
 
 const Component = forwardRef(
@@ -126,7 +126,7 @@ const Component = forwardRef(
   },
 );
 Component.displayName = 'Mask Input';
-type Type = {
+interface Type {
   id?: string;
   className?: string;
   mask?: any;
@@ -141,7 +141,7 @@ type Type = {
   onFocus?: (e: any) => any;
   onChange?: (e: any) => any;
   onPressEnter?: (e: any) => any;
-  list?: TableItemFilterList[];
+  list?: ITableItemFilterList[];
   autoFocus?: boolean;
-};
+}
 export default Component;

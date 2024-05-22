@@ -3,23 +3,22 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { Spin } from 'antd';
 
+import { EFormRuleType, EFormType } from '@/enums';
 import { Form } from '@/library/form';
-import { EFormRuleType, EFormType } from '@/models';
-import { EStatusGlobal, GlobalFacade } from '@/services';
+import { EStatusGlobal, SGlobal } from '@/services';
 import { lang, routerLinks } from '@/utils';
 
 const Page = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const globalFacade = GlobalFacade();
-  const { isLoading, status, user, data, login, profile } = globalFacade;
+  const sGlobal = SGlobal();
 
   useEffect(() => {
-    if (status === EStatusGlobal.loginFulfilled && user && Object.keys(user).length > 0) {
+    if (sGlobal.status === EStatusGlobal.loginFulfilled && sGlobal.user && Object.keys(sGlobal.user).length > 0) {
       navigate('/' + lang + '/dashboard', { replace: true });
-      profile();
+      sGlobal.profile();
     }
-  }, [status]);
+  }, [sGlobal.status]);
 
   return (
     <Fragment>
@@ -33,9 +32,9 @@ const Page = () => {
         <h5 className="intro-x font-normal text-teal-900 ">{t('routes.auth.login.subTitle')}</h5>
       </div>
       <div className="mx-auto lg:w-3/4 relative">
-        <Spin spinning={isLoading}>
+        <Spin spinning={sGlobal.isLoading}>
           <Form
-            values={{ ...data }}
+            values={{ ...sGlobal.data }}
             className="intro-x form-login"
             columns={[
               {
@@ -58,8 +57,8 @@ const Page = () => {
               },
             ]}
             textSubmit={'routes.auth.login.Log In'}
-            handSubmit={login}
-            disableSubmit={isLoading}
+            handSubmit={sGlobal.login}
+            disableSubmit={sGlobal.isLoading}
           />
         </Spin>
         <div className="absolute  top-2/3 right-0 text-right">

@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import classNames from 'classnames';
 import { Dropdown } from 'antd';
 
-import { TableGet, TableRefObject } from '@/models';
+import { ITableGet, ITableRefObject } from '@/interfaces';
 import { arrayUnique } from '@/utils';
 
 import { DataTable } from '../../data-table';
@@ -31,7 +31,7 @@ const Component = ({ mode, onChange, placeholder, disabled, get, value }: Type) 
   };
   const facade = get?.facade() || {};
 
-  const table = useRef<TableRefObject>(null);
+  const table = useRef<ITableRefObject>(null);
   const input = useRef<{ input: HTMLInputElement }>(null);
   let _data: any[] = [];
   if (get?.data) {
@@ -42,7 +42,6 @@ const Component = ({ mode, onChange, placeholder, disabled, get, value }: Type) 
   const _list = [..._temp.data, ...(facade?.result.data || [])]
     .map(get!.format!)
     .filter((item: any) => !value || item.value === value);
-  console.log(_list);
   return (
     <div ref={refSelect} className={classNames('relative', { 'bg-gray-100': disabled })}>
       <Dropdown
@@ -114,12 +113,12 @@ const Component = ({ mode, onChange, placeholder, disabled, get, value }: Type) 
     </div>
   );
 };
-type Type = {
+interface Type {
   mode?: 'multiple' | 'tags';
   onChange: (e: any) => any;
   value?: any;
   placeholder: string;
   disabled: boolean;
-  get?: TableGet;
-};
+  get?: ITableGet;
+}
 export default Component;

@@ -1,10 +1,11 @@
 import slug from 'slug';
 
-import { EFormRuleType, EFormType, FormModel } from '@/models';
+import { EFormRuleType, EFormType } from '@/enums';
+import { IForm } from '@/interfaces';
 import { loopMapSelect } from '@/utils';
 
 export default {
-  form: (id?: string, tree?: any[]): FormModel[] => {
+  form: (id?: string, tree?: any[]): IForm[] => {
     return [
       {
         title: 'Name',

@@ -6,7 +6,7 @@ import { initReactI18next } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { ConfigProvider } from 'antd';
 
-import { GlobalFacade, setupStore } from '@/services';
+import { SGlobal, setupStore } from '@/services';
 import { reportWebVitals, lang } from '@/utils';
 
 import Router from './router';
@@ -33,19 +33,19 @@ let container: HTMLElement;
 const Styling = lazy(() => import('./utils/init/styling'));
 
 const Context = () => {
-  const { locale, setLanguage } = GlobalFacade();
+  const sGlobal = SGlobal();
   useEffect(() => {
     for (let i = 0; i < localStorage.length; i++) {
       if (localStorage.key(i)?.indexOf('temp-') === 0) {
         localStorage.removeItem(localStorage.key(i) || '');
       }
     }
-    setLanguage(lang);
+    sGlobal.setLanguage(lang);
   }, []);
 
   return (
     <Styling>
-      <ConfigProvider theme={{ token: { controlHeight: 38 } }} locale={locale}>
+      <ConfigProvider theme={{ token: { controlHeight: 38 } }} locale={sGlobal.locale}>
         <Router />
       </ConfigProvider>
     </Styling>

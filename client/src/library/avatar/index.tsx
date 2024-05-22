@@ -284,7 +284,7 @@ export const Avatar = ({
     );
   }
 };
-type Type = {
+interface Type {
   src: string;
   text?: string | { [selector: string]: string }[];
   onClick?: MouseEventHandler<HTMLDivElement>;
@@ -294,4 +294,4 @@ type Type = {
   keyName?: string;
   maxCount?: number;
   index?: number;
-};
+}

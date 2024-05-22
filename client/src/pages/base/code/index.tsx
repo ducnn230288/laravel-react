@@ -4,17 +4,18 @@ import { Select, Spin, Tree } from 'antd';
 import classNames from 'classnames';
 
 import { Arrow, Plus } from '@/assets/svg';
-import { EStatusState, TableRefObject } from '@/models';
+import { EStatusState } from '@/enums';
+import { ITableRefObject } from '@/interfaces';
 import { Button } from '@/library/button';
 import { DataTable } from '@/library/data-table';
 import { DrawerForm } from '@/library/drawer';
-import { CodeService, CodeTypeService, GlobalFacade } from '@/services';
+import { CodeService, CodeTypeService, SGlobal } from '@/services';
 import { keyRole, renderTitleBreadcrumbs } from '@/utils';
 
 import _column from './column';
 
 const Page = () => {
-  const { user } = GlobalFacade();
+  const sGlobal = SGlobal();
   const codeTypeService = CodeTypeService();
   useEffect(() => {
     if (!codeTypeService.result?.data) codeTypeService.get({});
@@ -40,7 +41,7 @@ const Page = () => {
 
   const request = JSON.parse(codeService.queryParams || '{}');
   const { t } = useTranslation();
-  const dataTableRef = useRef<TableRefObject>(null);
+  const dataTableRef = useRef<ITableRefObject>(null);
   return (
     <div className={'container mx-auto grid grid-cols-12 gap-3 px-2.5 pt-2.5'}>
       <DrawerForm
@@ -119,7 +120,7 @@ const Page = () => {
               columns={_column.table()}
               rightHeader={
                 <div className={'flex gap-2'}>
-                  {user?.role?.permissions?.includes(keyRole.P_CODE_STORE) && (
+                  {sGlobal.user?.role?.permissions?.includes(keyRole.P_CODE_STORE) && (
                     <Button
                       icon={<Plus className="icon-cud !h-5 !w-5" />}
                       text={t('routes.admin.Layout.Add')}

@@ -3,10 +3,11 @@ import { t } from 'i18next';
 import dayjs from 'dayjs';
 import 'dayjs/locale/vi';
 
+import { ETypeChart } from '@/enums';
+import { IEditTable } from '@/interfaces';
 import { EChart } from '@/library/echart';
 import { EditTable } from '@/library/edit-table';
 import { Gantt } from '@/library/gantt';
-import { ETypeChart, MEditTable } from '@/models';
 import { formatDataChart } from '@/utils';
 
 const Page = () => {
@@ -530,7 +531,7 @@ const Page = () => {
     //   startDate: dayjs('2015-08-10'),
     // },
   ];
-  const table: MEditTable = {
+  const table: IEditTable = {
     fields: {
       columns: [
         { key: 'content' },
@@ -1144,7 +1145,7 @@ const Page = () => {
       },
     ],
   };
-  const table2: MEditTable = {
+  const table2: IEditTable = {
     fields: {
       columns: [
         { key: 'data1' },

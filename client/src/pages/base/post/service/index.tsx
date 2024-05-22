@@ -1,47 +1,43 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { useAppDispatch, useTypedSelector, Action, Slice, State } from '@/services';
-import { CommonEntity, PaginationQuery } from '@/models';
-import { PostType } from './type';
+import { ICommonEntity, IPaginationQuery } from '@/interfaces';
+import { IPostType } from './type';
 
 const name = 'Post';
-const action = new Action<Post>(name);
-export const postSlice = createSlice(new Slice<Post>(action));
+const action = new Action<IPost>(name);
+export const postSlice = createSlice(new Slice<IPost>(action));
 export const PostService = () => {
   const dispatch = useAppDispatch();
   return {
-    ...useTypedSelector((state) => state[action.name] as State<Post>),
-    set: (values: State<Post>) => dispatch(action.set(values)),
-    get: (params: PaginationQuery<Post>) => dispatch(action.get(params)),
+    ...useTypedSelector((state) => state[action.name] as State<IPost>),
+    set: (values: State<IPost>) => dispatch(action.set(values)),
+    get: (params: IPaginationQuery<IPost>) => dispatch(action.get(params)),
     getById: ({
       id,
       keyState = 'isVisible',
       params,
     }: {
       id: string;
-      keyState?: keyof State<Post>;
-      params?: PaginationQuery<Post>;
+      keyState?: keyof State<IPost>;
+      params?: IPaginationQuery<IPost>;
     }) => dispatch(action.getById({ id, keyState, params })),
-    post: (values: Post) => dispatch(action.post(values)),
-    put: (values: Post) => dispatch(action.put(values)),
+    post: (values: IPost) => dispatch(action.post(values)),
+    put: (values: IPost) => dispatch(action.put(values)),
     delete: (id: string) => dispatch(action.delete(id)),
   };
 };
-export class Post extends CommonEntity {
-  constructor(
-    public type?: string,
-    public thumbnailUrl?: string,
-    public item?: PostType,
-    public languages?: {
-      language?: string;
-      name: string;
-      description?: string;
-      slug: string;
-      content?: string;
-      postId?: string;
-      post?: Post;
-    }[],
-  ) {
-    super();
-  }
+export interface IPost extends ICommonEntity {
+  type?: string;
+  thumbnailUrl?: string;
+  item?: IPostType;
+  languages?: {
+    language?: string;
+    name: string;
+    description?: string;
+    slug: string;
+    content?: string;
+    postId?: string;
+    post?: IPost;
+  }[];
 }

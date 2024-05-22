@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import { useLocation } from 'react-router-dom';
 
 import { Avatar } from '@/library/avatar';
-import { GlobalFacade } from '@/services';
+import { SGlobal } from '@/services';
 import { Key, Out, User, Arrow, Logo } from '@/assets/svg';
 import { routerLinks, lang } from '@/utils';
 
@@ -15,8 +15,7 @@ import Menu from './menu';
 
 const Layout = ({ children }: PropsWithChildren) => {
   const { t } = useTranslation();
-  const globalFacade = GlobalFacade();
-  const { user } = globalFacade;
+  const sGlobal = SGlobal();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -56,11 +55,11 @@ const Layout = ({ children }: PropsWithChildren) => {
     }
   }, [location]);
   useEffect(() => {
-    if (globalFacade.pathname && globalFacade.pathname !== location.hash.substring(1)) {
-      globalFacade.set({ pathname: '' });
-      navigate(globalFacade.pathname);
+    if (sGlobal.pathname && sGlobal.pathname !== location.hash.substring(1)) {
+      sGlobal.set({ pathname: '' });
+      navigate(sGlobal.pathname);
     }
-  }, [globalFacade.pathname]);
+  }, [sGlobal.pathname]);
 
   const Header = () => (
     <header
@@ -85,10 +84,10 @@ const Layout = ({ children }: PropsWithChildren) => {
                   className: 'hover:!bg-white !border-b-slate-300 border-b !rounded-none',
                   label: (
                     <div className="flex">
-                      <Avatar src={user?.avatar || ''} size={8} />
+                      <Avatar src={sGlobal.user?.avatar || ''} size={8} />
                       <div className="text-left leading-none mr-3 block pl-2">
-                        <div className="font-semibold text-black text-sm leading-snug mb-0.5">{user?.name}</div>
-                        <div className="text-gray-500 text-[10px]">{user?.email}</div>
+                        <div className="font-semibold text-black text-sm leading-snug mb-0.5">{sGlobal.user?.name}</div>
+                        <div className="text-gray-500 text-[10px]">{sGlobal.user?.email}</div>
                       </div>
                     </div>
                   ),
@@ -143,7 +142,7 @@ const Layout = ({ children }: PropsWithChildren) => {
             placement="bottomRight"
           >
             <section className="flex items-center !rounded-full" id={'dropdown-profile'}>
-              <Avatar src={user?.avatar || ''} size={10} />
+              <Avatar src={sGlobal.user?.avatar || ''} size={10} />
             </section>
           </Dropdown>
         </div>
@@ -190,7 +189,7 @@ const Layout = ({ children }: PropsWithChildren) => {
       <div className={'div4 fixed z-30 top-16 left-0 h-screen bg-teal-900 transition-all duration-300 ease-in-out'}>
         <Menu
           isCollapsed={document.querySelectorAll('main')[0]?.classList?.contains('isCollapsed')}
-          permission={user?.role?.permissions}
+          permission={sGlobal.user?.role?.permissions}
         />
       </div>
       {!document.querySelectorAll('main')[0]?.classList?.contains('isCollapsed') && !(innerWidth > 1280) && (

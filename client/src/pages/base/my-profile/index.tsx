@@ -5,25 +5,25 @@ import { Form as AntForm, Tabs } from 'antd';
 import { useSearchParams } from 'react-router-dom';
 
 import { User } from '@/assets/svg';
+import { EFormRuleType, EFormType, ETableFilterType } from '@/enums';
 import { Form } from '@/library/form';
 import { Button } from '@/library/button';
-import { EFormRuleType, EFormType, ETableFilterType } from '@/models';
-import { CodeService, EStatusGlobal, GlobalFacade } from '@/services';
+import { CodeService, EStatusGlobal, SGlobal } from '@/services';
 import { lang, renderTitleBreadcrumbs, routerLinks } from '@/utils';
 
 const Page = () => {
-  const { user, isLoading, profile, status, putProfile, data } = GlobalFacade();
+  const sGlobal = SGlobal();
   useEffect(() => {
-    profile();
+    sGlobal.profile();
     renderTitleBreadcrumbs(t('pages.MyProfile'), []);
   }, []);
   useEffect(() => {
-    switch (status) {
+    switch (sGlobal.status) {
       case EStatusGlobal.putProfileFulfilled:
-        profile();
+        sGlobal.profile();
         break;
     }
-  }, [status]);
+  }, [sGlobal.status]);
 
   const [searchParams] = useSearchParams();
   const tab = searchParams.get('tab');
@@ -47,13 +47,13 @@ const Page = () => {
 
   const { t } = useTranslation();
   const roleName = useRef('');
-  if (user?.role?.name) roleName.current = user.role.name;
+  if (sGlobal.user?.role?.name) roleName.current = sGlobal.user.role.name;
   return (
     <Fragment>
       <div className="max-w-5xl mx-auto flex lg:flex-row flex-col w-full">
         <div className="flex-initial lg:w-[250px] mr-5 lg:rounded-xl w-full bg-white pt-6">
           <Form
-            values={{ ...data }}
+            values={{ ...sGlobal.data }}
             formAnt={forms}
             className="text-center items-centers text-xl font-bold text-slate-700 profile"
             columns={[
@@ -80,7 +80,7 @@ const Page = () => {
                 },
               },
             ]}
-            disableSubmit={isLoading}
+            disableSubmit={sGlobal.isLoading}
           />
         </div>
         <div className="flex-1 lg:rounded-xl w-auto">
@@ -96,7 +96,7 @@ const Page = () => {
                 children: (
                   <div className={'bg-white rounded-b-xl p-5'}>
                     <Form
-                      values={{ ...data }}
+                      values={{ ...sGlobal.data }}
                       columns={[
                         {
                           title: 'routes.admin.user.Full name',
@@ -152,7 +152,7 @@ const Page = () => {
                                 label: item?.name,
                                 value: item?.code,
                               }),
-                              data: () => data?.position,
+                              data: () => sGlobal.data?.position,
                               column: [
                                 {
                                   title: 'titles.Code',
@@ -183,8 +183,10 @@ const Page = () => {
                           },
                         },
                       ]}
-                      disableSubmit={isLoading}
-                      handSubmit={(values) => putProfile({ ...values, avatar: forms.getFieldValue('avatar')[0].url })}
+                      disableSubmit={sGlobal.isLoading}
+                      handSubmit={(values) =>
+                        sGlobal.putProfile({ ...values, avatar: forms.getFieldValue('avatar')[0].url })
+                      }
                       extendButton={() => (
                         <Button
                           text={t('components.datatable.cancel')}
@@ -204,7 +206,7 @@ const Page = () => {
                 children: (
                   <div className={'bg-white rounded-b-xl p-5'}>
                     <Form
-                      values={{ ...data }}
+                      values={{ ...sGlobal.data }}
                       columns={[
                         {
                           title: 'columns.auth.login.password',
@@ -250,7 +252,7 @@ const Page = () => {
                           },
                         },
                       ]}
-                      disableSubmit={isLoading}
+                      disableSubmit={sGlobal.isLoading}
                       extendButton={() => (
                         <Button
                           text={t('components.datatable.cancel')}
@@ -262,8 +264,8 @@ const Page = () => {
                       )}
                       textSubmit="routes.admin.Layout.Change Password"
                       handSubmit={(values) => {
-                        const { name, email, phoneNumber, dob, positionCode, description } = user!;
-                        putProfile({ name, email, phoneNumber, dob, positionCode, description, ...values });
+                        const { name, email, phoneNumber, dob, positionCode, description } = sGlobal.user!;
+                        sGlobal.putProfile({ name, email, phoneNumber, dob, positionCode, description, ...values });
                       }}
                     />
                   </div>

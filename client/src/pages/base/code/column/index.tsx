@@ -1,18 +1,20 @@
 import React from 'react';
-import { DataTableModel, EFormRuleType, EFormType, ETableAlign, ETableFilterType, FormModel } from '@/models';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 import slug from 'slug';
 
+import { EFormRuleType, EFormType, ETableAlign, ETableFilterType } from '@/enums';
+import { IDataTable, IForm } from '@/interfaces';
+
 import { Check, Disable, Edit, Trash } from '@/assets/svg';
 import { ToolTip } from '@/library/tooltip';
 import { PopConfirm } from '@/library/pop-confirm';
-import { CodeService, GlobalFacade } from '@/services';
+import { CodeService, SGlobal } from '@/services';
 import { keyRole } from '@/utils';
 
 export default {
-  table: (): DataTableModel[] => {
-    const { formatDate, user } = GlobalFacade();
+  table: (): IDataTable[] => {
+    const sGlobal = SGlobal();
     const { t } = useTranslation();
     const codeService = CodeService();
 
@@ -41,7 +43,11 @@ export default {
           width: 120,
           filter: { type: ETableFilterType.date },
           sorter: true,
-          render: (text) => dayjs(text).format(formatDate),
+          render: (text) => (
+            <ToolTip title={dayjs(text).format(sGlobal.formatDate + ' HH:mm:ss')}>
+              {dayjs(text).format(sGlobal.formatDate)}
+            </ToolTip>
+          ),
         },
       },
       {
@@ -51,7 +57,7 @@ export default {
           align: ETableAlign.center,
           render: (text: string, data) => (
             <div className={'flex gap-2'}>
-              {user?.role?.permissions?.includes(keyRole.P_CODE_UPDATE) && (
+              {sGlobal.user?.role?.permissions?.includes(keyRole.P_CODE_UPDATE) && (
                 <ToolTip title={t(data.isDisable ? 'components.datatable.Disabled' : 'components.datatable.Enabled')}>
                   <PopConfirm
                     title={t(
@@ -73,7 +79,7 @@ export default {
                   </PopConfirm>
                 </ToolTip>
               )}
-              {user?.role?.permissions?.includes(keyRole.P_CODE_UPDATE) && (
+              {sGlobal.user?.role?.permissions?.includes(keyRole.P_CODE_UPDATE) && (
                 <ToolTip title={t('routes.admin.Layout.Edit')}>
                   <button
                     title={t('routes.admin.Layout.Edit') || ''}
@@ -83,7 +89,7 @@ export default {
                   </button>
                 </ToolTip>
               )}
-              {user?.role?.permissions?.includes(keyRole.P_CODE_DESTROY) && (
+              {sGlobal.user?.role?.permissions?.includes(keyRole.P_CODE_DESTROY) && (
                 <ToolTip title={t('routes.admin.Layout.Delete')}>
                   <PopConfirm
                     title={t('components.datatable.areYouSureWant')}
@@ -101,7 +107,7 @@ export default {
       },
     ];
   },
-  form: (): FormModel[] => {
+  form: (): IForm[] => {
     return [
       {
         title: 'routes.admin.Code.Name',

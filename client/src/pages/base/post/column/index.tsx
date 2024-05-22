@@ -1,19 +1,20 @@
 import React from 'react';
-import { DataTableModel, EFormRuleType, EFormType, ETableAlign, ETableFilterType, FormModel } from '@/models';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 import slug from 'slug';
 
 import { Check, Disable, Edit, Trash } from '@/assets/svg';
+import { EFormRuleType, EFormType, ETableAlign, ETableFilterType } from '@/enums';
+import { IDataTable, IForm } from '@/interfaces';
 import { Avatar } from '@/library/avatar';
 import { PopConfirm } from '@/library/pop-confirm';
 import { ToolTip } from '@/library/tooltip';
-import { GlobalFacade, PostService } from '@/services';
+import { SGlobal, PostService } from '@/services';
 import { keyRole } from '@/utils';
 
 export default {
-  table: (): DataTableModel[] => {
-    const { formatDate, user } = GlobalFacade();
+  table: (): IDataTable[] => {
+    const sGlobal = SGlobal();
     const { t } = useTranslation();
     const postService = PostService();
 
@@ -56,7 +57,11 @@ export default {
           width: 120,
           filter: { type: ETableFilterType.date },
           sorter: true,
-          render: (text) => dayjs(text).format(formatDate),
+          render: (text) => (
+            <ToolTip title={dayjs(text).format(sGlobal.formatDate + ' HH:mm:ss')}>
+              {dayjs(text).format(sGlobal.formatDate)}
+            </ToolTip>
+          ),
         },
       },
       {
@@ -66,7 +71,7 @@ export default {
           align: ETableAlign.center,
           render: (text: string, data) => (
             <div className={'flex gap-2'}>
-              {user?.role?.permissions?.includes(keyRole.P_POST_UPDATE) && (
+              {sGlobal.user?.role?.permissions?.includes(keyRole.P_POST_UPDATE) && (
                 <ToolTip title={t(data.isDisable ? 'components.datatable.Disabled' : 'components.datatable.Enabled')}>
                   <PopConfirm
                     title={t(
@@ -88,7 +93,7 @@ export default {
                   </PopConfirm>
                 </ToolTip>
               )}
-              {user?.role?.permissions?.includes(keyRole.P_POST_UPDATE) && (
+              {sGlobal.user?.role?.permissions?.includes(keyRole.P_POST_UPDATE) && (
                 <ToolTip title={t('routes.admin.Layout.Edit')}>
                   <button
                     title={t('routes.admin.Layout.Edit') || ''}
@@ -98,7 +103,7 @@ export default {
                   </button>
                 </ToolTip>
               )}
-              {user?.role?.permissions?.includes(keyRole.P_POST_DESTROY) && (
+              {sGlobal.user?.role?.permissions?.includes(keyRole.P_POST_DESTROY) && (
                 <ToolTip title={t('routes.admin.Layout.Delete')}>
                   <PopConfirm
                     title={t('components.datatable.areYouSureWant')}
@@ -116,7 +121,7 @@ export default {
       },
     ];
   },
-  form: (id?: string): FormModel[] => {
+  form: (id?: string): IForm[] => {
     return [
       {
         title: 'Created At',

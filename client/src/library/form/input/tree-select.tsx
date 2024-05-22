@@ -196,7 +196,7 @@ const Component = ({ formItem, placeholder, onChange, value, form, disabled, sho
     />
   );
 };
-type Type = {
+interface Type {
   formItem: any;
   placeholder: string;
   onChange?: (e: any) => any;
@@ -204,5 +204,5 @@ type Type = {
   form: FormInstance;
   disabled: boolean;
   showSearch?: boolean;
-};
+}
 export default Component;

@@ -17,7 +17,7 @@ import {
 } from '@dnd-kit/sortable';
 
 import { Plus, Times } from '@/assets/svg';
-import { TableItemFilterList } from '@/models';
+import { ITableItemFilterList } from '@/interfaces';
 import { reorderArray } from '@/utils';
 
 import { Button } from '../../button';
@@ -32,7 +32,7 @@ const Component = ({
 }: {
   onChange?: (values: any[]) => void;
   value?: string[];
-  list?: TableItemFilterList[];
+  list?: ITableItemFilterList[];
   placeholder: string;
   disabled?: boolean;
 }) => {
@@ -150,7 +150,7 @@ const DraggableTag = ({
   tag: string;
   onClose: React.MouseEventHandler<HTMLButtonElement>;
   disabled: boolean;
-  list?: TableItemFilterList[];
+  list?: ITableItemFilterList[];
 }) => {
   const { listeners, transform, transition, isDragging, setNodeRef } = useSortable({ id: tag });
 

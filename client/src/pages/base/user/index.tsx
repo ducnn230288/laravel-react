@@ -6,18 +6,19 @@ import classNames from 'classnames';
 import { createSearchParams } from 'react-router-dom';
 
 import { Arrow, Plus } from '@/assets/svg';
+import { EStatusState } from '@/enums';
+import { ITableRefObject } from '@/interfaces';
 import { Button } from '@/library/button';
 import { DataTable } from '@/library/data-table';
 import { DrawerForm } from '@/library/drawer';
-import { EStatusState, TableRefObject } from '@/models';
-import { GlobalFacade, UserService, UserRoleService } from '@/services';
+import { SGlobal, UserService, UserRoleService } from '@/services';
 import { keyRole, lang, renderTitleBreadcrumbs, routerLinks } from '@/utils';
 
 import _column from './column';
 
 const Page = () => {
   const userRoleService = UserRoleService();
-  const { user } = GlobalFacade();
+  const sGlobal = SGlobal();
   useEffect(() => {
     if (!userRoleService?.result?.data) userRoleService.get({});
     return () => {
@@ -56,7 +57,7 @@ const Page = () => {
   }, [userService.status]);
   const request = JSON.parse(userService?.queryParams || '{}');
   const { t } = useTranslation();
-  const dataTableRef = useRef<TableRefObject>(null);
+  const dataTableRef = useRef<ITableRefObject>(null);
   return (
     <div className={'container mx-auto grid grid-cols-12 gap-3 px-2.5 pt-2.5'}>
       <DrawerForm
@@ -144,7 +145,7 @@ const Page = () => {
               columns={_column.table()}
               rightHeader={
                 <div className={'flex gap-2'}>
-                  {user?.role?.permissions?.includes(keyRole.P_USER_STORE) && (
+                  {sGlobal.user?.role?.permissions?.includes(keyRole.P_USER_STORE) && (
                     <Button
                       icon={<Plus className="icon-cud !h-5 !w-5" />}
                       text={t('components.button.New')}

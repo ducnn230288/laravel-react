@@ -4,7 +4,7 @@ import { Form, Checkbox, FormInstance } from 'antd';
 import classNames from 'classnames';
 
 import { Trash, Plus } from '@/assets/svg';
-import { FormModel } from '@/models';
+import { IForm } from '@/interfaces';
 
 import { Button } from '../../button';
 
@@ -178,9 +178,9 @@ const Component = ({
     </Form.List>
   );
 };
-type Type = {
+interface Type {
   name?: string;
-  column?: FormModel[];
+  column?: IForm[];
   textAdd?: string;
   onAdd?: (values: any, form: FormInstance) => void;
   generateForm: any;
@@ -188,5 +188,5 @@ type Type = {
   isTable?: boolean;
   showRemove: any;
   idCheck: any;
-};
+}
 export default Component;

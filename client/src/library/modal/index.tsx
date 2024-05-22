@@ -20,7 +20,20 @@ export const Modal = forwardRef(
       footerCustom,
       children,
       name = 'create',
-    }: Type,
+    }: PropsWithChildren<{
+      facade: any;
+      keyState?: string;
+      title?: (data: any) => string;
+      widthModal?: number;
+      onOk?: () => any;
+      onCancel?: () => void;
+      firstChange?: boolean;
+      textSubmit?: string;
+      textCancel?: string;
+      className?: string;
+      footerCustom?: (handleOk: () => Promise<void>, handleCancel: () => void) => JSX.Element[] | JSX.Element;
+      name?: string;
+    }>,
     ref: Ref<{ handleCancel: () => void }>,
   ) => {
     useImperativeHandle(ref, () => ({ handleCancel }));
@@ -91,17 +104,3 @@ export const Modal = forwardRef(
   },
 );
 Modal.displayName = 'HookModal';
-type Type = PropsWithChildren<{
-  facade: any;
-  keyState?: string;
-  title?: (data: any) => string;
-  widthModal?: number;
-  onOk?: () => any;
-  onCancel?: () => void;
-  firstChange?: boolean;
-  textSubmit?: string;
-  textCancel?: string;
-  className?: string;
-  footerCustom?: (handleOk: () => Promise<void>, handleCancel: () => void) => JSX.Element[] | JSX.Element;
-  name?: string;
-}>;

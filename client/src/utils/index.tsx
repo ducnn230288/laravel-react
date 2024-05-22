@@ -5,7 +5,7 @@ import React, { Fragment } from 'react';
 import classNames from 'classnames';
 
 import { Arrow } from '@/assets/svg';
-import { ETypeChart } from '@/models';
+import { ETypeChart } from '@/enums';
 
 import { keyToken, language, languages, linkApi } from './variable';
 

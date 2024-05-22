@@ -183,7 +183,7 @@ export const Pagination: any = ({
   );
 };
 
-type Type = {
+interface Type {
   total: number;
   pageSizeOptions: number[];
   perPage: number;
@@ -199,5 +199,5 @@ type Type = {
   lastPage: ({ page, lastIndex }: { page: number; lastIndex: number }) => number;
   showSizeChanger: boolean;
   showTotal: boolean;
-};
+}
 export default Pagination;

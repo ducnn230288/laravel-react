@@ -3,20 +3,20 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { Spin } from 'antd';
 
+import { EFormRuleType } from '@/enums';
 import { Form } from '@/library/form';
-import { EFormRuleType } from '@/models';
-import { EStatusGlobal, GlobalFacade } from '@/services';
+import { EStatusGlobal, SGlobal } from '@/services';
 import { lang, routerLinks } from '@/utils';
 
 const Page = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { isLoading, status, data, forgottenPassword } = GlobalFacade();
+  const sGlobal = SGlobal();
   useEffect(() => {
-    if (status === EStatusGlobal.forgottenPasswordFulfilled) {
+    if (sGlobal.status === EStatusGlobal.forgottenPasswordFulfilled) {
       navigate(`/${lang}${routerLinks('VerifyForotPassword')}`);
     }
-  }, [status]);
+  }, [sGlobal.status]);
 
   return (
     <Fragment>
@@ -30,9 +30,9 @@ const Page = () => {
         <h5 className="intro-x font-normal text-green-900 ">{t('routes.auth.reset-password.subTitle')}</h5>
       </div>
       <div className="mx-auto lg:w-3/4">
-        <Spin spinning={isLoading}>
+        <Spin spinning={sGlobal.isLoading}>
           <Form
-            values={{ ...data }}
+            values={{ ...sGlobal.data }}
             className="intro-x form-forgetPassword"
             columns={[
               {
@@ -45,8 +45,8 @@ const Page = () => {
               },
             ]}
             textSubmit={'routes.auth.reset-password.OTP'}
-            handSubmit={(values) => forgottenPassword({ ...values })}
-            disableSubmit={isLoading}
+            handSubmit={(values) => sGlobal.forgottenPassword({ ...values })}
+            disableSubmit={sGlobal.isLoading}
           />
         </Spin>
         <div className="text-center mt-3">

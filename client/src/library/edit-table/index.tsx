@@ -1,11 +1,15 @@
 import React, { Fragment, PropsWithChildren } from 'react';
 import classNames from 'classnames';
 
+import { IEditTable } from '@/interfaces';
 import { cssInObject } from '@/utils';
-import { MEditTable } from '@/models';
 import { Mask } from '../form/input';
 
-export const EditTable = ({ table }: Type) => {
+export const EditTable = ({
+  table,
+}: PropsWithChildren<{
+  table: IEditTable;
+}>) => {
   const getTree = (t: any, returnKey?: string, depth = 0) => {
     if (!t?.children) return returnKey ? t[returnKey] : depth;
     else return t?.children?.flatMap((child: any) => getTree(child, returnKey, depth + 1));
@@ -23,7 +27,7 @@ export const EditTable = ({ table }: Type) => {
       if (depth !== i && j[key]) return getArrayByDepth(j[key], depth + 1, i, key);
       return j[key] || [];
     });
-  const renderHeader = (depth = 0, i: number, table: MEditTable, rowSpan: number) => {
+  const renderHeader = (depth = 0, i: number, table: IEditTable, rowSpan: number) => {
     let array = [
       ...(table?.fields?.rows ? table.fields.rows.map((key: string) => ({ key })) : []),
       ...(table?.fields?.columns ?? []),
@@ -44,7 +48,7 @@ export const EditTable = ({ table }: Type) => {
     level: number,
     indexCol = 0,
     indexRow = 0,
-    table: MEditTable,
+    table: IEditTable,
     colBody: string[],
     key: string,
   ) => {
@@ -97,7 +101,7 @@ export const EditTable = ({ table }: Type) => {
     text: string | number,
     indexRow: number,
     name: string,
-    table: MEditTable,
+    table: IEditTable,
     type: string,
     maxLevel = 1,
   ) => {
@@ -274,6 +278,3 @@ export const EditTable = ({ table }: Type) => {
   return <Fragment>{table.data && renderTable(table)}</Fragment>;
 };
 EditTable.displayName = 'EditTable';
-type Type = PropsWithChildren<{
-  table: MEditTable;
-}>;

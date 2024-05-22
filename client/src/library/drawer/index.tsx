@@ -3,7 +3,7 @@ import { Drawer, Form as FormAnt } from 'antd';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 
-import { FormModel, FormModalRefObject } from '@/models';
+import { IForm, IFormModalRefObject } from '@/interfaces';
 import { convertFormValue } from '@/utils';
 
 import { Form } from '../form';
@@ -23,7 +23,7 @@ export const DrawerForm = forwardRef(
       keyData = 'data',
       onSubmit,
     }: Type,
-    ref: Ref<FormModalRefObject>,
+    ref: Ref<IFormModalRefObject>,
   ) => {
     useImperativeHandle(ref, () => ({ form }));
     const { t } = useTranslation();
@@ -65,15 +65,15 @@ export const DrawerForm = forwardRef(
   },
 );
 DrawerForm.displayName = 'DrawerForm';
-type Type = {
+interface Type {
   facade: any;
   size?: undefined | 'large';
   keyState?: string;
   keyIsLoading?: string;
   keyData?: string;
   title: string;
-  columns: FormModel[];
+  columns: IForm[];
   textSubmit?: string;
   textCancel?: string;
   onSubmit: (value: any) => void;
-};
+}

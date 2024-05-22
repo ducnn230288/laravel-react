@@ -3,21 +3,21 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { Spin } from 'antd';
 
+import { EFormRuleType, EFormType } from '@/enums';
 import { Form } from '@/library/form';
-import { EFormRuleType, EFormType } from '@/models';
-import { EStatusGlobal, GlobalFacade } from '@/services';
+import { EStatusGlobal, SGlobal } from '@/services';
 import { lang, routerLinks } from '@/utils';
 
 const Page = () => {
-  const { isLoading, status, resetPassword, data } = GlobalFacade();
+  const sGlobal = SGlobal();
   const navigate = useNavigate();
   useEffect(() => {
-    if (status === EStatusGlobal.resetPasswordFulfilled) {
+    if (sGlobal.status === EStatusGlobal.resetPasswordFulfilled) {
       navigate(`/${lang}${routerLinks('Login')}`, { replace: true });
     }
-  }, [status]);
+  }, [sGlobal.status]);
   useEffect(() => {
-    if (!data?.email) navigate(`/${lang}${routerLinks('ForgetPassword')}`, { replace: true });
+    if (!sGlobal.data?.email) navigate(`/${lang}${routerLinks('ForgetPassword')}`, { replace: true });
   }, []);
 
   const { t } = useTranslation();
@@ -35,10 +35,10 @@ const Page = () => {
           <br></br> {t('routes.auth.reset-password.subReset1')}
         </h5>
       </div>
-      <Spin spinning={isLoading}>
+      <Spin spinning={sGlobal.isLoading}>
         <Form
           className="intro-x form-login"
-          values={{ ...data }}
+          values={{ ...sGlobal.data }}
           columns={[
             {
               name: 'otp',
@@ -89,8 +89,8 @@ const Page = () => {
             },
           ]}
           textSubmit={'routes.auth.reset-password.Submit'}
-          handSubmit={(values) => resetPassword({ ...values })}
-          disableSubmit={isLoading}
+          handSubmit={(values) => sGlobal.resetPassword({ ...values })}
+          disableSubmit={sGlobal.isLoading}
         />
       </Spin>
     </Fragment>

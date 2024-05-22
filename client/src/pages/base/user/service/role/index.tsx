@@ -1,48 +1,44 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import { CommonEntity, PaginationQuery, Responses } from '@/models';
-import { useAppDispatch, useTypedSelector, Action, Slice, State, User } from '@/services';
+import { ICommonEntity, IPaginationQuery, IResponses } from '@/interfaces';
+import { useAppDispatch, useTypedSelector, Action, Slice, State, IUser } from '@/services';
 import { API, routerLinks } from '@/utils';
 
 const name = 'UserRole';
 const action = {
-  ...new Action<UserRole>(name),
+  ...new Action<IUserRole>(name),
   getPermission: createAsyncThunk(name + '/permission', async () =>
-    API.get<Responses<string[]>>(`${routerLinks(name, 'api')}/permission`),
+    API.get<IResponses<string[]>>(`${routerLinks(name, 'api')}/permission`),
   ),
 };
-export const userRoleSlice = createSlice(new Slice<UserRole>(action, { keepUnusedDataFor: 9999 }));
+export const userRoleSlice = createSlice(new Slice<IUserRole>(action, { keepUnusedDataFor: 9999 }));
 export const UserRoleService = () => {
   const dispatch = useAppDispatch();
   return {
-    ...useTypedSelector((state) => state[action.name] as State<UserRole>),
-    set: (values: State<UserRole>) => dispatch(action.set(values)),
-    get: (params: PaginationQuery<UserRole>) => dispatch(action.get(params)),
+    ...useTypedSelector((state) => state[action.name] as State<IUserRole>),
+    set: (values: State<IUserRole>) => dispatch(action.set(values)),
+    get: (params: IPaginationQuery<IUserRole>) => dispatch(action.get(params)),
     getById: ({
       id,
       keyState = 'isVisible',
       params,
     }: {
       id: string;
-      keyState?: keyof State<UserRole>;
-      params?: PaginationQuery<UserRole>;
+      keyState?: keyof State<IUserRole>;
+      params?: IPaginationQuery<IUserRole>;
     }) => dispatch(action.getById({ id, keyState, params })),
-    post: (values: UserRole) => dispatch(action.post(values)),
-    put: (values: UserRole) => dispatch(action.put(values)),
+    post: (values: IUserRole) => dispatch(action.post(values)),
+    put: (values: IUserRole) => dispatch(action.put(values)),
     delete: (id: string) => dispatch(action.delete(id)),
     getPermission: () => dispatch(action.getPermission()),
   };
 };
-export class UserRole extends CommonEntity {
-  constructor(
-    public name?: string,
-    public code?: string,
-    public isSystemAdmin?: boolean,
-    public permissions?: string[],
-    public users?: User[],
-    public createdAt?: string,
-    public updatedAt?: string,
-  ) {
-    super();
-  }
+export interface IUserRole extends ICommonEntity {
+  name?: string;
+  code?: string;
+  isSystemAdmin?: boolean;
+  permissions?: string[];
+  users?: IUser[];
+  createdAt?: string;
+  updatedAt?: string;
 }

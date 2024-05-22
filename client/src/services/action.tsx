@@ -1,17 +1,18 @@
 import { AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
 
+import { EStatusState } from '@/enums';
+import { ICommonEntity, IPaginationQuery, IResponses } from '@/interfaces';
 import { Message } from '@/library/message';
-import { CommonEntity, EStatusState, PaginationQuery, Responses } from '@/models';
 import { State } from '@/services';
 import { API, routerLinks } from '@/utils';
 
-export class Action<T extends CommonEntity, Y = EStatusState> {
+export class Action<T extends ICommonEntity, Y = EStatusState> {
   public name: string;
   public set: AsyncThunk<State<T, Y>, State<T, Y>, object>;
-  public get: AsyncThunk<Responses<T[]>, PaginationQuery<T>, object>;
+  public get: AsyncThunk<IResponses<T[]>, IPaginationQuery<T>, object>;
   public getById: AsyncThunk<
     { data: T | undefined; keyState: keyof State<T, Y> },
-    { id: string; keyState: keyof State<T, Y>; params?: PaginationQuery<T> },
+    { id: string; keyState: keyof State<T, Y>; params?: IPaginationQuery<T> },
     object
   >;
   public post: AsyncThunk<T | undefined, T, object>;
@@ -22,7 +23,7 @@ export class Action<T extends CommonEntity, Y = EStatusState> {
     this.set = createAsyncThunk(name + '/set', async (values: State<T, Y>) => values);
     this.get = createAsyncThunk(
       name + '/get',
-      async (params: PaginationQuery<T>) => await API.get(`${routerLinks(name, 'api')}`, params),
+      async (params: IPaginationQuery<T>) => await API.get(`${routerLinks(name, 'api')}`, params),
     );
     this.getById = createAsyncThunk(
       name + '/getById',
@@ -33,7 +34,7 @@ export class Action<T extends CommonEntity, Y = EStatusState> {
       }: {
         id: string;
         keyState: keyof State<T, Y>;
-        params?: PaginationQuery<T>;
+        params?: IPaginationQuery<T>;
       }) => {
         const { data } = await API.get<T>(`${routerLinks(name, 'api')}/${id}`, params);
         return { data, keyState };

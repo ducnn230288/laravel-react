@@ -5,7 +5,19 @@ import { TooltipPlacement } from 'antd/es/tooltip';
 import type { RenderFunction } from 'antd/es/_util/getRenderPropValue';
 
 export const PopConfirm = forwardRef(
-  ({ children, title, onConfirm, placement }: Type, ref: Ref<{ onConfirm: () => any }>) => {
+  (
+    {
+      children,
+      title,
+      onConfirm,
+      placement,
+    }: PropsWithChildren<{
+      title: React.ReactNode | RenderFunction;
+      onConfirm: (e?: React.MouseEvent<HTMLElement>) => void;
+      placement?: TooltipPlacement;
+    }>,
+    ref: Ref<{ onConfirm: () => any }>,
+  ) => {
     useImperativeHandle(ref, () => ({ onConfirm }));
 
     const { t } = useTranslation();
@@ -24,8 +36,3 @@ export const PopConfirm = forwardRef(
   },
 );
 PopConfirm.displayName = 'PopConfirm';
-type Type = PropsWithChildren<{
-  title: React.ReactNode | RenderFunction;
-  onConfirm: (e?: React.MouseEvent<HTMLElement>) => void;
-  placement?: TooltipPlacement;
-}>;

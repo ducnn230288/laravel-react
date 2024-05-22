@@ -11,7 +11,8 @@ import dayjs, { Dayjs } from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 
-import { DataTableModel, ETableFilterType, PaginationQuery, TableGet, TableRefObject } from '@/models';
+import { ETableFilterType } from '@/enums';
+import { IDataTable, IPaginationQuery, ITableGet, ITableRefObject } from '@/interfaces';
 import { cleanObjectKeyNull, getSizePageByHeight, uuidv4 } from '@/utils';
 import { Calendar, CheckCircle, CheckSquare, Search, Times } from '@/assets/svg';
 
@@ -69,18 +70,17 @@ export const DataTable = forwardRef(
       formatData = (data) => data,
       ...prop
     }: Type,
-    ref: Ref<TableRefObject>,
+    ref: Ref<ITableRefObject>,
   ) => {
     useImperativeHandle(ref, () => ({
       onChange,
-      handleDelete: async (id: string) => facade.delete(id),
     }));
     const { t } = useTranslation();
     const location = useLocation();
     const navigate = useNavigate();
     const idTable = useRef(idElement);
     const timeoutSearch = useRef<ReturnType<typeof setTimeout>>();
-    const cols = useRef<DataTableModel[]>();
+    const cols = useRef<IDataTable[]>();
     const refPageSizeOptions = useRef<number[]>();
     const { result, isLoading, queryParams, time } = facade;
     // eslint-disable-next-line prefer-const
@@ -149,7 +149,7 @@ export const DataTable = forwardRef(
         }, 10);
     }, [data, result?.data, facade.status]);
 
-    const onChange = (request?: PaginationQuery, changeNavigate = true) => {
+    const onChange = (request?: IPaginationQuery, changeNavigate = true) => {
       if (request) {
         localStorage.setItem(idTable.current, JSON.stringify(request));
         params.current = { ...request };
@@ -190,7 +190,7 @@ export const DataTable = forwardRef(
     );
     const valueFilter = useRef<{ [selector: string]: boolean }>({});
     const [filterDropdownOpen, setFilterDropdownOpen] = useState<any>({});
-    const columnSearch = (get: TableGet, fullTextSearch = '', value?: any, facade: any = {}) => {
+    const columnSearch = (get: ITableGet, fullTextSearch = '', value?: any, facade: any = {}) => {
       if (get?.facade) {
         const params = get.params ? get.params(fullTextSearch, value) : { fullTextSearch };
         if (new Date().getTime() > facade.time || JSON.stringify(cleanObjectKeyNull(params)) != facade.queryParams)
@@ -198,7 +198,7 @@ export const DataTable = forwardRef(
       }
     };
     // noinspection JSUnusedGlobalSymbols
-    const getColumnSearchRadio = (filters: CheckboxOptionType[], key: string, get: TableGet = {}) => ({
+    const getColumnSearchRadio = (filters: CheckboxOptionType[], key: string, get: ITableGet = {}) => ({
       onFilterDropdownOpenChange: async (visible: boolean) => (valueFilter.current[key] = visible),
       filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }: any) => {
         const facade = get?.facade ? get?.facade() : {};
@@ -238,7 +238,7 @@ export const DataTable = forwardRef(
       filterIcon: () => <CheckCircle className="h-3.5 w-3.5 fill-gray-600" />,
     });
     // noinspection JSUnusedGlobalSymbols
-    const getColumnSearchCheckbox = (filters: any, key: any, get: TableGet = {}) => ({
+    const getColumnSearchCheckbox = (filters: any, key: any, get: ITableGet = {}) => ({
       onFilterDropdownOpenChange: async (visible: boolean) => (valueFilter.current[key] = visible),
       filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }: any) => {
         const facade = get?.facade ? get?.facade() : {};
@@ -610,13 +610,13 @@ export const DataTable = forwardRef(
   },
 );
 DataTable.displayName = 'HookTable';
-type Type = {
+interface Type {
   id?: string;
-  columns: DataTableModel[];
+  columns: IDataTable[];
   summary?: (data: any) => any;
   showList?: boolean;
   footer?: (result: any) => any;
-  defaultRequest?: PaginationQuery;
+  defaultRequest?: IPaginationQuery;
   showPagination?: boolean;
   leftHeader?: JSX.Element;
   rightHeader?: JSX.Element;
@@ -637,7 +637,7 @@ type Type = {
   facade?: any;
   data?: any[];
   formatData?: (data: any) => any[];
-};
+}
 const Draggable = (props: any) => {
   const { attributes, listeners, setNodeRef } = useDraggable({ id: props.id });
   return (

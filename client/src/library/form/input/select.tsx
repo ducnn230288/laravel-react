@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FormInstance, Select } from 'antd';
 
-import { TableGet, TableItemFilterList } from '@/models';
+import { ITableGet, ITableItemFilterList } from '@/interfaces';
 import { arrayUnique, cleanObjectKeyNull } from '@/utils';
 
 const Component = ({
@@ -95,7 +95,7 @@ const Component = ({
     </Select>
   );
 };
-type Type = {
+interface Type {
   form?: FormInstance;
   value?: any;
   showSearch?: boolean;
@@ -105,9 +105,9 @@ type Type = {
   placeholder?: string;
   className?: string;
   disabled?: boolean;
-  get?: TableGet;
-  list?: TableItemFilterList[];
+  get?: ITableGet;
+  list?: ITableItemFilterList[];
   mode?: 'multiple' | 'tags';
   firstLoad?: (data: any) => any;
-};
+}
 export default Component;

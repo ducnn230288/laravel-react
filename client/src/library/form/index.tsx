@@ -16,8 +16,10 @@ import classNames from 'classnames';
 import dayjs from 'dayjs';
 
 import { Check, Times } from '@/assets/svg';
-import { EFormRuleType, EFormType, FormItem, FormModel } from '@/models';
-import { GlobalFacade } from '@/services';
+import { EFormRuleType, EFormType } from '@/enums';
+
+import { IFormItem, IForm } from '@/interfaces';
+import { SGlobal } from '@/services';
 import { convertFormValue } from '@/utils';
 
 import {
@@ -56,7 +58,7 @@ export const Form = ({
   formAnt,
 }: Type) => {
   const { t } = useTranslation();
-  const { formatDate } = GlobalFacade();
+  const sGlobal = SGlobal();
   const timeout = useRef<any>();
   const refLoad = useRef(true);
   const [forms] = AntForm.useForm();
@@ -74,7 +76,7 @@ export const Form = ({
     refLoad.current = true;
   }, [values]);
 
-  const generateInput = (formItem: FormItem, item: FormModel, values: any, name: string) => {
+  const generateInput = (formItem: IFormItem, item: IForm, values: any, name: string) => {
     switch (formItem.type) {
       case EFormType.hidden:
         return <input type={'hidden'} name={item.name} tabIndex={-1} />;
@@ -160,8 +162,8 @@ export const Form = ({
           <DatePicker
             format={
               !formItem.picker || formItem.picker === 'date'
-                ? (formatDate || '') + (formItem.showTime ? ' HH:mm' : '')
-                : formatDate || ''
+                ? (sGlobal.formatDate || '') + (formItem.showTime ? ' HH:mm' : '')
+                : sGlobal.formatDate || ''
             }
             onChange={(date: any) => formItem.onChange && formItem.onChange(date, form, reRender)}
             disabledDate={(current: any) => (formItem.disabledDate ? formItem.disabledDate(current, form) : false)}
@@ -191,7 +193,7 @@ export const Form = ({
             onOpenChange={(open) => {
               if (!open && form.getFieldValue(item.name)?.length < 2) form.resetFields([item.name]);
             }}
-            format={formatDate + (formItem.showTime ? ' HH:mm' : '')}
+            format={sGlobal.formatDate + (formItem.showTime ? ' HH:mm' : '')}
             disabledDate={(current) => (formItem.disabledDate ? formItem.disabledDate(current, form) : false)}
             defaultValue={
               formItem.initialValues && [dayjs(formItem.initialValues.start), dayjs(formItem.initialValues.end)]
@@ -722,9 +724,9 @@ export const Form = ({
     </Spin>
   );
 };
-type Type = {
+interface Type {
   className?: string;
-  columns: FormModel[];
+  columns: IForm[];
   textSubmit?: string;
   textCancel?: string;
   handSubmit?: (values: any) => void;
@@ -739,4 +741,4 @@ type Type = {
   idSubmit?: string;
   disableSubmit?: boolean;
   spinning?: boolean;
-};
+}

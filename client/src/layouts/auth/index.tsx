@@ -1,13 +1,13 @@
 import React, { PropsWithChildren, useEffect } from 'react';
 
-import { GlobalFacade } from '@/services';
+import { SGlobal } from '@/services';
 import './index.less';
 
 const Layout = ({ children }: PropsWithChildren) => {
-  const globalFacade = GlobalFacade();
+  const sGlobal = SGlobal();
 
   useEffect(() => {
-    globalFacade.logout();
+    sGlobal.logout();
   }, []);
 
   return (

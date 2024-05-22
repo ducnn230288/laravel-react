@@ -1,7 +1,7 @@
 import React, { forwardRef, Ref, useImperativeHandle } from 'react';
 import { Form as FormAnt } from 'antd';
 
-import { FormModel, FormModalRefObject } from '@/models';
+import { IForm, IFormModalRefObject } from '@/interfaces';
 import { convertFormValue } from '@/utils';
 
 import { Form } from '../../form';
@@ -22,19 +22,16 @@ export const ModalForm = forwardRef(
       keyPost = 'post',
       keyPut = 'put',
       keyData = 'data',
-      ...propForm
     }: Type,
-    ref: Ref<FormModalRefObject>,
+    ref: Ref<IFormModalRefObject>,
   ) => {
-    useImperativeHandle(ref, () => ({ handleEdit, handleDelete, form }));
+    useImperativeHandle(ref, () => ({ handleEdit, form }));
     const [form] = FormAnt.useForm();
 
     const handleEdit = async (item: { id?: string } = {}, isGet = true) => {
       if (item.id && isGet) facade.getById({ id: item.id, keyState });
       else facade.set({ [keyState]: true, [keyData]: item });
     };
-    const handleDelete = async (id: string) => facade.delete(id);
-
     return (
       <Modal
         facade={facade}
@@ -57,24 +54,23 @@ export const ModalForm = forwardRef(
             .catch(() => false);
         }}
       >
-        <Form {...propForm} values={{ ...facade[keyData] }} formAnt={form} columns={columns} />
+        <Form values={{ ...facade[keyData] }} formAnt={form} columns={columns} />
       </Modal>
     );
   },
 );
 ModalForm.displayName = 'HookModalForm';
-type Type = {
+interface Type {
+  title: (data: any) => string;
+  widthModal?: number;
+  columns: IForm[];
+  textSubmit?: string;
+  textCancel?: string;
+  className?: string;
+  footerCustom?: (handleOk: () => Promise<any>, handleCancel: () => void) => JSX.Element[] | JSX.Element;
   facade?: any;
   keyState?: string;
   keyPost?: string;
   keyPut?: string;
   keyData?: string;
-  title: (data: any) => string;
-  widthModal?: number;
-  columns: FormModel[];
-  textSubmit?: string;
-  textCancel?: string;
-  className?: string;
-  footerCustom?: (handleOk: () => Promise<any>, handleCancel: () => void) => JSX.Element[] | JSX.Element;
-  idElement?: string;
-};
+}

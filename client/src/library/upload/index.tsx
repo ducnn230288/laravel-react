@@ -21,7 +21,21 @@ export const Upload = ({
   keyImage = 'path',
   accept = 'image/*',
   validation = async () => true,
-}: Type) => {
+}: PropsWithChildren<{
+  value?: any[];
+  onChange?: (values: any[]) => any;
+  deleteFile?: any;
+  showBtnDelete?: (file: any) => boolean;
+  method?: string;
+  maxSize?: number;
+  multiple?: boolean;
+  right?: boolean;
+  action?: string | ((file: any, config: any) => any);
+  keyImage?: string;
+  accept?: string;
+  validation?: (file: any, listFiles: any) => Promise<boolean>;
+  children?: JSX.Element[] | JSX.Element;
+}>) => {
   const { t } = useTranslation();
   // const { formatDate } = useAuth();
   const isLoading = useRef(false);
@@ -303,18 +317,3 @@ export const Upload = ({
     </Fragment>
   );
 };
-type Type = PropsWithChildren<{
-  value?: any[];
-  onChange?: (values: any[]) => any;
-  deleteFile?: any;
-  showBtnDelete?: (file: any) => boolean;
-  method?: string;
-  maxSize?: number;
-  multiple?: boolean;
-  right?: boolean;
-  action?: string | ((file: any, config: any) => any);
-  keyImage?: string;
-  accept?: string;
-  validation?: (file: any, listFiles: any) => Promise<boolean>;
-  children?: JSX.Element[] | JSX.Element;
-}>;

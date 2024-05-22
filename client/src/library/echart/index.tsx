@@ -10,7 +10,7 @@ import {
 import { EChartsType, SeriesOption } from 'echarts';
 import { CallbackDataParams, CommonTooltipOption, OptionDataValue } from 'echarts/types/src/util/types';
 
-import { ETypeChart } from '@/models';
+import { ETypeChart } from '@/enums';
 import { uuidv4 } from '@/utils';
 
 export const EChart = forwardRef(({ option, style = { height: '20rem' } }: Type, ref: Ref<any>) => {
@@ -240,7 +240,7 @@ export const EChart = forwardRef(({ option, style = { height: '20rem' } }: Type,
   return <div style={style} id={_id.current} />;
 });
 EChart.displayName = 'EChart';
-type Type = {
+interface Type {
   option: any;
   style?: React.CSSProperties;
-};
+}

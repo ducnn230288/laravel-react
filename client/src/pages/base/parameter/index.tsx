@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import { createSearchParams } from 'react-router-dom';
 
 import { Arrow } from '@/assets/svg';
-import { EFormType } from '@/models';
+import { EFormType } from '@/enums';
 import { getQueryStringParams } from '@/library/data-table';
 import { Form } from '@/library/form';
 import { ParameterService } from '@/services';

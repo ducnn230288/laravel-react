@@ -1,31 +1,31 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { PaginationQuery } from '@/models';
-import { useAppDispatch, useTypedSelector, Action, Slice, State, User } from '@/services';
+import { IPaginationQuery } from '@/interfaces';
+import { useAppDispatch, useTypedSelector, Action, Slice, State, IUser } from '@/services';
 
 const name = 'User';
 export const action = {
-  ...new Action<User>(name),
+  ...new Action<IUser>(name),
 };
-export const userSlice = createSlice(new Slice<User>(action));
+export const userSlice = createSlice(new Slice<IUser>(action));
 
 export const UserService = () => {
   const dispatch = useAppDispatch();
   return {
-    ...(useTypedSelector((state) => state[action.name]) as State<User>),
-    set: (values: State<User>) => dispatch(action.set(values)),
-    get: (params: PaginationQuery<User>) => dispatch(action.get(params)),
+    ...(useTypedSelector((state) => state[action.name]) as State<IUser>),
+    set: (values: State<IUser>) => dispatch(action.set(values)),
+    get: (params: IPaginationQuery<IUser>) => dispatch(action.get(params)),
     getById: ({
       id,
       keyState = 'isVisible',
       params,
     }: {
       id: string;
-      keyState?: keyof State<User>;
-      params?: PaginationQuery<User>;
+      keyState?: keyof State<IUser>;
+      params?: IPaginationQuery<IUser>;
     }) => dispatch(action.getById({ id, keyState, params })),
-    post: (values: User) => dispatch(action.post(values)),
-    put: (values: User) => dispatch(action.put(values)),
+    post: (values: IUser) => dispatch(action.post(values)),
+    put: (values: IUser) => dispatch(action.put(values)),
     delete: (id: string) => dispatch(action.delete(id)),
   };
 };

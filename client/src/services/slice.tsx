@@ -1,9 +1,10 @@
 import { ActionReducerMapBuilder, Draft } from '@reduxjs/toolkit';
 
-import { EStatusState, CommonEntity, Responses } from '@/models';
+import { EStatusState } from '@/enums';
+import { ICommonEntity, IResponses } from '@/interfaces';
 import { Action } from '@/services';
 
-export class Slice<T extends CommonEntity, Y = EStatusState> {
+export class Slice<T extends ICommonEntity, Y = EStatusState> {
   name: string;
   initialState: State<T, Y>;
   reducers: any;
@@ -46,7 +47,7 @@ export class Slice<T extends CommonEntity, Y = EStatusState> {
         })
         .addCase(action.get.fulfilled, (state, action) => {
           if (action.payload.data) {
-            state.result = action.payload as Draft<Responses<T[]>>;
+            state.result = action.payload as Draft<IResponses<T[]>>;
             state.status = EStatusState.getFulfilled;
           } else state.status = EStatusState.idle;
           state.time = this.defaultState.time;
@@ -132,7 +133,7 @@ export class Slice<T extends CommonEntity, Y = EStatusState> {
 }
 export interface State<T = object, Y = EStatusState> {
   [selector: string]: any;
-  result?: Responses<T[]>;
+  result?: IResponses<T[]>;
   data?: T;
   isLoading?: boolean;
   isVisible?: boolean;

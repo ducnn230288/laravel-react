@@ -3,7 +3,7 @@ import React from 'react';
 import { Form, Tabs } from 'antd';
 import classNames from 'classnames';
 
-import { FormModel } from '@/models';
+import { IForm } from '@/interfaces';
 
 const Component = ({
   name,
@@ -12,7 +12,7 @@ const Component = ({
   list,
 }: {
   name?: string;
-  column?: FormModel[];
+  column?: IForm[];
   generateForm: any;
   list: any;
 }) => {

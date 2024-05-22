@@ -45,7 +45,7 @@ const Component = ({
     />
   );
 };
-type Type = {
+interface Type {
   form: FormInstance;
   name?: string;
   placeholder?: string;
@@ -56,5 +56,5 @@ type Type = {
   showTime: boolean;
   picker: 'time' | 'date' | 'week' | 'month' | 'quarter' | 'year' | undefined;
   disabled: boolean;
-};
+}
 export default Component;

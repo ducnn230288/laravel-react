@@ -24,7 +24,7 @@ export const Button = ({ text = '', icon, className, disabled, isLoading = false
   );
 };
 
-type Type = {
+interface Type {
   icon?: React.ReactNode;
   text?: any;
   title?: string;
@@ -35,4 +35,4 @@ type Type = {
   onPaste?: any;
   id?: string;
   type?: 'button' | 'submit' | 'reset';
-};
+}

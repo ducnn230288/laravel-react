@@ -12,7 +12,7 @@ const action = {
   ),
 };
 export const userRoleSlice = createSlice(new Slice<IUserRole>(action, { keepUnusedDataFor: 9999 }));
-export const UserRoleService = () => {
+export const SUserRole = () => {
   const dispatch = useAppDispatch();
   return {
     ...useTypedSelector((state) => state[action.name] as State<IUserRole>),

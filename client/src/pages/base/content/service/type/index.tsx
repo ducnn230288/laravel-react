@@ -7,7 +7,7 @@ import { IContent } from '../index';
 const name = 'ContentType';
 const action = new Action<IContentType>(name);
 export const contentTypeSlice = createSlice(new Slice<IContentType>(action, { keepUnusedDataFor: 9999 }));
-export const ContentTypeService = () => {
+export const SContentType = () => {
   const dispatch = useAppDispatch();
   return {
     ...useTypedSelector((state) => state[action.name] as State<IContentType>),

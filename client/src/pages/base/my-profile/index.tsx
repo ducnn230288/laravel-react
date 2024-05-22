@@ -8,7 +8,7 @@ import { User } from '@/assets/svg';
 import { EFormRuleType, EFormType, ETableFilterType } from '@/enums';
 import { Form } from '@/library/form';
 import { Button } from '@/library/button';
-import { CodeService, EStatusGlobal, SGlobal } from '@/services';
+import { SCode, EStatusGlobal, SGlobal } from '@/services';
 import { lang, renderTitleBreadcrumbs, routerLinks } from '@/utils';
 
 const Page = () => {
@@ -143,7 +143,7 @@ const Page = () => {
                             type: EFormType.selectTable,
                             rules: [{ type: EFormRuleType.required }],
                             get: {
-                              facade: CodeService,
+                              facade: SCode,
                               params: (fullTextSearch: string) => ({
                                 fullTextSearch,
                                 typeCode: 'position',

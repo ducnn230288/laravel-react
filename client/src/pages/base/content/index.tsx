@@ -9,50 +9,49 @@ import { ITableRefObject } from '@/interfaces';
 import { Button } from '@/library/button';
 import { DataTable } from '@/library/data-table';
 import { DrawerForm } from '@/library/drawer';
-import { ContentFacade, ContentTypeService, SGlobal } from '@/services';
+import { SContent, SContentType, SGlobal } from '@/services';
 import { keyRole, renderTitleBreadcrumbs } from '@/utils';
 
 import _column from './column';
 
 const Page = () => {
   const sGlobal = SGlobal();
-  const contentTypeService = ContentTypeService();
+  const sContentType = SContentType();
   useEffect(() => {
-    if (!contentTypeService.result?.data) contentTypeService.get({});
+    if (!sContentType.result?.data) sContentType.get({});
     return () => {
-      contentFacade.set({ isLoading: true, status: EStatusState.idle });
+      sContent.set({ isLoading: true, status: EStatusState.idle });
     };
   }, []);
 
-  const contentFacade = ContentFacade();
+  const sContent = SContent();
   useEffect(() => {
     renderTitleBreadcrumbs(t('pages.Content'), [
       { title: t('titles.Setting'), link: '' },
       { title: t('titles.Content'), link: '' },
     ]);
-    switch (contentFacade.status) {
+    switch (sContent.status) {
       case EStatusState.putFulfilled:
       case EStatusState.postFulfilled:
       case EStatusState.deleteFulfilled:
         dataTableRef?.current?.onChange(request);
         break;
     }
-  }, [contentFacade.status]);
+  }, [sContent.status]);
 
-  const request = JSON.parse(contentFacade.queryParams || '{}');
+  const request = JSON.parse(sContent.queryParams || '{}');
   const { t } = useTranslation();
   const dataTableRef = useRef<ITableRefObject>(null);
   return (
     <div className={'container mx-auto grid grid-cols-12 gap-3 px-2.5 pt-2.5'}>
       <DrawerForm
         size={request.typeCode !== 'partner' && request.typeCode !== 'tech' ? 'large' : undefined}
-        facade={contentFacade}
+        facade={sContent}
         columns={_column.form(request.typeCode)}
-        title={t(contentFacade.data ? 'pages.Content/Edit' : 'pages.Content/Add', { type: request.typeCode })}
+        title={t(sContent.data ? 'pages.Content/Edit' : 'pages.Content/Add', { type: request.typeCode })}
         onSubmit={(values) => {
-          if (contentFacade.data?.id)
-            contentFacade.put({ ...values, id: contentFacade.data.id, typeCode: request.typeCode });
-          else contentFacade.post({ ...values, typeCode: request.typeCode });
+          if (sContent.data?.id) sContent.put({ ...values, id: sContent.data.id, typeCode: request.typeCode });
+          else sContent.post({ ...values, typeCode: request.typeCode });
         }}
       />
       <div className="col-span-12 md:col-span-4 lg:col-span-3 -intro-x">
@@ -60,7 +59,7 @@ const Page = () => {
           <div className="h-14 flex justify-between items-center border-b border-gray-100 px-4 py-2">
             <h3 className={'font-bold text-lg'}>Data Type</h3>
           </div>
-          <Spin spinning={contentTypeService.isLoading}>
+          <Spin spinning={sContentType.isLoading}>
             <div className="h-[calc(100vh-12rem)] overflow-y-auto relative scroll hidden sm:block">
               <Tree
                 blockNode
@@ -68,7 +67,7 @@ const Page = () => {
                 autoExpandParent
                 defaultExpandAll
                 switcherIcon={<Arrow className={'w-4 h-4'} />}
-                treeData={contentTypeService.result?.data?.map((item: any) => ({
+                treeData={sContentType.result?.data?.map((item: any) => ({
                   title: item?.name,
                   key: item?.code,
                   value: item?.code,
@@ -100,7 +99,7 @@ const Page = () => {
               <Select
                 value={request.typeCode}
                 className={'w-full'}
-                options={contentTypeService.result?.data?.map((data) => ({ label: data.name, value: data.code }))}
+                options={sContentType.result?.data?.map((data) => ({ label: data.name, value: data.code }))}
                 onChange={(e) => {
                   request.typeCode = e;
                   dataTableRef?.current?.onChange(request);
@@ -114,7 +113,7 @@ const Page = () => {
         <div className="shadow rounded-xl w-full overflow-auto bg-white">
           <div className="sm:min-h-[calc(100vh-8.5rem)] overflow-y-auto p-3">
             <DataTable
-              facade={contentFacade}
+              facade={sContent}
               ref={dataTableRef}
               paginationDescription={(from: number, to: number, total: number) =>
                 t('routes.admin.Layout.Pagination', { from, to, total })
@@ -127,7 +126,7 @@ const Page = () => {
                     <Button
                       icon={<Plus className="icon-cud !h-5 !w-5" />}
                       text={t('components.button.New')}
-                      onClick={() => contentFacade.set({ data: undefined, isVisible: true })}
+                      onClick={() => sContent.set({ data: undefined, isVisible: true })}
                     />
                   )}
                 </div>

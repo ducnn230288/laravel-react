@@ -12,7 +12,7 @@ import { ToolTip } from '@/library/tooltip';
 
 import { EStatusState } from '@/enums';
 import { ITableRefObject } from '@/interfaces';
-import { SGlobal, PostService, PostTypeService } from '@/services';
+import { SGlobal, SPost, SPostType } from '@/services';
 import { keyRole, renderTitleBreadcrumbs } from '@/utils';
 
 import _column from './column';
@@ -20,62 +20,61 @@ import _columnType from './column/type';
 
 const Page = () => {
   const sGlobal = SGlobal();
-  const postTypeService = PostTypeService();
+  const sPostType = SPostType();
   useEffect(() => {
-    if (!postTypeService.result?.data) postTypeService.get({ include: 'children', postTypeId: '' });
+    if (!sPostType.result?.data) sPostType.get({ include: 'children', postTypeId: '' });
     return () => {
-      postService.set({ isLoading: true, status: EStatusState.idle });
+      sPost.set({ isLoading: true, status: EStatusState.idle });
     };
   }, []);
 
-  const postService = PostService();
+  const sPost = SPost();
   useEffect(() => {
     renderTitleBreadcrumbs(t('titles.Post'), [
       { title: t('titles.Setting'), link: '' },
       { title: t('titles.Post'), link: '' },
     ]);
-    switch (postService.status) {
+    switch (sPost.status) {
       case EStatusState.putFulfilled:
       case EStatusState.postFulfilled:
       case EStatusState.deleteFulfilled:
         dataTableRef?.current?.onChange(request);
         break;
     }
-  }, [postService.status]);
+  }, [sPost.status]);
   useEffect(() => {
-    switch (postTypeService.status) {
+    switch (sPostType.status) {
       case EStatusState.postFulfilled:
       case EStatusState.putFulfilled:
       case EStatusState.deleteFulfilled:
-        postTypeService.get(JSON.parse(postTypeService.queryParams || '{}'));
+        sPostType.get(JSON.parse(sPostType.queryParams || '{}'));
         break;
     }
-  }, [postTypeService.status]);
+  }, [sPostType.status]);
 
-  const request = JSON.parse(postService.queryParams || '{}');
+  const request = JSON.parse(sPost.queryParams || '{}');
   const { t } = useTranslation();
   const dataTableRef = useRef<ITableRefObject>(null);
 
   return (
     <div className={'container mx-auto grid grid-cols-12 gap-3 px-2.5 pt-2.5'}>
       <DrawerForm
-        facade={postTypeService}
-        columns={_columnType.form(postTypeService.data?.id, postTypeService.result?.data)}
-        title={t(postTypeService.data ? 'pages.Post/Edit' : 'pages.Post/Add', { type: '' })}
+        facade={sPostType}
+        columns={_columnType.form(sPostType.data?.id, sPostType.result?.data)}
+        title={t(sPostType.data ? 'pages.Post/Edit' : 'pages.Post/Add', { type: '' })}
         onSubmit={(values) => {
-          if (postTypeService.data) postTypeService.put({ ...values, id: postTypeService.data.code });
-          else postTypeService.post({ ...values });
+          if (sPostType.data) sPostType.put({ ...values, id: sPostType.data.code });
+          else sPostType.post({ ...values });
         }}
       />
       <DrawerForm
         size={'large'}
-        facade={postService}
-        columns={_column.form(postService.data?.id)}
-        title={t(postService.data ? 'pages.Post/Edit' : 'pages.Post/Add', { type: request.typeCode })}
+        facade={sPost}
+        columns={_column.form(sPost.data?.id)}
+        title={t(sPost.data ? 'pages.Post/Edit' : 'pages.Post/Add', { type: request.typeCode })}
         onSubmit={(values) => {
-          if (postService?.data?.id)
-            postService.put({ ...values, id: postService.data.id, typeCode: request.typeCode });
-          else postService.post({ ...values, typeCode: request.typeCode });
+          if (sPost?.data?.id) sPost.put({ ...values, id: sPost.data.id, typeCode: request.typeCode });
+          else sPost.post({ ...values, typeCode: request.typeCode });
         }}
       />
       <div className="col-span-12 md:col-span-4 lg:col-span-3 -intro-x">
@@ -86,11 +85,11 @@ const Page = () => {
               <Button
                 icon={<Plus className="icon-cud !h-5 !w-5" />}
                 text={t('routes.admin.Code.New Type')}
-                onClick={() => postTypeService.set({ data: undefined, isVisible: true })}
+                onClick={() => sPostType.set({ data: undefined, isVisible: true })}
               />
             </div>
           </div>
-          <Spin spinning={postTypeService.isLoading}>
+          <Spin spinning={sPostType.isLoading}>
             <div className="h-[calc(100vh-12rem)] overflow-y-auto relative scroll hidden sm:block">
               <Tree
                 blockNode
@@ -98,7 +97,7 @@ const Page = () => {
                 autoExpandParent
                 defaultExpandAll
                 switcherIcon={<Arrow className={'w-4 h-4'} />}
-                treeData={postTypeService.result?.data}
+                treeData={sPostType.result?.data}
                 titleRender={(data: any) => (
                   <div
                     className={classNames(
@@ -121,7 +120,7 @@ const Page = () => {
                           <button
                             className={'opacity-0 group-hover:opacity-100 transition-all duration-300 '}
                             title={t('routes.admin.Layout.Edit') || ''}
-                            onClick={() => postTypeService.getById({ id: data.code })}
+                            onClick={() => sPostType.getById({ id: data.code })}
                           >
                             <Edit className="icon-cud bg-teal-900 hover:bg-teal-700" />
                           </button>
@@ -131,7 +130,7 @@ const Page = () => {
                         <ToolTip title={t('routes.admin.Layout.Delete')}>
                           <PopConfirm
                             title={t('components.datatable.areYouSureWant')}
-                            onConfirm={() => postTypeService.delete(data.code!)}
+                            onConfirm={() => sPostType.delete(data.code!)}
                           >
                             <button
                               className={'opacity-0 group-hover:opacity-100 transition-all duration-300'}
@@ -151,7 +150,7 @@ const Page = () => {
               <TreeSelect
                 value={request.typeCode}
                 className={'w-full'}
-                treeData={postTypeService.result?.data}
+                treeData={sPostType.result?.data}
                 onChange={(e) => {
                   if (request.typeCode !== e) request.typeCode = e;
                   else delete request.typeCode;
@@ -166,7 +165,7 @@ const Page = () => {
         <div className="shadow rounded-xl w-full overflow-auto bg-white">
           <div className="sm:min-h-[calc(100vh-8.5rem)] overflow-y-auto p-3">
             <DataTable
-              facade={postService}
+              facade={sPost}
               ref={dataTableRef}
               paginationDescription={(from: number, to: number, total: number) =>
                 t('routes.admin.Layout.Pagination', { from, to, total })
@@ -179,7 +178,7 @@ const Page = () => {
                     <Button
                       icon={<Plus className="icon-cud !h-5 !w-5" />}
                       text={t('components.button.New')}
-                      onClick={() => postService.set({ data: undefined, isVisible: true })}
+                      onClick={() => sPost.set({ data: undefined, isVisible: true })}
                     />
                   )}
                 </div>

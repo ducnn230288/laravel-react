@@ -6,7 +6,7 @@ import { ICommonEntity, IPaginationQuery } from '@/interfaces';
 const name = 'Parameter';
 const action = new Action<IParameter>(name);
 export const parameterSlice = createSlice(new Slice<IParameter>(action));
-export const ParameterService = () => {
+export const SParameter = () => {
   const dispatch = useAppDispatch();
   return {
     ...useTypedSelector((state) => state[action.name] as State<IParameter>),

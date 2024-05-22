@@ -7,7 +7,7 @@ import { IPostType } from './type';
 const name = 'Post';
 const action = new Action<IPost>(name);
 export const postSlice = createSlice(new Slice<IPost>(action));
-export const PostService = () => {
+export const SPost = () => {
   const dispatch = useAppDispatch();
   return {
     ...useTypedSelector((state) => state[action.name] as State<IPost>),

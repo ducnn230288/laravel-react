@@ -9,7 +9,7 @@ export const action = {
 };
 export const userSlice = createSlice(new Slice<IUser>(action));
 
-export const UserService = () => {
+export const SUser = () => {
   const dispatch = useAppDispatch();
   return {
     ...(useTypedSelector((state) => state[action.name]) as State<IUser>),

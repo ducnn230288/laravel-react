@@ -7,7 +7,7 @@ import { ICodeType } from './type';
 const name = 'Code';
 const action = new Action<ICode>(name);
 export const codeSlice = createSlice(new Slice<ICode>(action));
-export const CodeService = () => {
+export const SCode = () => {
   const dispatch = useAppDispatch();
   return {
     ...useTypedSelector((state) => state[action.name] as State<ICode>),

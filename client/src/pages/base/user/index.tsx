@@ -11,26 +11,26 @@ import { ITableRefObject } from '@/interfaces';
 import { Button } from '@/library/button';
 import { DataTable } from '@/library/data-table';
 import { DrawerForm } from '@/library/drawer';
-import { SGlobal, UserService, UserRoleService } from '@/services';
+import { SGlobal, SUser, SUserRole } from '@/services';
 import { keyRole, lang, renderTitleBreadcrumbs, routerLinks } from '@/utils';
 
 import _column from './column';
 
 const Page = () => {
-  const userRoleService = UserRoleService();
+  const sUserRole = SUserRole();
   const sGlobal = SGlobal();
   useEffect(() => {
-    if (!userRoleService?.result?.data) userRoleService.get({});
+    if (!sUserRole?.result?.data) sUserRole.get({});
     return () => {
-      userService.set({ isLoading: true, status: EStatusState.idle });
+      sUser.set({ isLoading: true, status: EStatusState.idle });
     };
   }, []);
 
   const navigate = useNavigate();
   useEffect(() => {
     if (
-      userRoleService?.result?.data?.length &&
-      !userRoleService?.result?.data?.filter((item) => item.code === request.roleCode).length
+      sUserRole?.result?.data?.length &&
+      !sUserRole?.result?.data?.filter((item) => item.code === request.roleCode).length
     ) {
       navigate({
         pathname: `/${lang}${routerLinks('User')}`,
@@ -39,34 +39,34 @@ const Page = () => {
       request.roleCode = 'SUPER-ADMIN';
       dataTableRef?.current?.onChange(request);
     }
-  }, [userRoleService?.result]);
+  }, [sUserRole?.result]);
 
-  const userService = UserService();
+  const sUser = SUser();
   useEffect(() => {
     renderTitleBreadcrumbs(t('titles.User'), [
       { title: t('titles.User'), link: '' },
       { title: t('titles.User/List'), link: '' },
     ]);
-    switch (userService.status) {
+    switch (sUser.status) {
       case EStatusState.postFulfilled:
       case EStatusState.putFulfilled:
       case EStatusState.deleteFulfilled:
         dataTableRef?.current?.onChange(request);
         break;
     }
-  }, [userService.status]);
-  const request = JSON.parse(userService?.queryParams || '{}');
+  }, [sUser.status]);
+  const request = JSON.parse(sUser?.queryParams || '{}');
   const { t } = useTranslation();
   const dataTableRef = useRef<ITableRefObject>(null);
   return (
     <div className={'container mx-auto grid grid-cols-12 gap-3 px-2.5 pt-2.5'}>
       <DrawerForm
-        facade={userService}
+        facade={sUser}
         columns={_column.form()}
-        title={t(userService.data ? 'pages.User/Edit' : 'pages.User/Add', { roleCode: request.roleCode })}
+        title={t(sUser.data ? 'pages.User/Edit' : 'pages.User/Add', { roleCode: request.roleCode })}
         onSubmit={(values) => {
-          if (userService.data) userService.put({ ...values, id: userService.data.id, roleCode: request.roleCode });
-          else userService.post({ ...values, roleCode: request.roleCode });
+          if (sUser.data) sUser.put({ ...values, id: sUser.data.id, roleCode: request.roleCode });
+          else sUser.post({ ...values, roleCode: request.roleCode });
         }}
       />
       <div className="col-span-12 md:col-span-4 lg:col-span-3 -intro-x">
@@ -74,7 +74,7 @@ const Page = () => {
           <div className="h-14 flex justify-between items-center border-b border-gray-100 px-4 py-2">
             <h3 className={'font-bold text-lg'}>Role</h3>
           </div>
-          <Spin spinning={userRoleService.isLoading}>
+          <Spin spinning={sUserRole.isLoading}>
             <div className="h-[calc(100vh-12rem)] overflow-y-auto relative scroll hidden sm:block">
               <Tree
                 blockNode
@@ -82,7 +82,7 @@ const Page = () => {
                 autoExpandParent
                 defaultExpandAll
                 switcherIcon={<Arrow className={'w-4 h-4'} />}
-                treeData={userRoleService.result?.data?.map((item: any) => ({
+                treeData={sUserRole.result?.data?.map((item: any) => ({
                   title: item?.name,
                   key: item?.code,
                   value: item?.code,
@@ -114,7 +114,7 @@ const Page = () => {
               <Select
                 value={request.roleCode}
                 className={'w-full'}
-                options={userRoleService?.result?.data?.map((data) => ({ label: data.name, value: data.code }))}
+                options={sUserRole?.result?.data?.map((data) => ({ label: data.name, value: data.code }))}
                 onChange={(e) => {
                   request.roleCode = e;
                   dataTableRef?.current?.onChange(request);
@@ -129,7 +129,7 @@ const Page = () => {
           <div className="sm:min-h-[calc(100vh-8.5rem)] overflow-y-auto p-3">
             <DataTable
               className={'container mx-auto'}
-              facade={userService}
+              facade={sUser}
               ref={dataTableRef}
               defaultRequest={{
                 page: 1,
@@ -149,7 +149,7 @@ const Page = () => {
                     <Button
                       icon={<Plus className="icon-cud !h-5 !w-5" />}
                       text={t('components.button.New')}
-                      onClick={() => userService.set({ data: undefined, isVisible: true })}
+                      onClick={() => sUser.set({ data: undefined, isVisible: true })}
                     />
                   )}
                 </div>

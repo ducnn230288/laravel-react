@@ -7,7 +7,7 @@ import { ICode } from '../index';
 const name = 'CodeType';
 const action = new Action<ICodeType>(name);
 export const codeTypeSlice = createSlice(new Slice<ICodeType>(action, { keepUnusedDataFor: 9999 }));
-export const CodeTypeService = () => {
+export const SCodeType = () => {
   const dispatch = useAppDispatch();
   return {
     ...(useTypedSelector((state) => state[action.name]) as State<ICodeType>),

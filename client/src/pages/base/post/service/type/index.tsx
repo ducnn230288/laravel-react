@@ -7,7 +7,7 @@ import { IPost } from '../index';
 const name = 'PostType';
 const action = new Action<IPostType>(name);
 export const postTypeSlice = createSlice(new Slice<IPostType>(action, { keepUnusedDataFor: 9999 }));
-export const PostTypeService = () => {
+export const SPostType = () => {
   const dispatch = useAppDispatch();
   return {
     ...useTypedSelector((state) => state[action.name] as State<IPostType>),

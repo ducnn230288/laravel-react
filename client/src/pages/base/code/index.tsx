@@ -9,48 +9,48 @@ import { ITableRefObject } from '@/interfaces';
 import { Button } from '@/library/button';
 import { DataTable } from '@/library/data-table';
 import { DrawerForm } from '@/library/drawer';
-import { CodeService, CodeTypeService, SGlobal } from '@/services';
+import { SCode, SCodeType, SGlobal } from '@/services';
 import { keyRole, renderTitleBreadcrumbs } from '@/utils';
 
 import _column from './column';
 
 const Page = () => {
   const sGlobal = SGlobal();
-  const codeTypeService = CodeTypeService();
+  const sCodeType = SCodeType();
   useEffect(() => {
-    if (!codeTypeService.result?.data) codeTypeService.get({});
+    if (!sCodeType.result?.data) sCodeType.get({});
     return () => {
-      codeService.set({ isLoading: true, status: EStatusState.idle });
+      sCode.set({ isLoading: true, status: EStatusState.idle });
     };
   }, []);
 
-  const codeService = CodeService();
+  const sCode = SCode();
   useEffect(() => {
     renderTitleBreadcrumbs(t('pages.Code'), [
       { title: t('titles.Setting'), link: '' },
       { title: t('titles.Code'), link: '' },
     ]);
-    switch (codeService.status) {
+    switch (sCode.status) {
       case EStatusState.putFulfilled:
       case EStatusState.postFulfilled:
       case EStatusState.deleteFulfilled:
         dataTableRef?.current?.onChange(request);
         break;
     }
-  }, [codeService.status]);
+  }, [sCode.status]);
 
-  const request = JSON.parse(codeService.queryParams || '{}');
+  const request = JSON.parse(sCode.queryParams || '{}');
   const { t } = useTranslation();
   const dataTableRef = useRef<ITableRefObject>(null);
   return (
     <div className={'container mx-auto grid grid-cols-12 gap-3 px-2.5 pt-2.5'}>
       <DrawerForm
-        facade={codeService}
+        facade={sCode}
         columns={_column.form()}
-        title={t(codeService.data ? 'pages.Code/Edit' : 'pages.Code/Add', { type: request.typeCode })}
+        title={t(sCode.data ? 'pages.Code/Edit' : 'pages.Code/Add', { type: request.typeCode })}
         onSubmit={(values) => {
-          if (codeService.data) codeService.put({ ...values, id: codeService.data.code, typeCode: request.typeCode });
-          else codeService.post({ ...values, typeCode: request.typeCode });
+          if (sCode.data) sCode.put({ ...values, id: sCode.data.code, typeCode: request.typeCode });
+          else sCode.post({ ...values, typeCode: request.typeCode });
         }}
       />
       <div className="col-span-12 md:col-span-4 lg:col-span-3 -intro-x">
@@ -58,7 +58,7 @@ const Page = () => {
           <div className="h-14 flex justify-between items-center border-b border-gray-100 px-4 py-2">
             <h3 className={'font-bold text-lg'}>Type Code</h3>
           </div>
-          <Spin spinning={codeTypeService.isLoading}>
+          <Spin spinning={sCodeType.isLoading}>
             <div className="h-[calc(100vh-12rem)] overflow-y-auto relative scroll hidden sm:block">
               <Tree
                 blockNode
@@ -66,7 +66,7 @@ const Page = () => {
                 autoExpandParent
                 defaultExpandAll
                 switcherIcon={<Arrow className={'w-4 h-4'} />}
-                treeData={codeTypeService.result?.data?.map((item: any) => ({
+                treeData={sCodeType.result?.data?.map((item: any) => ({
                   title: item?.name,
                   key: item?.code,
                   value: item?.code,
@@ -98,7 +98,7 @@ const Page = () => {
               <Select
                 value={request.typeCode}
                 className={'w-full'}
-                options={codeTypeService.result?.data?.map((data) => ({ label: data.name, value: data.code }))}
+                options={sCodeType.result?.data?.map((data) => ({ label: data.name, value: data.code }))}
                 onChange={(e) => {
                   request.typeCode = e;
                   dataTableRef?.current?.onChange(request);
@@ -112,7 +112,7 @@ const Page = () => {
         <div className="shadow rounded-xl w-full overflow-auto bg-white">
           <div className="sm:min-h-[calc(100vh-8.5rem)] overflow-y-auto p-3">
             <DataTable
-              facade={codeService}
+              facade={sCode}
               ref={dataTableRef}
               paginationDescription={(from: number, to: number, total: number) =>
                 t('routes.admin.Layout.Pagination', { from, to, total })
@@ -124,7 +124,7 @@ const Page = () => {
                     <Button
                       icon={<Plus className="icon-cud !h-5 !w-5" />}
                       text={t('routes.admin.Layout.Add')}
-                      onClick={() => codeService.set({ data: undefined, isVisible: true })}
+                      onClick={() => sCode.set({ data: undefined, isVisible: true })}
                     />
                   )}
                 </div>

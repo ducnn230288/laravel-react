@@ -8,14 +8,14 @@ import { IDataTable, IForm } from '@/interfaces';
 import { Avatar } from '@/library/avatar';
 import { PopConfirm } from '@/library/pop-confirm';
 import { ToolTip } from '@/library/tooltip';
-import { CodeService, SGlobal, UserService } from '@/services';
+import { SCode, SGlobal, SUser } from '@/services';
 import { keyRole } from '@/utils';
 
 export default {
   table: (): IDataTable[] => {
     const sGlobal = SGlobal();
     const { t } = useTranslation();
-    const userService = UserService();
+    const sUser = SUser();
 
     return [
       {
@@ -37,7 +37,7 @@ export default {
           filter: {
             type: ETableFilterType.checkbox,
             get: {
-              facade: CodeService,
+              facade: SCode,
               format: (item: any) => ({
                 label: item.name,
                 value: item.code,
@@ -98,7 +98,7 @@ export default {
                         ? 'components.datatable.areYouSureWantDisable'
                         : 'components.datatable.areYouSureWantEnable',
                     )}
-                    onConfirm={() => userService.put({ id: data.id, isDisable: !data.isDisable })}
+                    onConfirm={() => sUser.put({ id: data.id, isDisable: !data.isDisable })}
                   >
                     <button
                       title={t(data.isDisable ? 'components.datatable.Disabled' : 'components.datatable.Enabled') || ''}
@@ -116,7 +116,7 @@ export default {
                 <ToolTip title={t('routes.admin.Layout.Edit')}>
                   <button
                     title={t('routes.admin.Layout.Edit') || ''}
-                    onClick={() => userService.getById({ id: data.id, params: { include: 'position' } })}
+                    onClick={() => sUser.getById({ id: data.id, params: { include: 'position' } })}
                   >
                     <Edit className="icon-cud bg-teal-900 hover:bg-teal-700" />
                   </button>
@@ -125,10 +125,7 @@ export default {
 
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_USER_DESTROY) && (
                 <ToolTip title={t('routes.admin.Layout.Delete')}>
-                  <PopConfirm
-                    title={t('components.datatable.areYouSureWant')}
-                    onConfirm={() => userService.delete(data.id)}
-                  >
+                  <PopConfirm title={t('components.datatable.areYouSureWant')} onConfirm={() => sUser.delete(data.id)}>
                     <button title={t('routes.admin.Layout.Delete') || ''}>
                       <Trash className="icon-cud bg-red-600 hover:bg-red-400" />
                     </button>
@@ -143,7 +140,7 @@ export default {
   },
   form: (): IForm[] => {
     const { t } = useTranslation();
-    const userService = UserService();
+    const sUser = SUser();
 
     return [
       {
@@ -222,7 +219,7 @@ export default {
           type: EFormType.select,
           rules: [{ type: EFormRuleType.required }],
           get: {
-            facade: CodeService,
+            facade: SCode,
             params: (fullTextSearch: string) => ({
               fullTextSearch,
               typeCode: 'position',
@@ -231,7 +228,7 @@ export default {
               label: item.name,
               value: item.code,
             }),
-            data: () => userService.data?.position,
+            data: () => sUser.data?.position,
           },
         },
       },

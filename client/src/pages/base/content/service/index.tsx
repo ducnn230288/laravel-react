@@ -7,7 +7,7 @@ import { IContentType } from './type';
 const name = 'Content';
 const action = new Action<IContent>(name);
 export const contentSlice = createSlice(new Slice<IContent>(action));
-export const ContentFacade = () => {
+export const SContent = () => {
   const dispatch = useAppDispatch();
   return {
     ...useTypedSelector((state) => state[action.name] as State<IContent>),

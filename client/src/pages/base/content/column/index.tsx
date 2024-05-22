@@ -8,14 +8,14 @@ import { IDataTable, IForm } from '@/interfaces';
 import { Avatar } from '@/library/avatar';
 import { PopConfirm } from '@/library/pop-confirm';
 import { ToolTip } from '@/library/tooltip';
-import { ContentFacade, SGlobal } from '@/services';
+import { SContent, SGlobal } from '@/services';
 import { keyRole } from '@/utils';
 
 export default {
   table: (): IDataTable[] => {
     const sGlobal = SGlobal();
     const { t } = useTranslation();
-    const contentFacade = ContentFacade();
+    const sContent = SContent();
 
     return [
       {
@@ -75,7 +75,7 @@ export default {
                         ? 'components.datatable.areYouSureWantDisable'
                         : 'components.datatable.areYouSureWantEnable',
                     )}
-                    onConfirm={() => contentFacade.put({ id: data.id, isDisable: !data.isDisable })}
+                    onConfirm={() => sContent.put({ id: data.id, isDisable: !data.isDisable })}
                   >
                     <button
                       title={t(data.isDisable ? 'components.datatable.Disabled' : 'components.datatable.Enabled') || ''}
@@ -93,7 +93,7 @@ export default {
                 <ToolTip title={t('routes.admin.Layout.Edit')}>
                   <button
                     title={t('routes.admin.Layout.Edit') || ''}
-                    onClick={() => contentFacade.getById({ id: data.id, params: { include: 'languages' } })}
+                    onClick={() => sContent.getById({ id: data.id, params: { include: 'languages' } })}
                   >
                     <Edit className="icon-cud bg-teal-900 hover:bg-teal-700" />
                   </button>
@@ -103,7 +103,7 @@ export default {
                 <ToolTip title={t('routes.admin.Layout.Delete')}>
                   <PopConfirm
                     title={t('components.datatable.areYouSureWant')}
-                    onConfirm={() => contentFacade.delete(data.id)}
+                    onConfirm={() => sContent.delete(data.id)}
                   >
                     <button title={t('routes.admin.Layout.Delete') || ''}>
                       <Trash className="icon-cud bg-red-600 hover:bg-red-400" />

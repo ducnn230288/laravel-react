@@ -9,14 +9,14 @@ import { IDataTable, IForm } from '@/interfaces';
 import { Check, Disable, Edit, Trash } from '@/assets/svg';
 import { ToolTip } from '@/library/tooltip';
 import { PopConfirm } from '@/library/pop-confirm';
-import { CodeService, SGlobal } from '@/services';
+import { SCode, SGlobal } from '@/services';
 import { keyRole } from '@/utils';
 
 export default {
   table: (): IDataTable[] => {
     const sGlobal = SGlobal();
     const { t } = useTranslation();
-    const codeService = CodeService();
+    const sCode = SCode();
 
     return [
       {
@@ -65,7 +65,7 @@ export default {
                         ? 'components.datatable.areYouSureWantDisable'
                         : 'components.datatable.areYouSureWantEnable',
                     )}
-                    onConfirm={() => codeService.put({ id: data.code, isDisable: !data.isDisable })}
+                    onConfirm={() => sCode.put({ id: data.code, isDisable: !data.isDisable })}
                   >
                     <button
                       title={t(data.isDisable ? 'components.datatable.Disabled' : 'components.datatable.Enabled') || ''}
@@ -81,10 +81,7 @@ export default {
               )}
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_CODE_UPDATE) && (
                 <ToolTip title={t('routes.admin.Layout.Edit')}>
-                  <button
-                    title={t('routes.admin.Layout.Edit') || ''}
-                    onClick={() => codeService.getById({ id: data.code })}
-                  >
+                  <button title={t('routes.admin.Layout.Edit') || ''} onClick={() => sCode.getById({ id: data.code })}>
                     <Edit className="icon-cud bg-teal-900 hover:bg-teal-700" />
                   </button>
                 </ToolTip>
@@ -93,7 +90,7 @@ export default {
                 <ToolTip title={t('routes.admin.Layout.Delete')}>
                   <PopConfirm
                     title={t('components.datatable.areYouSureWant')}
-                    onConfirm={() => codeService.delete(data.code)}
+                    onConfirm={() => sCode.delete(data.code)}
                   >
                     <button title={t('routes.admin.Layout.Delete') || ''}>
                       <Trash className="icon-cud bg-red-600 hover:bg-red-400" />

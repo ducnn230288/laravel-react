@@ -9,14 +9,14 @@ import { IDataTable, IForm } from '@/interfaces';
 import { Avatar } from '@/library/avatar';
 import { PopConfirm } from '@/library/pop-confirm';
 import { ToolTip } from '@/library/tooltip';
-import { SGlobal, PostService } from '@/services';
+import { SGlobal, SPost } from '@/services';
 import { keyRole } from '@/utils';
 
 export default {
   table: (): IDataTable[] => {
     const sGlobal = SGlobal();
     const { t } = useTranslation();
-    const postService = PostService();
+    const sPost = SPost();
 
     return [
       {
@@ -79,7 +79,7 @@ export default {
                         ? 'components.datatable.areYouSureWantDisable'
                         : 'components.datatable.areYouSureWantEnable',
                     )}
-                    onConfirm={() => postService.put({ id: data.id, isDisable: !data.isDisable })}
+                    onConfirm={() => sPost.put({ id: data.id, isDisable: !data.isDisable })}
                   >
                     <button
                       title={t(data.isDisable ? 'components.datatable.Disabled' : 'components.datatable.Enabled') || ''}
@@ -97,7 +97,7 @@ export default {
                 <ToolTip title={t('routes.admin.Layout.Edit')}>
                   <button
                     title={t('routes.admin.Layout.Edit') || ''}
-                    onClick={() => postService.getById({ id: data.id, params: { include: 'languages' } })}
+                    onClick={() => sPost.getById({ id: data.id, params: { include: 'languages' } })}
                   >
                     <Edit className="icon-cud bg-teal-900 hover:bg-teal-700" />
                   </button>
@@ -105,10 +105,7 @@ export default {
               )}
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_POST_DESTROY) && (
                 <ToolTip title={t('routes.admin.Layout.Delete')}>
-                  <PopConfirm
-                    title={t('components.datatable.areYouSureWant')}
-                    onConfirm={() => postService.delete(data.id)}
-                  >
+                  <PopConfirm title={t('components.datatable.areYouSureWant')} onConfirm={() => sPost.delete(data.id)}>
                     <button title={t('routes.admin.Layout.Delete') || ''}>
                       <Trash className="icon-cud bg-red-600 hover:bg-red-400" />
                     </button>

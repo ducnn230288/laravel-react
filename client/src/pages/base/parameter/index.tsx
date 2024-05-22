@@ -9,36 +9,36 @@ import { Arrow } from '@/assets/svg';
 import { EFormType } from '@/enums';
 import { getQueryStringParams } from '@/library/data-table';
 import { Form } from '@/library/form';
-import { ParameterService } from '@/services';
+import { SParameter } from '@/services';
 import { lang, renderTitleBreadcrumbs, routerLinks } from '@/utils';
 
 const Page = () => {
-  const parameterService = ParameterService();
+  const sParameter = SParameter();
   const location = useLocation();
   const request = getQueryStringParams(location.search);
   useEffect(() => {
-    if (!parameterService.result?.data) parameterService.get({});
+    if (!sParameter.result?.data) sParameter.get({});
     renderTitleBreadcrumbs(t('pages.Parameter'), [
       { title: t('titles.Setting'), link: '' },
       { title: t('titles.Parameter'), link: '' },
     ]);
-    parameterService.getById({ id: request.code });
+    sParameter.getById({ id: request.code });
   }, []);
 
   const navigate = useNavigate();
   useEffect(() => {
     if (
-      parameterService?.result?.data?.length &&
-      !parameterService?.result?.data?.filter((item) => item.code === request.code).length
+      sParameter?.result?.data?.length &&
+      !sParameter?.result?.data?.filter((item) => item.code === request.code).length
     ) {
       navigate({
         pathname: `/${lang}${routerLinks('Parameter')}`,
         search: `?${createSearchParams({ code: 'ADDRESS' })}`,
       });
     }
-  }, [parameterService.result]);
+  }, [sParameter.result]);
   console.log(request.code);
-  console.log(parameterService.result?.data);
+  console.log(sParameter.result?.data);
   const { t } = useTranslation();
   return (
     <div className={'container mx-auto grid grid-cols-12 gap-3 px-2.5 pt-2.5'}>
@@ -47,7 +47,7 @@ const Page = () => {
           <div className="h-14 flex justify-between items-center border-b border-gray-100 px-4 py-2">
             <h3 className={'font-bold text-lg'}>{t('titles.Parameter')}</h3>
           </div>
-          <Spin spinning={parameterService.isLoading}>
+          <Spin spinning={sParameter.isLoading}>
             <div className="h-[calc(100vh-12rem)] overflow-y-auto relative scroll hidden sm:block">
               <Tree
                 blockNode
@@ -55,7 +55,7 @@ const Page = () => {
                 autoExpandParent
                 defaultExpandAll
                 switcherIcon={<Arrow className={'w-4 h-4'} />}
-                treeData={parameterService.result?.data?.map((item: any) => ({
+                treeData={sParameter.result?.data?.map((item: any) => ({
                   title: item?.name,
                   key: item?.code,
                   value: item?.code,
@@ -76,7 +76,7 @@ const Page = () => {
                           pathname: `/${lang}${routerLinks('Parameter')}`,
                           search: `?${createSearchParams({ code: data.value! })}`,
                         });
-                        parameterService.getById({ id: data.value! });
+                        sParameter.getById({ id: data.value! });
                       }}
                       className="truncate cursor-pointer flex-1 hover:text-teal-900 item-text px-3 py-1"
                     >
@@ -90,13 +90,13 @@ const Page = () => {
               <Select
                 value={request.code}
                 className={'w-full'}
-                options={parameterService.result?.data?.map((data) => ({ label: data.code, value: data.code }))}
+                options={sParameter.result?.data?.map((data) => ({ label: data.code, value: data.code }))}
                 onChange={(code) => {
                   navigate({
                     pathname: `/${lang}${routerLinks('Parameter')}`,
                     search: `?${createSearchParams({ code })}`,
                   });
-                  parameterService.getById({ id: code });
+                  sParameter.getById({ id: code });
                 }}
               />
             </div>
@@ -109,9 +109,9 @@ const Page = () => {
             <h3 className={'font-bold text-lg'}>{t('pages.Parameter/Edit', { type: request.code })}</h3>
           </div>
           <div className="sm:min-h-[calc(100vh-12rem)] overflow-y-auto p-3">
-            <Spin spinning={parameterService.isLoading}>
+            <Spin spinning={sParameter.isLoading}>
               <Form
-                values={{ ...parameterService.data }}
+                values={{ ...sParameter.data }}
                 className="intro-x"
                 columns={[
                   {
@@ -131,8 +131,8 @@ const Page = () => {
                     },
                   },
                 ]}
-                handSubmit={(values) => parameterService.put({ ...values, id: parameterService.data!.code })}
-                disableSubmit={parameterService.isLoading}
+                handSubmit={(values) => sParameter.put({ ...values, id: sParameter.data!.code })}
+                disableSubmit={sParameter.isLoading}
               />
             </Spin>
           </div>

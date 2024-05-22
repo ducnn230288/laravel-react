@@ -23,7 +23,7 @@ i18n
     backend: {
       loadPath: '/locales/{{lng}}/{{ns}}.json',
     },
-    fallbackLng: fallbackLng || 'en',
+    fallbackLng: fallbackLng ?? 'en',
     interpolation: {
       escapeValue: false,
     },
@@ -37,7 +37,7 @@ const Context = () => {
   useEffect(() => {
     for (let i = 0; i < localStorage.length; i++) {
       if (localStorage.key(i)?.indexOf('temp-') === 0) {
-        localStorage.removeItem(localStorage.key(i) || '');
+        localStorage.removeItem(localStorage.key(i) ?? '');
       }
     }
     sGlobal.setLanguage(lang);
@@ -106,4 +106,4 @@ document.addEventListener(
   },
   { passive: true },
 );
-reportWebVitals();
+reportWebVitals((e) => console.log(e));

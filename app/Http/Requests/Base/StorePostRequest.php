@@ -21,15 +21,16 @@ class StorePostRequest extends FormRequest
      */
     public function rules(): array
     {
+      $rule = 'nullable|string';
         return [
           'type_code' => 'required|string|max:255',
-          'image' => 'nullable|string',
+          'image' => $rule,
           'languages' => 'required|array',
           'languages.*.language' => 'required|string',
           'languages.*.name' => 'required|string|max:255|unique:post_languages,name',
           'languages.*.slug' => 'required|string|max:255|unique:post_languages,slug',
-          'languages.*.description' => 'nullable|string',
-          'languages.*.content' => 'nullable|string',
+          'languages.*.description' => $rule,
+          'languages.*.content' => $rule,
         ];
     }
 }

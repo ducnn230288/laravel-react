@@ -22,7 +22,7 @@ class ContentLanguageResource extends JsonResource
         'description' => $this->whenHas('description'),
         'content' => $this->whenHas('content'),
         'parent' => new ContentResource($this->whenLoaded('content')),
-        Str::camel('is_disable') => !!$this->disabled_at,
+        Str::camel('is_disable') => $this->disabled_at != null,
       ];
     }
 }

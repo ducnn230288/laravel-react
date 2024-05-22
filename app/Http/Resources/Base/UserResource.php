@@ -27,7 +27,7 @@ class UserResource extends JsonResource
         'role' => new UserRoleResource($this->whenLoaded('role')),
         Str::camel('position_code') => $this->whenHas('position_code'),
         'position' => new CodeResource($this->whenLoaded('position')),
-        Str::camel('is_disable') => !!$this->disabled_at,
+        Str::camel('is_disable') => $this->disabled_at != null,
       ];
       return isset($this->token) ? [
         'token' => $this->whenHas('token'),

@@ -26,7 +26,9 @@ abstract class Controller
   }  protected function shouldIncludeRelation(string $relation): bool
 {
   $include = \request()->query('include');
-  if (!$include) return false;
+  if (!$include) {
+    return false;
+  }
   $relations = array_map('trim', explode(',', $include));
   return in_array($relation, $relations);
 }
@@ -59,7 +61,9 @@ abstract class Controller
     $queries = \request()->query();
     if ($queries) {
       foreach ($queries as $key => $value) {
-        if (!in_array($key, $filters)) $for->where(Str::snake($key), $value);
+        if (!in_array($key, $filters)) {
+          $for->where(Str::snake($key), $value);
+        }
       }
     }
     return $for;

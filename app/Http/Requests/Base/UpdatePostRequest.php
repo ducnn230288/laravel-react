@@ -21,9 +21,10 @@ class UpdatePostRequest extends FormRequest
      */
     public function rules(): array
     {
+      $rule = 'nullable|string';
       $validation_rules = [
         'type_code' => 'required_if:disabled_at,|string|max:255',
-        'image' => 'nullable|string',
+        'image' => $rule,
         'languages' => 'required_if:disabled_at,|array',
         'is_disable' => 'boolean',
       ];
@@ -35,8 +36,8 @@ class UpdatePostRequest extends FormRequest
             "languages.$i.language" => 'required_if:disabled_at,|string',
             "languages.$i.name" => 'required_if:disabled_at,|string|max:255',
             "languages.$i.slug" => 'required_if:disabled_at,|string|max:255|unique:post_languages,slug,'. $request['languages'][$i]['id'],
-            "languages.$i.description" => 'nullable|string',
-            "languages.$i.content" => 'nullable|string',
+            "languages.$i.description" => $rule,
+            "languages.$i.content" => $rule,
           ];
         }
       }

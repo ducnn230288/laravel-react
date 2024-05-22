@@ -21,9 +21,10 @@ class UpdateContentRequest extends FormRequest
      */
     public function rules(): array
     {
+      $rule = 'nullable|string';
       $validation_rules = [
         'name' => 'sometimes|string|max:255',
-        'image' => 'nullable|string',
+        'image' => $rule,
         'order' => 'nullable|integer',
         'is_disable' => 'boolean',
       ];
@@ -34,8 +35,8 @@ class UpdateContentRequest extends FormRequest
             "languages.$i.id" => 'required_if:disabled_at,|string',
             "languages.$i.language" => 'required_if:disabled_at,|string',
             "languages.$i.name" => 'required_if:disabled_at,|string|max:255',
-            "languages.$i.description" => 'nullable|string',
-            "languages.$i.content" => 'nullable|string',
+            "languages.$i.description" => $rule,
+            "languages.$i.content" => $rule,
           ];
         }
       }

@@ -12,8 +12,6 @@ use Database\Seeders\Base\UserRoleSeeder;
 use Database\Seeders\Base\UserSeeder;
 use Illuminate\Database\Seeder;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-
 class DatabaseSeeder extends Seeder
 {
     /**

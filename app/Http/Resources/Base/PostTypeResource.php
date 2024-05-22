@@ -24,7 +24,7 @@ class PostTypeResource extends JsonResource
         Str::camel('post_type_id') => $this->whenHas('post_type_id'),
         'posts' => PostResource::collection($this->whenLoaded('posts')),
         'children' => PostTypeResource::collection($this->whenLoaded('children')),
-        Str::camel('is_disable') => !!$this->disabled_at,
+        Str::camel('is_disable') => $this->disabled_at != null,
       ];
     }
 }

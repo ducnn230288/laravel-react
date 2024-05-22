@@ -31,13 +31,16 @@ class AuthController extends Controller implements HasMiddleware
       'password' => 'required'
     ]);
     $user = User::where('email', $request->email)->first();
-    if (!$user) throw ValidationException::withMessages([
-      'email' => __('auth.failed')
-    ]);
-    if (!Hash::check($request->password, $user->password))
+    if (!$user) {
       throw ValidationException::withMessages([
-      'email' => __('auth.password')
-    ]);
+        'email' => __('auth.failed')
+      ]);
+    }
+    if (!Hash::check($request->password, $user->password)) {
+      throw ValidationException::withMessages([
+        'email' => __('auth.password')
+      ]);
+    }
 
     $user['token'] = $user->createToken('access_token', [ETokenAbility::ACCESS_API->value], Carbon::now()->addMinutes(config('sanctum.ac_expiration')))->plainTextToken;
     $user['refresh-token'] = $user->createToken('refresh_token', [ETokenAbility::ISSUE_ACCESS_TOKEN->value], Carbon::now()->addMinutes(config('sanctum.rt_expiration')))->plainTextToken;

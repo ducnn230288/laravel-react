@@ -21,22 +21,16 @@ class StoreUserRequest extends FormRequest
      */
     public function rules(): array
     {
+      $rule = 'required|string|max:255';
         return [
-          'name' => 'required|string|max:255',
+          'name' => $rule,
           'avatar' => 'string|max:255',
           'password' => 'required|confirmed|string|max:255',
           'dob' => 'nullable|date',
-          'role_code' => 'required|string|max:255',
-          'position_code' => 'required|string|max:255',
+          'role_code' => $rule,
+          'position_code' => $rule,
           'email' => 'required|string|unique:users',
           'phone_number' => 'required|string|unique:users',
         ];
     }
-
-//    public function prepareForValidation()
-//    {
-//      $this->merge([
-//        'role_code1' => $this->role_code
-//      ]);
-//    }
 }

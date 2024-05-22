@@ -21,12 +21,13 @@ class UpdateAddressRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-          'address' => 'required|string|max:255',
-          'province_code' => 'required|string|max:255',
-          'district_code' => 'required|string|max:255',
-          'ward_code' => 'required|string|max:255',
-          'is_disable' => 'boolean',
-        ];
+      $rule = 'required|string|max:255';
+      return [
+        'address' => $rule,
+        'province_code' => $rule,
+        'district_code' => $rule,
+        'ward_code' => $rule,
+        'is_disable' => 'boolean',
+      ];
     }
 }

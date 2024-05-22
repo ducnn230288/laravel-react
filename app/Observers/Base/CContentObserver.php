@@ -30,12 +30,15 @@ class CContentObserver
       $contentLanguage['content'] = $this->fileService->convertSrcImage(
         value: $contentLanguage['content'],
         callback: function ($path) use ($oldImages) {
-          if (($key = array_search($path, $oldImages)) !== false)
+          if (($key = array_search($path, $oldImages)) !== false) {
             unset($oldImages[$key]);
+          }
           $this->fileService->active($path, true);
         }
       );
-      foreach ($oldImages as $oldImage) $this->fileService->destroy($oldImage);
+      foreach ($oldImages as $oldImage) {
+        $this->fileService->destroy($oldImage);
+      }
     }
 
     /**
@@ -44,6 +47,8 @@ class CContentObserver
     public function deleted(mixed $contentLanguage): void
     {
       $oldImages = $this->fileService->getSrcImages($contentLanguage['content']);
-      foreach ($oldImages as $oldImage) $this->fileService->destroy($oldImage);
+      foreach ($oldImages as $oldImage) {
+        $this->fileService->destroy($oldImage);
+      }
     }
 }

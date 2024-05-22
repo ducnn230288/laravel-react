@@ -14,7 +14,7 @@ export const API = {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         authorization: localStorage.getItem(keyToken) ? 'Bearer ' + localStorage.getItem(keyToken) : '',
-        'Accept-Language': localStorage.getItem('i18nextLng') || '',
+        'Accept-Language': localStorage.getItem('i18nextLng') ?? '',
       },
       redirect: 'follow',
       referrerPolicy: 'no-referrer',
@@ -56,7 +56,7 @@ export const API = {
       localStorage.removeItem(keyToken);
       location.reload();
     }
-    throw {};
+    throw new Error('Error');
   },
   get: <T>(url: string, params = {}, headers?: RequestInit['headers'], throwText: boolean = false) =>
     API.responsible<T>(url, params, { ...API.init(), method: 'GET' }, headers, throwText),

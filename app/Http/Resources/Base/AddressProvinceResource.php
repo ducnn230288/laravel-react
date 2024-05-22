@@ -21,7 +21,7 @@ class AddressProvinceResource extends JsonResource
         'code' => $this->whenHas('code'),
         'description' => $this->whenHas('description'),
         'districts' => AddressDistrictResource::collection($this->whenLoaded('districts')),
-        Str::camel('is_disable') => !!$this->disabled_at,
+        Str::camel('is_disable') => $this->disabled_at != null,
       ];
     }
 }

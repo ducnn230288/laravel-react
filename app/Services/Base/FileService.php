@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Storage;
 
 class FileService
 {
+  public string $defaultAppUrl = 'http://localhost';
   /**
    * @param string|null $value
    * @param bool $isGetAbsolutePath
@@ -19,7 +20,9 @@ class FileService
       $images = $this->getPathImageHTML($value);
       for ($i = 0; $i < count($images); $i++) {
         $path = $isGetAbsolutePath ? $this->getAbsolutePath($images[$i]) : $this->getRelativePath($images[$i]);
-        if ($callback) $callback($path);
+        if ($callback) {
+          $callback($path);
+        }
         $value = str_replace($images[$i], $path, $value);
       }
     }
@@ -68,7 +71,7 @@ class FileService
    */
   public function isRelativePath(string $path): bool
   {
-    return !str_starts_with($path, env('APP_URL', 'http://localhost')) && !str_starts_with($path, 'http://') && !str_starts_with($path, 'https://');
+    return !str_starts_with($path, env('APP_URL', $this->defaultAppUrl)) && !str_starts_with($path, 'http://') && !str_starts_with($path, 'https://');
   }
 
   /**
@@ -77,7 +80,9 @@ class FileService
    */
   public function getAbsolutePath(string $path): string
   {
-    if ($this->isRelativePath($path)) $path = env('APP_URL', 'http://localhost').':'.env('APP_PORT', '3000').'/storage/' . $path;
+    if ($this->isRelativePath($path)) {
+      $path = env('APP_URL', $this->defaultAppUrl).':'.env('APP_PORT', '3000').'/storage/' . $path;
+    }
     return $path;
 
   }
@@ -88,7 +93,9 @@ class FileService
    */
   public function getRelativePath(string $path): string
   {
-    if (!$this->isRelativePath($path)) $path = str_replace(env('APP_URL', 'http://localhost') . ':' . env('APP_PORT', '3000') . '/storage/', '', $path);
+    if (!$this->isRelativePath($path)) {
+      $path = str_replace(env('APP_URL', $this->defaultAppUrl) . ':' . env('APP_PORT', '3000') . '/storage/', '', $path);
+    }
     return $path;
   }
 
@@ -98,7 +105,9 @@ class FileService
    */
   public function deleteFile(string $path): void
   {
-    if ($this->isRelativePath($path)) Storage::delete($this->getRelativePath($path));
+    if ($this->isRelativePath($path)) {
+      Storage::delete($this->getRelativePath($path));
+    }
   }
 
   /**

@@ -23,7 +23,7 @@ class PostResource extends JsonResource
         Str::camel('created_at') => $this->whenHas('created_at'),
         'type' => new PostTypeResource($this->whenLoaded('type')),
         'languages' => PostLanguageResource::collection($this->whenLoaded('languages')),
-        Str::camel('is_disable') => !!$this->disabled_at,
+        Str::camel('is_disable') => $this->disabled_at != null,
       ];
     }
 }

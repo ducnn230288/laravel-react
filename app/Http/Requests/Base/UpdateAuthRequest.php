@@ -33,9 +33,10 @@ class UpdateAuthRequest extends FormRequest
 
   protected function prepareForValidation(): void
   {
-    if (isset($this->dob))
+    if (isset($this->dob)) {
       $this->merge([
         'dob' => Carbon::createFromTimeString($this->dob)->format('Y-m-d')
       ]);
+    }
   }
 }

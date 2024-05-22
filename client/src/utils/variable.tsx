@@ -5,16 +5,6 @@ export const timeBuild = '0fc57d7b-0b51-41ef-8b7e-ed7b7d5dba16';
 export const linkApi = import.meta.env.VITE_URL_API;
 export const languages = import.meta.env.VITE_URL_LANGUAGES.split(',');
 export const language = import.meta.env.VITE_URL_LANGUAGE;
-// export const urlChat = import.meta.env.REACT_APP_URL_CHAT;
-// export const passChat = 'RL?N*&M%8+G=Q3$FgLbQdD7A4d3PNj';
-// export const firebaseConfig = {
-//   apiKey: import.meta.env.REACT_APP_API_KEY_FIREBASE,
-//   authDomain: import.meta.env.REACT_APP_AUTH_DOMAIN_FIREBASE,
-//   projectId: import.meta.env.REACT_APP_PROJECT_ID_FIREBASE,
-//   storageBucket: import.meta.env.REACT_APP_STORAGE_BUCKET_FIREBASE,
-//   messagingSenderId: import.meta.env.REACT_APP_MESSAGING_SENDER_ID_FIREBASE,
-//   appId: import.meta.env.REACT_APP_APP_ID_FIREBASE
-// };
 export const listType = [
   { value: 'type1', label: 'Type 1' },
   { value: 'type2', label: 'Type 2' },

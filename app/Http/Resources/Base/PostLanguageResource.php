@@ -23,7 +23,7 @@ class PostLanguageResource extends JsonResource
         'description' => $this->whenHas('description'),
         'content' => $this->whenHas('content'),
         'post' => new PostResource($this->whenLoaded('post')),
-        Str::camel('is_disable') => !!$this->disabled_at,
+        Str::camel('is_disable') => $this->disabled_at != null,
       ];
     }
 }

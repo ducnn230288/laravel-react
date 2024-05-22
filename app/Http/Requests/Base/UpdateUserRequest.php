@@ -21,16 +21,17 @@ class UpdateUserRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-          'name' => 'string|max:255',
-          'avatar' => 'string|max:255',
-          'password' => 'string|confirmed|max:255',
-          'dob' => 'nullable|date',
-          'role_code' => 'string|max:255',
-          'position_code' => 'string|max:255',
-          'email' => 'string|unique:users,email,'.$this->user->id,
-          'phone_number' => 'string|unique:users,phone_number,'.$this->user->id,
-          'is_disable' => 'bool'
-        ];
+      $rule = 'string|max:255';
+      return [
+        'name' => $rule,
+        'avatar' => $rule,
+        'password' => 'string|confirmed|max:255',
+        'dob' => 'nullable|date',
+        'role_code' => $rule,
+        'position_code' => $rule,
+        'email' => 'string|unique:users,email,'.$this->user->id,
+        'phone_number' => 'string|unique:users,phone_number,'.$this->user->id,
+        'is_disable' => 'bool'
+      ];
     }
 }

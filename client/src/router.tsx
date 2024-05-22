@@ -90,7 +90,7 @@ const Pages = () => {
       <Routes>
         <Route path={'/:lang'}>
           {pages.map(({ layout, isPublic, child }, index) => (
-            <Route key={index} element={<Layout layout={layout} isPublic={isPublic} />}>
+            <Route key={'menu' + index} element={<Layout layout={layout} isPublic={isPublic} />}>
               {child.map(({ path = '', component }, subIndex: number) => (
                 <Route
                   key={path + subIndex}

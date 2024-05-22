@@ -22,7 +22,7 @@ class CodeResource extends JsonResource
         'description' => $this->whenHas('description'),
         Str::camel('type_code') => $this->whenHas('type_code'),
         'type' => new CodeTypeResource($this->whenLoaded('type')),
-        Str::camel('is_disable') => !!$this->disabled_at,
+        Str::camel('is_disable') => $this->disabled_at != null,
       ];
     }
 }

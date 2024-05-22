@@ -22,7 +22,7 @@ class UserRoleResource extends JsonResource
         'description' => $this->whenHas('description'),
         'permissions' => $this->whenHas('permissions'),
         'users' => UserResource::collection($this->whenLoaded('users')),
-        Str::camel('is_disable') => !!$this->disabled_at,
+        Str::camel('is_disable') => $this->disabled_at != null,
       ];
     }
 }

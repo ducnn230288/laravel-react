@@ -21,11 +21,12 @@ class StoreAddressRequest extends FormRequest
      */
     public function rules(): array
     {
+      $rule = 'required|string|max:255';
         return [
-          'address' => 'required|string|max:255',
-          'province_code' => 'required|string|max:255',
-          'district_code' => 'required|string|max:255',
-          'ward_code' => 'required|string|max:255',
+          'address' => $rule,
+          'province_code' => $rule,
+          'district_code' => $rule,
+          'ward_code' => $rule,
         ];
     }
 }

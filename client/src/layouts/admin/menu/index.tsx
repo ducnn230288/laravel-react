@@ -29,7 +29,9 @@ const Layout = ({ isCollapsed = false, permission = [] }: { isCollapsed: boolean
   }, [location.hash]);
 
   useEffect(() => {
-    if (document.querySelectorAll('main')[0]?.classList?.contains('isCollapsed')) refMenu!.current!.scrollTop = 0;
+    if (document.querySelectorAll('main')[0]?.classList?.contains('isCollapsed') && refMenu.current) {
+      refMenu.current.scrollTop = 0;
+    }
   }, [document.querySelectorAll('main')[0]?.classList?.contains('isCollapsed')]);
 
   const subMenu = (child: any[]) => (
@@ -53,11 +55,12 @@ const Layout = ({ isCollapsed = false, permission = [] }: { isCollapsed: boolean
                 search: `?${createSearchParams(subItem.queryParams)}`,
               })
             }
+            role="button"
           >
             <p className="h-1 w-1 mr-3 rounded-lg bg-white group-hover:w-2 duration-300 ease-in-out transition-all"></p>
-            <a className="hover:text-white sub-menu">
+            <button className="hover:text-white sub-menu">
               <span>{t(`titles.${subItem.name}`)}</span>
-            </a>
+            </button>
           </li>
         ))}
     </ul>
@@ -91,7 +94,8 @@ const Layout = ({ isCollapsed = false, permission = [] }: { isCollapsed: boolean
                     search: `?${createSearchParams(item.queryParams)}`,
                   })
                 }
-                key={index}
+                key={item.name}
+                role="button"
               >
                 <div className={'div15'}>{item.icon}</div>
                 <p
@@ -105,7 +109,7 @@ const Layout = ({ isCollapsed = false, permission = [] }: { isCollapsed: boolean
             );
           } else {
             return (
-              <Fragment key={index}>
+              <Fragment key={item.name}>
                 <div className="div22">
                   <Popover placement="rightTop" trigger={'hover'} content={subMenu(item.child)}>
                     <li className="flex items-center justify-center h-12 m-2 px-2 text-gray-300 fill-gray-300 ">

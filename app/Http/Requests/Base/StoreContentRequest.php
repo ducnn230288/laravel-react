@@ -21,16 +21,17 @@ class StoreContentRequest extends FormRequest
      */
     public function rules(): array
     {
+      $rule = 'nullable|string';
         return [
           'name' => '|max:255',
           'type_code' => 'required|string|max:255',
-          'image' => 'nullable|string',
+          'image' => $rule,
           'order' => 'nullable|integer',
           'languages' => 'required|array',
           'languages.*.language' => 'required|string',
           'languages.*.name' => 'required|string|max:255',
-          'languages.*.description' => 'nullable|string',
-          'languages.*.content' => 'nullable|string',
+          'languages.*.description' => $rule,
+          'languages.*.content' => $rule,
         ];
     }
 }

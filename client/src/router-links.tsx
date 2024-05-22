@@ -31,10 +31,9 @@ export const routerLinks = (name: string, type?: string) => {
     PostType: '/posts/types',
   }; // 💬 generate api to here
 
-  switch (type) {
-    case 'api':
-      return apis[name];
-    default:
-      return array[name];
+  if (type === 'api') {
+    return apis[name];
+  } else {
+    return array[name];
   }
 };

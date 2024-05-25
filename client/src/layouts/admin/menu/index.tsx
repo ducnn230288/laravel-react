@@ -75,7 +75,7 @@ const Layout = ({ isCollapsed = false, permission = [] }: { isCollapsed: boolean
             item.child.filter((subItem) => !subItem.permission || permission?.includes(subItem.permission)).length > 0
           );
         })
-        .map((item, index) => {
+        .map((item) => {
           if (!item.child) {
             return (
               <li

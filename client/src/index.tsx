@@ -30,7 +30,7 @@ i18n
   });
 const store = setupStore();
 let container: HTMLElement;
-const Styling = lazy(() => import('./utils/init/styling'));
+const Styling = lazy(() => import('./styling'));
 
 const Context = () => {
   const sGlobal = SGlobal();

@@ -53,7 +53,6 @@ const Layout = ({ children }: PropsWithChildren) => {
     }
   }, [sGlobal.pathname]);
 
-
   return (
     <main className={classNames({ isCollapsed: innerWidth >= 1280 })}>
       {contextHolder}
@@ -140,7 +139,7 @@ const Header = () => {
                   className: 'hover:!bg-white !border-b-slate-300 border-b !rounded-none',
                   label: (
                     <div className="flex">
-                      <Avatar src={sGlobal.user?.avatar ?? ''} size={8}/>
+                      <Avatar src={sGlobal.user?.avatar ?? ''} size={8} />
                       <div className="text-left leading-none mr-3 block pl-2">
                         <div className="font-semibold text-black text-sm leading-snug mb-0.5">{sGlobal.user?.name}</div>
                         <div className="text-gray-500 text-[10px]">{sGlobal.user?.email}</div>
@@ -154,10 +153,10 @@ const Header = () => {
                   label: (
                     <div
                       className="flex"
-                      onClick={() => navigate(`/${lang}${routerLinks('MyProfile')}?tab=1`, {replace: true})}
+                      onClick={() => navigate(`/${lang}${routerLinks('MyProfile')}?tab=1`, { replace: true })}
                     >
                       <div className="flex items-center">
-                        <User className="w-6 h-6 pr-2 text-black"/>
+                        <User className="w-6 h-6 pr-2 text-black" />
                       </div>
                       <div>{t('routes.admin.Layout.My Profile')}</div>
                     </div>
@@ -169,10 +168,10 @@ const Header = () => {
                   label: (
                     <div
                       className="flex"
-                      onClick={() => navigate(`/${lang}${routerLinks('MyProfile')}?tab=2`, {replace: true})}
+                      onClick={() => navigate(`/${lang}${routerLinks('MyProfile')}?tab=2`, { replace: true })}
                     >
                       <div className="flex items-center">
-                        <Key className="w-6 h-6 pr-2 text-black"/>
+                        <Key className="w-6 h-6 pr-2 text-black" />
                       </div>
                       <div>{t('routes.admin.Layout.Change Password')}</div>
                     </div>
@@ -184,10 +183,10 @@ const Header = () => {
                   label: (
                     <div
                       className="flex"
-                      onClick={() => navigate(`/${lang}${routerLinks('Login')}`, {replace: true})}
+                      onClick={() => navigate(`/${lang}${routerLinks('Login')}`, { replace: true })}
                     >
                       <div className="flex items-center">
-                        <Out className="w-6 h-6 pr-2 text-black"/>
+                        <Out className="w-6 h-6 pr-2 text-black" />
                       </div>
                       <div>{t('routes.admin.Layout.Sign out')}</div>
                     </div>
@@ -198,7 +197,7 @@ const Header = () => {
             placement="bottomRight"
           >
             <section className="flex items-center !rounded-full" id={'dropdown-profile'}>
-              <Avatar src={sGlobal.user?.avatar ?? ''} size={10}/>
+              <Avatar src={sGlobal.user?.avatar ?? ''} size={10} />
             </section>
           </Dropdown>
         </div>

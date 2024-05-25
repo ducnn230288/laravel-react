@@ -3,7 +3,7 @@ import { AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
 import { EStatusState } from '@/enums';
 import { ICommonEntity, IPaginationQuery, IResponses } from '@/interfaces';
 import { Message } from '@/library/message';
-import { State } from '@/services';
+import { State } from '@/services/index';
 import { API, routerLinks } from '@/utils';
 
 export class Action<T extends ICommonEntity, Y = EStatusState> {

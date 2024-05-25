@@ -9,7 +9,7 @@ import { ETypeChart } from '@/enums';
 
 import { keyToken, language, languages, linkApi } from './variable';
 
-export * from './init/reportWebVitals';
+export * from './reportWebVitals';
 export * from './api';
 export * from './variable';
 export * from '../router-links';

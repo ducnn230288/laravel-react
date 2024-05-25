@@ -1,6 +1,6 @@
 import queryString from "query-string";
 
-import { keyRefreshToken, keyToken, linkApi, routerLinks } from '@/utils';
+import { keyRefreshToken, keyToken, linkApi, routerLinks } from '@/utils/index';
 import { Message } from '@/library/message';
 import { IResponses } from '@/interfaces';
 

@@ -6,11 +6,12 @@ import classNames from 'classnames';
 import { Arrow, Plus } from '@/assets/svg';
 import { EStatusState } from '@/enums';
 import { ITableRefObject } from '@/interfaces';
+import { Breadcrumbs } from '@/library/breadcrumbs';
 import { Button } from '@/library/button';
 import { DataTable } from '@/library/data-table';
 import { DrawerForm } from '@/library/drawer';
 import { SContent, SContentType, SGlobal } from '@/services';
-import { keyRole, renderTitleBreadcrumbs } from '@/utils';
+import { keyRole } from '@/utils';
 
 import _column from './column';
 
@@ -26,7 +27,7 @@ const Page = () => {
 
   const sContent = SContent();
   useEffect(() => {
-    renderTitleBreadcrumbs(t('pages.Content'), [
+    Breadcrumbs(t('pages.Content'), [
       { title: t('titles.Setting'), link: '' },
       { title: t('titles.Content'), link: '' },
     ]);

@@ -1,10 +1,5 @@
 import { CheckboxOptionType } from 'antd';
 import { io } from 'socket.io-client';
-import * as ReactDOMServer from 'react-dom/server';
-import React, { Fragment } from 'react';
-import classNames from 'classnames';
-
-import { Arrow } from '@/assets/svg';
 import { ETypeChart } from '@/enums';
 
 import { keyToken, language, languages, linkApi } from './variable';
@@ -113,21 +108,7 @@ export const uuidv4 = () => {
     return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
   });
 };
-export const renderTitleBreadcrumbs = (title: string, breadcrumbs: { title: string; link: string }[]) => {
-  document.title = title;
-  document.querySelectorAll('.title-page').forEach((e) => (e.innerHTML = title));
-  document.querySelectorAll('.breadcrumbs-page').forEach(
-    (e) =>
-      (e.innerHTML = ReactDOMServer.renderToStaticMarkup(
-        breadcrumbs.map((item, i) => (
-          <Fragment key={i}>
-            <span className={classNames({ 'text-gray-400': i < breadcrumbs.length - 1 })}>{item.title}</span>{' '}
-            {i < breadcrumbs.length - 1 && <Arrow className={'w-2.5 h-2.5 mx-1.5'} />}
-          </Fragment>
-        )),
-      )),
-  );
-};
+
 export const isNumeric = (str: string) => {
   return !isNaN(Number(str)) && !isNaN(parseFloat(str));
 };

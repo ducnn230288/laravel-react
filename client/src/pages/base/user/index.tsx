@@ -8,11 +8,12 @@ import { createSearchParams } from 'react-router-dom';
 import { Arrow, Plus } from '@/assets/svg';
 import { EStatusState } from '@/enums';
 import { ITableRefObject } from '@/interfaces';
+import { Breadcrumbs } from '@/library/breadcrumbs';
 import { Button } from '@/library/button';
 import { DataTable } from '@/library/data-table';
 import { DrawerForm } from '@/library/drawer';
 import { SGlobal, SUser, SUserRole } from '@/services';
-import { keyRole, lang, renderTitleBreadcrumbs, routerLinks } from '@/utils';
+import { keyRole, lang, routerLinks } from '@/utils';
 
 import _column from './column';
 
@@ -43,7 +44,7 @@ const Page = () => {
 
   const sUser = SUser();
   useEffect(() => {
-    renderTitleBreadcrumbs(t('titles.User'), [
+    Breadcrumbs(t('titles.User'), [
       { title: t('titles.User'), link: '' },
       { title: t('titles.User/List'), link: '' },
     ]);

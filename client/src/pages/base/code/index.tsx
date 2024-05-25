@@ -6,11 +6,12 @@ import classNames from 'classnames';
 import { Arrow, Plus } from '@/assets/svg';
 import { EStatusState } from '@/enums';
 import { ITableRefObject } from '@/interfaces';
+import { Breadcrumbs } from '@/library/breadcrumbs';
 import { Button } from '@/library/button';
 import { DataTable } from '@/library/data-table';
 import { DrawerForm } from '@/library/drawer';
 import { SCode, SCodeType, SGlobal } from '@/services';
-import { keyRole, renderTitleBreadcrumbs } from '@/utils';
+import { keyRole } from '@/utils';
 
 import _column from './column';
 
@@ -26,7 +27,7 @@ const Page = () => {
 
   const sCode = SCode();
   useEffect(() => {
-    renderTitleBreadcrumbs(t('pages.Code'), [
+    Breadcrumbs(t('pages.Code'), [
       { title: t('titles.Setting'), link: '' },
       { title: t('titles.Code'), link: '' },
     ]);

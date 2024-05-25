@@ -4,16 +4,16 @@ import { Spin, Tree, TreeSelect } from 'antd';
 import classNames from 'classnames';
 
 import { Arrow, Edit, Plus, Trash } from '@/assets/svg';
+import { EStatusState } from '@/enums';
+import { ITableRefObject } from '@/interfaces';
+import { Breadcrumbs } from '@/library/breadcrumbs';
 import { Button } from '@/library/button';
 import { DataTable } from '@/library/data-table';
 import { DrawerForm } from '@/library/drawer';
 import { PopConfirm } from '@/library/pop-confirm';
 import { ToolTip } from '@/library/tooltip';
-
-import { EStatusState } from '@/enums';
-import { ITableRefObject } from '@/interfaces';
 import { SGlobal, SPost, SPostType } from '@/services';
-import { keyRole, renderTitleBreadcrumbs } from '@/utils';
+import { keyRole } from '@/utils';
 
 import _column from './column';
 import _columnType from './column/type';
@@ -30,7 +30,7 @@ const Page = () => {
 
   const sPost = SPost();
   useEffect(() => {
-    renderTitleBreadcrumbs(t('titles.Post'), [
+    Breadcrumbs(t('titles.Post'), [
       { title: t('titles.Setting'), link: '' },
       { title: t('titles.Post'), link: '' },
     ]);

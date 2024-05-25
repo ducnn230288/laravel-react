@@ -6,16 +6,17 @@ import { useSearchParams } from 'react-router-dom';
 
 import { User } from '@/assets/svg';
 import { EFormRuleType, EFormType, ETableFilterType } from '@/enums';
+import { Breadcrumbs } from '@/library/breadcrumbs';
 import { Form } from '@/library/form';
 import { Button } from '@/library/button';
 import { SCode, EStatusGlobal, SGlobal } from '@/services';
-import { lang, renderTitleBreadcrumbs, routerLinks } from '@/utils';
+import { lang, routerLinks } from '@/utils';
 
 const Page = () => {
   const sGlobal = SGlobal();
   useEffect(() => {
     sGlobal.profile();
-    renderTitleBreadcrumbs(t('pages.MyProfile'), []);
+    Breadcrumbs(t('pages.MyProfile'), []);
   }, []);
   useEffect(() => {
     switch (sGlobal.status) {

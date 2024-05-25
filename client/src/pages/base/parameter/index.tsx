@@ -7,10 +7,11 @@ import { createSearchParams } from 'react-router-dom';
 
 import { Arrow } from '@/assets/svg';
 import { EFormType } from '@/enums';
+import { Breadcrumbs } from '@/library/breadcrumbs';
 import { getQueryStringParams } from '@/library/data-table';
 import { Form } from '@/library/form';
 import { SParameter } from '@/services';
-import { lang, renderTitleBreadcrumbs, routerLinks } from '@/utils';
+import { lang, routerLinks } from '@/utils';
 
 const Page = () => {
   const sParameter = SParameter();
@@ -18,7 +19,7 @@ const Page = () => {
   const request = getQueryStringParams(location.search);
   useEffect(() => {
     if (!sParameter.result?.data) sParameter.get({});
-    renderTitleBreadcrumbs(t('pages.Parameter'), [
+    Breadcrumbs(t('pages.Parameter'), [
       { title: t('titles.Setting'), link: '' },
       { title: t('titles.Parameter'), link: '' },
     ]);

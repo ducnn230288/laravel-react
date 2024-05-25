@@ -23,7 +23,7 @@ export class Action<T extends ICommonEntity, Y = EStatusState> {
     this.set = createAsyncThunk(name + '/set', async (values: State<T, Y>) => values);
     this.get = createAsyncThunk(
       name + '/get',
-      async (params: IPaginationQuery<T>) => await API.get(`${routerLinks(name, 'api')}`, params),
+      async (params: IPaginationQuery<T>) => await API.get({ url: `${routerLinks(name, 'api')}`, params }),
     );
     this.getById = createAsyncThunk(
       name + '/getById',
@@ -36,23 +36,20 @@ export class Action<T extends ICommonEntity, Y = EStatusState> {
         keyState: keyof State<T, Y>;
         params?: IPaginationQuery<T>;
       }) => {
-        const { data } = await API.get<T>(`${routerLinks(name, 'api')}/${id}`, params);
+        const { data } = await API.get<T>({ url: `${routerLinks(name, 'api')}/${id}`, params });
         return { data, keyState };
       },
     );
     this.post = createAsyncThunk(name + '/post', async (values: T) => {
-      const { data, message } = await API.post<T>(`${routerLinks(name, 'api')}`, values);
-      if (message) await Message.success({ text: message });
+      const { data } = await API.post<T>({ url: `${routerLinks(name, 'api')}`, values });
       return data;
     });
     this.put = createAsyncThunk(name + '/put', async ({ id, ...values }: T) => {
-      const { data, message } = await API.put<T>(`${routerLinks(name, 'api')}/${id}`, values);
-      if (message) await Message.success({ text: message });
+      const { data } = await API.put<T>({ url: `${routerLinks(name, 'api')}/${id}`, values });
       return data;
     });
     this.delete = createAsyncThunk(name + '/delete', async (id: string) => {
-      const { data, message } = await API.delete<T>(`${routerLinks(name, 'api')}/${id}`);
-      if (message) await Message.success({ text: message });
+      const { data } = await API.delete<T>({ url: `${routerLinks(name, 'api')}/${id}` });
       return data;
     });
   }

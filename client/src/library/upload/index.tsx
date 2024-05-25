@@ -29,12 +29,10 @@ export const Upload = ({
   method?: string;
   maxSize?: number;
   multiple?: boolean;
-  right?: boolean;
   action?: string | ((file: any, config: any) => any);
   keyImage?: string;
   accept?: string;
   validation?: (file: any, listFiles: any) => Promise<boolean>;
-  children?: JSX.Element[] | JSX.Element;
 }>) => {
   const { t } = useTranslation();
   // const { formatDate } = useAuth();
@@ -123,19 +121,18 @@ export const Upload = ({
         if (typeof action === 'string') {
           const bodyFormData = new FormData();
           bodyFormData.append('file', file);
-          const { data } = await API.responsible<any>(
-            action,
-            {},
-            {
+          const { data } = await API.responsible<any>({
+            url: action,
+            config: {
               ...API.init(),
               method,
               body: bodyFormData,
               headers: {
-                authorization: 'Bearer ' + (localStorage.getItem(keyToken) || ''),
-                'Accept-Language': localStorage.getItem('i18nextLng') || '',
+                authorization: 'Bearer ' + (localStorage.getItem(keyToken) ?? ''),
+                'Accept-Language': localStorage.getItem('i18nextLng') ?? '',
               },
             },
-          );
+          });
           if (data) {
             const files = multiple
               ? listFiles.map((item: any) => {

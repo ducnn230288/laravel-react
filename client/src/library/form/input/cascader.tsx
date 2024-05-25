@@ -19,7 +19,7 @@ const Component = ({ formItem, placeholder, onChange, value, form, disabled, sho
             const params = formItem.api.params
               ? formItem.api.params(form.getFieldValue, fullTextSearch)
               : { fullTextSearch };
-            const { data } = await API.get<any>(url, {}, params);
+            const { data } = await API.get<any>({url, params});
             const listData = data.data.map(formItem.api.format);
             if (formItem.mode === 'multiple' && value?.length) {
               // const array = formItem.api.convertData ? formItem.api.convertData(listData) : listData;

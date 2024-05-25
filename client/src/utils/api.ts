@@ -1,4 +1,4 @@
-import queryString from "query-string";
+import queryString from 'query-string';
 
 import { keyRefreshToken, keyToken, linkApi, routerLinks } from '@/utils/index';
 import { Message } from '@/library/message';
@@ -11,7 +11,7 @@ export const API = {
       cache: 'no-cache',
       credentials: 'same-origin',
       headers: {
-        'Accept': 'application/json',
+        Accept: 'application/json',
         'Content-Type': 'application/json',
         authorization: localStorage.getItem(keyToken) ? 'Bearer ' + localStorage.getItem(keyToken) : '',
         'Accept-Language': localStorage.getItem('i18nextLng') ?? '',
@@ -19,22 +19,33 @@ export const API = {
       redirect: 'follow',
       referrerPolicy: 'no-referrer',
     }) as RequestInit,
-  responsible: async <T>(
-    url: string,
-    params: { [key: string]: string } = {},
-    config: RequestInit,
-    headers: RequestInit['headers'] = {},
-    throwText: boolean = false,
-  ) => {
+  responsible: async <T>({
+    url,
+    params = {},
+    config,
+    headers = {},
+    throwError = false,
+    showMessage = false,
+  }: {
+    url: string;
+    params?: any;
+    config: RequestInit;
+    headers?: RequestInit['headers'];
+    throwError?: boolean;
+    showMessage?: boolean;
+  }) => {
     config.headers = { ...config.headers, ...headers };
 
-    const linkParam = queryString.stringify(params, {arrayFormat: 'index'});
+    const linkParam = queryString.stringify(params, { arrayFormat: 'index' });
     const response = await fetch(
       (url.includes('https://') || url.includes('http://') ? '' : linkApi) + url + (linkParam && '?' + linkParam),
       config,
     );
     const res: IResponses<T> = await response.json();
-    if (response.ok) return res;
+    if (response.ok) {
+      if (showMessage && res.message) await Message.success({ text: res.message });
+      return res;
+    }
     if (
       response.status === 401 &&
       url !== `${routerLinks('Auth', 'api')}/refresh-token` &&
@@ -48,7 +59,7 @@ export const API = {
         return (await response.json()) as IResponses<T>;
       }
     } else if (res.message) {
-      if (!throwText) await Message.error({ text: res.message });
+      if (!throwError) await Message.error({ text: res.message });
       else throw new Error(res.message);
     }
 
@@ -58,20 +69,84 @@ export const API = {
     }
     throw new Error('Error');
   },
-  get: <T>(url: string, params = {}, headers?: RequestInit['headers'], throwText: boolean = false) =>
-    API.responsible<T>(url, params, { ...API.init(), method: 'GET' }, headers, throwText),
-  post: <T>(url: string, data = {}, params = {}, headers?: RequestInit['headers'], throwText: boolean = false) =>
-    API.responsible<T>(url, params, { ...API.init(), method: 'POST', body: JSON.stringify(data) }, headers, throwText),
-  put: <T>(url: string, data = {}, params = {}, headers?: RequestInit['headers'], throwText: boolean = false) =>
-    API.responsible<T>(url, params, { ...API.init(), method: 'PUT', body: JSON.stringify(data) }, headers, throwText),
-  delete: <T>(url: string, params = {}, headers?: RequestInit['headers'], throwText: boolean = false) =>
-    API.responsible<T>(url, params, { ...API.init(), method: 'DELETE' }, headers, throwText),
+  get: <T>({
+    url,
+    params = {},
+    headers,
+    throwError = false,
+    showMessage = false,
+  }: {
+    url: string;
+    params?: any;
+    headers?: RequestInit['headers'];
+    throwError?: boolean;
+    showMessage?: boolean;
+  }) => API.responsible<T>({ url, params, config: { ...API.init(), method: 'GET' }, headers, throwError, showMessage }),
+  post: <T>({
+    url,
+    values = {},
+    params = {},
+    headers,
+    throwError = false,
+    showMessage = true,
+  }: {
+    url: string;
+    values: any;
+    params?: any;
+    headers?: RequestInit['headers'];
+    throwError?: boolean;
+    showMessage?: boolean;
+  }) =>
+    API.responsible<T>({
+      url,
+      params,
+      config: { ...API.init(), method: 'POST', body: JSON.stringify(values) },
+      headers,
+      throwError,
+      showMessage,
+    }),
+  put: <T>({
+    url,
+    values = {},
+    params = {},
+    headers,
+    throwError = false,
+    showMessage = true,
+  }: {
+    url: string;
+    values: any;
+    params?: any;
+    headers?: RequestInit['headers'];
+    throwError?: boolean;
+    showMessage?: boolean;
+  }) =>
+    API.responsible<T>({
+      url,
+      params,
+      config: { ...API.init(), method: 'PUT', body: JSON.stringify(values) },
+      headers,
+      throwError,
+      showMessage,
+    }),
+  delete: <T>({
+    url,
+    params = {},
+    headers,
+    throwError = false,
+    showMessage = true,
+  }: {
+    url: string;
+    params?: any;
+    headers?: RequestInit['headers'];
+    throwError?: boolean;
+    showMessage?: boolean;
+  }) =>
+    API.responsible<T>({ url, params, config: { ...API.init(), method: 'DELETE' }, headers, throwError, showMessage }),
   refresh: async () => {
-    const res = await API.get<{ token: string; refreshToken: null }>(
-      `${routerLinks('Auth', 'api')}/refresh-token`,
-      {},
-      { authorization: 'Bearer ' + localStorage.getItem(keyRefreshToken) },
-    );
+    const res = await API.get<{ token: string; refreshToken: null }>({
+      url: `${routerLinks('Auth', 'api')}/refresh-token`,
+      headers: { authorization: 'Bearer ' + localStorage.getItem(keyRefreshToken) },
+    });
     if (res) {
       localStorage.setItem(keyToken, res.data!.token);
       return 'Bearer ' + res.data!.token;

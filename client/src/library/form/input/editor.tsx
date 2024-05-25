@@ -9,7 +9,6 @@ const Component = ({
   onChange?: (values: string) => void;
   value?: string;
   placeholder: string;
-  disabled: boolean;
 }) => {
   const _id = useRef(uuidv4());
   useEffect(() => {
@@ -44,19 +43,18 @@ const Component = ({
       editor.onImageUploadBefore = (files: any, info: any, core: any, uploadHandler: any) => {
         const bodyFormData = new FormData();
         bodyFormData.append('file', files[0]);
-        API.responsible(
-          `/files`,
-          {},
-          {
+        API.responsible({
+          url: `/files`,
+          config: {
             ...API.init(),
             method: 'post',
             body: bodyFormData,
             headers: {
-              authorization: 'Bearer ' + (localStorage.getItem(keyToken) || ''),
-              'Accept-Language': localStorage.getItem('i18nextLng') || '',
+              authorization: 'Bearer ' + (localStorage.getItem(keyToken) ?? ''),
+              'Accept-Language': localStorage.getItem('i18nextLng') ?? '',
             },
           },
-        ).then(({ data }: any) => {
+        }).then(({ data }: any) => {
           uploadHandler({
             result: [
               {

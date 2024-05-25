@@ -99,9 +99,8 @@ export const Form = ({
       case EFormType.editor:
         return (
           <Editor
-            disabled={!!formItem.disabled && formItem.disabled(values, form)}
             placeholder={
-              t(formItem.placeholder || '') || t('components.form.Enter') + ' ' + t(item.title)!.toLowerCase()
+              t(formItem.placeholder ?? '') ?? t('components.form.Enter') + ' ' + t(item.title)!.toLowerCase()
             }
           />
         );
@@ -113,7 +112,7 @@ export const Form = ({
         return (
           <Password
             placeholder={
-              t(formItem.placeholder || '') || t('components.form.Enter') + ' ' + t(item.title)!.toLowerCase()
+              t(formItem.placeholder ?? '') ?? t('components.form.Enter') + ' ' + t(item.title)!.toLowerCase()
             }
             disabled={!!formItem.disabled && formItem.disabled(values, form)}
           />
@@ -131,7 +130,7 @@ export const Form = ({
             rows={4}
             maxLength={1000}
             placeholder={
-              t(formItem.placeholder || '') || t('components.form.Enter') + ' ' + t(item.title)!.toLowerCase()
+              t(formItem.placeholder ?? '') ?? t('components.form.Enter') + ' ' + t(item.title)!.toLowerCase()
             }
             onChange={(e) => formItem.onChange && formItem.onChange(e.target.value, form, reRender)}
           />
@@ -162,17 +161,17 @@ export const Form = ({
           <DatePicker
             format={
               !formItem.picker || formItem.picker === 'date'
-                ? (sGlobal.formatDate || '') + (formItem.showTime ? ' HH:mm' : '')
-                : sGlobal.formatDate || ''
+                ? (sGlobal.formatDate ?? '') + (formItem.showTime ? ' HH:mm' : '')
+                : sGlobal.formatDate ?? ''
             }
             onChange={(date: any) => formItem.onChange && formItem.onChange(date, form, reRender)}
             disabledDate={(current: any) => (formItem.disabledDate ? formItem.disabledDate(current, form) : false)}
             showTime={!!formItem.showTime}
-            picker={formItem.picker || 'date'}
+            picker={formItem.picker ?? 'date'}
             disabled={!!formItem.disabled && formItem.disabled(values, form)}
             form={form}
             name={item.name}
-            placeholder={t(formItem.placeholder || '') || t('components.form.Select Date') || ''}
+            placeholder={formItem.placeholder ? t(formItem.placeholder) : t('components.form.Select Date')}
           />
         );
       case EFormType.dateRange:
@@ -211,7 +210,7 @@ export const Form = ({
             disabledDate={(current: any) => (formItem.disabledDate ? formItem.disabledDate(current, form) : false)}
             disabled={!!formItem.disabled && formItem.disabled(values, form)}
             name={item.name}
-            placeholder={t(formItem.placeholder || '') || t('components.form.Select Date') || ''}
+            placeholder={formItem.placeholder ? t(formItem.placeholder) : t('components.form.Select Date')}
           />
         );
       case EFormType.timeRange:
@@ -268,9 +267,11 @@ export const Form = ({
       case EFormType.tag:
         return (
           <SelectTag
-            maxTagCount={formItem.maxTagCount || 'responsive'}
+            maxTagCount={formItem.maxTagCount ?? 'responsive'}
             placeholder={
-              t(formItem.placeholder || '') || t('components.form.Enter') + ' ' + t(item.title)!.toLowerCase()
+              formItem.placeholder
+                ? t(formItem.placeholder)
+                : t('components.form.Enter') + ' ' + t(item.title)!.toLowerCase()
             }
             tag={formItem.tag}
             form={form}
@@ -281,7 +282,9 @@ export const Form = ({
         return (
           <Chips
             placeholder={
-              t(formItem.placeholder || '') || t('components.form.Enter') + ' ' + t(item.title)!.toLowerCase()
+              formItem.placeholder
+                ? t(formItem.placeholder)
+                : t('components.form.Enter') + ' ' + t(item.title)!.toLowerCase()
             }
             disabled={!!formItem.disabled && formItem.disabled(values, form)}
             list={formItem.list}
@@ -291,10 +294,12 @@ export const Form = ({
         return (
           <Select
             showSearch={formItem.showSearch}
-            maxTagCount={formItem.maxTagCount || 'responsive'}
+            maxTagCount={formItem.maxTagCount ?? 'responsive'}
             onChange={(value: any) => formItem.onChange && formItem.onChange(value, form, reRender)}
             placeholder={
-              t(formItem.placeholder || '') || t('components.form.Choose') + ' ' + t(item.title)!.toLowerCase()
+              formItem.placeholder
+                ? t(formItem.placeholder)
+                : t('components.form.Choose') + ' ' + t(item.title)!.toLowerCase()
             }
             form={form}
             disabled={!!formItem.disabled && formItem.disabled(values, form)}
@@ -308,7 +313,9 @@ export const Form = ({
           <SelectTable
             onChange={(value: any) => formItem.onChange && formItem.onChange(value, form, reRender)}
             placeholder={
-              t(formItem.placeholder || '') || t('components.form.Choose') + ' ' + t(item.title)!.toLowerCase()
+              formItem.placeholder
+                ? t(formItem.placeholder)
+                : t('components.form.Choose') + ' ' + t(item.title)!.toLowerCase()
             }
             disabled={!!formItem.disabled && formItem.disabled(values, form)}
             mode={formItem.mode}
@@ -323,7 +330,9 @@ export const Form = ({
             form={form}
             disabled={!!formItem.disabled && formItem.disabled(values, form)}
             placeholder={
-              t(formItem.placeholder || '') || t('components.form.Choose') + ' ' + t(item.title)!.toLowerCase()
+              formItem.placeholder
+                ? t(formItem.placeholder)
+                : t('components.form.Choose') + ' ' + t(item.title)!.toLowerCase()
             }
           />
         );
@@ -335,7 +344,9 @@ export const Form = ({
             form={form}
             disabled={!!formItem.disabled && formItem.disabled(values, form)}
             placeholder={
-              t(formItem.placeholder || '') || t('components.form.Choose') + ' ' + t(item.title)!.toLowerCase()
+              formItem.placeholder
+                ? t(formItem.placeholder)
+                : t('components.form.Choose') + ' ' + t(item.title)!.toLowerCase()
             }
           />
         );
@@ -349,7 +360,7 @@ export const Form = ({
           />
         );
       case EFormType.otp:
-        return <InputOTP inputType="numeric" length={formItem.maxLength || 5} />;
+        return <InputOTP inputType="numeric" length={formItem.maxLength ?? 5} />;
       default:
         // @ts-ignore
         return (
@@ -361,7 +372,9 @@ export const Form = ({
             addonAfter={formItem.addonAfter}
             maxLength={formItem.maxLength}
             placeholder={
-              t(formItem.placeholder || '') || t('components.form.Enter') + ' ' + t(item.title)!.toLowerCase()
+              formItem.placeholder
+                ? t(formItem.placeholder)
+                : t('components.form.Enter') + ' ' + t(item.title)!.toLowerCase()
             }
             onBlur={(e: any) => formItem.onBlur && formItem.onBlur(e.target.value, form, name)}
             onChange={(e: any) => formItem.onChange && formItem.onChange(e.target.value, form, reRender)}

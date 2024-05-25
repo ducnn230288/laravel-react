@@ -8,7 +8,7 @@ const name = 'UserRole';
 const action = {
   ...new Action<IUserRole>(name),
   getPermission: createAsyncThunk(name + '/permission', async () =>
-    API.get<IResponses<string[]>>(`${routerLinks(name, 'api')}/permission`),
+    API.get<IResponses<string[]>>({url: `${routerLinks(name, 'api')}/permission`}),
   ),
 };
 export const userRoleSlice = createSlice(new Slice<IUserRole>(action, { keepUnusedDataFor: 9999 }));

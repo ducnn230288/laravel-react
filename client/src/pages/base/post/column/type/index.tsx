@@ -3,12 +3,15 @@ import slug from 'slug';
 import { EFormRuleType, EFormType } from '@/enums';
 import { IForm } from '@/interfaces';
 import { loopMapSelect } from '@/utils';
+import { useTranslation } from 'react-i18next';
 
 export default {
-  form: (id?: string, tree?: any[]): IForm[] => {
+  useForm: (id?: string, tree?: any[]): IForm[] => {
+    const { t } = useTranslation('locale', { keyPrefix: 'pages.base.post' });
+
     return [
       {
-        title: 'Name',
+        title: t('Name type'),
         name: 'name',
         formItem: {
           rules: [{ type: EFormRuleType.required }],
@@ -18,7 +21,7 @@ export default {
         },
       },
       {
-        title: 'Code',
+        title: t('Code type'),
         name: 'code',
         formItem: {
           rules: [{ type: EFormRuleType.required }, { type: EFormRuleType.max, value: 100 }],
@@ -26,7 +29,7 @@ export default {
         },
       },
       {
-        title: 'Là nhánh con',
+        title: t('Subtype'),
         name: 'post_type_id',
         formItem: {
           type: id ? EFormType.hidden : EFormType.treeSelect,

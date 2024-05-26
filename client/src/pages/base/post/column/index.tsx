@@ -13,14 +13,14 @@ import { SGlobal, SPost } from '@/services';
 import { keyRole } from '@/utils';
 
 export default {
-  table: (): IDataTable[] => {
+  useTable: (): IDataTable[] => {
     const sGlobal = SGlobal();
-    const { t } = useTranslation();
+    const { t } = useTranslation('locale', { keyPrefix: 'pages.base.post' });
     const sPost = SPost();
 
     return [
       {
-        title: 'routes.admin.Post.Name',
+        title: t('Name Post'),
         name: 'translations.name',
         tableItem: {
           filter: { type: ETableFilterType.search },
@@ -29,10 +29,9 @@ export default {
             <Avatar
               src={item.image}
               text={
-                (item.languages?.length &&
-                  item.languages?.filter((item: any) => item?.language === localStorage.getItem('i18nextLng'))[0]
-                    .name) ||
-                ''
+                item.languages?.length
+                  ? item.languages?.find((item: any) => item?.language === localStorage.getItem('i18nextLng')).name
+                  : ''
               }
             />
           ),
@@ -46,12 +45,12 @@ export default {
           sorter: true,
           render: (_: string, item: any) =>
             item.languages?.length
-              ? item.languages?.filter((item: any) => item?.language === localStorage.getItem('i18nextLng'))[0].slug
+              ? item.languages?.find((item: any) => item?.language === localStorage.getItem('i18nextLng')).slug
               : '',
         },
       },
       {
-        title: 'Created',
+        title: t('Created At'),
         name: 'createdAt',
         tableItem: {
           width: 120,
@@ -65,24 +64,36 @@ export default {
         },
       },
       {
-        title: 'routes.admin.user.Action',
+        title: t('Action'),
         tableItem: {
           width: 100,
           align: ETableAlign.center,
           render: (text: string, data) => (
             <div className={'flex gap-2'}>
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_POST_UPDATE) && (
-                <ToolTip title={t(data.isDisable ? 'components.datatable.Disabled' : 'components.datatable.Enabled')}>
+                <ToolTip
+                  title={t(data.isDisable ? 'Disabled post' : 'Enabled post', {
+                    name: data.languages?.length
+                      ? data.languages?.find((item: any) => item?.language === localStorage.getItem('i18nextLng')).name
+                      : '',
+                  })}
+                >
                   <PopConfirm
-                    title={t(
-                      !data.isDisable
-                        ? 'components.datatable.areYouSureWantDisable'
-                        : 'components.datatable.areYouSureWantEnable',
-                    )}
+                    title={t(!data.isDisable ? 'Are you sure want disable post?' : 'Are you sure want enable post?', {
+                      name: data.languages?.length
+                        ? data.languages?.find((item: any) => item?.language === localStorage.getItem('i18nextLng'))
+                            .name
+                        : '',
+                    })}
                     onConfirm={() => sPost.put({ id: data.id, isDisable: !data.isDisable })}
                   >
                     <button
-                      title={t(data.isDisable ? 'components.datatable.Disabled' : 'components.datatable.Enabled') || ''}
+                      title={t(data.isDisable ? 'Disabled post' : 'Enabled post', {
+                        name: data.languages?.length
+                          ? data.languages?.find((item: any) => item?.language === localStorage.getItem('i18nextLng'))
+                              .name
+                          : '',
+                      })}
                     >
                       {data.isDisable ? (
                         <Disable className="icon-cud bg-yellow-700 hover:bg-yellow-500" />
@@ -94,9 +105,20 @@ export default {
                 </ToolTip>
               )}
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_POST_UPDATE) && (
-                <ToolTip title={t('routes.admin.Layout.Edit')}>
+                <ToolTip
+                  title={t('Edit post', {
+                    name: data.languages?.length
+                      ? data.languages?.find((item: any) => item?.language === localStorage.getItem('i18nextLng')).name
+                      : '',
+                  })}
+                >
                   <button
-                    title={t('routes.admin.Layout.Edit') || ''}
+                    title={t('Edit post', {
+                      name: data.languages?.length
+                        ? data.languages?.find((item: any) => item?.language === localStorage.getItem('i18nextLng'))
+                            .name
+                        : '',
+                    })}
                     onClick={() => sPost.getById({ id: data.id, params: { include: 'languages' } })}
                   >
                     <Edit className="icon-cud bg-teal-900 hover:bg-teal-700" />
@@ -104,9 +126,30 @@ export default {
                 </ToolTip>
               )}
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_POST_DESTROY) && (
-                <ToolTip title={t('routes.admin.Layout.Delete')}>
-                  <PopConfirm title={t('components.datatable.areYouSureWant')} onConfirm={() => sPost.delete(data.id)}>
-                    <button title={t('routes.admin.Layout.Delete') || ''}>
+                <ToolTip
+                  title={t('Delete post', {
+                    name: data.languages?.length
+                      ? data.languages?.find((item: any) => item?.language === localStorage.getItem('i18nextLng')).name
+                      : '',
+                  })}
+                >
+                  <PopConfirm
+                    title={t('Are you sure want delete post?', {
+                      name: data.languages?.length
+                        ? data.languages?.find((item: any) => item?.language === localStorage.getItem('i18nextLng'))
+                            .name
+                        : '',
+                    })}
+                    onConfirm={() => sPost.delete(data.id)}
+                  >
+                    <button
+                      title={t('Delete post', {
+                        name: data.languages?.length
+                          ? data.languages?.find((item: any) => item?.language === localStorage.getItem('i18nextLng'))
+                              .name
+                          : '',
+                      })}
+                    >
                       <Trash className="icon-cud bg-red-600 hover:bg-red-400" />
                     </button>
                   </PopConfirm>
@@ -118,10 +161,11 @@ export default {
       },
     ];
   },
-  form: (id?: string): IForm[] => {
+  useForm: (id?: string): IForm[] => {
+    const { t } = useTranslation('locale', { keyPrefix: 'pages.base.post' });
     return [
       {
-        title: 'Created At',
+        title: t('Created At'),
         name: 'createdAt',
         formItem: {
           col: 6,
@@ -130,7 +174,7 @@ export default {
         },
       },
       {
-        title: 'Thumbnail Url',
+        title: t('Image'),
         name: 'image',
         formItem: {
           col: 6,
@@ -144,13 +188,13 @@ export default {
           type: EFormType.tab,
           tab: 'language',
           list: [
-            { label: 'English', value: 'en' },
-            { label: 'Vietnam', value: 'vn' },
+            { label: t('English post'), value: 'en' },
+            { label: t('Vietnamese post'), value: 'vn' },
           ],
           column: [
             { title: 'id', name: 'id', formItem: { type: EFormType.hidden } },
             {
-              title: 'Name',
+              title: t('Name Post'),
               name: 'name',
               formItem: {
                 col: 6,
@@ -171,14 +215,14 @@ export default {
               },
             },
             {
-              title: 'Description',
+              title: t('Description'),
               name: 'description',
               formItem: {
                 type: EFormType.textarea,
               },
             },
             {
-              title: 'Content',
+              title: t('Content'),
               name: 'content',
               formItem: {
                 type: EFormType.editor,

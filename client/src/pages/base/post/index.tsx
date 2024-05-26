@@ -30,9 +30,9 @@ const Page = () => {
 
   const sPost = SPost();
   useEffect(() => {
-    Breadcrumbs(t('titles.Post'), [
-      { title: t('titles.Setting'), link: '' },
-      { title: t('titles.Post'), link: '' },
+    Breadcrumbs(t('Post'), [
+      { title: t('Setting'), link: '' },
+      { title: t('Post'), link: '' },
     ]);
     switch (sPost.status) {
       case EStatusState.putFulfilled:
@@ -53,15 +53,15 @@ const Page = () => {
   }, [sPostType.status]);
 
   const request = JSON.parse(sPost.queryParams ?? '{}');
-  const { t } = useTranslation();
+  const { t } = useTranslation('locale', { keyPrefix: 'pages.base.post' });
   const dataTableRef = useRef<ITableRefObject>(null);
 
   return (
     <div className={'container mx-auto grid grid-cols-12 gap-3 px-2.5 pt-2.5'}>
       <DrawerForm
         facade={sPostType}
-        columns={_columnType.form(sPostType.data?.id, sPostType.result?.data)}
-        title={t(sPostType.data ? 'pages.Post/Edit' : 'pages.Post/Add', { type: '' })}
+        columns={_columnType.useForm(sPostType.data?.id, sPostType.result?.data)}
+        title={t(sPostType.data ? 'Edit Type Post' : 'Add new Type Post')}
         onSubmit={(values) => {
           if (sPostType.data) sPostType.put({ ...values, id: sPostType.data.code });
           else sPostType.post({ ...values });
@@ -70,8 +70,8 @@ const Page = () => {
       <DrawerForm
         size={'large'}
         facade={sPost}
-        columns={_column.form(sPost.data?.id)}
-        title={t(sPost.data ? 'pages.Post/Edit' : 'pages.Post/Add', { type: request.typeCode })}
+        columns={_column.useForm(sPost.data?.id)}
+        title={t(sPost.data ? 'Edit Post' : 'Add new Post', { type: request.typeCode })}
         onSubmit={(values) => {
           if (sPost?.data?.id) sPost.put({ ...values, id: sPost.data.id, typeCode: request.typeCode });
           else sPost.post({ ...values, typeCode: request.typeCode });
@@ -80,11 +80,11 @@ const Page = () => {
       <div className="col-span-12 md:col-span-4 lg:col-span-3 -intro-x">
         <div className="shadow rounded-xl w-full bg-white overflow-hidden">
           <div className="h-14 flex justify-between items-center border-b border-gray-100 px-4 py-2">
-            <h3 className={'font-bold text-lg'}>Post Type</h3>
+            <h3 className={'font-bold text-lg'}>{t('Type Post')}</h3>
             <div className="flex items-center">
               <Button
                 icon={<Plus className="icon-cud !h-5 !w-5" />}
-                text={t('routes.admin.Code.New Type')}
+                text={t('Add new Type Post')}
                 onClick={() => sPostType.set({ data: undefined, isVisible: true })}
               />
             </div>
@@ -105,7 +105,7 @@ const Page = () => {
                       'item text-gray-700 font-medium hover:bg-gray-100 flex justify-between items-center border-b border-gray-100 w-full text-left  group',
                     )}
                   >
-                    <div
+                    <button
                       onClick={() => {
                         request.typeCode = data.code;
                         dataTableRef?.current?.onChange(request);
@@ -113,13 +113,13 @@ const Page = () => {
                       className="truncate cursor-pointer flex-1 hover:text-teal-900 item-text px-3 py-1"
                     >
                       {data.name}
-                    </div>
+                    </button>
                     <div className="w-16 flex justify-end gap-1">
                       {sGlobal.user?.role?.permissions?.includes(keyRole.P_POST_TYPE_UPDATE) && (
-                        <ToolTip title={t('routes.admin.Layout.Edit')}>
+                        <ToolTip title={t('Edit Type Post', { name: data.name })}>
                           <button
                             className={'opacity-0 group-hover:opacity-100 transition-all duration-300 '}
-                            title={t('routes.admin.Layout.Edit') || ''}
+                            title={t('Edit Type Post', { name: data.name })}
                             onClick={() => sPostType.getById({ id: data.code })}
                           >
                             <Edit className="icon-cud bg-teal-900 hover:bg-teal-700" />
@@ -127,14 +127,14 @@ const Page = () => {
                         </ToolTip>
                       )}
                       {sGlobal.user?.role?.permissions?.includes(keyRole.P_POST_TYPE_DESTROY) && !data.isPrimary && (
-                        <ToolTip title={t('routes.admin.Layout.Delete')}>
+                        <ToolTip title={t('Delete type post', { name: data.name })}>
                           <PopConfirm
-                            title={t('components.datatable.areYouSureWant')}
-                            onConfirm={() => sPostType.delete(data.code!)}
+                            title={t('Are you sure want delete type post?', { name: data.name })}
+                            onConfirm={() => sPostType.delete(data.code)}
                           >
                             <button
                               className={'opacity-0 group-hover:opacity-100 transition-all duration-300'}
-                              title={t('routes.admin.Layout.Delete') || ''}
+                              title={t('Delete type post', { name: data.name })}
                             >
                               <Trash className="icon-cud bg-red-600 hover:bg-red-400" />
                             </button>
@@ -168,16 +168,16 @@ const Page = () => {
               facade={sPost}
               ref={dataTableRef}
               paginationDescription={(from: number, to: number, total: number) =>
-                t('routes.admin.Layout.Pagination', { from, to, total })
+                t('Pagination post', { from, to, total })
               }
               defaultRequest={{ include: 'languages' }}
-              columns={_column.table()}
+              columns={_column.useTable()}
               rightHeader={
                 <div className={'flex gap-2'}>
                   {sGlobal.user?.role?.permissions?.includes(keyRole.P_POST_STORE) && (
                     <Button
                       icon={<Plus className="icon-cud !h-5 !w-5" />}
-                      text={t('components.button.New')}
+                      text={t('Add new Post', { type: request.typeCode })}
                       onClick={() => sPost.set({ data: undefined, isVisible: true })}
                     />
                   )}

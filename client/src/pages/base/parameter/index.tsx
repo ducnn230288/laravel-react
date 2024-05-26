@@ -19,9 +19,9 @@ const Page = () => {
   const request = getQueryStringParams(location.search);
   useEffect(() => {
     if (!sParameter.result?.data) sParameter.get({});
-    Breadcrumbs(t('pages.Parameter'), [
-      { title: t('titles.Setting'), link: '' },
-      { title: t('titles.Parameter'), link: '' },
+    Breadcrumbs(t('Parameter'), [
+      { title: t('Setting'), link: '' },
+      { title: t('Parameter'), link: '' },
     ]);
     sParameter.getById({ id: request.code });
   }, []);
@@ -38,15 +38,14 @@ const Page = () => {
       });
     }
   }, [sParameter.result]);
-  console.log(request.code);
-  console.log(sParameter.result?.data);
-  const { t } = useTranslation();
+
+  const { t } = useTranslation('locale', { keyPrefix: 'pages.base.parameter' });
   return (
     <div className={'container mx-auto grid grid-cols-12 gap-3 px-2.5 pt-2.5'}>
       <div className="col-span-12 md:col-span-4 lg:col-span-3 -intro-x">
         <div className="shadow rounded-xl w-full bg-white overflow-hidden">
           <div className="h-14 flex justify-between items-center border-b border-gray-100 px-4 py-2">
-            <h3 className={'font-bold text-lg'}>{t('titles.Parameter')}</h3>
+            <h3 className={'font-bold text-lg'}>{t('Parameter')}</h3>
           </div>
           <Spin spinning={sParameter.isLoading}>
             <div className="h-[calc(100vh-12rem)] overflow-y-auto relative scroll hidden sm:block">
@@ -107,7 +106,7 @@ const Page = () => {
       <div className="col-span-12 md:col-span-8 lg:col-span-9 intro-x">
         <div className="shadow rounded-xl w-full overflow-auto bg-white">
           <div className="h-14 flex justify-between items-center border-b border-gray-100 px-4 py-2">
-            <h3 className={'font-bold text-lg'}>{t('pages.Parameter/Edit', { type: request.code })}</h3>
+            <h3 className={'font-bold text-lg'}>{t('Edit Parameter', { code: request.code })}</h3>
           </div>
           <div className="sm:min-h-[calc(100vh-12rem)] overflow-y-auto p-3">
             <Spin spinning={sParameter.isLoading}>
@@ -116,7 +115,7 @@ const Page = () => {
                 className="intro-x"
                 columns={[
                   {
-                    title: 'routes.admin.Layout.Vietnam',
+                    title: t('Vietnamese parameter'),
                     name: 'vn',
                     formItem: {
                       col: 6,
@@ -124,7 +123,7 @@ const Page = () => {
                     },
                   },
                   {
-                    title: 'routes.admin.Layout.English',
+                    title: t('English parameter'),
                     name: 'en',
                     formItem: {
                       col: 6,

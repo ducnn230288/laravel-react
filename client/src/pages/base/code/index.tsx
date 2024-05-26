@@ -27,9 +27,9 @@ const Page = () => {
 
   const sCode = SCode();
   useEffect(() => {
-    Breadcrumbs(t('pages.Code'), [
-      { title: t('titles.Setting'), link: '' },
-      { title: t('titles.Code'), link: '' },
+    Breadcrumbs(t('Code'), [
+      { title: t('Setting'), link: '' },
+      { title: t('Code'), link: '' },
     ]);
     switch (sCode.status) {
       case EStatusState.putFulfilled:
@@ -40,15 +40,15 @@ const Page = () => {
     }
   }, [sCode.status]);
 
-  const request = JSON.parse(sCode.queryParams || '{}');
-  const { t } = useTranslation();
+  const request = JSON.parse(sCode.queryParams ?? '{}');
+  const { t } = useTranslation('locale', { keyPrefix: 'pages.base.code' });
   const dataTableRef = useRef<ITableRefObject>(null);
   return (
     <div className={'container mx-auto grid grid-cols-12 gap-3 px-2.5 pt-2.5'}>
       <DrawerForm
         facade={sCode}
-        columns={_column.form()}
-        title={t(sCode.data ? 'pages.Code/Edit' : 'pages.Code/Add', { type: request.typeCode })}
+        columns={_column.useForm()}
+        title={t(sCode.data?.id ? 'Edit Code' : 'Add new Code', { type: request.typeCode })}
         onSubmit={(values) => {
           if (sCode.data) sCode.put({ ...values, id: sCode.data.code, typeCode: request.typeCode });
           else sCode.post({ ...values, typeCode: request.typeCode });
@@ -57,7 +57,7 @@ const Page = () => {
       <div className="col-span-12 md:col-span-4 lg:col-span-3 -intro-x">
         <div className="shadow rounded-xl w-full bg-white overflow-hidden">
           <div className="h-14 flex justify-between items-center border-b border-gray-100 px-4 py-2">
-            <h3 className={'font-bold text-lg'}>Type Code</h3>
+            <h3 className={'font-bold text-lg'}>{t('Type code')}</h3>
           </div>
           <Spin spinning={sCodeType.isLoading}>
             <div className="h-[calc(100vh-12rem)] overflow-y-auto relative scroll hidden sm:block">
@@ -82,7 +82,7 @@ const Page = () => {
                       'item text-gray-700 font-medium hover:bg-gray-100 flex justify-between items-center border-b border-gray-100 w-full text-left  group',
                     )}
                   >
-                    <div
+                    <button
                       onClick={() => {
                         request.typeCode = data.value;
                         dataTableRef?.current?.onChange(request);
@@ -90,7 +90,7 @@ const Page = () => {
                       className="truncate cursor-pointer flex-1 hover:text-teal-900 item-text px-3 py-1"
                     >
                       {data.title}
-                    </div>
+                    </button>
                   </div>
                 )}
               />
@@ -116,15 +116,15 @@ const Page = () => {
               facade={sCode}
               ref={dataTableRef}
               paginationDescription={(from: number, to: number, total: number) =>
-                t('routes.admin.Layout.Pagination', { from, to, total })
+                t('Pagination code', { from, to, total })
               }
-              columns={_column.table()}
+              columns={_column.useTable()}
               rightHeader={
                 <div className={'flex gap-2'}>
                   {sGlobal.user?.role?.permissions?.includes(keyRole.P_CODE_STORE) && (
                     <Button
                       icon={<Plus className="icon-cud !h-5 !w-5" />}
-                      text={t('routes.admin.Layout.Add')}
+                      text={t('Add new Code', { type: request.typeCode })}
                       onClick={() => sCode.set({ data: undefined, isVisible: true })}
                     />
                   )}

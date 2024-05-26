@@ -15,7 +15,7 @@ const Component = ({ tag, onChange, form, value, disabled, maxTagCount, placehol
         const params = tag.params
           ? tag.params(form.getFieldValue, fullTextSearch, value && value.filter((item: any) => !!item))
           : { fullTextSearch };
-        const { data } = await API.get<any>({url: tag.api, params});
+        const { data } = await API.get<any>({ url: tag.api, params });
         set_options(
           data?.data?.map((item: any, index: number) => ({
             label: tag.avatar ? (
@@ -82,7 +82,7 @@ interface Type {
   onChange?: (e: any) => any;
   form: FormInstance;
   value?: any;
-  disabled: boolean;
+  disabled?: boolean;
   maxTagCount: number | 'responsive';
   placeholder: string;
 }

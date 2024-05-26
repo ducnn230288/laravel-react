@@ -3,12 +3,12 @@ import classNames from 'classnames';
 
 import { Spinner } from '@/assets/svg';
 
-export const Button = ({ text = '', icon, className, disabled, isLoading = false, title, ...props }: Type) => {
+export const Button = ({ text = '', icon, title, className, disabled, isLoading = false, ...props }: Type) => {
   return (
     <button
       type="button"
       disabled={disabled}
-      title={title || text || ''}
+      title={title ?? text ?? ''}
       className={classNames(
         'button',
         {
@@ -25,8 +25,8 @@ export const Button = ({ text = '', icon, className, disabled, isLoading = false
 };
 
 interface Type {
-  icon?: React.ReactNode;
   text?: any;
+  icon?: React.ReactNode;
   title?: string;
   className?: string;
   disabled?: boolean;

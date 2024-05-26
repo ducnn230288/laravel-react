@@ -7,10 +7,9 @@ import { createSearchParams } from 'react-router-dom';
 
 import { routerLinks, lang, uuidv4 } from '@/utils';
 import listMenu from '../menus';
-import './index.less';
 
 const Layout = ({ isCollapsed = false, permission = [] }: { isCollapsed: boolean; permission?: string[] }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('locale', { keyPrefix: 'menu' });
   const navigate = useNavigate();
   const location = useLocation();
   const refMenu = useRef<HTMLUListElement>(null);
@@ -59,7 +58,7 @@ const Layout = ({ isCollapsed = false, permission = [] }: { isCollapsed: boolean
           >
             <p className="h-1 w-1 mr-3 rounded-lg bg-white group-hover:w-2 duration-300 ease-in-out transition-all"></p>
             <button className="hover:text-white sub-menu">
-              <span>{t(`titles.${subItem.name}`)}</span>
+              <span>{t(subItem.name)}</span>
             </button>
           </li>
         ))}
@@ -103,7 +102,7 @@ const Layout = ({ isCollapsed = false, permission = [] }: { isCollapsed: boolean
                     'div17 ml-2.5 transition-all duration-300 ease-in-out font-medium text-base !h-8 flex items-center',
                   )}
                 >
-                  {t(`titles.${item.name}`)}
+                  {t(item.name)}
                 </p>
               </li>
             );
@@ -138,7 +137,7 @@ const Layout = ({ isCollapsed = false, permission = [] }: { isCollapsed: boolean
                                   'div20 pl-2.5 transition-all duration-300 ease-in-out font-medium text-base text-gray-300'
                                 }
                               >
-                                {t(`titles.${item.name}`)}
+                                {t(item.name)}
                               </span>
                             </li>
                           </ul>

@@ -12,14 +12,14 @@ import { SContent, SGlobal } from '@/services';
 import { keyRole } from '@/utils';
 
 export default {
-  table: (): IDataTable[] => {
+  useTable: (): IDataTable[] => {
     const sGlobal = SGlobal();
-    const { t } = useTranslation();
+    const { t } = useTranslation('locale', { keyPrefix: 'pages.base.content' });
     const sContent = SContent();
 
     return [
       {
-        title: 'routes.admin.Content.Name',
+        title: t('Name Content'),
         name: 'name',
         tableItem: {
           filter: { type: ETableFilterType.search },
@@ -39,7 +39,7 @@ export default {
         },
       },
       {
-        title: 'routes.admin.Content.Order',
+        title: t('Order'),
         name: 'order',
         tableItem: {
           filter: { type: ETableFilterType.search },
@@ -47,7 +47,7 @@ export default {
         },
       },
       {
-        title: 'Created',
+        title: t('Created At'),
         name: 'createdAt',
         tableItem: {
           width: 120,
@@ -61,24 +61,31 @@ export default {
         },
       },
       {
-        title: 'routes.admin.user.Action',
+        title: 'Action',
         tableItem: {
           width: 100,
           align: ETableAlign.center,
           render: (text: string, data) => (
             <div className={'flex gap-2'}>
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_CONTENT_UPDATE) && (
-                <ToolTip title={t(data.isDisable ? 'components.datatable.Disabled' : 'components.datatable.Enabled')}>
-                  <PopConfirm
-                    title={t(
-                      !data.isDisable
-                        ? 'components.datatable.areYouSureWantDisable'
-                        : 'components.datatable.areYouSureWantEnable',
-                    )}
-                    onConfirm={() => sContent.put({ id: data.id, isDisable: !data.isDisable })}
+                <PopConfirm
+                  title={t(
+                    !data.isDisable ? 'Are you sure want disable content?' : 'Are you sure want enable content?',
+                    {
+                      name: data.name,
+                    },
+                  )}
+                  onConfirm={() => sContent.put({ id: data.id, isDisable: !data.isDisable })}
+                >
+                  <ToolTip
+                    title={t(data.isDisable ? 'Disabled content' : 'Enabled content', {
+                      name: data.name,
+                    })}
                   >
                     <button
-                      title={t(data.isDisable ? 'components.datatable.Disabled' : 'components.datatable.Enabled') || ''}
+                      title={t(data.isDisable ? 'Disabled content' : 'Enabled content', {
+                        name: data.name,
+                      })}
                     >
                       {data.isDisable ? (
                         <Disable className="icon-cud bg-yellow-700 hover:bg-yellow-500" />
@@ -86,13 +93,19 @@ export default {
                         <Check className="icon-cud bg-green-600 hover:bg-green-400" />
                       )}
                     </button>
-                  </PopConfirm>
-                </ToolTip>
+                  </ToolTip>
+                </PopConfirm>
               )}
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_CONTENT_UPDATE) && (
-                <ToolTip title={t('routes.admin.Layout.Edit')}>
+                <ToolTip
+                  title={t('Edit content', {
+                    name: data.name,
+                  })}
+                >
                   <button
-                    title={t('routes.admin.Layout.Edit') || ''}
+                    title={t('Edit content', {
+                      name: data.name,
+                    })}
                     onClick={() => sContent.getById({ id: data.id, params: { include: 'languages' } })}
                   >
                     <Edit className="icon-cud bg-teal-900 hover:bg-teal-700" />
@@ -100,16 +113,26 @@ export default {
                 </ToolTip>
               )}
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_CONTENT_DESTROY) && (
-                <ToolTip title={t('routes.admin.Layout.Delete')}>
-                  <PopConfirm
-                    title={t('components.datatable.areYouSureWant')}
-                    onConfirm={() => sContent.delete(data.id)}
+                <PopConfirm
+                  title={t('Are you sure want delete content?', {
+                    name: data.name,
+                  })}
+                  onConfirm={() => sContent.delete(data.id)}
+                >
+                  <ToolTip
+                    title={t('Delete content', {
+                      name: data.name,
+                    })}
                   >
-                    <button title={t('routes.admin.Layout.Delete') || ''}>
+                    <button
+                      title={t('Delete content', {
+                        name: data.name,
+                      })}
+                    >
                       <Trash className="icon-cud bg-red-600 hover:bg-red-400" />
                     </button>
-                  </PopConfirm>
-                </ToolTip>
+                  </ToolTip>
+                </PopConfirm>
               )}
             </div>
           ),
@@ -117,15 +140,17 @@ export default {
       },
     ];
   },
-  form: (type?: string): IForm[] => {
+  useForm: (type?: string): IForm[] => {
+    const { t } = useTranslation('locale', { keyPrefix: 'pages.base.content' });
+
     return [
       {
-        title: 'Name',
+        title: t('Name Content'),
         name: 'name',
         formItem: type === 'partner' || type === 'tech' ? {} : undefined,
       },
       {
-        title: 'routes.admin.Content.Order',
+        title: t('Order'),
         name: 'order',
         formItem: {
           col: type === 'partner' || type === 'tech' ? 12 : 6,
@@ -133,7 +158,7 @@ export default {
         },
       },
       {
-        title: 'routes.admin.Content.Image',
+        title: t('Image'),
         name: 'image',
         formItem: {
           col: type === 'partner' || type === 'tech' ? 12 : 6,
@@ -150,13 +175,13 @@ export default {
                 type: EFormType.tab,
                 tab: 'language',
                 list: [
-                  { label: 'English', value: 'en' },
-                  { label: 'Vietnam', value: 'vn' },
+                  { label: t('English content'), value: 'en' },
+                  { label: t('Vietnamese content'), value: 'vn' },
                 ],
                 column: [
                   { title: 'id', name: 'id', formItem: { type: EFormType.hidden } },
                   {
-                    title: 'Name',
+                    title: t('Name'),
                     name: 'name',
                     formItem: {
                       col: type === 'member' ? 6 : 12,
@@ -165,7 +190,7 @@ export default {
                   },
 
                   {
-                    title: 'Position',
+                    title: t('Position'),
                     name: 'position',
                     formItem:
                       type === 'member'
@@ -176,7 +201,7 @@ export default {
                   },
 
                   {
-                    title: 'Description',
+                    title: t('Description'),
                     name: 'description',
                     formItem: {
                       type: EFormType.textarea,
@@ -184,7 +209,7 @@ export default {
                   },
 
                   {
-                    title: 'Content',
+                    title: t('Content'),
                     name: 'content',
                     formItem:
                       type === 'member'

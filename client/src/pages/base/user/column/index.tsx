@@ -12,14 +12,14 @@ import { SCode, SGlobal, SUser } from '@/services';
 import { keyRole } from '@/utils';
 
 export default {
-  table: (): IDataTable[] => {
+  useTable: (): IDataTable[] => {
     const sGlobal = SGlobal();
-    const { t } = useTranslation();
+    const { t } = useTranslation('locale', { keyPrefix: 'pages.base.user' });
     const sUser = SUser();
 
     return [
       {
-        title: `routes.admin.user.Full name`,
+        title: t('Full name'),
         name: 'name',
         tableItem: {
           filter: { type: ETableFilterType.search },
@@ -30,7 +30,7 @@ export default {
         },
       },
       {
-        title: 'routes.admin.user.Position',
+        title: t('Position'),
         name: 'positionCode',
         tableItem: {
           width: 200,
@@ -62,7 +62,7 @@ export default {
         },
       },
       {
-        title: 'routes.admin.user.Phone Number',
+        title: t('Phone Number'),
         name: 'phoneNumber',
         tableItem: {
           filter: { type: ETableFilterType.search },
@@ -70,7 +70,7 @@ export default {
         },
       },
       {
-        title: 'Created',
+        title: t('Created At'),
         name: 'createdAt',
         tableItem: {
           width: 120,
@@ -84,24 +84,24 @@ export default {
         },
       },
       {
-        title: 'routes.admin.user.Action',
+        title: t('Action'),
         tableItem: {
           width: 100,
           align: ETableAlign.center,
           render: (text: string, data) => (
             <div className={'flex gap-2'}>
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_USER_UPDATE) && (
-                <ToolTip title={t(data.isDisable ? 'components.datatable.Disabled' : 'components.datatable.Enabled')}>
-                  <PopConfirm
-                    title={t(
-                      !data.isDisable
-                        ? 'components.datatable.areYouSureWantDisable'
-                        : 'components.datatable.areYouSureWantEnable',
-                    )}
-                    onConfirm={() => sUser.put({ id: data.id, isDisable: !data.isDisable })}
-                  >
+                <PopConfirm
+                  title={t(!data.isDisable ? 'Are you sure want disable user?' : 'Are you sure want enable user?', {
+                    name: data.name,
+                  })}
+                  onConfirm={() => sUser.put({ id: data.id, isDisable: !data.isDisable })}
+                >
+                  <ToolTip title={t(data.isDisable ? 'Disabled user' : 'Enabled user', { name: data.name })}>
                     <button
-                      title={t(data.isDisable ? 'components.datatable.Disabled' : 'components.datatable.Enabled') || ''}
+                      title={t(data.isDisable ? 'Disabled user' : 'Enabled user', {
+                        name: data.name,
+                      })}
                     >
                       {data.isDisable ? (
                         <Disable className="icon-cud bg-yellow-700 hover:bg-yellow-500" />
@@ -109,13 +109,13 @@ export default {
                         <Check className="icon-cud bg-green-600 hover:bg-green-400" />
                       )}
                     </button>
-                  </PopConfirm>
-                </ToolTip>
+                  </ToolTip>
+                </PopConfirm>
               )}
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_USER_UPDATE) && (
-                <ToolTip title={t('routes.admin.Layout.Edit')}>
+                <ToolTip title={t('Edit user', { name: data.name })}>
                   <button
-                    title={t('routes.admin.Layout.Edit') || ''}
+                    title={t('Edit user', { name: data.name })}
                     onClick={() => sUser.getById({ id: data.id, params: { include: 'position' } })}
                   >
                     <Edit className="icon-cud bg-teal-900 hover:bg-teal-700" />
@@ -124,9 +124,12 @@ export default {
               )}
 
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_USER_DESTROY) && (
-                <ToolTip title={t('routes.admin.Layout.Delete')}>
-                  <PopConfirm title={t('components.datatable.areYouSureWant')} onConfirm={() => sUser.delete(data.id)}>
-                    <button title={t('routes.admin.Layout.Delete') || ''}>
+                <ToolTip title={t('Delete user', { name: data.name })}>
+                  <PopConfirm
+                    title={t('Are you sure want delete user?', { name: data.name })}
+                    onConfirm={() => sUser.delete(data.id)}
+                  >
+                    <button title={t('Delete user', { name: data.name })}>
                       <Trash className="icon-cud bg-red-600 hover:bg-red-400" />
                     </button>
                   </PopConfirm>
@@ -138,13 +141,13 @@ export default {
       },
     ];
   },
-  form: (): IForm[] => {
-    const { t } = useTranslation();
+  useForm: (): IForm[] => {
+    const { t } = useTranslation('locale', { keyPrefix: 'pages.base.user' });
     const sUser = SUser();
 
     return [
       {
-        title: 'routes.admin.user.Full name',
+        title: t('Full name'),
         name: 'name',
         formItem: {
           rules: [{ type: EFormRuleType.required }],
@@ -162,7 +165,7 @@ export default {
         },
       },
       {
-        title: 'columns.auth.login.password',
+        title: t('Password'),
         name: 'password',
         formItem: {
           type: EFormType.password,
@@ -171,10 +174,9 @@ export default {
         },
       },
       {
-        title: 'columns.auth.register.retypedPassword',
+        title: t('Confirm Password'),
         name: 'passwordConfirmation',
         formItem: {
-          placeholder: 'columns.auth.register.retypedPassword',
           type: EFormType.password,
           condition: (value: string, form, index: number, values) => !values?.id,
           rules: [
@@ -187,7 +189,7 @@ export default {
                   if (!value || (getFieldValue('password') === value && value.length >= 8)) {
                     return Promise.resolve();
                   }
-                  return Promise.reject(t('components.form.ruleConfirmPassword'));
+                  return Promise.reject(new Error(t('Two passwords that you enter is inconsistent!')));
                 },
               }),
             },
@@ -195,14 +197,14 @@ export default {
         },
       },
       {
-        title: 'Số điện thoại',
+        title: t('Phone Number'),
         name: 'phoneNumber',
         formItem: {
           rules: [{ type: EFormRuleType.required }, { type: EFormRuleType.phone, min: 10, max: 15 }],
         },
       },
       {
-        title: 'routes.admin.user.Date of birth',
+        title: t('Date of birth'),
         name: 'dob',
         formItem: {
           type: EFormType.date,
@@ -213,7 +215,7 @@ export default {
         },
       },
       {
-        title: 'routes.admin.user.Position',
+        title: t('Position'),
         name: 'positionCode',
         formItem: {
           type: EFormType.select,
@@ -233,15 +235,15 @@ export default {
         },
       },
       {
-        title: 'routes.admin.user.Description',
+        title: t('Description'),
         name: 'description',
         formItem: {
           type: EFormType.textarea,
         },
       },
       {
+        title: t('Upload avatar'),
         name: 'avatar',
-        title: 'routes.admin.user.Upload avatar',
         formItem: {
           type: EFormType.upload,
         },

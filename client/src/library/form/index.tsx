@@ -17,7 +17,6 @@ import dayjs from 'dayjs';
 
 import { Check, Times } from '@/assets/svg';
 import { EFormRuleType, EFormType } from '@/enums';
-
 import { IFormItem, IForm } from '@/interfaces';
 import { SGlobal } from '@/services';
 import { convertFormValue } from '@/utils';
@@ -43,8 +42,8 @@ import { Button } from '../button';
 export const Form = ({
   className,
   columns,
-  textSubmit = 'components.form.modal.save',
-  textCancel = 'components.datatable.cancel',
+  textSubmit,
+  textCancel,
   handSubmit,
   handCancel,
   values = {},
@@ -57,17 +56,13 @@ export const Form = ({
   spinning = false,
   formAnt,
 }: Type) => {
-  const { t } = useTranslation();
-  const sGlobal = SGlobal();
-  const timeout = useRef<any>();
   const refLoad = useRef(true);
-  const [forms] = AntForm.useForm();
-  const form = formAnt || forms;
-
   const reRender = () => {
     refLoad.current = false;
   };
 
+  const [forms] = AntForm.useForm();
+  const form = formAnt || forms;
   useEffect(() => {
     if (form && refLoad.current) {
       form.resetFields();
@@ -76,6 +71,8 @@ export const Form = ({
     refLoad.current = true;
   }, [values]);
 
+  const { t } = useTranslation('locale', { keyPrefix: 'library' });
+  const sGlobal = SGlobal();
   const generateInput = (formItem: IFormItem, item: IForm, values: any, name: string) => {
     switch (formItem.type) {
       case EFormType.hidden:
@@ -97,13 +94,7 @@ export const Form = ({
           />
         );
       case EFormType.editor:
-        return (
-          <Editor
-            placeholder={
-              t(formItem.placeholder ?? '') ?? t('components.form.Enter') + ' ' + t(item.title)!.toLowerCase()
-            }
-          />
-        );
+        return <Editor placeholder={t(formItem.placeholder ?? 'Enter', { title: item.title.toLowerCase() })} />;
       case EFormType.upload:
         return <Upload multiple={!!formItem.mode} />;
       case EFormType.tableTransfer:
@@ -111,34 +102,30 @@ export const Form = ({
       case EFormType.password:
         return (
           <Password
-            placeholder={
-              t(formItem.placeholder ?? '') ?? t('components.form.Enter') + ' ' + t(item.title)!.toLowerCase()
-            }
-            disabled={!!formItem.disabled && formItem.disabled(values, form)}
+            placeholder={t(formItem.placeholder ?? 'Enter', { title: item.title.toLowerCase() })}
+            disabled={formItem.disabled?.(values, form)}
           />
         );
       case EFormType.textarea:
         return (
           <textarea
-            disabled={!!formItem.disabled && formItem.disabled(values, form)}
+            disabled={formItem.disabled?.(values, form)}
             className={classNames(
               'ant-input px-4 py-2.5 w-full rounded-xl text-gray-600 border border-solid input-description ',
               {
-                'text-gray-400 !border-0': !!formItem.disabled && formItem.disabled(values, form),
+                'text-gray-400 !border-0': formItem.disabled?.(values, form),
               },
             )}
             rows={4}
             maxLength={1000}
-            placeholder={
-              t(formItem.placeholder ?? '') ?? t('components.form.Enter') + ' ' + t(item.title)!.toLowerCase()
-            }
-            onChange={(e) => formItem.onChange && formItem.onChange(e.target.value, form, reRender)}
+            placeholder={t(formItem.placeholder ?? 'Enter', { title: item.title.toLowerCase() })}
+            onChange={(e) => formItem.onChange?.(e.target.value, form, reRender)}
           />
         );
       case EFormType.slider:
         return (
           <Slider
-            tooltip={{ formatter: (value = 0) => formItem.sliderMarks && formItem.sliderMarks[value] }}
+            tooltip={{ formatter: (value = 0) => formItem?.sliderMarks?.[value] }}
             max={formItem.max ? formItem.max : 100}
             min={formItem.min ? formItem.min : 0}
             marks={formItem.sliderMarks}
@@ -161,17 +148,17 @@ export const Form = ({
           <DatePicker
             format={
               !formItem.picker || formItem.picker === 'date'
-                ? (sGlobal.formatDate ?? '') + (formItem.showTime ? ' HH:mm' : '')
-                : sGlobal.formatDate ?? ''
+                ? sGlobal.formatDate + (formItem.showTime ? ' HH:mm' : '')
+                : sGlobal.formatDate
             }
-            onChange={(date: any) => formItem.onChange && formItem.onChange(date, form, reRender)}
+            onChange={(date: any) => formItem.onChange?.(date, form, reRender)}
             disabledDate={(current: any) => (formItem.disabledDate ? formItem.disabledDate(current, form) : false)}
             showTime={!!formItem.showTime}
             picker={formItem.picker ?? 'date'}
-            disabled={!!formItem.disabled && formItem.disabled(values, form)}
+            disabled={formItem.disabled?.(values, form)}
             form={form}
             name={item.name}
-            placeholder={formItem.placeholder ? t(formItem.placeholder) : t('components.form.Select Date')}
+            placeholder={t(formItem.placeholder ?? 'Choose', { title: item.title.toLowerCase() })}
           />
         );
       case EFormType.dateRange:
@@ -182,12 +169,11 @@ export const Form = ({
                 item.name,
                 date?.filter((i) => !!i),
               );
-              formItem.onChange &&
-                formItem.onChange(
-                  date?.filter((i) => !!i),
-                  form,
-                  reRender,
-                );
+              formItem.onChange?.(
+                date?.filter((i) => !!i),
+                form,
+                reRender,
+              );
             }}
             onOpenChange={(open) => {
               if (!open && form.getFieldValue(item.name)?.length < 2) form.resetFields([item.name]);
@@ -198,7 +184,7 @@ export const Form = ({
               formItem.initialValues && [dayjs(formItem.initialValues.start), dayjs(formItem.initialValues.end)]
             }
             showTime={formItem.showTime}
-            disabled={!!formItem.disabled && formItem.disabled(values, form)}
+            disabled={formItem.disabled?.(values, form)}
           />
         );
       case EFormType.time:
@@ -206,11 +192,11 @@ export const Form = ({
           <TimePicker
             minuteStep={10}
             format={'HH:mm'}
-            onChange={(date: any) => formItem.onChange && formItem.onChange(date, form, reRender)}
+            onChange={(date: any) => formItem.onChange?.(date, form, reRender)}
             disabledDate={(current: any) => (formItem.disabledDate ? formItem.disabledDate(current, form) : false)}
-            disabled={!!formItem.disabled && formItem.disabled(values, form)}
+            disabled={formItem.disabled?.(values, form)}
             name={item.name}
-            placeholder={formItem.placeholder ? t(formItem.placeholder) : t('components.form.Select Date')}
+            placeholder={t(formItem.placeholder ?? 'Choose', { title: item.title.toLowerCase() })}
           />
         );
       case EFormType.timeRange:
@@ -222,12 +208,11 @@ export const Form = ({
                 item.name,
                 date?.filter((i) => !!i),
               );
-              formItem.onChange &&
-                formItem.onChange(
-                  date?.filter((i) => !!i),
-                  form,
-                  reRender,
-                );
+              formItem.onChange?.(
+                date?.filter((i) => !!i),
+                form,
+                reRender,
+              );
             }}
             onOpenChange={(open) => {
               if (!open && form.getFieldValue(item.name)?.length < 2) form.resetFields([item.name]);
@@ -237,20 +222,20 @@ export const Form = ({
             defaultValue={
               formItem.initialValues && [dayjs(formItem.initialValues.start), dayjs(formItem.initialValues.end)]
             }
-            disabled={!!formItem.disabled && formItem.disabled(values, form)}
+            disabled={formItem.disabled?.(values, form)}
           />
         );
       case EFormType.checkbox:
         return formItem.list ? (
           <Checkbox.Group
             options={formItem.list}
-            onChange={(value) => formItem.onChange && formItem.onChange(value, form, reRender)}
-            disabled={!!formItem.disabled && formItem.disabled(values, form)}
+            onChange={(value) => formItem.onChange?.(value, form, reRender)}
+            disabled={formItem.disabled?.(values, form)}
           />
         ) : (
           <Checkbox
-            onChange={(value) => formItem.onChange && formItem.onChange(value.target.checked, form, reRender)}
-            disabled={!!formItem.disabled && formItem.disabled(values, form)}
+            onChange={(value) => formItem.onChange?.(value.target.checked, form, reRender)}
+            disabled={formItem.disabled?.(values, form)}
           >
             {formItem.label}
           </Checkbox>
@@ -260,33 +245,25 @@ export const Form = ({
           <Radio.Group
             options={formItem.list}
             optionType={'button'}
-            disabled={!!formItem.disabled && formItem.disabled(values, form)}
-            onChange={({ target }) => formItem.onChange && formItem.onChange(target.value, form, reRender)}
+            disabled={formItem.disabled?.(values, form)}
+            onChange={({ target }) => formItem.onChange?.(target.value, form, reRender)}
           />
         );
       case EFormType.tag:
         return (
           <SelectTag
             maxTagCount={formItem.maxTagCount ?? 'responsive'}
-            placeholder={
-              formItem.placeholder
-                ? t(formItem.placeholder)
-                : t('components.form.Enter') + ' ' + t(item.title)!.toLowerCase()
-            }
+            placeholder={t(formItem.placeholder ?? 'Choose', { title: item.title.toLowerCase() })}
             tag={formItem.tag}
             form={form}
-            disabled={!!formItem.disabled && formItem.disabled(values, form)}
+            disabled={formItem.disabled?.(values, form)}
           />
         );
       case EFormType.chips:
         return (
           <Chips
-            placeholder={
-              formItem.placeholder
-                ? t(formItem.placeholder)
-                : t('components.form.Enter') + ' ' + t(item.title)!.toLowerCase()
-            }
-            disabled={!!formItem.disabled && formItem.disabled(values, form)}
+            placeholder={t(formItem.placeholder ?? 'Enter', { title: item.title.toLowerCase() })}
+            disabled={formItem.disabled?.(values, form)}
             list={formItem.list}
           />
         );
@@ -295,14 +272,10 @@ export const Form = ({
           <Select
             showSearch={formItem.showSearch}
             maxTagCount={formItem.maxTagCount ?? 'responsive'}
-            onChange={(value: any) => formItem.onChange && formItem.onChange(value, form, reRender)}
-            placeholder={
-              formItem.placeholder
-                ? t(formItem.placeholder)
-                : t('components.form.Choose') + ' ' + t(item.title)!.toLowerCase()
-            }
+            onChange={(value: any) => formItem.onChange?.(value, form, reRender)}
+            placeholder={t(formItem.placeholder ?? 'Choose', { title: item.title.toLowerCase() })}
             form={form}
-            disabled={!!formItem.disabled && formItem.disabled(values, form)}
+            disabled={formItem.disabled?.(values, form)}
             get={formItem.get}
             list={formItem.list}
             mode={formItem.mode}
@@ -311,13 +284,9 @@ export const Form = ({
       case EFormType.selectTable:
         return (
           <SelectTable
-            onChange={(value: any) => formItem.onChange && formItem.onChange(value, form, reRender)}
-            placeholder={
-              formItem.placeholder
-                ? t(formItem.placeholder)
-                : t('components.form.Choose') + ' ' + t(item.title)!.toLowerCase()
-            }
-            disabled={!!formItem.disabled && formItem.disabled(values, form)}
+            onChange={(value: any) => formItem.onChange?.(value, form, reRender)}
+            placeholder={t(formItem.placeholder ?? 'Choose', { title: item.title.toLowerCase() })}
+            disabled={formItem.disabled?.(values, form)}
             mode={formItem.mode}
             get={formItem.get}
           />
@@ -328,12 +297,8 @@ export const Form = ({
             formItem={formItem}
             showSearch={formItem.showSearch}
             form={form}
-            disabled={!!formItem.disabled && formItem.disabled(values, form)}
-            placeholder={
-              formItem.placeholder
-                ? t(formItem.placeholder)
-                : t('components.form.Choose') + ' ' + t(item.title)!.toLowerCase()
-            }
+            disabled={formItem.disabled?.(values, form)}
+            placeholder={t(formItem.placeholder ?? 'Choose', { title: item.title.toLowerCase() })}
           />
         );
       case EFormType.cascader:
@@ -342,12 +307,8 @@ export const Form = ({
             formItem={formItem}
             showSearch={formItem.showSearch}
             form={form}
-            disabled={!!formItem.disabled && formItem.disabled(values, form)}
-            placeholder={
-              formItem.placeholder
-                ? t(formItem.placeholder)
-                : t('components.form.Choose') + ' ' + t(item.title)!.toLowerCase()
-            }
+            disabled={formItem.disabled?.(values, form)}
+            placeholder={t(formItem.placeholder ?? 'Choose', { title: item.title.toLowerCase() })}
           />
         );
       case EFormType.switch:
@@ -356,13 +317,12 @@ export const Form = ({
             checkedChildren={<Check className="h-5 w-5 fill-white" />}
             unCheckedChildren={<Times className="h-5 w-5 fill-white" />}
             defaultChecked={!!values && values[item.name || ''] === 1}
-            onChange={(e) => formItem.onChange && formItem.onChange(e, form, reRender)}
+            onChange={(e) => formItem.onChange?.(e, form, reRender)}
           />
         );
       case EFormType.otp:
         return <InputOTP inputType="numeric" length={formItem.maxLength ?? 5} />;
       default:
-        // @ts-ignore
         return (
           <Mask
             list={formItem.list}
@@ -371,14 +331,10 @@ export const Form = ({
             addonBefore={formItem.addonBefore}
             addonAfter={formItem.addonAfter}
             maxLength={formItem.maxLength}
-            placeholder={
-              formItem.placeholder
-                ? t(formItem.placeholder)
-                : t('components.form.Enter') + ' ' + t(item.title)!.toLowerCase()
-            }
-            onBlur={(e: any) => formItem.onBlur && formItem.onBlur(e.target.value, form, name)}
-            onChange={(e: any) => formItem.onChange && formItem.onChange(e.target.value, form, reRender)}
-            disabled={!!formItem.disabled && formItem.disabled(values, form)}
+            placeholder={t(formItem.placeholder ?? 'Enter', { title: item.title.toLowerCase() })}
+            onBlur={(e: any) => formItem.onBlur?.(e.target.value, form, name)}
+            onChange={(e: any) => formItem.onChange?.(e.target.value, form, reRender)}
+            disabled={formItem.disabled?.(values, form)}
           />
         );
     }
@@ -406,8 +362,8 @@ export const Form = ({
                     rules.push({
                       required: true,
                       whitespace: true,
-                      message: t(rule.message || 'components.form.ruleRequired', {
-                        title: t(item.title).toLowerCase(),
+                      message: t(rule.message ?? 'Please enter', {
+                        title: item.title.toLowerCase(),
                       }),
                     });
                     break;
@@ -415,13 +371,8 @@ export const Form = ({
                     rules.push({
                       required: true,
                       message: t(
-                        rule.message ||
-                          (item.formItem.type !== EFormType.otp
-                            ? 'components.form.ruleRequiredSelect'
-                            : 'components.form.ruleRequired'),
-                        {
-                          title: t(item.title).toLowerCase(),
-                        },
+                        rule.message ?? (item.formItem.type !== EFormType.otp ? 'Please choose' : 'Please enter'),
+                        { title: item.title.toLowerCase() },
                       ),
                     });
                     break;
@@ -440,7 +391,7 @@ export const Form = ({
                       value.filter((item: any) => !regexEmail.test(item)).length === 0
                     )
                       return Promise.resolve();
-                    return Promise.reject(t(rule.message || 'components.form.ruleEmail'));
+                    return Promise.reject(new Error(t(rule.message || 'Please enter a valid email address!')));
                   },
                 }));
                 break;
@@ -450,11 +401,11 @@ export const Form = ({
                     if (!value) return Promise.resolve();
                     else if (/^\d+$/.test(value)) {
                       if (value?.trim().length < 10)
-                        return Promise.reject(t('components.form.ruleMinNumberLength', { min: 10 }));
+                        return Promise.reject(new Error(t('Please enter at least characters!', { min: 10 })));
                       else if (value?.trim().length > 12)
-                        return Promise.reject(t('components.form.ruleMaxNumberLength', { max: 12 }));
+                        return Promise.reject(new Error(t('Please enter maximum characters!', { max: 12 })));
                       else return Promise.resolve();
-                    } else return Promise.reject(t('components.form.only number'));
+                    } else return Promise.reject(new Error(t('Please enter only number!')));
                   },
                 }));
                 break;
@@ -465,7 +416,9 @@ export const Form = ({
                       if (!value || /^0$|^-?[1-9]\d*(\.\d+)?$/.test(value)) {
                         if (/^0$|^-?[1-9]\d*(\.\d+)?$/.test(value)) {
                           if (parseFloat(value) < rule.value) {
-                            return Promise.reject(t(rule.message || 'components.form.ruleMin', { min: rule.value }));
+                            return Promise.reject(
+                              new Error(t(rule.message || 'Please enter minimum number!', { min: rule.value })),
+                            );
                           }
                         }
                       }
@@ -476,10 +429,10 @@ export const Form = ({
                   if (!rule.message) {
                     switch (item.formItem.type) {
                       case EFormType.onlyNumber:
-                        rule.message = t('components.form.ruleMinNumberLength', { min: rule.value });
+                        rule.message = t('Please enter at least number characters!', { min: rule.value });
                         break;
                       default:
-                        rule.message = t('components.form.ruleMinLength', { min: rule.value });
+                        rule.message = t('Please enter minimum number!', { min: rule.value });
                     }
                   }
                   rules.push({
@@ -489,14 +442,16 @@ export const Form = ({
                   });
                 }
                 break;
-              case 'max':
+              case EFormRuleType.max:
                 if (item.formItem.type === EFormType.number)
                   rules.push(() => ({
                     validator(_: any, value: any) {
                       if (!value || /^0$|^-?[1-9]\d*(\.\d+)?$/.test(value)) {
                         if (/^0$|^-?[1-9]\d*(\.\d+)?$/.test(value)) {
                           if (parseFloat(value) > rule.value) {
-                            return Promise.reject(t(rule.message || 'components.form.ruleMax', { max: rule.value }));
+                            return Promise.reject(
+                              new Error(t(rule.message || 'Please enter maximum number!', { max: rule.value })),
+                            );
                           }
                         }
                       }
@@ -507,10 +462,10 @@ export const Form = ({
                   if (!rule.message) {
                     switch (item.formItem.type) {
                       case EFormType.onlyNumber:
-                        rule.message = t('components.form.ruleMaxNumberLength', { max: rule.value });
+                        rule.message = t('Please enter maximum number characters!', { max: rule.value });
                         break;
                       default:
-                        rule.message = t('components.form.ruleMaxLength', { max: rule.value });
+                        rule.message = t('Please enter maximum number!', { max: rule.value });
                     }
                   }
                   rules.push({
@@ -523,14 +478,14 @@ export const Form = ({
               case EFormRuleType.url:
                 rules.push({
                   type: 'url',
-                  message: t(rule.message || 'components.form.incorrectPathFormat'),
+                  message: t(rule.message || 'Incorrect path format'),
                 });
                 break;
               case EFormRuleType.onlyText:
                 rules.push(() => ({
                   validator(_: any, value: any) {
                     if (!value || /^[A-Za-z]+$/.test(value)) return Promise.resolve();
-                    return Promise.reject(t(rule.message || 'components.form.only text'));
+                    return Promise.reject(new Error(t(rule.message || 'Please enter only text!')));
                   },
                 }));
                 break;
@@ -538,7 +493,7 @@ export const Form = ({
                 rules.push(() => ({
                   validator(_: any, value: any) {
                     if (!value || /^[a-zA-Z ]+$/.test(value)) return Promise.resolve();
-                    return Promise.reject(t(rule.message || 'components.form.only text'));
+                    return Promise.reject(new Error(t(rule.message || 'Please enter only text!')));
                   },
                 }));
                 break;
@@ -546,7 +501,9 @@ export const Form = ({
                 rules.push(() => ({
                   validator(_: any, value: any) {
                     if (value?.trim().length > 500) {
-                      return Promise.reject(t(rule.message || 'components.form.ruleMaxLength', { max: 500 }));
+                      return Promise.reject(
+                        new Error(t(rule.message || 'Please enter maximum characters!', { max: 500 })),
+                      );
                     }
                     return Promise.resolve();
                   },
@@ -567,7 +524,7 @@ export const Form = ({
               validator(_: any, value: any) {
                 if (!value || (/^-?[1-9]*\d+(\.\d{1,2})?$/.test(value) && parseInt(value) < 1000000000))
                   return Promise.resolve();
-                return Promise.reject(t('components.form.only number'));
+                return Promise.reject(new Error(t('Please enter only number!')));
               },
             }));
             break;
@@ -575,7 +532,7 @@ export const Form = ({
             rules.push(() => ({
               validator(_: any, value: any) {
                 if (!value || /^[A-Za-zÀ-Ỹà-ỹ]+[A-Za-zÀ-Ỹà-ỹ\s-]*$/u.test(value)) return Promise.resolve();
-                return Promise.reject(t('components.form.only text'));
+                return Promise.reject(new Error(t('Please enter only text!')));
               },
             }));
             break;
@@ -585,11 +542,10 @@ export const Form = ({
                 if (value) {
                   let min = 8;
                   rules.forEach((item: any) => item.min && (min = item.min));
-                  if (value.trim().length < min)
-                    return Promise.reject(t('components.form.ruleMinNumberLength', { min }));
+                  if (value.trim().length < min) return Promise.reject(t('Please enter at least characters!', { min }));
                   // if (/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?])/.test(value))
                   //   return Promise.resolve();
-                  // else return Promise.reject(t('components.form.rulePassword'));
+                  // else return Promise.reject(t('Password needs to have at least 8 characters!'));
                 } else return Promise.resolve();
               },
             }));
@@ -598,7 +554,7 @@ export const Form = ({
             rules.push(() => ({
               validator(_: any, value: any) {
                 if (!value || /^[0-9]+$/.test(value)) return Promise.resolve();
-                return Promise.reject(t('components.form.only number'));
+                return Promise.reject(new Error(t('Please enter only number!')));
               },
             }));
             break;
@@ -606,7 +562,9 @@ export const Form = ({
             rules.push(() => ({
               validator(_: any, value: any) {
                 if (value && value.length < (item.formItem.maxLength || 5)) {
-                  return Promise.reject(t('components.form.ruleMinLength', { min: item.formItem.maxLength || 5 }));
+                  return Promise.reject(
+                    new Error(t('Please enter at least characters!', { min: item.formItem.maxLength || 5 })),
+                  );
                 }
                 return Promise.resolve();
               },
@@ -617,8 +575,8 @@ export const Form = ({
 
       const otherProps: any = {
         key: index,
-        label: showLabel && t(item.title),
-        name: name || item.name,
+        label: showLabel && item.title,
+        name: name ?? item.name,
         labelAlign: 'left',
         validateTrigger: 'onBlur',
       };
@@ -655,6 +613,7 @@ export const Form = ({
     handSubmit && handSubmit(values);
   };
 
+  const timeout = useRef<any>();
   return (
     <Spin spinning={spinning}>
       <AntForm
@@ -672,8 +631,7 @@ export const Form = ({
             clearTimeout(timeout.current);
             timeout.current = setTimeout(async () => {
               for (const key in objValue) {
-                if (Object.prototype.hasOwnProperty.call(objValue, key))
-                  columns.filter((_item: any) => _item.name === key);
+                if (Object.hasOwn(objValue, key)) columns.filter((_item: any) => _item.name === key);
               }
               refLoad.current = false;
             }, 500);
@@ -692,8 +650,8 @@ export const Form = ({
                       className={classNames(
                         'col-span-12 ' +
                           (column?.formItem?.type || EFormType.text) +
-                          (' sm:col-span-' + (column?.formItem?.col ? column?.formItem?.col : 12)) +
-                          (' lg:col-span-' + (column?.formItem?.col ? column?.formItem?.col : 12)),
+                          (' sm:col-span-' + (column?.formItem?.col ?? 12)) +
+                          (' lg:col-span-' + (column?.formItem?.col ?? 12)),
                       )}
                       key={index}
                     >
@@ -703,7 +661,7 @@ export const Form = ({
               )}
           </div>
 
-          {extendForm && extendForm(values)}
+          {extendForm?.(values)}
         </div>
 
         <div
@@ -717,17 +675,17 @@ export const Form = ({
         >
           {handCancel && (
             <Button
-              text={t(textCancel)}
+              text={textCancel ?? t('Cancel')}
               className={'sm:min-w-32 justify-center out-line !border-black w-full sm:w-auto'}
               onClick={handCancel}
             />
           )}
-          {extendButton && extendButton(form)}
+          {extendButton?.(form)}
           {handSubmit && (
             <Button
-              text={t(textSubmit)}
+              text={textSubmit ?? t('Save')}
               id={idSubmit}
-              onClick={() => form && form.submit()}
+              onClick={() => form?.submit()}
               disabled={disableSubmit || spinning}
               className={'sm:min-w-44 justify-center w-full sm:w-auto '}
             />

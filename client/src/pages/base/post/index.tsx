@@ -47,12 +47,12 @@ const Page = () => {
       case EStatusState.postFulfilled:
       case EStatusState.putFulfilled:
       case EStatusState.deleteFulfilled:
-        sPostType.get(JSON.parse(sPostType.queryParams || '{}'));
+        sPostType.get(JSON.parse(sPostType.queryParams ?? '{}'));
         break;
     }
   }, [sPostType.status]);
 
-  const request = JSON.parse(sPost.queryParams || '{}');
+  const request = JSON.parse(sPost.queryParams ?? '{}');
   const { t } = useTranslation();
   const dataTableRef = useRef<ITableRefObject>(null);
 

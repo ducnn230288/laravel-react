@@ -118,7 +118,7 @@ interface Type {
   onChange: (e: any) => any;
   value?: any;
   placeholder: string;
-  disabled: boolean;
+  disabled?: boolean;
   get?: ITableGet;
 }
 export default Component;

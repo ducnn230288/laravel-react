@@ -15,15 +15,15 @@ const pages = [
       },
       {
         path: routerLinks('ForgetPassword'),
-        component: React.lazy(() => import('@/pages/base/forget-password')),
+        component: React.lazy(() => import('@/pages/base/login/forget-password')),
       },
       {
         path: routerLinks('VerifyForotPassword'),
-        component: React.lazy(() => import('@/pages/base/forget-password/otp')),
+        component: React.lazy(() => import('@/pages/base/login/forget-password/verify-forgot-password')),
       },
       {
         path: routerLinks('SetPassword'),
-        component: React.lazy(() => import('@/pages/base/forget-password/otp/set-password')),
+        component: React.lazy(() => import('@/pages/base/login/forget-password/verify-forgot-password/set-password')),
       },
     ],
   },

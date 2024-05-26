@@ -29,14 +29,14 @@ const Component = ({
       onOpenChange={(e) => {
         if (!e) {
           const { value }: any = document.getElementById(id);
-          const selectDate = dayjs(value, format || 'DD/MM/YYYY');
+          const selectDate = dayjs(value, format ?? 'DD/MM/YYYY');
           if (
             selectDate.isValid() &&
             onChange &&
             name &&
             (!form ||
               (form.getFieldValue(name) &&
-                form.getFieldValue(name).format(format || 'DD/MM/YYYY') !== selectDate.format(format || 'DD/MM/YYYY')))
+                form.getFieldValue(name).format(format ?? 'DD/MM/YYYY') !== selectDate.format(format ?? 'DD/MM/YYYY')))
           ) {
             onChange(selectDate, value);
           }
@@ -51,10 +51,10 @@ interface Type {
   placeholder?: string;
   id?: string;
   onChange: (selectDate: any, value: any) => void;
-  format: string;
+  format?: string;
   disabledDate: (current: any) => boolean;
   showTime: boolean;
   picker: 'time' | 'date' | 'week' | 'month' | 'quarter' | 'year' | undefined;
-  disabled: boolean;
+  disabled?: boolean;
 }
 export default Component;

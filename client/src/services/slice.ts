@@ -16,7 +16,7 @@ export class Slice<T extends ICommonEntity, S = EStatusState> {
     isVisible: false,
     reRender: false,
     status: EStatusState.idle,
-    queryParams: '',
+    queryParams: undefined,
     keepUnusedDataFor: 60,
     time: 0,
   };
@@ -27,8 +27,7 @@ export class Slice<T extends ICommonEntity, S = EStatusState> {
   ) {
     this.name = action.name;
     this.initialState = { ...this.defaultState, ...initialState };
-    this.reducers = {
-    };
+    this.reducers = {};
     this.extraReducers = (builder: ActionReducerMapBuilder<State<T, S>>) => {
       this.set(action, builder);
       this.get(action, builder);
@@ -40,13 +39,12 @@ export class Slice<T extends ICommonEntity, S = EStatusState> {
     };
   }
   set(action: Action<T, S>, builder: ActionReducerMapBuilder<State<T, S>>) {
-    builder
-      .addCase(action.set.fulfilled, (state, action) => {
-        Object.keys(action.payload).forEach((key) => {
-          state[key] = action.payload[key as keyof State<T, S>];
-        });
-        state.status = EStatusState.idle;
-      })
+    builder.addCase(action.set.fulfilled, (state, action) => {
+      Object.keys(action.payload).forEach((key) => {
+        state[key] = action.payload[key as keyof State<T, S>];
+      });
+      state.status = EStatusState.idle;
+    });
   }
   get(action: Action<T, S>, builder: ActionReducerMapBuilder<State<T, S>>) {
     builder

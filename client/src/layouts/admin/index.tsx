@@ -10,14 +10,12 @@ import { SGlobal } from '@/services';
 import { Key, Out, User, Arrow, Logo } from '@/assets/svg';
 import { routerLinks, lang } from '@/utils';
 
-import './index.less';
 import Menu from './menu';
 
 const Layout = ({ children }: PropsWithChildren) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('locale', { keyPrefix: 'layouts' });
   const sGlobal = SGlobal();
 
-  const navigate = useNavigate();
   const location = useLocation();
 
   const [, contextHolder] = notification.useNotification();
@@ -46,12 +44,6 @@ const Layout = ({ children }: PropsWithChildren) => {
       changeCollapsed();
     }
   }, [location]);
-  useEffect(() => {
-    if (sGlobal.pathname && sGlobal.pathname !== location.hash.substring(1)) {
-      sGlobal.set({ pathname: '' });
-      navigate(sGlobal.pathname);
-    }
-  }, [sGlobal.pathname]);
 
   return (
     <main className={classNames({ isCollapsed: innerWidth >= 1280 })}>
@@ -106,13 +98,13 @@ const Layout = ({ children }: PropsWithChildren) => {
           {children}
         </div>
 
-        <footer className="text-center pt-1.5 w-full">{t('layout.footer', { year: new Date().getFullYear() })}</footer>
+        <footer className="text-center pt-1.5 w-full">{t('Footer', { year: new Date().getFullYear() })}</footer>
       </section>
     </main>
   );
 };
 const Header = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('locale', { keyPrefix: 'layouts' });
   const sGlobal = SGlobal();
   const navigate = useNavigate();
 
@@ -158,7 +150,7 @@ const Header = () => {
                       <div className="flex items-center">
                         <User className="w-6 h-6 pr-2 text-black" />
                       </div>
-                      <div>{t('routes.admin.Layout.My Profile')}</div>
+                      <div>{t('My Profile')}</div>
                     </div>
                   ),
                 },
@@ -173,7 +165,7 @@ const Header = () => {
                       <div className="flex items-center">
                         <Key className="w-6 h-6 pr-2 text-black" />
                       </div>
-                      <div>{t('routes.admin.Layout.Change Password')}</div>
+                      <div>{t('Change Password')}</div>
                     </div>
                   ),
                 },
@@ -188,7 +180,7 @@ const Header = () => {
                       <div className="flex items-center">
                         <Out className="w-6 h-6 pr-2 text-black" />
                       </div>
-                      <div>{t('routes.admin.Layout.Sign out')}</div>
+                      <div>{t('Sign out')}</div>
                     </div>
                   ),
                 },

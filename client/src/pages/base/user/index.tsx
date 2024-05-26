@@ -44,10 +44,7 @@ const Page = () => {
 
   const sUser = SUser();
   useEffect(() => {
-    Breadcrumbs(t('titles.User'), [
-      { title: t('titles.User'), link: '' },
-      { title: t('titles.User/List'), link: '' },
-    ]);
+    Breadcrumbs(t('User'), [{ title: t('User'), link: '' }]);
     switch (sUser.status) {
       case EStatusState.postFulfilled:
       case EStatusState.putFulfilled:
@@ -56,15 +53,15 @@ const Page = () => {
         break;
     }
   }, [sUser.status]);
-  const request = JSON.parse(sUser?.queryParams || '{}');
-  const { t } = useTranslation();
+  const request = JSON.parse(sUser?.queryParams ?? '{}');
+  const { t } = useTranslation('locale', { keyPrefix: 'pages.base.user' });
   const dataTableRef = useRef<ITableRefObject>(null);
   return (
     <div className={'container mx-auto grid grid-cols-12 gap-3 px-2.5 pt-2.5'}>
       <DrawerForm
         facade={sUser}
-        columns={_column.form()}
-        title={t(sUser.data ? 'pages.User/Edit' : 'pages.User/Add', { roleCode: request.roleCode })}
+        columns={_column.useForm()}
+        title={t(sUser.data ? 'Edit User' : 'Add new User', { roleCode: request.roleCode })}
         onSubmit={(values) => {
           if (sUser.data) sUser.put({ ...values, id: sUser.data.id, roleCode: request.roleCode });
           else sUser.post({ ...values, roleCode: request.roleCode });
@@ -73,7 +70,7 @@ const Page = () => {
       <div className="col-span-12 md:col-span-4 lg:col-span-3 -intro-x">
         <div className="shadow rounded-xl w-full bg-white overflow-hidden">
           <div className="h-14 flex justify-between items-center border-b border-gray-100 px-4 py-2">
-            <h3 className={'font-bold text-lg'}>Role</h3>
+            <h3 className={'font-bold text-lg'}>{t('Role')}</h3>
           </div>
           <Spin spinning={sUserRole.isLoading}>
             <div className="h-[calc(100vh-12rem)] overflow-y-auto relative scroll hidden sm:block">
@@ -98,7 +95,7 @@ const Page = () => {
                       'item text-gray-700 font-medium hover:bg-gray-100 flex justify-between items-center border-b border-gray-100 w-full text-left  group',
                     )}
                   >
-                    <div
+                    <button
                       onClick={() => {
                         request.roleCode = data.value;
                         dataTableRef?.current?.onChange(request);
@@ -106,7 +103,7 @@ const Page = () => {
                       className="truncate cursor-pointer flex-1 hover:text-teal-900 item-text px-3 py-1"
                     >
                       {data.title}
-                    </div>
+                    </button>
                   </div>
                 )}
               />
@@ -141,15 +138,15 @@ const Page = () => {
                 // onDoubleClick: () => userService.getById({ id: data.id }),
               })}
               paginationDescription={(from: number, to: number, total: number) =>
-                t('routes.admin.Layout.User', { from, to, total })
+                t('Pagination user', { from, to, total })
               }
-              columns={_column.table()}
+              columns={_column.useTable()}
               rightHeader={
                 <div className={'flex gap-2'}>
                   {sGlobal.user?.role?.permissions?.includes(keyRole.P_USER_STORE) && (
                     <Button
                       icon={<Plus className="icon-cud !h-5 !w-5" />}
-                      text={t('components.button.New')}
+                      text={t('Add new User', { roleCode: request.roleCode })}
                       onClick={() => sUser.set({ data: undefined, isVisible: true })}
                     />
                   )}

@@ -9,7 +9,6 @@ import { EStatusGlobal, SGlobal } from '@/services';
 import { lang, routerLinks } from '@/utils';
 
 const Page = () => {
-  const { t } = useTranslation();
   const navigate = useNavigate();
   const sGlobal = SGlobal();
 
@@ -20,6 +19,8 @@ const Page = () => {
     }
   }, [sGlobal.status]);
 
+  const { t } = useTranslation('locale', { keyPrefix: 'pages.base.login' });
+
   return (
     <Fragment>
       <div className="text-center mb-8">
@@ -27,9 +28,9 @@ const Page = () => {
           className="intro-x text-3xl mb-8 font-bold text-teal-900 leading-8 md:text-5xl md:leading-10 lg:leading-10"
           id={'title-login'}
         >
-          {t('routes.auth.login.title')}
+          {t('Sign In')}
         </h1>
-        <h5 className="intro-x font-normal text-teal-900 ">{t('routes.auth.login.subTitle')}</h5>
+        <h5 className="intro-x font-normal text-teal-900 ">{t('Enter your details to login to your account')}</h5>
       </div>
       <div className="mx-auto lg:w-3/4 relative">
         <Spin spinning={sGlobal.isLoading}>
@@ -39,24 +40,22 @@ const Page = () => {
             columns={[
               {
                 name: 'email',
-                title: t('columns.auth.login.Username'),
+                title: t('Username'),
                 formItem: {
-                  placeholder: 'columns.auth.login.Enter Username',
                   rules: [{ type: EFormRuleType.required }, { type: EFormRuleType.email }],
                 },
               },
               {
                 name: 'password',
-                title: t('columns.auth.login.password'),
+                title: t('Password'),
                 formItem: {
-                  placeholder: 'columns.auth.login.Enter Password',
                   type: EFormType.password,
                   notDefaultValid: true,
                   rules: [{ type: EFormRuleType.required }],
                 },
               },
             ]}
-            textSubmit={'routes.auth.login.Log In'}
+            textSubmit={t('Log In')}
             handSubmit={sGlobal.login}
             disableSubmit={sGlobal.isLoading}
           />
@@ -66,7 +65,7 @@ const Page = () => {
             className={'text-teal-900 font-normal underline hover:no-underline mt-2'}
             onClick={() => navigate(`/${lang}${routerLinks('ForgetPassword')}`)}
           >
-            {t('routes.auth.login.Forgot Password')}
+            {t('Forgot Password')}
           </button>
         </div>
       </div>

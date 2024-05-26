@@ -27,9 +27,9 @@ const Page = () => {
 
   const sContent = SContent();
   useEffect(() => {
-    Breadcrumbs(t('pages.Content'), [
-      { title: t('titles.Setting'), link: '' },
-      { title: t('titles.Content'), link: '' },
+    Breadcrumbs(t('Content'), [
+      { title: t('Setting'), link: '' },
+      { title: t('Content'), link: '' },
     ]);
     switch (sContent.status) {
       case EStatusState.putFulfilled:
@@ -40,16 +40,16 @@ const Page = () => {
     }
   }, [sContent.status]);
 
-  const request = JSON.parse(sContent.queryParams || '{}');
-  const { t } = useTranslation();
+  const request = JSON.parse(sContent.queryParams ?? '{}');
+  const { t } = useTranslation('locale', { keyPrefix: 'pages.base.content' });
   const dataTableRef = useRef<ITableRefObject>(null);
   return (
     <div className={'container mx-auto grid grid-cols-12 gap-3 px-2.5 pt-2.5'}>
       <DrawerForm
         size={request.typeCode !== 'partner' && request.typeCode !== 'tech' ? 'large' : undefined}
         facade={sContent}
-        columns={_column.form(request.typeCode)}
-        title={t(sContent.data ? 'pages.Content/Edit' : 'pages.Content/Add', { type: request.typeCode })}
+        columns={_column.useForm(request.typeCode)}
+        title={t(sContent.data ? 'Edit Content' : 'Add new Content', { type: request.typeCode })}
         onSubmit={(values) => {
           if (sContent.data?.id) sContent.put({ ...values, id: sContent.data.id, typeCode: request.typeCode });
           else sContent.post({ ...values, typeCode: request.typeCode });
@@ -58,7 +58,7 @@ const Page = () => {
       <div className="col-span-12 md:col-span-4 lg:col-span-3 -intro-x">
         <div className="shadow rounded-xl w-full bg-white overflow-hidden">
           <div className="h-14 flex justify-between items-center border-b border-gray-100 px-4 py-2">
-            <h3 className={'font-bold text-lg'}>Data Type</h3>
+            <h3 className={'font-bold text-lg'}>{t('Type content')}</h3>
           </div>
           <Spin spinning={sContentType.isLoading}>
             <div className="h-[calc(100vh-12rem)] overflow-y-auto relative scroll hidden sm:block">
@@ -83,7 +83,7 @@ const Page = () => {
                       'item text-gray-700 font-medium hover:bg-gray-100 flex justify-between items-center border-b border-gray-100 w-full text-left  group',
                     )}
                   >
-                    <div
+                    <button
                       onClick={() => {
                         request.typeCode = data.value;
                         dataTableRef?.current?.onChange(request);
@@ -91,7 +91,7 @@ const Page = () => {
                       className="truncate cursor-pointer flex-1 hover:text-teal-900 item-text px-3 py-1"
                     >
                       {data.title}
-                    </div>
+                    </button>
                   </div>
                 )}
               />
@@ -117,16 +117,16 @@ const Page = () => {
               facade={sContent}
               ref={dataTableRef}
               paginationDescription={(from: number, to: number, total: number) =>
-                t('routes.admin.Layout.Pagination', { from, to, total })
+                t('Pagination content', { from, to, total })
               }
               defaultRequest={{ include: 'languages' }}
-              columns={_column.table()}
+              columns={_column.useTable()}
               rightHeader={
                 <div className={'flex gap-2'}>
                   {sGlobal.user?.role?.permissions?.includes(keyRole.P_CONTENT_STORE) && (
                     <Button
                       icon={<Plus className="icon-cud !h-5 !w-5" />}
-                      text={t('components.button.New')}
+                      text={t('Add new Content', { type: request.typeCode })}
                       onClick={() => sContent.set({ data: undefined, isVisible: true })}
                     />
                   )}

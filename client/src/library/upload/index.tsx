@@ -34,8 +34,7 @@ export const Upload = ({
   accept?: string;
   validation?: (file: any, listFiles: any) => Promise<boolean>;
 }>) => {
-  const { t } = useTranslation();
-  // const { formatDate } = useAuth();
+  const { t } = useTranslation('locale', { keyPrefix: 'library' });
   const isLoading = useRef(false);
   const ref = useRef<any>();
   const [listFiles, set_listFiles] = useState(
@@ -82,7 +81,7 @@ export const Upload = ({
       const file = target.files[i];
       if (maxSize && file.size > maxSize * 1024 * 1024) {
         await Message.error({
-          text: `${file.name} (${(file.size / (1024 * 1024)).toFixed(1)}mb): ${t('components.form.ruleMaxSize', {
+          text: `${file.name} (${(file.size / (1024 * 1024)).toFixed(1)}mb): ${t('You can only upload up to mb!', {
             max: maxSize,
           })}`,
         });
@@ -284,7 +283,7 @@ export const Upload = ({
 
             {showBtnDelete(file) && (
               <PopConfirm
-                title={t('components.datatable.areYouSureWant')}
+                title={t('Are you sure want delete?')}
                 onConfirm={async () => {
                   if (deleteFile && file?.id) {
                     const data = await deleteFile(file?.id);
@@ -292,7 +291,7 @@ export const Upload = ({
                       return false;
                     }
                   }
-                  onChange && onChange(listFiles.filter((_item: any) => _item.id !== file.id));
+                  onChange?.(listFiles.filter((_item: any) => _item.id !== file.id));
                 }}
               >
                 <Button

@@ -13,14 +13,14 @@ import { SCode, SGlobal } from '@/services';
 import { keyRole } from '@/utils';
 
 export default {
-  table: (): IDataTable[] => {
+  useTable: (): IDataTable[] => {
     const sGlobal = SGlobal();
-    const { t } = useTranslation();
+    const { t } = useTranslation('locale', { keyPrefix: 'pages.base.code' });
     const sCode = SCode();
 
     return [
       {
-        title: 'titles.Code',
+        title: t('Code'),
         name: 'code',
         tableItem: {
           width: 100,
@@ -29,7 +29,7 @@ export default {
         },
       },
       {
-        title: 'routes.admin.Code.Name',
+        title: t('Name Code'),
         name: 'name',
         tableItem: {
           filter: { type: ETableFilterType.search },
@@ -37,7 +37,7 @@ export default {
         },
       },
       {
-        title: 'Created',
+        title: t('Created At'),
         name: 'createdAt',
         tableItem: {
           width: 120,
@@ -51,52 +51,48 @@ export default {
         },
       },
       {
-        title: 'routes.admin.user.Action',
+        title: t('Action'),
         tableItem: {
           width: 100,
           align: ETableAlign.center,
           render: (text: string, data) => (
             <div className={'flex gap-2'}>
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_CODE_UPDATE) && (
-                <ToolTip title={t(data.isDisable ? 'components.datatable.Disabled' : 'components.datatable.Enabled')}>
-                  <PopConfirm
-                    title={t(
-                      !data.isDisable
-                        ? 'components.datatable.areYouSureWantDisable'
-                        : 'components.datatable.areYouSureWantEnable',
-                    )}
-                    onConfirm={() => sCode.put({ id: data.code, isDisable: !data.isDisable })}
-                  >
-                    <button
-                      title={t(data.isDisable ? 'components.datatable.Disabled' : 'components.datatable.Enabled') || ''}
-                    >
+                <PopConfirm
+                  title={t(!data.isDisable ? 'Are you sure want disable code?' : 'Are you sure want enable code?', {
+                    name: data.name,
+                  })}
+                  onConfirm={() => sCode.put({ id: data.code, isDisable: !data.isDisable })}
+                >
+                  <ToolTip title={t(data.isDisable ? 'Disabled code' : 'Enabled code', { name: data.name })}>
+                    <button title={t(data.isDisable ? 'Disabled code' : 'Enabled code', { name: data.name })}>
                       {data.isDisable ? (
                         <Disable className="icon-cud bg-yellow-700 hover:bg-yellow-500" />
                       ) : (
                         <Check className="icon-cud bg-green-600 hover:bg-green-400" />
                       )}
                     </button>
-                  </PopConfirm>
-                </ToolTip>
+                  </ToolTip>
+                </PopConfirm>
               )}
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_CODE_UPDATE) && (
-                <ToolTip title={t('routes.admin.Layout.Edit')}>
-                  <button title={t('routes.admin.Layout.Edit') || ''} onClick={() => sCode.getById({ id: data.code })}>
+                <ToolTip title={t('Edit code', { name: data.name })}>
+                  <button title={t('Edit code', { name: data.name })} onClick={() => sCode.getById({ id: data.code })}>
                     <Edit className="icon-cud bg-teal-900 hover:bg-teal-700" />
                   </button>
                 </ToolTip>
               )}
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_CODE_DESTROY) && (
-                <ToolTip title={t('routes.admin.Layout.Delete')}>
-                  <PopConfirm
-                    title={t('components.datatable.areYouSureWant')}
-                    onConfirm={() => sCode.delete(data.code)}
-                  >
-                    <button title={t('routes.admin.Layout.Delete') || ''}>
+                <PopConfirm
+                  title={t('Are you sure want delete code?', { name: data.name })}
+                  onConfirm={() => sCode.delete(data.code)}
+                >
+                  <ToolTip title={t('Delete code', { name: data.name })}>
+                    <button title={t('Delete code', { name: data.name })}>
                       <Trash className="icon-cud bg-red-600 hover:bg-red-400" />
                     </button>
-                  </PopConfirm>
-                </ToolTip>
+                  </ToolTip>
+                </PopConfirm>
               )}
             </div>
           ),
@@ -104,10 +100,11 @@ export default {
       },
     ];
   },
-  form: (): IForm[] => {
+  useForm: (): IForm[] => {
+    const { t } = useTranslation('locale', { keyPrefix: 'pages.base.code' });
     return [
       {
-        title: 'routes.admin.Code.Name',
+        title: t('Name Code'),
         name: 'name',
         formItem: {
           rules: [{ type: EFormRuleType.required }],
@@ -119,7 +116,7 @@ export default {
         },
       },
       {
-        title: 'titles.Code',
+        title: t('Code'),
         name: 'code',
         formItem: {
           condition: (_: string, form, __: number, values: any) => !values?.id,
@@ -127,7 +124,7 @@ export default {
         },
       },
       {
-        title: 'routes.admin.user.Description',
+        title: t('Description code'),
         name: 'description',
         formItem: {
           type: EFormType.textarea,

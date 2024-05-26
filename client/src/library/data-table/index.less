@@ -40,12 +40,20 @@
       @apply ~'mt-1 mr-1';
     }
   }
-  &-content .ant-table-thead > tr { @apply relative;
-    .bg { @apply absolute top-0 left-0 w-full h-full z-50; }
+  &-content .ant-table-thead > tr {
+    @apply relative;
+    .bg {
+      @apply absolute top-0 left-0 w-full h-full z-50;
+    }
 
-    > th { @apply relative !bg-gray-100;}
+    > th {
+      @apply relative !bg-gray-100;
+    }
   }
-  &-column-sorter-inner > .anticon { @apply !mt-0;
-    &:not(.active){ @apply hidden; }
+  &-column-sorter-inner > .anticon {
+    @apply !mt-0;
+    &:not(.active) {
+      @apply hidden;
+    }
   }
 }

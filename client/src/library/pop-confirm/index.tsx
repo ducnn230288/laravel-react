@@ -20,15 +20,15 @@ export const PopConfirm = forwardRef(
   ) => {
     useImperativeHandle(ref, () => ({ onConfirm }));
 
-    const { t } = useTranslation();
+    const { t } = useTranslation('locale', { keyPrefix: 'library' });
     return (
       <Popconfirm
         title={title}
         placement={placement}
         onConfirm={onConfirm}
         destroyTooltipOnHide={true}
-        okText={t('components.datatable.ok')}
-        cancelText={t('components.datatable.cancel')}
+        okText={t('Ok')}
+        cancelText={t('Cancel')}
       >
         {children}
       </Popconfirm>

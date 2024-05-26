@@ -1,7 +1,6 @@
 import React, { PropsWithChildren, useEffect } from 'react';
 
 import { SGlobal } from '@/services';
-import './index.less';
 
 const Layout = ({ children }: PropsWithChildren) => {
   const sGlobal = SGlobal();

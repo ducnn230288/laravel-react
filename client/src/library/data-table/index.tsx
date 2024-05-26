@@ -75,8 +75,6 @@ export const DataTable = forwardRef(
     useImperativeHandle(ref, () => ({
       onChange,
     }));
-    const { t } = useTranslation();
-    const location = useLocation();
     const navigate = useNavigate();
     const idTable = useRef(idElement);
     const timeoutSearch = useRef<ReturnType<typeof setTimeout>>();
@@ -97,20 +95,20 @@ export const DataTable = forwardRef(
         if (params.current?.perPage === 1) params.current.perPage = getSizePageByHeight();
         if (params.current.perPage! < 5) params.current.perPage = 5;
         refPageSizeOptions.current = [
-          params.current.perPage || 10,
-          (params.current.perPage || 10) * 2,
-          (params.current.perPage || 10) * 3,
-          (params.current.perPage || 10) * 4,
-          (params.current.perPage || 10) * 5,
+          params.current.perPage ?? 10,
+          (params.current.perPage ?? 10) * 2,
+          (params.current.perPage ?? 10) * 3,
+          (params.current.perPage ?? 10) * 4,
+          (params.current.perPage ?? 10) * 5,
         ];
       } else refPageSizeOptions.current = pageSizeOptions;
       params.current = cleanObjectKeyNull({
         ...params.current,
-        sort: Object.entries(params.current.sort || {})
+        sort: Object.entries(params.current.sort ?? {})
           .filter(([, value]) => !!value)
           .map(([key, value]) => `${key},${value}`)
           .join(''),
-        like: Object.entries(params.current.like || {})
+        like: Object.entries(params.current.like ?? {})
           .filter(([, value]) => !!value)
           .map(([key, value]) => `${key},${value}`),
       });
@@ -123,7 +121,7 @@ export const DataTable = forwardRef(
         scroll.current.x = 0;
         columns.forEach((item) => {
           if (item.tableItem) {
-            scroll.current.x! += item.tableItem?.width || 150;
+            scroll.current.x! += item.tableItem?.width ?? 150;
           }
         });
       }
@@ -158,7 +156,7 @@ export const DataTable = forwardRef(
             navigate(location.hash.substring(1) + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
         }
       } else if (localStorage.getItem(idTable.current))
-        params.current = JSON.parse(localStorage.getItem(idTable.current) || '{}');
+        params.current = JSON.parse(localStorage.getItem(idTable.current) ?? '{}');
       if (showList && facade?.get) facade?.get(cleanObjectKeyNull({ ...request }));
     };
 
@@ -170,10 +168,11 @@ export const DataTable = forwardRef(
     if (params.current.sort && typeof params.current.sort === 'string')
       params.current.sort = { [params.current.sort.split(',')[0]]: params.current.sort.split(',')[1] };
 
+    const { t } = useTranslation('locale', { keyPrefix: 'library' });
     const groupButton = (confirm: any, clearFilters: any, key: any, value: any) => (
       <div className="grid grid-cols-2 gap-2 sm:mt-1 mt-2">
         <Button
-          text={t('components.datatable.reset')}
+          text={t('Reset')}
           onClick={() => {
             clearFilters();
             confirm();
@@ -182,7 +181,7 @@ export const DataTable = forwardRef(
         />
         <Button
           icon={<Search className="fill-white h-3 w-3" />}
-          text={t('components.datatable.search')}
+          text={t('Search')}
           onClick={() => confirm(value)}
           className={'justify-center h-4/5 sm:h-auto !px-2 sm:px-4'}
         />
@@ -206,11 +205,11 @@ export const DataTable = forwardRef(
           if (get && !facade?.result?.data && valueFilter.current[key]) columnSearch(get, '', undefined, facade);
         }, [valueFilter.current[key]]);
         return (
-          <Spin spinning={facade.isLoading === true || false}>
+          <Spin spinning={facade.isLoading === true}>
             <div className="p-1">
               {get?.facade && (
                 <Mask
-                  placeholder={t('components.datatable.pleaseEnterValueToSearch') || ''}
+                  placeholder={t('Search')}
                   onChange={(e) => {
                     clearTimeout(timeoutSearch.current);
                     timeoutSearch.current = setTimeout(() => columnSearch(get, e.target.value, selectedKeys), 500);
@@ -227,7 +226,7 @@ export const DataTable = forwardRef(
                   onChange={(e) => setSelectedKeys(e.target.value + '')}
                 />
                 {(filters?.length === 0 || facade?.result?.data?.length === 0) && (
-                  <span className={'px-2'}>{t('components.datatable.No Data')}</span>
+                  <span className={'px-2'}>{t('No Data')}</span>
                 )}
               </div>
               {groupButton(confirm, clearFilters, key, selectedKeys)}
@@ -246,11 +245,11 @@ export const DataTable = forwardRef(
           if (get && !facade?.result?.data && valueFilter.current[key]) columnSearch(get, '', undefined, facade);
         }, [valueFilter.current[key]]);
         return (
-          <Spin spinning={facade.isLoading === true || false}>
+          <Spin spinning={facade.isLoading === true}>
             <div className="p-1">
               {!!get?.facade && (
                 <Mask
-                  placeholder={t('components.datatable.pleaseEnterValueToSearch') || ''}
+                  placeholder={t('Search')}
                   onChange={(e) => {
                     clearTimeout(timeoutSearch.current);
                     timeoutSearch.current = setTimeout(
@@ -268,7 +267,7 @@ export const DataTable = forwardRef(
                   onChange={(e) => setSelectedKeys(e)}
                 />
                 {(filters?.length === 0 || facade?.result?.data?.length === 0) && (
-                  <span className={'px-2'}>{t('components.datatable.No Data')}</span>
+                  <span className={'px-2'}>{t('No Data')}</span>
                 )}
               </div>
               {groupButton(confirm, clearFilters, key, selectedKeys)}
@@ -286,7 +285,7 @@ export const DataTable = forwardRef(
         <div className="p-1">
           <Mask
             id={idTable.current + '_input_filter_' + key}
-            placeholder={t('components.datatable.pleaseEnterValueToSearch') || ''}
+            placeholder={t('Search')}
             value={selectedKeys}
             onChange={(e) => setSelectedKeys(e.target.value)}
             onPressEnter={() => confirm()}
@@ -316,7 +315,7 @@ export const DataTable = forwardRef(
             renderExtraFooter={() => (
               <Button
                 icon={<CheckCircle className="h-5 w-5 fill-white" />}
-                text={t('components.datatable.ok')}
+                text={t('Ok')}
                 onClick={() => (document.activeElement as HTMLElement).blur()}
                 className={'w-full justify-center !py-0'}
               />
@@ -383,7 +382,7 @@ export const DataTable = forwardRef(
           });
         // noinspection JSUnusedGlobalSymbols
         return {
-          title: t(col.title || ''),
+          title: col.title,
           dataIndex: col.name,
           ellipsis: true,
           ...item,
@@ -471,7 +470,7 @@ export const DataTable = forwardRef(
                   className={'h-10 pl-8'}
                   id={idTable.current + '_input_search'}
                   value={params.current.fullTextSearch}
-                  placeholder={searchPlaceholder || (t('components.datatable.pleaseEnterValueToSearch') as string)}
+                  placeholder={searchPlaceholder ?? t('Search')}
                   onChange={() => {
                     clearTimeout(timeoutSearch.current);
                     timeoutSearch.current = setTimeout(
@@ -565,9 +564,12 @@ export const DataTable = forwardRef(
                 },
               }}
               locale={{
-                emptyText: (
-                  <div className="bg-gray-100 text-gray-400 py-4">{t(`components.datatable.${emptyText}`)}</div>
-                ),
+                emptyText:
+                  typeof emptyText === 'string' ? (
+                    <div className="bg-gray-100 text-gray-400 py-4">{t(emptyText)}</div>
+                  ) : (
+                    emptyText
+                  ),
               }}
               loading={isLoading}
               columns={cols.current}
@@ -626,7 +628,7 @@ interface Type {
   subHeader?: (count: number) => any;
   xScroll?: number;
   yScroll?: number;
-  emptyText?: JSX.Element | string;
+  emptyText?: any;
   onRow?: (data: any) => { onDoubleClick?: () => void; onClick?: () => void };
   pageSizeOptions?: number[];
   pageSizeRender?: (sizePage: number) => number | string;

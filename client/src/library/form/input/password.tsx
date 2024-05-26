@@ -9,7 +9,7 @@ const Component = ({
 }: {
   value?: string;
   placeholder: string;
-  disabled: boolean;
+  disabled?: boolean;
 }) => {
   const [toggle, set_toggle] = useState(true);
 

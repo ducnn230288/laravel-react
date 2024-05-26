@@ -15,8 +15,8 @@ export const DrawerForm = forwardRef(
       size,
       title,
       columns,
-      textSubmit = 'components.form.modal.save',
-      textCancel = 'components.datatable.cancel',
+      textSubmit = 'Save',
+      textCancel = 'Cancel',
       facade,
       keyState = 'isVisible',
       keyIsLoading = 'isLoading',
@@ -26,7 +26,7 @@ export const DrawerForm = forwardRef(
     ref: Ref<IFormModalRefObject>,
   ) => {
     useImperativeHandle(ref, () => ({ form }));
-    const { t } = useTranslation();
+    const { t } = useTranslation('locale', { keyPrefix: 'library' });
     const [form] = FormAnt.useForm();
 
     return (
@@ -36,12 +36,12 @@ export const DrawerForm = forwardRef(
         footer={
           <div className={classNames('gap-3 flex mt-2 items-center sm:flex-row justify-end')}>
             <Button
-              text={t(textCancel)}
+              text={typeof textCancel === 'string' ? t(textCancel) : textCancel}
               className={'sm:min-w-36 justify-center out-line !border-black w-full sm:w-auto'}
               onClick={() => facade.set({ [keyData]: undefined, [keyState]: false })}
             />
             <Button
-              text={t(textSubmit)}
+              text={typeof textCancel === 'string' ? t(textSubmit) : textSubmit}
               onClick={async () => onSubmit(convertFormValue(columns, await form.validateFields()))}
               disabled={facade[keyIsLoading]}
               className={'sm:min-w-48 justify-center w-full sm:w-auto'}
@@ -73,7 +73,7 @@ interface Type {
   keyData?: string;
   title: string;
   columns: IForm[];
-  textSubmit?: string;
-  textCancel?: string;
+  textSubmit?: any;
+  textCancel?: any;
   onSubmit: (value: any) => void;
 }

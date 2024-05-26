@@ -14,8 +14,8 @@ export const Modal = forwardRef(
       widthModal = 9999,
       onOk,
       firstChange = true,
-      textSubmit,
-      textCancel,
+      textSubmit = 'Save',
+      textCancel = 'Cancel',
       className = '',
       footerCustom,
       children,
@@ -39,7 +39,7 @@ export const Modal = forwardRef(
     useImperativeHandle(ref, () => ({ handleCancel }));
     const [searchParams, setSearchParams] = useSearchParams();
     const { data, isLoading, ...state } = facade;
-    const { t } = useTranslation();
+    const { t } = useTranslation('locale', { keyPrefix: 'library' });
     const handleCancel = () => facade.set({ [keyState]: false });
     const handleOk = async () => {
       if (onOk) onOk();
@@ -83,13 +83,13 @@ export const Modal = forwardRef(
           ((footerCustom && footerCustom(handleOk, handleCancel)) || (
             <div className="flex justify-end gap-2">
               <Button
-                text={t(textCancel || '') || t('components.datatable.cancel')}
+                text={typeof textCancel === 'string' ? t(textCancel) : textCancel}
                 className="!bg-white !text-teal-900 btn-cancel"
                 onClick={handleCancel}
               />
               <Button
                 isLoading={isLoading}
-                text={t(textSubmit || '') || t('components.form.modal.save')}
+                text={typeof textCancel === 'string' ? t(textSubmit) : textSubmit}
                 className="!bg-teal-900"
                 disabled={!firstChange}
                 onClick={handleOk}

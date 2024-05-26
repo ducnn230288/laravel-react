@@ -49,7 +49,7 @@ const Page = () => {
         size={request.typeCode !== 'partner' && request.typeCode !== 'tech' ? 'large' : undefined}
         facade={sContent}
         columns={_column.useForm(request.typeCode)}
-        title={t(sContent.data ? 'Edit Content' : 'Add new Content', { type: request.typeCode })}
+        title={t(sContent.data ? 'Edit Content' : 'Add new Content', { name: request.typeCode })}
         onSubmit={(values) => {
           if (sContent.data?.id) sContent.put({ ...values, id: sContent.data.id, typeCode: request.typeCode });
           else sContent.post({ ...values, typeCode: request.typeCode });
@@ -126,7 +126,7 @@ const Page = () => {
                   {sGlobal.user?.role?.permissions?.includes(keyRole.P_CONTENT_STORE) && (
                     <Button
                       icon={<Plus className="icon-cud !h-5 !w-5" />}
-                      text={t('Add new Content', { type: request.typeCode })}
+                      text={t('Add new Content', { name: request.typeCode })}
                       onClick={() => sContent.set({ data: undefined, isVisible: true })}
                     />
                   )}

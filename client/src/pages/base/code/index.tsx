@@ -48,7 +48,7 @@ const Page = () => {
       <DrawerForm
         facade={sCode}
         columns={_column.useForm()}
-        title={t(sCode.data?.id ? 'Edit Code' : 'Add new Code', { type: request.typeCode })}
+        title={t(sCode.data?.id ? 'Edit Code' : 'Add new Code', { name: request.typeCode })}
         onSubmit={(values) => {
           if (sCode.data) sCode.put({ ...values, id: sCode.data.code, typeCode: request.typeCode });
           else sCode.post({ ...values, typeCode: request.typeCode });
@@ -124,7 +124,7 @@ const Page = () => {
                   {sGlobal.user?.role?.permissions?.includes(keyRole.P_CODE_STORE) && (
                     <Button
                       icon={<Plus className="icon-cud !h-5 !w-5" />}
-                      text={t('Add new Code', { type: request.typeCode })}
+                      text={t('Add new Code', { name: request.typeCode })}
                       onClick={() => sCode.set({ data: undefined, isVisible: true })}
                     />
                   )}

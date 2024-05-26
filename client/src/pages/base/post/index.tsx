@@ -71,7 +71,7 @@ const Page = () => {
         size={'large'}
         facade={sPost}
         columns={_column.useForm(sPost.data?.id)}
-        title={t(sPost.data ? 'Edit Post' : 'Add new Post', { type: request.typeCode })}
+        title={t(sPost.data ? 'Edit Post' : 'Add new Post', { name: request.typeCode })}
         onSubmit={(values) => {
           if (sPost?.data?.id) sPost.put({ ...values, id: sPost.data.id, typeCode: request.typeCode });
           else sPost.post({ ...values, typeCode: request.typeCode });
@@ -177,7 +177,7 @@ const Page = () => {
                   {sGlobal.user?.role?.permissions?.includes(keyRole.P_POST_STORE) && (
                     <Button
                       icon={<Plus className="icon-cud !h-5 !w-5" />}
-                      text={t('Add new Post', { type: request.typeCode })}
+                      text={t('Add new Post', { name: request.typeCode })}
                       onClick={() => sPost.set({ data: undefined, isVisible: true })}
                     />
                   )}

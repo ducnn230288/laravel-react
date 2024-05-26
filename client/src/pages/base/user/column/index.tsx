@@ -113,9 +113,9 @@ export default {
                 </PopConfirm>
               )}
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_USER_UPDATE) && (
-                <ToolTip title={t('Edit user', { name: data.name })}>
+                <ToolTip title={t('Edit User', { name: data.name })}>
                   <button
-                    title={t('Edit user', { name: data.name })}
+                    title={t('Edit User', { name: data.name })}
                     onClick={() => sUser.getById({ id: data.id, params: { include: 'position' } })}
                   >
                     <Edit className="icon-cud bg-teal-900 hover:bg-teal-700" />

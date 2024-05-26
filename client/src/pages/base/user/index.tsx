@@ -61,7 +61,7 @@ const Page = () => {
       <DrawerForm
         facade={sUser}
         columns={_column.useForm()}
-        title={t(sUser.data ? 'Edit User' : 'Add new User', { roleCode: request.roleCode })}
+        title={t(sUser.data ? 'Edit User' : 'Add new User', { name: request.roleCode })}
         onSubmit={(values) => {
           if (sUser.data) sUser.put({ ...values, id: sUser.data.id, roleCode: request.roleCode });
           else sUser.post({ ...values, roleCode: request.roleCode });
@@ -146,7 +146,7 @@ const Page = () => {
                   {sGlobal.user?.role?.permissions?.includes(keyRole.P_USER_STORE) && (
                     <Button
                       icon={<Plus className="icon-cud !h-5 !w-5" />}
-                      text={t('Add new User', { roleCode: request.roleCode })}
+                      text={t('Add new User', { name: request.roleCode })}
                       onClick={() => sUser.set({ data: undefined, isVisible: true })}
                     />
                   )}

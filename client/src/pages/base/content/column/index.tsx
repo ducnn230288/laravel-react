@@ -98,12 +98,12 @@ export default {
               )}
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_CONTENT_UPDATE) && (
                 <ToolTip
-                  title={t('Edit content', {
+                  title={t('Edit Content', {
                     name: data.name,
                   })}
                 >
                   <button
-                    title={t('Edit content', {
+                    title={t('Edit Content', {
                       name: data.name,
                     })}
                     onClick={() => sContent.getById({ id: data.id, params: { include: 'languages' } })}

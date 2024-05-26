@@ -106,14 +106,14 @@ export default {
               )}
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_POST_UPDATE) && (
                 <ToolTip
-                  title={t('Edit post', {
+                  title={t('Edit Post', {
                     name: data.languages?.length
                       ? data.languages?.find((item: any) => item?.language === localStorage.getItem('i18nextLng')).name
                       : '',
                   })}
                 >
                   <button
-                    title={t('Edit post', {
+                    title={t('Edit Post', {
                       name: data.languages?.length
                         ? data.languages?.find((item: any) => item?.language === localStorage.getItem('i18nextLng'))
                             .name

@@ -1,12 +1,12 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
+import { Popconfirm } from 'antd';
 
 import { Check, Disable, Edit, Trash } from '@/assets/svg';
 import { EFormRuleType, EFormType, ETableAlign, ETableFilterType } from '@/enums';
 import { IDataTable, IForm } from '@/interfaces';
 import { Avatar } from '@/library/avatar';
-import { PopConfirm } from '@/library/pop-confirm';
 import { ToolTip } from '@/library/tooltip';
 import { SCode, SGlobal, SUser } from '@/services';
 import { keyRole } from '@/utils';
@@ -91,13 +91,13 @@ export default {
           render: (text: string, data) => (
             <div className={'flex gap-2'}>
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_USER_UPDATE) && (
-                <PopConfirm
-                  title={t(!data.isDisable ? 'Are you sure want disable user?' : 'Are you sure want enable user?', {
-                    name: data.name,
-                  })}
-                  onConfirm={() => sUser.put({ id: data.id, isDisable: !data.isDisable })}
-                >
-                  <ToolTip title={t(data.isDisable ? 'Disabled user' : 'Enabled user', { name: data.name })}>
+                <ToolTip title={t(data.isDisable ? 'Disabled user' : 'Enabled user', { name: data.name })}>
+                  <Popconfirm
+                    title={t(!data.isDisable ? 'Are you sure want disable user?' : 'Are you sure want enable user?', {
+                      name: data.name,
+                    })}
+                    onConfirm={() => sUser.put({ id: data.id, isDisable: !data.isDisable })}
+                  >
                     <button
                       title={t(data.isDisable ? 'Disabled user' : 'Enabled user', {
                         name: data.name,
@@ -109,8 +109,8 @@ export default {
                         <Check className="icon-cud bg-green-600 hover:bg-green-400" />
                       )}
                     </button>
-                  </ToolTip>
-                </PopConfirm>
+                  </Popconfirm>
+                </ToolTip>
               )}
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_USER_UPDATE) && (
                 <ToolTip title={t('Edit User', { name: data.name })}>
@@ -125,14 +125,14 @@ export default {
 
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_USER_DESTROY) && (
                 <ToolTip title={t('Delete user', { name: data.name })}>
-                  <PopConfirm
+                  <Popconfirm
                     title={t('Are you sure want delete user?', { name: data.name })}
                     onConfirm={() => sUser.delete(data.id)}
                   >
                     <button title={t('Delete user', { name: data.name })}>
                       <Trash className="icon-cud bg-red-600 hover:bg-red-400" />
                     </button>
-                  </PopConfirm>
+                  </Popconfirm>
                 </ToolTip>
               )}
             </div>

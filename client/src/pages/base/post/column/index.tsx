@@ -2,12 +2,12 @@ import React from 'react';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 import slug from 'slug';
+import { Popconfirm } from 'antd';
 
 import { Check, Disable, Edit, Trash } from '@/assets/svg';
 import { EFormRuleType, EFormType, ETableAlign, ETableFilterType } from '@/enums';
 import { IDataTable, IForm } from '@/interfaces';
 import { Avatar } from '@/library/avatar';
-import { PopConfirm } from '@/library/pop-confirm';
 import { ToolTip } from '@/library/tooltip';
 import { SGlobal, SPost } from '@/services';
 import { keyRole } from '@/utils';
@@ -78,7 +78,7 @@ export default {
                       : '',
                   })}
                 >
-                  <PopConfirm
+                  <Popconfirm
                     title={t(!data.isDisable ? 'Are you sure want disable post?' : 'Are you sure want enable post?', {
                       name: data.languages?.length
                         ? data.languages?.find((item: any) => item?.language === localStorage.getItem('i18nextLng'))
@@ -101,7 +101,7 @@ export default {
                         <Check className="icon-cud bg-green-600 hover:bg-green-400" />
                       )}
                     </button>
-                  </PopConfirm>
+                  </Popconfirm>
                 </ToolTip>
               )}
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_POST_UPDATE) && (
@@ -133,7 +133,7 @@ export default {
                       : '',
                   })}
                 >
-                  <PopConfirm
+                  <Popconfirm
                     title={t('Are you sure want delete post?', {
                       name: data.languages?.length
                         ? data.languages?.find((item: any) => item?.language === localStorage.getItem('i18nextLng'))
@@ -152,7 +152,7 @@ export default {
                     >
                       <Trash className="icon-cud bg-red-600 hover:bg-red-400" />
                     </button>
-                  </PopConfirm>
+                  </Popconfirm>
                 </ToolTip>
               )}
             </div>

@@ -1,12 +1,12 @@
 import React, { Fragment, PropsWithChildren, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
+import { notification } from 'antd';
 
 import { Arrow, Paste, Times, UploadSVG } from '@/assets/svg';
 import { API, keyToken, uuidv4 } from '@/utils';
 
 import { Button } from '../button';
-import { Message } from '../message';
 import { PopConfirm } from '../pop-confirm';
 
 export const Upload = ({
@@ -80,8 +80,8 @@ export const Upload = ({
     for (let i = 0; i < target.files.length; i++) {
       const file = target.files[i];
       if (maxSize && file.size > maxSize * 1024 * 1024) {
-        await Message.error({
-          text: `${file.name} (${(file.size / (1024 * 1024)).toFixed(1)}mb): ${t('You can only upload up to mb!', {
+        await notification.error({
+          message: `${file.name} (${(file.size / (1024 * 1024)).toFixed(1)}mb): ${t('You can only upload up to mb!', {
             max: maxSize,
           })}`,
         });

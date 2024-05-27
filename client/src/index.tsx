@@ -4,7 +4,7 @@ import i18n from 'i18next';
 import XHR from 'i18next-xhr-backend';
 import { initReactI18next } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { ConfigProvider } from 'antd';
+import { ConfigProvider, notification } from 'antd';
 
 import { SGlobal, setupStore } from '@/services';
 import { reportWebVitals, lang } from '@/utils';
@@ -41,6 +41,10 @@ const Context = () => {
       }
     }
     sGlobal.setLanguage(lang);
+    notification.config({
+      placement: 'bottomLeft',
+      duration: 3,
+    });
   }, []);
 
   return (

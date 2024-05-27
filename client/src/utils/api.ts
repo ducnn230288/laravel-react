@@ -1,7 +1,7 @@
 import queryString from 'query-string';
+import { notification } from 'antd';
 
 import { keyRefreshToken, keyToken, linkApi, routerLinks } from '@/utils/index';
-import { Message } from '@/library/message';
 import { IResponses } from '@/interfaces';
 
 export const API = {
@@ -43,7 +43,7 @@ export const API = {
     );
     const res: IResponses<T> = await response.json();
     if (response.ok) {
-      if (showMessage && res.message) await Message.success({ text: res.message });
+      if (showMessage && res.message) notification.success({ message: res.message });
       return res;
     }
     if (
@@ -59,7 +59,7 @@ export const API = {
         return (await response.json()) as IResponses<T>;
       }
     } else if (res.message) {
-      if (!throwError) await Message.error({ text: res.message });
+      if (!throwError) notification.error({ message: res.message });
       else throw new Error(res.message);
     }
 

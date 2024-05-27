@@ -170,7 +170,7 @@
       "user": {
         "User": "Người Dùng",
         "Role": "Vai trò",
-        "Add new user": "Thêm mới người dùng {{name}}",
+        "Add new User": "Thêm mới người dùng {{name}}",
         "Edit User": "Sửa người dùng {{name}}",
         "Pagination user": "Hiển thị {{from}} - {{to}} /Tổng số {{total}} người dùng",
         "Full name": "Họ và tên",

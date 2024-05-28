@@ -2,7 +2,7 @@ import React, { Ref, forwardRef, useEffect, useImperativeHandle, useRef, useStat
 import { Checkbox, CheckboxOptionType, DatePicker, Radio, Spin, Table } from 'antd';
 import { SorterResult } from 'antd/lib/table/interface';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 import classNames from 'classnames';
 import { DndContext, useDraggable } from '@dnd-kit/core';
 import { restrictToHorizontalAxis } from '@dnd-kit/modifiers';

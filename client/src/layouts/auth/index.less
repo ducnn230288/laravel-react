@@ -1,39 +1,24 @@
-.form-login {
-  input {
-    @apply !bg-green-900 text-white border-none font-medium placeholder:text-white placeholder:font-medium;
+.l-login {
+  @apply block lg:flex justify-between h-full bg-cover bg-no-repeat relative;
+  background-image: url(/assets/images/bg-login.jpg);
+  background-position: top right 25rem;
+
+  > .mask {
+    @apply backdrop-blur-sm bg-base-100/30 absolute left-0 top-0 w-screen h-screen z-0;
   }
-  input:-webkit-autofill {
-    -webkit-text-fill-color: white !important;
-    -webkit-box-shadow: 0 0 0 30px rgb(20 83 45 / var(--tw-bg-opacity)) inset !important;
+  > .wapper {
+    @apply w-full lg:max-w-md bg-base-100 h-screen flex items-center justify-between lg:items-center z-10 relative;
+    > .content {
+      @apply p-10 w-full;
+      > .t-head {
+        @apply inline-block border-b border-primary/30 mb-8;
+      }
+    }
   }
-  label {
-    @apply !text-teal-900;
+  h1 {
+    @apply text-2xl mb-4 font-bold leading-8 md:text-4xl md:leading-10;
   }
-  button {
-    @apply !bg-green-500 !text-green-900 text-base !font-normal rounded-xl py-2 mt-10 !w-full !justify-center hover:!bg-green-500 !border-none;
-  }
-  .group-input {
-    @apply !p-0;
-  }
-  .fill-eye {
-    @apply !fill-white;
-  }
-}
-.form-forgetPassword {
-  input {
-    @apply !bg-green-900 text-white border-none font-medium placeholder:text-white placeholder:font-medium;
-  }
-  input:-webkit-autofill {
-    -webkit-text-fill-color: white !important;
-    -webkit-box-shadow: 0 0 0 30px rgb(20 83 45 / var(--tw-bg-opacity)) inset !important;
-  }
-  label {
-    @apply !text-teal-900;
-  }
-  button {
-    @apply !bg-green-500 !text-green-900 text-base !font-normal rounded-xl py-2 mt-5 !w-full !justify-center hover:!bg-green-500 !border-none;
-  }
-  .group-input {
-    @apply !p-0;
+  h5 {
+    @apply mb-8;
   }
 }

@@ -1,6 +1,8 @@
 import React, { PropsWithChildren, useEffect } from 'react';
 
+import { Logo } from '@/assets/svg';
 import { SGlobal } from '@/services';
+import { APP_NAME } from '@/utils';
 
 const Layout = ({ children }: PropsWithChildren) => {
   const sGlobal = SGlobal();
@@ -10,12 +12,18 @@ const Layout = ({ children }: PropsWithChildren) => {
   }, []);
 
   return (
-    <div className="bg-white relative">
-      <div className="block lg:flex h-full bg-[url('/assets/images/bg-login.jpg')] bg-[top_right_25rem] bg-cover bg-no-repeat">
-        <div className="w-1/2 min-h-full h-screen hidden lg:block "></div>
-        <div className="backdrop-blur-sm bg-white/30 absolute left-0 top-0 w-screen h-screen z-0"></div>
-        <div className="w-full lg:w-1/2 h-screen flex items-center justify-between lg:items-center z-10 relative">
-          <div className="lg:max-w-xl mx-auto p-10 w-full">{children}</div>
+    <div className="l-login">
+      <div />
+      <div className="mask"></div>
+      <div className="wapper">
+        <div className="content intro-x">
+          <div className="t-head">
+            <div className="block-grap-1">
+              <Logo className="logo" />
+              <h4>{APP_NAME}</h4>
+            </div>
+          </div>
+          {children}
         </div>
       </div>
     </div>

@@ -9,13 +9,7 @@ export const Button = ({ text = '', icon, title, className, disabled, isLoading 
       type="button"
       disabled={disabled}
       title={title ?? text ?? ''}
-      className={classNames(
-        'button',
-        {
-          icon: !!icon && !text,
-        },
-        className,
-      )}
+      className={className ?? classNames('btn btn-outline btn-sm')}
       {...props}
     >
       {!isLoading ? icon : <Spinner className={'animate-spin h-5 w-5'} />}

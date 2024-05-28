@@ -16,6 +16,7 @@ const Page = () => {
       navigate(`/${lang}${routerLinks('Login')}`, { replace: true });
     }
   }, [sGlobal.status]);
+
   useEffect(() => {
     if (!sGlobal.data?.email) navigate(`/${lang}${routerLinks('ForgetPassword')}`, { replace: true });
   }, []);
@@ -25,22 +26,14 @@ const Page = () => {
   });
   return (
     <Fragment>
-      <div className="text-center mb-8 mx-auto">
-        <h1
-          className="intro-x text-3xl mb-10 font-bold text-green-900 leading-8 md:text-5xl lg:leading-10"
-          id={'title-login'}
-        >
-          {t('Reset Password')}
-        </h1>
-        <h5 className="intro-x font-normal text-green-900">
-          {t(
-            'Password requires 8 characters or more, with at least 1 uppercase letter, 1 lowercase letter, 1 digit and 1 special character.',
-          )}
-        </h5>
-      </div>
+      <h1>{t('Reset Password')}</h1>
+      <h5>
+        {t(
+          'Password requires 8 characters or more, with at least 1 uppercase letter, 1 lowercase letter, 1 digit and 1 special character.',
+        )}
+      </h5>
       <Spin spinning={sGlobal.isLoading}>
         <Form
-          className="intro-x form-login"
           values={{ ...sGlobal.data }}
           columns={[
             {

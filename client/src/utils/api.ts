@@ -1,7 +1,7 @@
 import queryString from 'query-string';
-import { notification } from 'antd';
 
-import { keyRefreshToken, keyToken, linkApi, routerLinks } from '@/utils/index';
+import { notification } from '@/index';
+import { keyRefreshToken, keyToken, linkApi, routerLinks } from '@/utils';
 import { IResponses } from '@/interfaces';
 
 export const API = {

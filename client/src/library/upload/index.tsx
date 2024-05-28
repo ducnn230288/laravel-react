@@ -1,8 +1,8 @@
 import React, { Fragment, PropsWithChildren, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
-import { notification } from 'antd';
 
+import { notification } from '@/index';
 import { Arrow, Paste, Times, UploadSVG } from '@/assets/svg';
 import { API, keyToken, uuidv4 } from '@/utils';
 

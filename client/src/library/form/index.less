@@ -1,16 +1,16 @@
 .ant-input {
-  @apply border-gray-300;
+  @apply border-base-content/20;
   &:focus {
-    @apply border-blue-400 shadow shadow-blue-600/30 outline-0;
+    @apply shadow shadow-primary/20 outline-0;
   }
 }
 
 .ant-select {
   &:not(.ant-select-customize-input) .ant-select-selector {
-    @apply rounded-xl border px-4 border-solid border-gray-300 items-center;
+    @apply rounded-xl border px-4 border-solid border-base-content/20 items-center;
   }
   &-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector {
-    @apply border-teal-300;
+    @apply border-base-content/20;
   }
   &-single {
     &.ant-select-show-arrow .ant-select-selection-item {
@@ -21,7 +21,7 @@
     }
   }
   &-multiple .ant-select-selection-item {
-    @apply bg-teal-100 rounded-xl py-0 h-5 leading-5 px-2 my-0 -ml-1;
+    @apply bg-base-100 rounded-xl py-0 h-5 leading-5 px-2 my-0 -ml-1;
   }
 }
 
@@ -30,20 +30,20 @@
     @apply hidden;
   }
   &-item-has-error .ant-input {
-    @apply border-red-400;
+    @apply border-error;
   }
   .ant-form-item {
     @apply mb-4;
     &-label {
       @apply overflow-visible pr-2;
       > label {
-        @apply font-medium text-gray-600;
+        @apply font-medium text-base-content/90;
         &.ant-form-item-required:not(.ant-form-item-required-mark-optional) {
           &::before {
             content: none;
           }
           &::after {
-            @apply contents text-red-600 visible;
+            @apply contents text-error visible;
             content: ' *' !important;
           }
         }
@@ -81,36 +81,36 @@
 }
 
 .ant-picker {
-  @apply rounded-xl border px-4 border-solid border-gray-300 h-10 items-center w-full;
+  @apply rounded-xl border px-4 border-solid border-base-content/20 h-10 items-center w-full;
 }
 
 .ant-tabs {
   .ant-tabs-ink-bar {
-    @apply bg-teal-900;
+    @apply bg-primary;
   }
   &.ant-tabs-top > .ant-tabs-nav:before {
-    @apply border-b border-stone-300;
+    @apply border-b border-base-content/20;
   }
   .ant-tabs-tab {
     @apply !bg-transparent py-2.5;
     &:hover {
-      @apply !text-teal-900;
+      @apply !text-primary;
     }
     .ant-tabs-tab-btn {
-      @apply text-base !text-gray-600 font-normal uppercase;
+      @apply text-base !text-base-content font-normal uppercase;
     }
     &-active {
       .ant-tabs-tab-btn {
-        @apply !text-teal-900 !bg-white !opacity-100 font-bold;
+        @apply !text-primary !bg-base-100 !opacity-100 font-bold;
       }
     }
   }
 }
 
 .ant-switch {
-  @apply bg-gray-400;
+  @apply bg-base-100;
   &:hover {
-    @apply !bg-gray-400;
+    @apply !bg-base-100;
   }
   &-inner-unchecked {
     @apply !-mt-5;
@@ -121,9 +121,9 @@
 }
 
 .ant-switch-checked {
-  @apply !bg-green-600;
+  @apply !bg-success;
   &:hover {
-    @apply !bg-green-600;
+    @apply !bg-success;
   }
 }
 .ant-upload-wrapper .ant-upload-list .ant-upload-list-item-container {
@@ -132,7 +132,7 @@
 .ant-upload-wrapper .ant-upload-list.ant-upload-list-picture {
   @apply flex flex-col items-center;
   .ant-upload-list-item {
-    @apply rounded-none border-gray-300;
+    @apply rounded-none border-base-content/20;
   }
 }
 .sun-editor {
@@ -147,7 +147,7 @@
     figure {
       @apply inline-block text-center w-full py-5;
       figcaption {
-        @apply bg-teal-50 border border-teal-200 mt-1 py-1 px-2 inline-block;
+        @apply bg-base-100 border border-base-200 mt-1 py-1 px-2 inline-block;
       }
     }
     p {
@@ -157,43 +157,43 @@
       @apply mx-auto;
     }
     h1 {
-      @apply text-5xl text-teal-900 mb-7 mt-0;
+      @apply text-5xl text-primary mb-7 mt-0;
     }
     h2 {
-      @apply text-4xl text-teal-900 mb-6 mt-0;
+      @apply text-4xl text-primary mb-6 mt-0;
     }
     h3 {
-      @apply text-3xl text-teal-900 mb-5 mt-0;
+      @apply text-3xl text-primary mb-5 mt-0;
     }
     h4 {
-      @apply text-2xl text-teal-900 mb-4 mt-0;
+      @apply text-2xl text-primary mb-4 mt-0;
     }
     h5 {
-      @apply text-xl text-teal-900 mb-4 mt-0;
+      @apply text-xl text-primary mb-4 mt-0;
     }
     h6 {
-      @apply text-lg text-teal-900 mb-4 mt-0;
+      @apply text-lg text-primary mb-4 mt-0;
     }
     table {
       @apply w-full my-3;
       th,
       td {
-        @apply text-left border border-gray-200 px-2 ~'py-1.5';
+        @apply text-left border border-base-100 px-2 ~'py-1.5';
       }
     }
     blockquote {
       @apply mb-7 mx-auto relative table text-justify p-4 border-0 m-0 text-inherit;
       background:
-        linear-gradient(to right, theme('textColor.indigo.500') 2px, transparent 1px) 0 100%,
-        linear-gradient(to left, theme('textColor.indigo.500') 2px, transparent 1px) 100% 0,
-        linear-gradient(to bottom, theme('textColor.indigo.500') 2px, transparent 1px) 100% 0,
-        linear-gradient(to top, theme('textColor.indigo.500') 2px, transparent 1px) 0 100%;
+        linear-gradient(to right, theme('textColor.primary') 2px, transparent 1px) 0 100%,
+        linear-gradient(to left, theme('textColor.primary') 2px, transparent 1px) 100% 0,
+        linear-gradient(to bottom, theme('textColor.primary') 2px, transparent 1px) 100% 0,
+        linear-gradient(to top, theme('textColor.primary') 2px, transparent 1px) 0 100%;
       background-size: 20px 20px;
       background-repeat: no-repeat;
 
       &:before,
       &:after {
-        @apply font-black absolute text-indigo-500 text-3xl;
+        @apply font-black absolute text-primary text-3xl;
         font-family:
           Line Awesome Free,
           serif;

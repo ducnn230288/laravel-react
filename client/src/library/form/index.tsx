@@ -599,6 +599,7 @@ export const Form = ({
         default:
       }
 
+      delete otherProps.key;
       return item.formItem.type !== EFormType.addable ? (
         <AntForm.Item {...otherProps}>{generateInput(item.formItem, item, values, otherProps.name)}</AntForm.Item>
       ) : (
@@ -653,7 +654,7 @@ export const Form = ({
                           (' sm:col-span-' + (column?.formItem?.col ?? 12)) +
                           (' lg:col-span-' + (column?.formItem?.col ?? 12)),
                       )}
-                      key={index}
+                      key={index + column.name}
                     >
                       {generateForm(column, index)}
                     </div>
@@ -687,7 +688,7 @@ export const Form = ({
               id={idSubmit}
               onClick={() => form?.submit()}
               disabled={disableSubmit || spinning}
-              className={'sm:min-w-44 justify-center w-full sm:w-auto '}
+              className={'btn btn-primary btn-block text-base'}
             />
           )}
         </div>

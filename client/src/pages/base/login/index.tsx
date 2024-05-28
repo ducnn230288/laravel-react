@@ -23,52 +23,45 @@ const Page = () => {
 
   return (
     <Fragment>
-      <div className="text-center mb-8">
-        <h1
-          className="intro-x text-3xl mb-8 font-bold text-teal-900 leading-8 md:text-5xl md:leading-10 lg:leading-10"
-          id={'title-login'}
-        >
-          {t('Sign In')}
-        </h1>
-        <h5 className="intro-x font-normal text-teal-900 ">{t('Enter your details to login to your account')}</h5>
-      </div>
-      <div className="mx-auto lg:w-3/4 relative">
-        <Spin spinning={sGlobal.isLoading}>
-          <Form
-            values={{ ...sGlobal.data }}
-            className="intro-x form-login"
-            columns={[
-              {
-                name: 'email',
-                title: t('Username'),
-                formItem: {
-                  rules: [{ type: EFormRuleType.required }, { type: EFormRuleType.email }],
-                },
+      <h1>{t('Sign In')}</h1>
+      <h5>{t('Enter your details to login to your account')}</h5>
+      <Spin spinning={sGlobal.isLoading}>
+        <Form
+          values={{ ...sGlobal.data }}
+          columns={[
+            {
+              name: 'email',
+              title: t('Username'),
+              formItem: {
+                rules: [{ type: EFormRuleType.required }, { type: EFormRuleType.email }],
               },
-              {
-                name: 'password',
-                title: t('Password'),
-                formItem: {
-                  type: EFormType.password,
-                  notDefaultValid: true,
-                  rules: [{ type: EFormRuleType.required }],
-                },
+            },
+            {
+              name: 'password',
+              title: t('Password'),
+              formItem: {
+                type: EFormType.password,
+                notDefaultValid: true,
+                rules: [{ type: EFormRuleType.required }],
               },
-            ]}
-            textSubmit={t('Log In')}
-            handSubmit={sGlobal.login}
-            disableSubmit={sGlobal.isLoading}
-          />
-        </Spin>
-        <div className="absolute  top-2/3 right-0 text-right">
-          <button
-            className={'text-teal-900 font-normal underline hover:no-underline mt-2'}
-            onClick={() => navigate(`/${lang}${routerLinks('ForgetPassword')}`)}
-          >
-            {t('Forgot Password')}
-          </button>
-        </div>
-      </div>
+            },
+          ]}
+          extendForm={() => (
+            <div className="text-right -mt-2">
+              <button
+                className="text-base-content/60"
+                type="button"
+                onClick={() => navigate(`/${lang}${routerLinks('ForgetPassword')}`)}
+              >
+                {t('Forgot Password')}
+              </button>
+            </div>
+          )}
+          textSubmit={t('Log In')}
+          handSubmit={sGlobal.login}
+          disableSubmit={sGlobal.isLoading}
+        />
+      </Spin>
     </Fragment>
   );
 };

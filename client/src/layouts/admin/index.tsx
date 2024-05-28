@@ -1,5 +1,5 @@
 import React, { PropsWithChildren, useEffect } from 'react';
-import { Dropdown, notification } from 'antd';
+import { Dropdown } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import classNames from 'classnames';
@@ -17,8 +17,6 @@ const Layout = ({ children }: PropsWithChildren) => {
   const sGlobal = SGlobal();
 
   const location = useLocation();
-
-  const [, contextHolder] = notification.useNotification();
 
   useEffect(() => {
     setTimeout(() => changeCollapsed(), 200);
@@ -47,7 +45,6 @@ const Layout = ({ children }: PropsWithChildren) => {
 
   return (
     <main className={classNames({ isCollapsed: innerWidth >= 1280 })}>
-      {contextHolder}
       <div className="leading-10" />
       <div className="h-16 relative">
         <div className="absolute top-0 left-0 right-0">

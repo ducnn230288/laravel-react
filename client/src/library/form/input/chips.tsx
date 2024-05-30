@@ -92,7 +92,7 @@ const Component = ({
             (e.target as any).style = 'display: inline-block';
           }
         }}
-        className={'gap-2.5 flex py-2 flex-wrap'}
+        className={'flex flex-wrap gap-2.5 py-2'}
       >
         <DndContext sensors={sensors} onDragEnd={handleDragEnd} collisionDetection={closestCenter}>
           <SortableContext items={value} strategy={horizontalListSortingStrategy}>
@@ -128,8 +128,8 @@ const Component = ({
               )
             ) : (
               <Button
-                icon={<Plus className="h-8 w-8 p-2" />}
-                className="rounded-full inline-block border"
+                icon={<Plus className="size-8 p-2" />}
+                className="inline-block rounded-full border"
                 onClick={showInput}
                 disabled={disabled}
               />
@@ -160,14 +160,14 @@ const DraggableTag = ({
 
   return (
     <div
-      className="inline-block cursor-move bg-teal-100 rounded-xl py-1.5 px-2 relative border"
+      className="relative inline-block cursor-move rounded-xl border bg-teal-100 px-2 py-1.5"
       style={style}
       ref={setNodeRef}
       {...listeners}
     >
       <Button
-        icon={<Times className="h-4 w-4 p-1" />}
-        className="absolute rounded-full -top-1.5 -right-2"
+        icon={<Times className="size-4 p-1" />}
+        className="absolute -right-2 -top-1.5 rounded-full"
         onClick={onClose}
         disabled={disabled}
       />

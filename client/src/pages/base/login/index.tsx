@@ -47,7 +47,7 @@ const Page = () => {
             },
           ]}
           extendForm={() => (
-            <div className="text-right -mt-2">
+            <div className="-mt-2 text-right">
               <button
                 className="text-base-content/60"
                 type="button"

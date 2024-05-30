@@ -52,11 +52,11 @@ const Layout = ({ children }: PropsWithChildren) => {
       </aside>
 
       {/* <div className={'w-full h-full fixed bg-black opacity-30 z-20'} /> */}
-      <section className={'grow px-2 sm:px-0 bg-base-300/50'}>
+      <section className={'grow bg-base-300/50 px-2 sm:px-0'}>
         <Header />
         <div className={'h-[calc(100vh-6rem)] overflow-auto'}>{children}</div>
 
-        <footer className="text-center pt-1.5 w-full">{t('Footer', { year: new Date().getFullYear() })}</footer>
+        <footer className="w-full pt-1.5 text-center">{t('Footer', { year: new Date().getFullYear() })}</footer>
       </section>
     </main>
   );
@@ -67,8 +67,8 @@ const Header = () => {
   const navigate = useNavigate();
 
   return (
-    <header className={'block bg-base-100 border-b border-base-300'}>
-      <div className="flex items-center justify-between px-5 h-12">
+    <header className={'block border-b border-base-300 bg-base-100'}>
+      <div className="flex h-12 items-center justify-between px-5">
         <div>
           <div className="flex gap-5">
             <button
@@ -93,9 +93,9 @@ const Header = () => {
                   label: (
                     <div className="flex">
                       <Avatar src={sGlobal.user?.avatar ?? ''} size={8} />
-                      <div className="text-left leading-none mr-3 block pl-2">
-                        <div className="font-semibold text-sm leading-snug mb-0.5">{sGlobal.user?.name}</div>
-                        <div className="text-gray-500 text-[10px]">{sGlobal.user?.email}</div>
+                      <div className="mr-3 block pl-2 text-left leading-none">
+                        <div className="mb-0.5 text-sm font-semibold leading-snug">{sGlobal.user?.name}</div>
+                        <div className="text-[10px] text-gray-500">{sGlobal.user?.email}</div>
                       </div>
                     </div>
                   ),
@@ -109,7 +109,7 @@ const Header = () => {
                       onClick={() => navigate(`/${lang}${routerLinks('MyProfile')}?tab=1`, { replace: true })}
                     >
                       <div className="flex items-center">
-                        <User className="w-6 h-6 pr-2" />
+                        <User className="size-6 pr-2" />
                       </div>
                       <div>{t('My Profile')}</div>
                     </button>
@@ -124,7 +124,7 @@ const Header = () => {
                       onClick={() => navigate(`/${lang}${routerLinks('MyProfile')}?tab=2`, { replace: true })}
                     >
                       <div className="flex items-center">
-                        <Key className="w-6 h-6 pr-2" />
+                        <Key className="size-6 pr-2" />
                       </div>
                       <div>{t('Change Password')}</div>
                     </button>
@@ -139,7 +139,7 @@ const Header = () => {
                       onClick={() => navigate(`/${lang}${routerLinks('Login')}`, { replace: true })}
                     >
                       <div className="flex items-center">
-                        <Out className="w-6 h-6 pr-2" />
+                        <Out className="size-6 pr-2" />
                       </div>
                       <div>{t('Sign out')}</div>
                     </button>
@@ -151,7 +151,7 @@ const Header = () => {
           >
             <div className="flex gap-3">
               <button
-                className="hover:text-primary hover:bg-primary/10 px-2 py-1 rounded-btn"
+                className="rounded-btn px-2 py-1 hover:bg-primary/10 hover:text-primary"
                 onClick={() => {
                   const html = document.querySelector('html');
                   const dataTheme = html?.getAttribute('data-theme');
@@ -160,7 +160,7 @@ const Header = () => {
                   localStorage.setItem('theme', 'theme');
                 }}
               >
-                <DayNight className="w-6 h-6" />
+                <DayNight className="size-6" />
               </button>
               <Avatar src={sGlobal.user?.avatar ?? ''} size={8} />
             </div>

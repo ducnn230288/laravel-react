@@ -12,7 +12,7 @@ export const Breadcrumbs = (title: string, breadcrumbs: { title: string; link: s
         breadcrumbs.map((item, i) => (
           <Fragment key={i}>
             <span className={classNames({ 'text-gray-400': i < breadcrumbs.length - 1 })}>{item.title}</span>{' '}
-            {i < breadcrumbs.length - 1 && <Arrow className={'w-2.5 h-2.5 mx-1.5'} />}
+            {i < breadcrumbs.length - 1 && <Arrow className={'mx-1.5 size-2.5'} />}
           </Fragment>
         )),
       )),

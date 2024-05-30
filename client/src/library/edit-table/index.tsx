@@ -57,7 +57,7 @@ export const EditTable = ({
       if (type === 'number' && level === maxLevel) {
         return (
           <Mask
-            className={'text-right border-0'}
+            className={'border-0 text-right'}
             placeholder={'Nhập số'}
             mask={{
               alias: 'decimal',

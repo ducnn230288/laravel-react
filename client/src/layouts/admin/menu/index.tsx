@@ -48,7 +48,7 @@ const Layout = ({ permission = [] }: { permission?: string[] }) => {
             })
           }
         >
-          <span className="h-1 w-1 rounded-lg bg-base-content/20 group-hover:w-2 duration-300 ease-in-out transition-all"></span>
+          <span className="size-1 rounded-lg bg-base-content/20 transition-all duration-300 ease-in-out group-hover:w-2"></span>
           <span>{t(subItem.name)}</span>
         </button>
       ));

@@ -73,7 +73,7 @@ export const Modal = forwardRef(
         destroyOnClose={true}
         centered={true}
         width={widthModal}
-        title={title && <h3 className="font-bold text-lg">{title(data)}</h3>}
+        title={title && <h3 className="text-lg font-bold">{title(data)}</h3>}
         open={state[keyState]}
         onOk={handleOk}
         onCancel={handleCancel}
@@ -84,7 +84,7 @@ export const Modal = forwardRef(
             <div className="flex justify-end gap-2">
               <Button
                 text={typeof textCancel === 'string' ? t(textCancel) : textCancel}
-                className="!bg-white !text-teal-900 btn-cancel"
+                className="!bg-white !text-teal-900"
                 onClick={handleCancel}
               />
               <Button

@@ -101,7 +101,7 @@ const Component = forwardRef(
           {!!addonAfter && <div>{addonAfter(form)}</div>}
         </div>
         {list && (
-          <div className={'flex flex-wrap gap-2 mt-2'}>
+          <div className={'mt-2 flex flex-wrap gap-2'}>
             {list.map((item, index) => (
               <Button
                 key={index}

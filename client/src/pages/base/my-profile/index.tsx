@@ -46,12 +46,12 @@ const Page = () => {
   const roleName = useRef('');
   if (sGlobal.user?.role?.name) roleName.current = sGlobal.user.role.name;
   return (
-    <div className="max-w-5xl mx-auto flex lg:flex-row flex-col w-full">
-      <div className="flex-initial lg:w-[250px] mr-5 lg:rounded-xl w-full bg-white pt-6">
+    <div className="mx-auto flex w-full max-w-5xl flex-col lg:flex-row">
+      <div className="mr-5 w-full flex-initial bg-white pt-6 lg:w-[250px] lg:rounded-xl">
         <Form
           values={{ ...sGlobal.data }}
           formAnt={forms}
-          className="text-center items-centers text-xl font-bold text-slate-700"
+          className="items-center text-center text-xl font-bold text-slate-700"
           columns={[
             {
               title: '',
@@ -67,8 +67,8 @@ const Page = () => {
                 render: (_, values) => (
                   <div>
                     {values.name}
-                    <div className="flex w-full flex-row justify-center pt-2 font-normal pb-3">
-                      <User className="w-5 h-5 mr-2 fill-slate-500" />
+                    <div className="flex w-full flex-row justify-center pb-3 pt-2 font-normal">
+                      <User className="mr-2 size-5 fill-slate-500" />
                       <div className="text-base text-gray-500">{roleName.current}</div>
                     </div>
                   </div>
@@ -79,18 +79,17 @@ const Page = () => {
           disableSubmit={sGlobal.isLoading}
         />
       </div>
-      <div className="flex-1 lg:rounded-xl w-auto">
+      <div className="w-auto flex-1 lg:rounded-xl">
         <Tabs
           onTabClick={(key: string) => onChangeTab(key)}
           activeKey={activeKey.current}
           size="large"
-          className="profile"
           items={[
             {
               key: '1',
               label: t('My Profile'),
               children: (
-                <div className={'bg-white rounded-b-xl p-5'}>
+                <div className={'rounded-b-xl bg-white p-5'}>
                   <Form
                     values={{ ...sGlobal.data }}
                     columns={[
@@ -186,7 +185,7 @@ const Page = () => {
                     extendButton={() => (
                       <Button
                         text={t('Cancel')}
-                        className={'md:w-32 justify-center out-line max-sm:w-3/5'}
+                        className={'justify-center max-sm:w-3/5 md:w-32'}
                         onClick={() => {
                           navigate(`/${lang}${routerLinks('MyProfile')}`);
                         }}
@@ -200,7 +199,7 @@ const Page = () => {
               key: '2',
               label: t('Change Password'),
               children: (
-                <div className={'bg-white rounded-b-xl p-5'}>
+                <div className={'rounded-b-xl bg-white p-5'}>
                   <Form
                     values={{ ...sGlobal.data }}
                     columns={[
@@ -252,7 +251,7 @@ const Page = () => {
                     extendButton={() => (
                       <Button
                         text={t('Cancel')}
-                        className={'md:min-w-32 justify-center out-line max-sm:w-3/5'}
+                        className={'justify-center max-sm:w-3/5 md:min-w-32'}
                         onClick={() => {
                           navigate(`/${lang}${routerLinks('MyProfile')}`);
                         }}

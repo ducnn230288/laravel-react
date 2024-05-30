@@ -21,18 +21,15 @@ const Component = ({
         disabled={disabled}
         {...prop}
         type={toggle ? 'password' : 'text'}
-        className="w-full h-12 rounded-btn text-base-content bg-base-100 border border-solid py-2 pr-9 pl-4 ant-input"
+        className="ant-input h-12 w-full rounded-btn border border-solid bg-base-100 py-2 pl-4 pr-9 text-base-content"
       />
       {!toggle && (
-        <Eye
-          onClick={() => set_toggle(!toggle)}
-          className="absolute top-3.5 right-3 z-10 w-5 h-5 fill-base-content fill-eye"
-        />
+        <Eye onClick={() => set_toggle(!toggle)} className="absolute right-3 top-3.5 z-10 size-5 fill-base-content" />
       )}
       {toggle && (
         <EyeSlash
           onClick={() => set_toggle(!toggle)}
-          className="absolute top-3.5 right-3 z-10 w-5 h-5 fill-base-content fill-eye"
+          className="absolute right-3 top-3.5 z-10 size-5 fill-base-content"
         />
       )}
     </div>

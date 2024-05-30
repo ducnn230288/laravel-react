@@ -55,19 +55,19 @@ const Page = () => {
           else sContent.post({ ...values, typeCode: request.typeCode });
         }}
       />
-      <div className="col-span-12 md:col-span-4 lg:col-span-3 -intro-x">
-        <div className="shadow rounded-xl w-full bg-white overflow-hidden">
-          <div className="h-14 flex justify-between items-center border-b border-gray-100 px-4 py-2">
-            <h3 className={'font-bold text-lg'}>{t('Type content')}</h3>
+      <div className="-intro-x col-span-12 md:col-span-4 lg:col-span-3">
+        <div className="w-full overflow-hidden rounded-xl bg-white shadow">
+          <div className="flex h-14 items-center justify-between border-b border-gray-100 px-4 py-2">
+            <h3 className={'text-lg font-bold'}>{t('Type content')}</h3>
           </div>
           <Spin spinning={sContentType.isLoading}>
-            <div className="h-[calc(100vh-12rem)] overflow-y-auto relative scroll hidden sm:block">
+            <div className="relative hidden h-[calc(100vh-12rem)] overflow-y-auto sm:block">
               <Tree
                 blockNode
                 showLine
                 autoExpandParent
                 defaultExpandAll
-                switcherIcon={<Arrow className={'w-4 h-4'} />}
+                switcherIcon={<Arrow className={'size-4'} />}
                 treeData={sContentType.result?.data?.map((item: any) => ({
                   title: item?.name,
                   key: item?.code,
@@ -88,7 +88,7 @@ const Page = () => {
                         request.typeCode = data.value;
                         dataTableRef?.current?.onChange(request);
                       }}
-                      className="truncate cursor-pointer flex-1 hover:text-teal-900 item-text px-3 py-1"
+                      className="flex-1 cursor-pointer truncate px-3 py-1 hover:text-teal-900"
                     >
                       {data.title}
                     </button>
@@ -96,7 +96,7 @@ const Page = () => {
                 )}
               />
             </div>
-            <div className="p-2 sm:p-0 block sm:hidden">
+            <div className="block p-2 sm:hidden sm:p-0">
               <Select
                 value={request.typeCode}
                 className={'w-full'}
@@ -110,9 +110,9 @@ const Page = () => {
           </Spin>
         </div>
       </div>
-      <div className="col-span-12 md:col-span-8 lg:col-span-9 intro-x">
-        <div className="shadow rounded-xl w-full overflow-auto bg-white">
-          <div className="sm:min-h-[calc(100vh-8.5rem)] overflow-y-auto p-3">
+      <div className="intro-x col-span-12 md:col-span-8 lg:col-span-9">
+        <div className="w-full overflow-auto rounded-xl bg-white shadow">
+          <div className="overflow-y-auto p-3 sm:min-h-[calc(100vh-8.5rem)]">
             <DataTable
               facade={sContent}
               ref={dataTableRef}

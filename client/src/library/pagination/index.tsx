@@ -146,13 +146,13 @@ export const Pagination: any = ({
             )}
           </label>
           {showTotal && (
-            <span className="sm:ml-3 text-black my-3">
+            <span className="my-3 text-black sm:ml-3">
               {paginationDescription(_temp.ranges[0], _temp.ranges[1], total)}
             </span>
           )}
         </div>
-        <div className="mt-3 sm:mt-0 right flex justify-center p-1 rounded-xl bg-white">
-          <div className="flex sm:flex-wrap justify-center duration-300 transition-all">
+        <div className="right mt-3 flex justify-center rounded-xl bg-white p-1 sm:mt-0">
+          <div className="flex justify-center transition-all duration-300 sm:flex-wrap">
             {listOfPageItem.current.map((item: any, index: number) => (
               <button
                 type={'button'}
@@ -168,10 +168,10 @@ export const Pagination: any = ({
                 onClick={() => onPageIndexChange(item)}
                 aria-label={item.type}
               >
-                {item.type === 'prev' && <Arrow className={'w-3 h-3 rotate-180'} />}
-                {item.type === 'next' && <Arrow className={'w-3 h-3'} />}
-                {item.type === 'prev_10' && <DoubleArrow className={'w-3 h-3 rotate-180'} />}
-                {item.type === 'next_10' && <DoubleArrow className={'w-3 h-3'} />}
+                {item.type === 'prev' && <Arrow className={'size-3 rotate-180'} />}
+                {item.type === 'next' && <Arrow className={'size-3'} />}
+                {item.type === 'prev_10' && <DoubleArrow className={'size-3 rotate-180'} />}
+                {item.type === 'next_10' && <DoubleArrow className={'size-3'} />}
                 {item.type.indexOf('page') === 0 && item.index}
                 {(item.type === 'prev_5' || item.type === 'next_5') && '...'}
               </button>

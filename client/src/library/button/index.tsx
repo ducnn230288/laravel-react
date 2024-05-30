@@ -12,7 +12,7 @@ export const Button = ({ text = '', icon, title, className, disabled, isLoading 
       className={className ?? classNames('btn btn-outline btn-sm')}
       {...props}
     >
-      {!isLoading ? icon : <Spinner className={'animate-spin h-5 w-5'} />}
+      {!isLoading ? icon : <Spinner className={'size-5 animate-spin'} />}
       {text}
     </button>
   );

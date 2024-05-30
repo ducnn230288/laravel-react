@@ -50,7 +50,7 @@ const Component = ({ mode, onChange, placeholder, disabled, get, value }: Type) 
         open={_temp.open}
         placement="bottom"
         dropdownRender={() => (
-          <div className={'bg-white drop-shadow-lg rounded-xl overflow-hidden'}>
+          <div className={'overflow-hidden rounded-xl bg-white drop-shadow-lg'}>
             <DataTable
               formatData={(data) => arrayUnique([..._temp.data, ...data], 'id')}
               ref={table}
@@ -84,7 +84,7 @@ const Component = ({ mode, onChange, placeholder, disabled, get, value }: Type) 
           className={'h-10'}
         />
       </Dropdown>
-      <span className="arrow-down absolute top-3 right-2.5 text-gray-400 opacity-100 duration-150 ease-in-out transition-all">
+      <span className="absolute right-2.5 top-3 text-gray-400 opacity-100 transition-all duration-150 ease-in-out">
         <svg
           viewBox="64 64 896 896"
           focusable="false"
@@ -97,7 +97,7 @@ const Component = ({ mode, onChange, placeholder, disabled, get, value }: Type) 
           <path d="M884 256h-75c-5.1 0-9.9 2.5-12.9 6.6L512 654.2 227.9 262.6c-3-4.1-7.8-6.6-12.9-6.6h-75c-6.5 0-10.3 7.4-6.5 12.7l352.6 486.1c12.8 17.6 39 17.6 51.7 0l352.6-486.1c3.9-5.3.1-12.7-6.4-12.7z"></path>
         </svg>
       </span>
-      <span className="search absolute top-3 right-3 text-gray-400 opacity-0 duration-150 ease-in-out transition-all">
+      <span className="absolute right-3 top-3 text-gray-400 opacity-0 transition-all duration-150 ease-in-out">
         <svg
           viewBox="64 64 896 896"
           focusable="false"

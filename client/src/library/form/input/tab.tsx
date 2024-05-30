@@ -25,7 +25,7 @@ const Component = ({
             label: list[i].label,
             key: i,
             children: (
-              <div className={'grid gap-x-5 grid-cols-12'}>
+              <div className={'grid grid-cols-12 gap-x-5'}>
                 {column.map((col: any, index: number) => (
                   <div
                     className={classNames(

@@ -37,14 +37,14 @@ export const DrawerForm = forwardRef(
           <div className={classNames('gap-3 flex mt-2 items-center sm:flex-row justify-end')}>
             <Button
               text={typeof textCancel === 'string' ? t(textCancel) : textCancel}
-              className={'sm:min-w-36 justify-center out-line !border-black w-full sm:w-auto'}
+              className={'w-full justify-center !border-black sm:w-auto sm:min-w-36'}
               onClick={() => facade.set({ [keyData]: undefined, [keyState]: false })}
             />
             <Button
               text={typeof textCancel === 'string' ? t(textSubmit) : textSubmit}
               onClick={async () => onSubmit(convertFormValue(columns, await form.validateFields()))}
               disabled={facade[keyIsLoading]}
-              className={'sm:min-w-48 justify-center w-full sm:w-auto'}
+              className={'w-full justify-center sm:w-auto sm:min-w-48'}
             />
           </div>
         }

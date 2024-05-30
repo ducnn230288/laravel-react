@@ -55,10 +55,10 @@ const Component = ({
       {(fields, { add, remove }) =>
         isTable ? (
           <Fragment>
-            <div className={'table w-full border-collapse addable'} style={{ minWidth: column.length * 150 }}>
+            <div className={'table w-full border-collapse'} style={{ minWidth: column.length * 150 }}>
               <div className="table-row">
                 {!!idCheck && (
-                  <div className={'table-cell font-bold p-1 text-center w-10'}>
+                  <div className={'table-cell w-10 p-1 text-center font-bold'}>
                     <Checkbox
                       indeterminate={_temp.indeterminate}
                       onChange={onCheckAllChange}
@@ -66,7 +66,7 @@ const Component = ({
                     />
                   </div>
                 )}
-                <div className={'table-cell border bg-gray-300 font-bold p-1 text-center w-10'}>STT</div>
+                <div className={'table-cell w-10 border bg-gray-300 p-1 text-center font-bold'}>STT</div>
                 {column.map((col: any, index: number) => (
                   <div
                     key={index}
@@ -82,7 +82,7 @@ const Component = ({
                     {col.title}
                   </div>
                 ))}
-                <div className={'w-8 h-1'} />
+                <div className={'h-1 w-8'} />
               </div>
               {fields.map(({ name: n }, i) => (
                 <div className="table-row" key={i}>
@@ -96,14 +96,14 @@ const Component = ({
                   )}
                   <div className={'table-cell border bg-gray-300 text-center'}>{i + 1}</div>
                   {column.map((col: any, index: number) => (
-                    <div className={'table-cell border relative'} key={index}>
+                    <div className={'relative table-cell border'} key={index}>
                       {generateForm(col, index + '_' + i, false, [n, col.name])}
                     </div>
                   ))}
-                  <div className={'table-cell align-middle w-8 sm:w-8'}>
+                  <div className={'table-cell w-8 align-middle sm:w-8'}>
                     {showRemove(form.getFieldValue([[name], n]), n) && (
                       <Trash
-                        className="fill-red-600 hover:fill-red-400 cursor-pointer h-8 w-8"
+                        className="size-8 cursor-pointer fill-red-600 hover:fill-red-400"
                         onClick={() => {
                           remove(n);
                           onAdd(form.getFieldValue(name), form);
@@ -114,9 +114,8 @@ const Component = ({
                 </div>
               ))}
             </div>
-            <div className={'flex justify-end btn-add'}>
+            <div className={'flex justify-end'}>
               <Button
-                className="addable-add"
                 onClick={() => {
                   add();
                   onAdd(form.getFieldValue(name), form);
@@ -127,9 +126,9 @@ const Component = ({
             </div>
           </Fragment>
         ) : (
-          <div className={'addable'}>
+          <div>
             {fields.map(({ name: n }, i) => (
-              <div className={'grid gap-x-5 grid-cols-12'} key={i}>
+              <div className={'grid grid-cols-12 gap-x-5'} key={i}>
                 {column.map((col: any, index: number) => (
                   <div
                     className={classNames(
@@ -148,10 +147,10 @@ const Component = ({
                     {generateForm(col, index + '_' + i, true, [n, col.name])}
                   </div>
                 ))}
-                <div className={'table-cell align-middle w-8'}>
+                <div className={'table-cell w-8 align-middle'}>
                   {showRemove(form.getFieldValue([[name], n]), n) && (
                     <Trash
-                      className="fill-red-600 hover:fill-red-400 cursor-pointer h-8 w-8"
+                      className="size-8 cursor-pointer fill-red-600 hover:fill-red-400"
                       onClick={() => {
                         remove(n);
                         onAdd(form.getFieldValue(name), form);
@@ -165,7 +164,6 @@ const Component = ({
               <Button
                 icon={<Plus className="icon-cud !h-5 !w-5" />}
                 text={textAdd}
-                className="addable-add"
                 onClick={() => {
                   add();
                   onAdd(form.getFieldValue(name), form);

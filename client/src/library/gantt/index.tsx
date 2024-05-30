@@ -154,7 +154,7 @@ export const Gantt = ({
       document.querySelector(`#${id.current} ${e.target.dataset.scrollX}`)!.scrollTo({ left: e.target.scrollLeft });
   };
   const NameColumn = ({ name }: { name: string; isDrag?: boolean }) => (
-    <th align={'left'} className="capitalize border px-4 h-12 text-xs relative truncate">
+    <th align={'left'} className="relative h-12 truncate border px-4 text-xs capitalize">
       {name}
     </th>
   );
@@ -253,7 +253,7 @@ export const Gantt = ({
           left: startLeft + (item.endDate || index === 0 ? 0 : widthColumnDay / perRow) + 'px',
         }}
       >
-        <div className={'absolute top-1 -left-1 z-10 h-3 w-3 bg-black rotate-45'}></div>
+        <div className={'absolute -left-1 top-1 z-10 size-3 rotate-45 bg-black'}></div>
         {/*<div className="absolute -top-0.5 left-3 whitespace-nowrap">{item.name}</div>*/}
       </div>
     );
@@ -308,7 +308,7 @@ export const Gantt = ({
             }
           }}
         >
-          <div className={'w-full flex gap-0.5'}>
+          <div className={'flex w-full gap-0.5'}>
             <div className={'left overflow-hidden'} style={{ flexBasis: '50%' }}>
               <div className={'left-scroll overflow-x-hidden'}>
                 <table className={'head min-w-[600px]'}>
@@ -338,7 +338,7 @@ export const Gantt = ({
                             data-index={index}
                             data-level={item.level}
                           >
-                            <td className="border-x pl-5 py-0 h-6 overflow-hidden">
+                            <td className="h-6 overflow-hidden border-x py-0 pl-5">
                               <div
                                 className={'flex items-center gap-1'}
                                 style={{ paddingLeft: item.level * (widthColumnDay / perRow) + 'px' }}
@@ -348,15 +348,15 @@ export const Gantt = ({
                                     animation={{ rotate: 0, duration: 200 }} // @ts-ignore
                                     moment={!statusCollapse.current[index] ? null : 1}
                                     reverse={!statusCollapse.current[index]}
-                                    className={'-ml-4 rotate-90 w-3 h-3 cursor-pointer'}
+                                    className={'-ml-4 size-3 rotate-90 cursor-pointer'}
                                   >
-                                    <Arrow onClick={() => handleCollapse(index, item.level)} className={'w-3 h-3'} />
+                                    <Arrow onClick={() => handleCollapse(index, item.level)} className={'size-3'} />
                                   </TweenOne>
                                 )}
                                 <span className={'truncate'}>{item.name}</span>
                               </div>
                             </td>
-                            <td className="border-x px-4 py-0 h-6 truncate">{item.assignee}</td>
+                            <td className="h-6 truncate border-x px-4 py-0">{item.assignee}</td>
                             <td
                               className={classNames('border-x px-4 py-0 h-6 text-white truncate', {
                                 'bg-blue-600': item.status === 'In Progress',
@@ -375,10 +375,10 @@ export const Gantt = ({
                             >
                               {item.priority}
                             </td>
-                            <td className="border-x px-4 py-0 h-6 truncate">
+                            <td className="h-6 truncate border-x px-4 py-0">
                               {item.planned} {item.planned ? 'hours' : ''}
                             </td>
-                            <td className="border-x px-4 py-0 h-6 truncate">
+                            <td className="h-6 truncate border-x px-4 py-0">
                               {item.work} {item.work ? 'days' : ''}
                             </td>
                           </tr>
@@ -402,7 +402,7 @@ export const Gantt = ({
                           <th
                             key={index}
                             align={'left'}
-                            className={'capitalize border-l border-r border-t px-4 h-6 text-xs'}
+                            className={'h-6 border-x border-t px-4 text-xs capitalize'}
                             style={{ width: widthGantt(year, month) }}
                           >
                             {_temp.date.obj[year][month][0].format('MMMM')} {year}
@@ -423,7 +423,7 @@ export const Gantt = ({
                           _temp.date.obj[year][month].map((day: Dayjs, index: number) => (
                             <th
                               key={index}
-                              className={'capitalize border-x font-normal h-6 text-xs'}
+                              className={'h-6 border-x text-xs font-normal capitalize'}
                               style={{ width: widthColumnDay + 'px' }}
                             >
                               {day.format('DD')}
@@ -435,9 +435,9 @@ export const Gantt = ({
                   </thead>
                 </table>
               </div>
-              <div className="overflow-scroll relative" data-scroll-x={'.right-scroll'} onScroll={handleScroll}>
+              <div className="relative overflow-scroll" data-scroll-x={'.right-scroll'} onScroll={handleScroll}>
                 <div
-                  className="event h-full absolute top-0 left-0 flex z-10"
+                  className="event absolute left-0 top-0 z-10 flex h-full"
                   style={{ width: _temp.date.total * widthColumnDay + 'px' }}
                 >
                   {event.map((item, index) => {
@@ -445,7 +445,7 @@ export const Gantt = ({
                       return (
                         <div
                           key={index}
-                          className={'bg-gray-200 h-full absolute flex items-center justify-center text-gray-400'}
+                          className={'absolute flex h-full items-center justify-center bg-gray-200 text-gray-400'}
                           style={{
                             width: (item.endDate.diff(item.startDate, 'day') + 1) * (widthColumnDay / perRow) + 'px',
                             left: item.startDate.diff(_temp.dateStart, 'day') * (widthColumnDay / perRow) + 'px',
@@ -464,19 +464,19 @@ export const Gantt = ({
                         <div
                           key={index}
                           className={
-                            'border-red-600 border-l border-dashed h-full absolute flex justify-center items-center'
+                            'absolute flex h-full items-center justify-center border-l border-dashed border-red-600'
                           }
                           style={{
                             left: item.startDate.diff(_temp.dateStart, 'day') * (widthColumnDay / perRow) + 'px',
                           }}
                         >
-                          <div className="px-2 py-1 bg-red-500 text-white rounded-r-xl">{item.name}</div>
+                          <div className="rounded-r-xl bg-red-500 px-2 py-1 text-white">{item.name}</div>
                         </div>
                       );
                   })}
                 </div>
                 <svg
-                  className={'absolute top-0 left-0 z-10'}
+                  className={'absolute left-0 top-0 z-10'}
                   style={{
                     width: _temp.date.total * widthColumnDay + 'px',
                     height: _temp.task.filter((item) => !item.hidden).length * 24 + 'px',
@@ -485,13 +485,13 @@ export const Gantt = ({
                   {_temp.task.filter((item) => !item.hidden).map((item, i) => renderSvg(item, i))}
                 </svg>
                 <div
-                  className="task absolute top-0 left-0 flex z-10"
+                  className="task absolute left-0 top-0 z-10 flex"
                   style={{ width: _temp.date.total * widthColumnDay + 'px' }}
                 >
                   {_temp.task.map((item, index) => renderProgress(item, index))}
                 </div>
                 <table
-                  className={'min-w-[600px] border-b -z-10'}
+                  className={'-z-10 min-w-[600px] border-b'}
                   style={{ width: _temp.date.total * widthColumnDay + 'px' }}
                 >
                   <tbody>
@@ -506,7 +506,7 @@ export const Gantt = ({
                         {Object.keys(_temp.date.obj).map((year) =>
                           Object.keys(_temp.date.obj[year]).map((month) =>
                             _temp.date.obj[year][month].map((day: Dayjs, i: number) => (
-                              <td key={i} className={'capitalize border-x font-normal h-6 relative py-0'} />
+                              <td key={i} className={'relative h-6 border-x py-0 font-normal capitalize'} />
                             )),
                           ),
                         )}
@@ -541,13 +541,13 @@ export const Gantt = ({
 const DraggableSide = () => {
   const { attributes, listeners, setNodeRef } = useDraggable({ id: 'side' });
   return (
-    <div className={'w-1 h-auto cursor-ew-resize hover:bg-red-500'} ref={setNodeRef} {...listeners} {...attributes} />
+    <div className={'h-auto w-1 cursor-ew-resize hover:bg-red-500'} ref={setNodeRef} {...listeners} {...attributes} />
   );
 };
 const DraggableVertical = () => {
   const { attributes, listeners, setNodeRef } = useDraggable({ id: 'vertical' });
   return (
-    <div className={'w-full h-1 cursor-ns-resize hover:bg-red-500'} ref={setNodeRef} {...listeners} {...attributes} />
+    <div className={'h-1 w-full cursor-ns-resize hover:bg-red-500'} ref={setNodeRef} {...listeners} {...attributes} />
   );
 };
 type TTask = {

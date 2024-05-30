@@ -99,7 +99,7 @@ const Pages = () => {
                     <Suspense
                       fallback={
                         <Spin>
-                          <div className="w-screen h-screen" />
+                          <div className="h-screen w-screen" />
                         </Spin>
                       }
                     >

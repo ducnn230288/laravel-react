@@ -314,8 +314,8 @@ export const Form = ({
       case EFormType.switch:
         return (
           <Switch
-            checkedChildren={<Check className="h-5 w-5 fill-white" />}
-            unCheckedChildren={<Times className="h-5 w-5 fill-white" />}
+            checkedChildren={<Check className="size-5 fill-white" />}
+            unCheckedChildren={<Times className="size-5 fill-white" />}
             defaultChecked={!!values && values[item.name || ''] === 1}
             onChange={(e) => formItem.onChange?.(e, form, reRender)}
           />
@@ -639,8 +639,8 @@ export const Form = ({
           }
         }}
       >
-        <div className={'group-input group-input-profile'}>
-          <div className={'grid gap-x-5 grid-cols-12 group-input'}>
+        <div>
+          <div className={'grid grid-cols-12 gap-x-5'}>
             {columns
               .filter((item: any) => !!item && !!item.formItem)
               .map(
@@ -677,7 +677,7 @@ export const Form = ({
           {handCancel && (
             <Button
               text={textCancel ?? t('Cancel')}
-              className={'sm:min-w-32 justify-center out-line !border-black w-full sm:w-auto'}
+              className={'w-full justify-center !border-black sm:w-auto sm:min-w-32'}
               onClick={handCancel}
             />
           )}

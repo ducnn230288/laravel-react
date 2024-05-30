@@ -52,10 +52,10 @@ const Component = ({ tag, onChange, form, value, disabled, maxTagCount, placehol
       filterOption={false}
       maxTagPlaceholder={(array) => '+' + array.length}
       tagRender={({ label, onClose }) => (
-        <div className="bg-teal-100 rounded-xl py-1 px-2 relative mr-2.5 -left-2.5">
+        <div className="relative -left-2.5 mr-2.5 rounded-xl bg-teal-100 px-2 py-1">
           <Button
-            icon={<Times className="h-5 w-5 fill-red-600" />}
-            className="absolute rounded-full -top-1 -right-2 !bg-red-100 !text-red-600 leading-none z-auto"
+            icon={<Times className="size-5 fill-red-600" />}
+            className="absolute -right-2 -top-1 z-auto rounded-full !bg-red-100 leading-none !text-red-600"
             onClick={onClose}
             disabled={disabled}
           />

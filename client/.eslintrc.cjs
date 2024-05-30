@@ -1,11 +1,7 @@
 module.exports = {
   plugins: ['@typescript-eslint/eslint-plugin', 'react', 'jsx-a11y', 'react-refresh'],
   parser: '@typescript-eslint/parser',
-  extends: [
-    'eslint:recommended',
-    'plugin:react/recommended',
-    'plugin:@typescript-eslint/recommended',
-  ],
+  extends: ['eslint:recommended', 'plugin:react/recommended', 'plugin:@typescript-eslint/recommended'],
   root: true,
   settings: {
     react: {

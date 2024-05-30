@@ -169,20 +169,20 @@ export const DataTable = forwardRef(
 
     const { t } = useTranslation('locale', { keyPrefix: 'library' });
     const groupButton = (confirm: any, clearFilters: any, key: any, value: any) => (
-      <div className="grid grid-cols-2 gap-2 sm:mt-1 mt-2">
+      <div className="mt-2 grid grid-cols-2 gap-2 sm:mt-1">
         <Button
           text={t('Reset')}
           onClick={() => {
             clearFilters();
             confirm();
           }}
-          className={'justify-center !bg-gray-300 !text-black h-4/5 sm:h-auto !px-2 sm:px-4'}
+          className={'h-4/5 justify-center !bg-gray-300 !px-2 !text-black sm:h-auto sm:px-4'}
         />
         <Button
-          icon={<Search className="fill-white h-3 w-3" />}
+          icon={<Search className="size-3 fill-white" />}
           text={t('Search')}
           onClick={() => confirm(value)}
-          className={'justify-center h-4/5 sm:h-auto !px-2 sm:px-4'}
+          className={'h-4/5 justify-center !px-2 sm:h-auto sm:px-4'}
         />
       </div>
     );
@@ -233,7 +233,7 @@ export const DataTable = forwardRef(
           </Spin>
         );
       },
-      filterIcon: () => <CheckCircle className="h-3.5 w-3.5 fill-gray-600" />,
+      filterIcon: () => <CheckCircle className="size-3.5 fill-gray-600" />,
     });
     // noinspection JSUnusedGlobalSymbols
     const getColumnSearchCheckbox = (filters: any, key: any, get: ITableGet = {}) => ({
@@ -313,7 +313,7 @@ export const DataTable = forwardRef(
           <RangePicker
             renderExtraFooter={() => (
               <Button
-                icon={<CheckCircle className="h-5 w-5 fill-white" />}
+                icon={<CheckCircle className="size-5 fill-white" />}
                 text={t('Ok')}
                 onClick={() => (document.activeElement as HTMLElement).blur()}
                 className={'w-full justify-center !py-0'}
@@ -462,7 +462,7 @@ export const DataTable = forwardRef(
     return (
       <div ref={tableRef} className={classNames(className, 'intro-x')}>
         {(!!showSearch || !!leftHeader || !!rightHeader) && (
-          <div className="lg:flex justify-between mb-2.5 gap-y-2.5 flex-wrap">
+          <div className="mb-2.5 flex-wrap justify-between gap-y-2.5 lg:flex">
             {showSearch ? (
               <div className="relative">
                 <Mask
@@ -494,7 +494,7 @@ export const DataTable = forwardRef(
                 />
                 {!params.current.fullTextSearch ? (
                   <Search
-                    className="w-3.5 h-3.5 my-1 fill-gray-500 text-lg absolute top-2 left-2.5 z-10"
+                    className="absolute left-2.5 top-2 z-10 my-1 size-3.5 fill-gray-500 text-lg"
                     onClick={() => {
                       if (params.current.fullTextSearch) {
                         (document.getElementById(idTable.current + '_input_search') as HTMLInputElement).value = '';
@@ -505,7 +505,7 @@ export const DataTable = forwardRef(
                 ) : (
                   !!params.current.fullTextSearch && (
                     <Times
-                      className="w-3.5 h-3.5 my-1 fill-gray-500 text-lg las absolute top-2 right-3 z-10"
+                      className="absolute right-3 top-2 z-10 my-1 size-3.5 fill-gray-500 text-lg"
                       onClick={() => {
                         if (params.current.fullTextSearch) {
                           (document.getElementById(idTable.current + '_input_search') as HTMLInputElement).value = '';
@@ -565,7 +565,7 @@ export const DataTable = forwardRef(
               locale={{
                 emptyText:
                   typeof emptyText === 'string' ? (
-                    <div className="bg-gray-100 text-gray-400 py-4">{t(emptyText)}</div>
+                    <div className="bg-gray-100 py-4 text-gray-400">{t(emptyText)}</div>
                   ) : (
                     emptyText
                   ),
@@ -643,7 +643,7 @@ const Draggable = (props: any) => {
   const { attributes, listeners, setNodeRef } = useDraggable({ id: props.id });
   return (
     <span
-      className={'opacity-0 cursor-col-resize absolute right-0 top-0 z-50 h-full w-1'}
+      className={'absolute right-0 top-0 z-50 h-full w-1 cursor-col-resize opacity-0'}
       ref={setNodeRef}
       {...listeners}
       {...attributes}

@@ -77,10 +77,10 @@ const Page = () => {
           else sPost.post({ ...values, typeCode: request.typeCode });
         }}
       />
-      <div className="col-span-12 md:col-span-4 lg:col-span-3 -intro-x">
-        <div className="shadow rounded-xl w-full bg-white overflow-hidden">
-          <div className="h-14 flex justify-between items-center border-b border-gray-100 px-4 py-2">
-            <h3 className={'font-bold text-lg'}>{t('Type Post')}</h3>
+      <div className="-intro-x col-span-12 md:col-span-4 lg:col-span-3">
+        <div className="w-full overflow-hidden rounded-xl bg-white shadow">
+          <div className="flex h-14 items-center justify-between border-b border-gray-100 px-4 py-2">
+            <h3 className={'text-lg font-bold'}>{t('Type Post')}</h3>
             <div className="flex items-center">
               <Button
                 icon={<Plus className="icon-cud !h-5 !w-5" />}
@@ -90,13 +90,13 @@ const Page = () => {
             </div>
           </div>
           <Spin spinning={sPostType.isLoading}>
-            <div className="h-[calc(100vh-12rem)] overflow-y-auto relative scroll hidden sm:block">
+            <div className="relative hidden h-[calc(100vh-12rem)] overflow-y-auto sm:block">
               <Tree
                 blockNode
                 showLine
                 autoExpandParent
                 defaultExpandAll
-                switcherIcon={<Arrow className={'w-4 h-4'} />}
+                switcherIcon={<Arrow className={'size-4'} />}
                 treeData={sPostType.result?.data}
                 titleRender={(data: any) => (
                   <div
@@ -110,15 +110,15 @@ const Page = () => {
                         request.typeCode = data.code;
                         dataTableRef?.current?.onChange(request);
                       }}
-                      className="truncate cursor-pointer flex-1 hover:text-teal-900 item-text px-3 py-1"
+                      className="flex-1 cursor-pointer truncate px-3 py-1 hover:text-teal-900"
                     >
                       {data.name}
                     </button>
-                    <div className="w-16 flex justify-end gap-1">
+                    <div className="flex w-16 justify-end gap-1">
                       {sGlobal.user?.role?.permissions?.includes(keyRole.P_POST_TYPE_UPDATE) && (
                         <ToolTip title={t('Edit Type Post', { name: data.name })}>
                           <button
-                            className={'opacity-0 group-hover:opacity-100 transition-all duration-300 '}
+                            className={'opacity-0 transition-all duration-300 group-hover:opacity-100 '}
                             title={t('Edit Type Post', { name: data.name })}
                             onClick={() => sPostType.getById({ id: data.code })}
                           >
@@ -133,7 +133,7 @@ const Page = () => {
                             onConfirm={() => sPostType.delete(data.code)}
                           >
                             <button
-                              className={'opacity-0 group-hover:opacity-100 transition-all duration-300'}
+                              className={'opacity-0 transition-all duration-300 group-hover:opacity-100'}
                               title={t('Delete type post', { name: data.name })}
                             >
                               <Trash className="icon-cud bg-red-600 hover:bg-red-400" />
@@ -146,7 +146,7 @@ const Page = () => {
                 )}
               />
             </div>
-            <div className="p-2 sm:p-0 block sm:hidden">
+            <div className="block p-2 sm:hidden sm:p-0">
               <TreeSelect
                 value={request.typeCode}
                 className={'w-full'}
@@ -161,9 +161,9 @@ const Page = () => {
           </Spin>
         </div>
       </div>
-      <div className="col-span-12 md:col-span-8 lg:col-span-9 intro-x">
-        <div className="shadow rounded-xl w-full overflow-auto bg-white">
-          <div className="sm:min-h-[calc(100vh-8.5rem)] overflow-y-auto p-3">
+      <div className="intro-x col-span-12 md:col-span-8 lg:col-span-9">
+        <div className="w-full overflow-auto rounded-xl bg-white shadow">
+          <div className="overflow-y-auto p-3 sm:min-h-[calc(100vh-8.5rem)]">
             <DataTable
               facade={sPost}
               ref={dataTableRef}

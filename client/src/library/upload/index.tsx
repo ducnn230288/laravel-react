@@ -204,12 +204,12 @@ export const Upload = ({
   };
   return (
     <Fragment>
-      <div className={'flex gap-2 mb-2'}>
+      <div className={'mb-2 flex gap-2'}>
         <Button
           isLoading={isLoading.current}
           onClick={() => ref.current.click()}
           className={'!px-2 !py-0.5 !font-normal'}
-          icon={<UploadSVG className={'h-4 w-4'} />}
+          icon={<UploadSVG className={'size-4'} />}
           text={'Upload'}
         />
         <div
@@ -223,9 +223,9 @@ export const Upload = ({
               }
             }
           }}
-          className={'!px-2 !py-0.5 !font-normal button cursor-pointer'}
+          className={'cursor-pointer !px-2 !py-0.5 !font-normal'}
         >
-          <Paste className={'h-4 w-4'} />
+          <Paste className={'size-4'} />
           Paste
         </div>
       </div>
@@ -259,10 +259,10 @@ export const Upload = ({
               <div
                 onClick={() => moverImage(index, index - 1)}
                 className={
-                  'absolute top-1 right-1 bg-gray-300 hover:bg-teal-900 text-white rounded-full cursor-pointer w-6 h-6 transition-all duration-300 flex items-center justify-center'
+                  'absolute right-1 top-1 flex size-6 cursor-pointer items-center justify-center rounded-full bg-gray-300 text-white transition-all duration-300 hover:bg-teal-900'
                 }
               >
-                <Arrow className={'h-3 w-3 fill-teal-700 hover:fill-white rotate-180'} />
+                <Arrow className={'size-3 rotate-180 fill-teal-700 hover:fill-white'} />
               </div>
             )}
 
@@ -277,7 +277,7 @@ export const Upload = ({
                   },
                 )}
               >
-                <Arrow className={'h-3 w-3 fill-teal-700 hover:fill-white'} />
+                <Arrow className={'size-3 fill-teal-700 hover:fill-white'} />
               </div>
             )}
 
@@ -295,7 +295,7 @@ export const Upload = ({
                 }}
               >
                 <Button
-                  icon={<Times className={'h-3 w-3 fill-red-400 hover:fill-white'} />}
+                  icon={<Times className={'size-3 fill-red-400 hover:fill-white'} />}
                   className={classNames(
                     '!bg-gray-300 !rounded-full absolute right-1 hover:!bg-red-500 text-white cursor-pointer w-6 h-6 transition-all duration-300 flex items-center justify-center',
                     {

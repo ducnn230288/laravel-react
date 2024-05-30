@@ -51,7 +51,7 @@ const Page = () => {
         <Form
           values={{ ...sGlobal.data }}
           formAnt={forms}
-          className="text-center items-centers text-xl font-bold text-slate-700 profile"
+          className="text-center items-centers text-xl font-bold text-slate-700"
           columns={[
             {
               title: '',

@@ -51,9 +51,19 @@ const Context = () => {
     sGlobal.setLanguage(lang);
     notification = api;
   }, []);
-  console.log('asdasd');
   return (
-    <ConfigProvider theme={{ token: { controlHeight: 38 } }} locale={sGlobal.locale}>
+    <ConfigProvider
+      theme={{
+        token: {
+          fontSize: 13,
+          lineHeight: 1.847,
+          controlHeight: 38,
+          fontFamily:
+            'Plus Jakarta Sans, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" ',
+        },
+      }}
+      locale={sGlobal.locale}
+    >
       {contextHolder}
       <Router />
     </ConfigProvider>
@@ -66,9 +76,11 @@ document.addEventListener(
     if (!container) {
       container = document.getElementById('root') as HTMLElement;
       const root = createRoot(container);
-      console.log('container');
+      localStorage.getItem('theme');
+      document.querySelector('html')?.setAttribute('data-theme', localStorage.getItem('theme') ?? 'light');
+
       root.render(
-        <Suspense fallback={<Spin />}>
+        <Suspense fallback={<Spin size={'large'} className="h-screen w-screen flex items-center justify-center" />}>
           <Provider store={store}>
             <Context />
           </Provider>

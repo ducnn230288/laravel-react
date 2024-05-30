@@ -207,7 +207,7 @@ export const Avatar = ({
   const Avatar = ({ onClick, text, src, showName, size, index = 0 }: Type) => (
     <div onClick={onClick} className={classNames({ 'flex items-center': showName })}>
       {!text || (src && src.indexOf('/defaultAvatar.png') === -1) ? (
-        <div className={classNames({ '-ml-2': index > 0 })}>
+        <div className={classNames({ '-ml-2': index > 0 }, 'h-' + size, 'w-' + size)}>
           <img
             className={classNames('rounded-full object-center', 'h-' + size, 'w-' + size, {
               'object-contain': !showName,

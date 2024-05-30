@@ -303,8 +303,8 @@ export const Gantt = ({
                 wRight = parseFloat(right.clientWidth);
               }
               const p = delta.x;
-              left.style.flexBasis = wLeft + p + 'px';
-              right.style.flexBasis = wRight - p + 'px';
+              left.style.flexBasis = ((wLeft + p) / (wLeft + wRight)) * 100 + '%';
+              right.style.flexBasis = ((wRight - p) / (wLeft + wRight)) * 100 + '%';
             }
           }}
         >

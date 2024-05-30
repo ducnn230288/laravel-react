@@ -6,7 +6,6 @@ import { APP_NAME } from '@/utils';
 
 const Layout = ({ children }: PropsWithChildren) => {
   const sGlobal = SGlobal();
-
   useEffect(() => {
     sGlobal.logout();
   }, []);

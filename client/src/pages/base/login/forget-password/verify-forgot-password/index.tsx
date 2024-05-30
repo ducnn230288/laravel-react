@@ -55,10 +55,8 @@ const Page = () => {
           disableSubmit={sGlobal.isLoading}
         />
       </Spin>
-      <div className="text-center mt-5">
-        <button className={'text-right -mt-2'} onClick={() => navigate(`/${lang}${routerLinks('Login')}`)}>
-          {t('Go back to login')}
-        </button>
+      <div className="text-center mt-3">
+        <button onClick={() => navigate(`/${lang}${routerLinks('Login')}`)}>{t('Go back to login')}</button>
       </div>
     </Fragment>
   );

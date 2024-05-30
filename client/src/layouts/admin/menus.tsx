@@ -7,17 +7,17 @@ import './index.less';
 
 const Layout: IMenu[] = [
   {
-    icon: <Calendar className="h-6 w-6" />,
+    icon: <Calendar className="h-6 w-5" />,
     name: 'Dashboard',
   },
   {
-    icon: <User className="h-6 w-6" />,
+    icon: <User className="h-6 w-5" />,
     name: 'User',
     permission: keyRole.P_USER_INDEX,
     queryParams: { roleCode: 'SUPER-ADMIN' },
   },
   {
-    icon: <Cog className="h-6 w-6" />,
+    icon: <Cog className="h-6 w-5" />,
     name: 'Setting',
     child: [
       {

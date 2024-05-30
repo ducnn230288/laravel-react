@@ -1,11 +1,11 @@
-import viVN from "antd/lib/locale/vi_VN";
-import enUS from "antd/lib/locale/en_US";
+import viVN from 'antd/lib/locale/vi_VN';
+import enUS from 'antd/lib/locale/en_US';
 
-import {ICommonEntity} from "@/interfaces";
-import {ICode} from "@/pages/base/code/service";
-import {IUserRole} from "@/pages/base/user/service/role";
+import { ICommonEntity } from '@/interfaces';
+import { ICode } from '@/pages/base/code/service';
+import { IUserRole } from '@/pages/base/user/service/role';
 
-import {EStatusGlobal} from "./enum";
+import { EStatusGlobal } from './enum';
 
 interface State {
   [selector: string]: any;
@@ -19,6 +19,7 @@ interface State {
   formatDate?: string;
   language?: string;
   locale?: typeof viVN | typeof enUS;
+  isCollapseMenu?: boolean;
 }
 
 export default State;

@@ -2,98 +2,59 @@ import React, { PropsWithChildren, useEffect } from 'react';
 import { Dropdown } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
-import classNames from 'classnames';
-import { useLocation } from 'react-router-dom';
 
 import { Avatar } from '@/library/avatar';
 import { SGlobal } from '@/services';
-import { Key, Out, User, Arrow, Logo } from '@/assets/svg';
-import { routerLinks, lang } from '@/utils';
+import { Key, Out, User, Logo, DayNight } from '@/assets/svg';
+import { routerLinks, lang, APP_NAME } from '@/utils';
 
 import Menu from './menu';
+import classNames from 'classnames';
 
 const Layout = ({ children }: PropsWithChildren) => {
   const { t } = useTranslation('locale', { keyPrefix: 'layouts' });
   const sGlobal = SGlobal();
 
-  const location = useLocation();
-
   useEffect(() => {
-    setTimeout(() => changeCollapsed(), 200);
-    if (innerWidth < 1280 && !document.querySelectorAll('main')[0]?.classList?.contains('isCollapsed')) {
-      setTimeout(() => changeCollapsed());
-    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    function handleResize() {
-      if (innerWidth < 1280 && !document.querySelectorAll('main')[0]?.classList?.contains('isCollapsed')) {
-        changeCollapsed();
-      }
-    }
-    window.addEventListener('resize', handleResize, { passive: true });
-
-    return () => {
-      window.removeEventListener('resize', handleResize, true);
-    };
+    return () => {};
   }, []);
 
-  useEffect(() => {
-    if (innerWidth < 1280 && !document.querySelectorAll('main')[0]?.classList?.contains('isCollapsed')) {
-      changeCollapsed();
-    }
-  }, [location]);
-
   return (
-    <main className={classNames({ isCollapsed: innerWidth >= 1280 })}>
-      <div className="leading-10" />
-      <div className="h-16 relative">
-        <div className="absolute top-0 left-0 right-0">
-          <Header />
-        </div>
-      </div>
-      <div
-        className={
-          'div5 flex items-center justify-between bg-white sm:bg-teal-900 text-gray-800 hover:text-gray-500 h-16 fixed top-0 left-0 pr-5 pl-3 font-bold transition-all duration-300 ease-in-out rounded-tr-3xl z-20'
-        }
+    <main className="flex">
+      <aside
+        className={classNames(
+          'h-screen flex-none bg-base-100/50 border-r border-base-300 overflow-hidden duration-300 ease-in-out transition-all',
+          {
+            'w-56': !sGlobal.isCollapseMenu,
+            'w-12': sGlobal.isCollapseMenu,
+          },
+        )}
       >
-        <div className="flex">
-          <div className={'div11 hamburger sm:!hidden'} onClick={() => changeCollapsed()}>
-            <span className="line" />
-            <span className="line" />
-            <span className="line" />
-          </div>
+        <a
+          href="/vn/dashboard"
+          className={classNames('flex items-center justify-center p-2', {
+            'gap-3': !sGlobal.isCollapseMenu,
+          })}
+        >
+          <Logo className={'h-8 text-primary'} />
+          <h1
+            className={classNames('text-primary', {
+              'text-[0px] duration-300': sGlobal.isCollapseMenu,
+              'text-xl duration-500': !sGlobal.isCollapseMenu,
+            })}
+          >
+            {APP_NAME}
+          </h1>
+        </a>
+        <Menu permission={sGlobal.user?.role?.permissions} />
+      </aside>
 
-          <a href="/vn/dashboard" className="flex items-center group">
-            <Logo className={'div12 w-12 mr-3 text-white'} />
-            <div
-              id={'name-application'}
-              className={
-                'div13 transition-all duration-300 ease-in-out absolute text-white left-16 overflow-ellipsis overflow-hidden ml-5'
-              }
-            >
-              Admin
-            </div>
-          </a>
-        </div>
-        <div className={'div11 relative'} onClick={() => changeCollapsed()}>
-          <Arrow className={'div10 w-9 text-white transition-all duration-300 ease-in-out'} />
-        </div>
-      </div>
-      <div className={'div4 fixed z-30 top-16 left-0 h-screen bg-teal-900 transition-all duration-300 ease-in-out'}>
-        <Menu
-          isCollapsed={document.querySelectorAll('main')[0]?.classList?.contains('isCollapsed')}
-          permission={sGlobal.user?.role?.permissions}
-        />
-      </div>
-      {!document.querySelectorAll('main')[0]?.classList?.contains('isCollapsed') && innerWidth <= 1280 && (
-        <div className={'w-full h-full fixed bg-black opacity-30 z-20'} onClick={() => changeCollapsed()} />
-      )}
-      <section id={'main'} className={'div7 px-2 sm:px-0 transition-all duration-300 ease-in-out z-10 relative'}>
-        <div className={'h-[calc(100vh-6rem)] overflow-auto'}>
-          {innerWidth <= 1280 && <h1 className={'title-page text-xl font-bold block sm:hidden'} aria-hidden></h1>}
-          <div className={'breadcrumbs-page flex items-center text-xs mt-0.5 pb-5 sm:hidden'}></div>
-          {children}
-        </div>
+      {/* <div className={'w-full h-full fixed bg-black opacity-30 z-20'} /> */}
+      <section className={'grow px-2 sm:px-0 bg-base-300/50'}>
+        <Header />
+        <div className={'h-[calc(100vh-6rem)] overflow-auto'}>{children}</div>
 
         <footer className="text-center pt-1.5 w-full">{t('Footer', { year: new Date().getFullYear() })}</footer>
       </section>
@@ -106,31 +67,34 @@ const Header = () => {
   const navigate = useNavigate();
 
   return (
-    <header
-      className={
-        'div3 bg-white w-full h-16 transition-all duration-300 ease-in-out top-0 block sm:bg-gray-100 z-20 fixed lg:relative pl-64'
-      }
-    >
-      <div className="flex items-center justify-end sm:justify-between px-5 h-16">
-        <div className={'div6'}>
-          <h1 className={'title-page text-xl font-bold hidden sm:block'} aria-hidden></h1>
-
-          <div className={'breadcrumbs-page hidden sm:flex items-center text-xs mt-0.5'}></div>
+    <header className={'block bg-base-100 border-b border-base-300'}>
+      <div className="flex items-center justify-between px-5 h-12">
+        <div>
+          <div className="flex gap-5">
+            <button
+              className={classNames('hamburger', { active: sGlobal.isCollapseMenu })}
+              onClick={() => sGlobal.set({ isShowMenu: !sGlobal.isCollapseMenu })}
+            >
+              <span className="line" />
+              <span className="line" />
+              <span className="line" />
+            </button>
+          </div>
         </div>
 
-        <div className="flex items-center gap-5 absolute right-6">
+        <div className="flex items-center">
           <Dropdown
             trigger={['click']}
             menu={{
               items: [
                 {
                   key: '0',
-                  className: 'hover:!bg-white !border-b-slate-300 border-b !rounded-none',
+                  className: 'hover:!bg-white border-b-slate-300 border-b',
                   label: (
                     <div className="flex">
                       <Avatar src={sGlobal.user?.avatar ?? ''} size={8} />
                       <div className="text-left leading-none mr-3 block pl-2">
-                        <div className="font-semibold text-black text-sm leading-snug mb-0.5">{sGlobal.user?.name}</div>
+                        <div className="font-semibold text-sm leading-snug mb-0.5">{sGlobal.user?.name}</div>
                         <div className="text-gray-500 text-[10px]">{sGlobal.user?.email}</div>
                       </div>
                     </div>
@@ -140,223 +104,70 @@ const Header = () => {
                   key: '1',
                   className: 'h-11',
                   label: (
-                    <div
+                    <button
                       className="flex"
                       onClick={() => navigate(`/${lang}${routerLinks('MyProfile')}?tab=1`, { replace: true })}
                     >
                       <div className="flex items-center">
-                        <User className="w-6 h-6 pr-2 text-black" />
+                        <User className="w-6 h-6 pr-2" />
                       </div>
                       <div>{t('My Profile')}</div>
-                    </div>
+                    </button>
                   ),
                 },
                 {
                   key: '2',
                   className: 'h-11 !border-b-slate-300 border-b !rounded-none',
                   label: (
-                    <div
+                    <button
                       className="flex"
                       onClick={() => navigate(`/${lang}${routerLinks('MyProfile')}?tab=2`, { replace: true })}
                     >
                       <div className="flex items-center">
-                        <Key className="w-6 h-6 pr-2 text-black" />
+                        <Key className="w-6 h-6 pr-2" />
                       </div>
                       <div>{t('Change Password')}</div>
-                    </div>
+                    </button>
                   ),
                 },
                 {
                   key: '3',
                   className: 'h-11',
                   label: (
-                    <div
+                    <button
                       className="flex"
                       onClick={() => navigate(`/${lang}${routerLinks('Login')}`, { replace: true })}
                     >
                       <div className="flex items-center">
-                        <Out className="w-6 h-6 pr-2 text-black" />
+                        <Out className="w-6 h-6 pr-2" />
                       </div>
                       <div>{t('Sign out')}</div>
-                    </div>
+                    </button>
                   ),
                 },
               ],
             }}
             placement="bottomRight"
           >
-            <section className="flex items-center !rounded-full" id={'dropdown-profile'}>
-              <Avatar src={sGlobal.user?.avatar ?? ''} size={10} />
-            </section>
+            <div className="flex gap-3">
+              <button
+                className="hover:text-primary hover:bg-primary/10 px-2 py-1 rounded-btn"
+                onClick={() => {
+                  const html = document.querySelector('html');
+                  const dataTheme = html?.getAttribute('data-theme');
+                  const theme = dataTheme === 'light' ? 'dark' : 'light';
+                  html?.setAttribute('data-theme', theme);
+                  localStorage.setItem('theme', 'theme');
+                }}
+              >
+                <DayNight className="w-6 h-6" />
+              </button>
+              <Avatar src={sGlobal.user?.avatar ?? ''} size={8} />
+            </div>
           </Dropdown>
         </div>
       </div>
     </header>
   );
-};
-const changeCollapsed = () => {
-  document.querySelectorAll('main')[0]?.classList?.toggle('isCollapsed');
-  const listElement = [
-    {
-      classId: 'div5',
-      condition: !document.querySelectorAll('main')[0]?.classList?.contains('isCollapsed') && innerWidth > 1280,
-      toggleClass: 'w-64',
-    },
-    {
-      classId: 'div5',
-      condition: document.querySelectorAll('main')[0]?.classList?.contains('isCollapsed') && innerWidth > 1280,
-      toggleClass: 'w-16',
-    },
-    {
-      classId: 'main',
-      condition: !document.querySelectorAll('main')[0]?.classList?.contains('isCollapsed') && innerWidth > 1280,
-      toggleClass: 'ml-64',
-    },
-    {
-      classId: 'main',
-      condition: document.querySelectorAll('main')[0]?.classList?.contains('isCollapsed') && innerWidth > 1280,
-      toggleClass: 'ml-16',
-    },
-    {
-      classId: 'div4',
-      condition: !document.querySelectorAll('main')[0]?.classList?.contains('isCollapsed'),
-      toggleClass: 'w-64',
-    },
-    {
-      classId: 'div4',
-      condition: document.querySelectorAll('main')[0]?.classList?.contains('isCollapsed'),
-      toggleClass: 'w-16',
-    },
-    {
-      classId: 'div4',
-      condition: document.querySelectorAll('main')[0]?.classList?.contains('isCollapsed') && innerWidth <= 1280,
-      toggleClass: '!-left-20',
-    },
-    {
-      classId: 'div7',
-      condition: !document.querySelectorAll('main')[0]?.classList?.contains('isCollapsed') && innerWidth > 1280,
-      toggleClass: 'ml-64',
-    },
-    {
-      classId: 'div7',
-      condition: document.querySelectorAll('main')[0]?.classList?.contains('isCollapsed') && innerWidth > 1280,
-      toggleClass: 'ml-16',
-    },
-    {
-      classId: 'div1',
-      condition:
-        (document.querySelectorAll('main')[0]?.classList?.contains('isCollapsed') && innerWidth > 1280) ||
-        (!document.querySelectorAll('main')[0]?.classList?.contains('isCollapsed') && innerWidth <= 1280),
-      toggleClass: 'is-active',
-    },
-    {
-      classId: 'div6',
-      condition: document.querySelectorAll('main')[0]?.classList?.contains('isCollapsed'),
-      toggleClass: 'xl:ml-7',
-    },
-    {
-      classId: 'div3',
-      condition: !document.querySelectorAll('main')[0]?.classList?.contains('isCollapsed') && innerWidth > 1280,
-      toggleClass: 'pl-64',
-    },
-    {
-      classId: 'div3',
-      condition: document.querySelectorAll('main')[0]?.classList?.contains('isCollapsed') && innerWidth > 1280,
-      toggleClass: 'pl-16',
-    },
-    {
-      classId: 'div10',
-      condition: !document.querySelectorAll('main')[0]?.classList?.contains('isCollapsed') && innerWidth > 1280,
-      toggleClass: 'rotate-180',
-    },
-    {
-      classId: 'div11',
-      condition:
-        (document.querySelectorAll('main')[0]?.classList?.contains('isCollapsed') && innerWidth > 1280) ||
-        (!document.querySelectorAll('main')[0]?.classList?.contains('isCollapsed') && innerWidth <= 1280),
-      toggleClass: 'is-active',
-    },
-    {
-      classId: 'div12',
-      condition:
-        (!document.querySelectorAll('main')[0]?.classList?.contains('isCollapsed') && innerWidth > 1280) ||
-        (document.querySelectorAll('main')[0]?.classList?.contains('isCollapsed') && innerWidth <= 1280),
-      toggleClass: ['opacity-100', 'text-lg', 'w-12'],
-    },
-    {
-      classId: 'div13',
-      condition: !document.querySelectorAll('main')[0]?.classList?.contains('isCollapsed') && innerWidth > 1280,
-      toggleClass: ['opacity-100', 'text-xl'],
-    },
-    {
-      classId: 'div13',
-      condition: document.querySelectorAll('main')[0]?.classList?.contains('isCollapsed') || innerWidth <= 1280,
-      toggleClass: ['opacity-0', 'text-[0px]', 'hidden'],
-    },
-    {
-      classId: 'div14',
-      condition: document.querySelectorAll('main')[0]?.classList?.contains('isCollapsed'),
-      toggleClass: ['justify-center', 'h-10'],
-    },
-    {
-      classId: 'div15',
-      condition: document.querySelectorAll('main')[0]?.classList?.contains('isCollapsed'),
-      toggleClass: 'absolute',
-    },
-    {
-      classId: 'div16',
-      condition: !document.querySelectorAll('main')[0]?.classList?.contains('isCollapsed'),
-      toggleClass: 'opacity-100',
-    },
-    {
-      classId: 'div17',
-      condition: document.querySelectorAll('main')[0]?.classList?.contains('isCollapsed'),
-      toggleClass: 'hidden',
-    },
-    {
-      classId: 'div18',
-      condition: document.querySelectorAll('main')[0]?.classList?.contains('isCollapsed'),
-      toggleClass: 'justify-center',
-    },
-    {
-      classId: 'div19',
-      condition: !document.querySelectorAll('main')[0]?.classList?.contains('isCollapsed'),
-      toggleClass: 'ml-1',
-    },
-    {
-      classId: 'div20',
-      condition: !document.querySelectorAll('main')[0]?.classList?.contains('isCollapsed'),
-      toggleClass: 'opacity-100',
-    },
-    {
-      classId: 'div20',
-      condition: document.querySelectorAll('main')[0]?.classList?.contains('isCollapsed'),
-      toggleClass: ['opacity-0', 'text-[0]'],
-    },
-    {
-      classId: 'div21',
-      condition: document.querySelectorAll('main')[0]?.classList?.contains('isCollapsed'),
-      toggleClass: 'hidden',
-    },
-    {
-      classId: 'div22',
-      condition: !document.querySelectorAll('main')[0]?.classList?.contains('isCollapsed'),
-      toggleClass: 'hidden',
-    },
-  ];
-  listElement.forEach((item) => {
-    const element = document.getElementsByClassName(item.classId);
-    if (element.length && item.condition) {
-      Array.from(element).forEach((el) => {
-        if (Array.isArray(item.toggleClass)) el?.classList?.add(...item.toggleClass);
-        else el?.classList?.add(item.toggleClass);
-      });
-    } else {
-      Array.from(element).forEach((el) => {
-        if (Array.isArray(item.toggleClass)) el?.classList?.remove(...item.toggleClass);
-        else el?.classList?.remove(item.toggleClass);
-      });
-    }
-  });
 };
 export default Layout;

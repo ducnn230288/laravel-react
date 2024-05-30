@@ -10,7 +10,7 @@ export class Slice<T extends ICommonEntity, S = EStatusState> {
   reducers: any;
   extraReducers: (builder: any) => void;
   defaultState: State<T, S> = {
-    result: {},
+    result: undefined,
     data: undefined,
     isLoading: true,
     isVisible: false,

@@ -81,8 +81,7 @@ export const DataTable = forwardRef(
     const cols = useRef<IDataTable[]>();
     const refPageSizeOptions = useRef<number[]>();
     const { result, isLoading, queryParams, time } = facade;
-    // eslint-disable-next-line prefer-const
-    let params = useRef(
+    const params = useRef(
       save && location.search && location.search.indexOf('=') > -1
         ? { ...defaultRequest, ...queryString.parse(location.search, { arrayFormat: 'index' }) }
         : defaultRequest,

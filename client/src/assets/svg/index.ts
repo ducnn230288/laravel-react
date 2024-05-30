@@ -21,6 +21,8 @@ import UploadSVG from './upload.svg';
 import Key from './key.svg';
 import Out from './out.svg';
 import Logo from './logo.svg';
+import Home from './home.svg';
+import DayNight from './day-night.svg';
 
 export {
   Arrow,
@@ -46,4 +48,6 @@ export {
   Key,
   Out,
   Logo,
+  Home,
+  DayNight,
 };

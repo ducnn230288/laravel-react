@@ -1,19 +1,20 @@
-import { Collapse, Popover } from 'antd';
+import { Collapse } from 'antd';
 import React, { Fragment, useEffect, useRef } from 'react';
 import classNames from 'classnames';
 import { useNavigate, useLocation } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { createSearchParams } from 'react-router-dom';
 
+import { SGlobal } from '@/services';
 import { routerLinks, lang, uuidv4 } from '@/utils';
 import listMenu from '../menus';
 
-const Layout = ({ isCollapsed = false, permission = [] }: { isCollapsed: boolean; permission?: string[] }) => {
+const Layout = ({ permission = [] }: { permission?: string[] }) => {
   const { t } = useTranslation('locale', { keyPrefix: 'menu' });
   const navigate = useNavigate();
   const location = useLocation();
-  const refMenu = useRef<HTMLUListElement>(null);
   const clearTime = useRef<NodeJS.Timeout>();
+  const sGlobal = SGlobal();
 
   const menuActive = useRef<string[]>([]);
   useEffect(() => {
@@ -27,46 +28,33 @@ const Layout = ({ isCollapsed = false, permission = [] }: { isCollapsed: boolean
     clearTime.current = setTimeout(() => (menuActive.current = [linkActive]), 200);
   }, [location.hash]);
 
-  useEffect(() => {
-    if (document.querySelectorAll('main')[0]?.classList?.contains('isCollapsed') && refMenu.current) {
-      refMenu.current.scrollTop = 0;
-    }
-  }, [document.querySelectorAll('main')[0]?.classList?.contains('isCollapsed')]);
-
-  const subMenu = (child: any[]) => (
-    <ul className={'menu'}>
-      {child
-        .filter((subItem) => !subItem.permission || permission?.includes(subItem.permission))
-        .map((subItem, index: number) => (
-          <li
-            key={index + uuidv4()}
-            className={classNames(
-              'group flex items-center pl-9 py-2 cursor-pointer rounded-2xl text-gray-300 font-medium text-base',
-              {
-                'bg-teal-700 text-white !fill-gray-300':
-                  location.pathname.indexOf(`/${lang}${routerLinks(subItem.name)}`) > -1,
-              },
-            )}
-            onClick={() =>
-              location.pathname.indexOf(`/${lang}${routerLinks(subItem.name)}`) === -1 &&
-              navigate({
-                pathname: `/${lang}${routerLinks(subItem.name)}`,
-                search: `?${createSearchParams(subItem.queryParams)}`,
-              })
-            }
-            role="button"
-          >
-            <p className="h-1 w-1 mr-3 rounded-lg bg-white group-hover:w-2 duration-300 ease-in-out transition-all"></p>
-            <button className="hover:text-white sub-menu">
-              <span>{t(subItem.name)}</span>
-            </button>
-          </li>
-        ))}
-    </ul>
-  );
+  const subMenu = (child: any[]) =>
+    child
+      .filter((subItem) => !subItem.permission || permission?.includes(subItem.permission))
+      .map((subItem, index: number) => (
+        <button
+          key={index + uuidv4()}
+          className={classNames(
+            'flex items-center w-full gap-2 py-2 px-3 hover:text-primary hover:bg-primary/10 rounded-r-btn border-l group border-base-content/20 text-base-content',
+            {
+              'text-primary bg-primary/5': location.pathname.indexOf(`/${lang}${routerLinks(subItem.name)}`) > -1,
+            },
+          )}
+          onClick={() =>
+            location.pathname.indexOf(`/${lang}${routerLinks(subItem.name)}`) === -1 &&
+            navigate({
+              pathname: `/${lang}${routerLinks(subItem.name)}`,
+              search: `?${createSearchParams(subItem.queryParams)}`,
+            })
+          }
+        >
+          <span className="h-1 w-1 rounded-lg bg-base-content/20 group-hover:w-2 duration-300 ease-in-out transition-all"></span>
+          <span>{t(subItem.name)}</span>
+        </button>
+      ));
 
   return (
-    <ul className="menu relative h-[calc(100vh-5rem)] " id={'menu-sidebar'} ref={refMenu}>
+    <div className="main-menu">
       {listMenu
         .filter((item) => {
           return (
@@ -77,13 +65,13 @@ const Layout = ({ isCollapsed = false, permission = [] }: { isCollapsed: boolean
         .map((item) => {
           if (!item.child) {
             return (
-              <li
+              <button
                 className={classNames(
-                  'div14 flex items-center text-gray-300 h-12 m-2 relative cursor-pointer py-1 px-2',
+                  'flex items-center w-full hover:text-primary hover:bg-primary/10 rounded-btn py-1.5',
                   {
-                    'bg-teal-700 text-white !fill-gray-300 rounded-2xl opacity-100':
-                      location.pathname === `/${lang}${routerLinks(item.name)}`,
-                    'fill-gray-300': location.pathname !== `/${lang}${routerLinks(item.name)}`,
+                    'text-primary bg-primary/5': location.pathname === `/${lang}${routerLinks(item.name)}`,
+                    'px-3 gap-2': !sGlobal.isCollapseMenu,
+                    'px-1': sGlobal.isCollapseMenu,
                   },
                 )}
                 onClick={() =>
@@ -94,64 +82,68 @@ const Layout = ({ isCollapsed = false, permission = [] }: { isCollapsed: boolean
                   })
                 }
                 key={item.name}
-                role="button"
               >
-                <div className={'div15'}>{item.icon}</div>
-                <p
-                  className={classNames(
-                    'div17 ml-2.5 transition-all duration-300 ease-in-out font-medium text-base !h-8 flex items-center',
-                  )}
+                {item.icon}
+                <span
+                  className={classNames('font-medium ease-in-out transition-all', {
+                    'text-[0px] duration-300': sGlobal.isCollapseMenu,
+                    'text-sm duration-500': !sGlobal.isCollapseMenu,
+                  })}
                 >
                   {t(item.name)}
-                </p>
-              </li>
+                </span>
+              </button>
             );
           } else {
             return (
               <Fragment key={item.name}>
-                <div className="div22">
+                {/* <div>
                   <Popover placement="rightTop" trigger={'hover'} content={subMenu(item.child)}>
                     <li className="flex items-center justify-center h-12 m-2 px-2 text-gray-300 fill-gray-300 ">
-                      <div className={classNames({ 'ml-1': !isCollapsed })}>{item.icon}</div>
+                      <div>{item.icon}</div>
                     </li>
                   </Popover>
-                </div>
-                <li className="div21 my-1 px-1">
-                  <Collapse
-                    accordion
-                    bordered={false}
-                    className={classNames('bg-teal-900', {
-                      'active-menu': location.pathname.indexOf(`/${lang}${routerLinks(item.name)}`) > -1,
-                    })}
-                    defaultActiveKey={menuActive.current}
-                    items={[
-                      {
-                        key: `/${lang}${routerLinks(item.name)}`,
-                        showArrow: !isCollapsed,
-                        label: (
-                          <ul>
-                            <li className={'div18 flex items-center text-gray-300 fill-gray-300 menu'}>
-                              <span className={'div19'}>{item.icon}</span>
-                              <span
-                                className={
-                                  'div20 pl-2.5 transition-all duration-300 ease-in-out font-medium text-base text-gray-300'
-                                }
-                              >
-                                {t(item.name)}
-                              </span>
-                            </li>
-                          </ul>
-                        ),
-                        children: subMenu(item.child),
-                      },
-                    ]}
-                  />
-                </li>
+                </div> */}
+                <Collapse
+                  accordion
+                  bordered={false}
+                  defaultActiveKey={menuActive.current}
+                  items={[
+                    {
+                      key: `/${lang}${routerLinks(item.name)}`,
+                      showArrow: false,
+                      label: (
+                        <button
+                          className={classNames(
+                            'flex items-center w-full hover:text-primary hover:bg-primary/10 rounded-btn py-1.5 text-base-content',
+                            {
+                              'text-primary bg-primary/5':
+                                location.pathname.indexOf(`/${lang}${routerLinks(item.name)}`) > -1,
+                              'px-3 gap-2': !sGlobal.isCollapseMenu,
+                              'px-1': sGlobal.isCollapseMenu,
+                            },
+                          )}
+                        >
+                          {item.icon}
+                          <span
+                            className={classNames('font-medium ease-in-out transition-all', {
+                              'text-[0px] duration-300': sGlobal.isCollapseMenu,
+                              'text-sm duration-500': !sGlobal.isCollapseMenu,
+                            })}
+                          >
+                            {t(item.name)}
+                          </span>
+                        </button>
+                      ),
+                      children: subMenu(item.child),
+                    },
+                  ]}
+                />
               </Fragment>
             );
           }
         })}
-    </ul>
+    </div>
   );
 };
 

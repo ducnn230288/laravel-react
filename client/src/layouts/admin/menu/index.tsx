@@ -21,8 +21,12 @@ const Layout = ({ permission = [] }: { permission?: string[] }) => {
     clearTimeout(clearTime.current);
     let linkActive = '';
     listMenu.forEach((item) => {
-      if (!linkActive && !!item.child && location.hash.substring(1).indexOf(`/${lang}${routerLinks(item.name)}`) > -1) {
-        linkActive = `/${lang}${routerLinks(item.name)}`;
+      if (
+        !linkActive &&
+        !!item.children &&
+        location.hash.substring(1).indexOf(`/${lang}${routerLinks(item.label)}`) > -1
+      ) {
+        linkActive = `/${lang}${routerLinks(item.label)}`;
       }
     });
     clearTime.current = setTimeout(() => (menuActive.current = [linkActive]), 200);
@@ -58,30 +62,31 @@ const Layout = ({ permission = [] }: { permission?: string[] }) => {
       {listMenu
         .filter((item) => {
           return (
-            !item.child ||
-            item.child.filter((subItem) => !subItem.permission || permission?.includes(subItem.permission)).length > 0
+            !item.children ||
+            item.children.filter((subItem) => !subItem.permission || permission?.includes(subItem.permission)).length >
+              0
           );
         })
         .map((item) => {
-          if (!item.child) {
+          if (!item.children) {
             return (
               <button
                 className={classNames(
                   'flex items-center w-full hover:text-primary hover:bg-primary/10 rounded-btn py-1.5',
                   {
-                    'text-primary bg-primary/5': location.pathname === `/${lang}${routerLinks(item.name)}`,
+                    'text-primary bg-primary/5': location.pathname === `/${lang}${routerLinks(item.label)}`,
                     'px-3 gap-2': !sGlobal.isCollapseMenu,
                     'px-1': sGlobal.isCollapseMenu,
                   },
                 )}
                 onClick={() =>
-                  location.pathname !== `/${lang}${routerLinks(item.name)}` &&
+                  location.pathname !== `/${lang}${routerLinks(item.label)}` &&
                   navigate({
-                    pathname: `/${lang}${routerLinks(item.name)}`,
+                    pathname: `/${lang}${routerLinks(item.label)}`,
                     search: `?${createSearchParams(item.queryParams)}`,
                   })
                 }
-                key={item.name}
+                key={item.label}
               >
                 {item.icon}
                 <span
@@ -90,13 +95,13 @@ const Layout = ({ permission = [] }: { permission?: string[] }) => {
                     'text-sm duration-500': !sGlobal.isCollapseMenu,
                   })}
                 >
-                  {t(item.name)}
+                  {t(item.label)}
                 </span>
               </button>
             );
           } else {
             return (
-              <Fragment key={item.name}>
+              <Fragment key={item.label}>
                 {/* <div>
                   <Popover placement="rightTop" trigger={'hover'} content={subMenu(item.child)}>
                     <li className="flex items-center justify-center h-12 m-2 px-2 text-gray-300 fill-gray-300 ">
@@ -110,7 +115,7 @@ const Layout = ({ permission = [] }: { permission?: string[] }) => {
                   defaultActiveKey={menuActive.current}
                   items={[
                     {
-                      key: `/${lang}${routerLinks(item.name)}`,
+                      key: `/${lang}${routerLinks(item.label)}`,
                       showArrow: false,
                       label: (
                         <button
@@ -118,7 +123,7 @@ const Layout = ({ permission = [] }: { permission?: string[] }) => {
                             'flex items-center w-full hover:text-primary hover:bg-primary/10 rounded-btn py-1.5 text-base-content',
                             {
                               'text-primary bg-primary/5':
-                                location.pathname.indexOf(`/${lang}${routerLinks(item.name)}`) > -1,
+                                location.pathname.indexOf(`/${lang}${routerLinks(item.label)}`) > -1,
                               'px-3 gap-2': !sGlobal.isCollapseMenu,
                               'px-1': sGlobal.isCollapseMenu,
                             },
@@ -131,11 +136,11 @@ const Layout = ({ permission = [] }: { permission?: string[] }) => {
                               'text-sm duration-500': !sGlobal.isCollapseMenu,
                             })}
                           >
-                            {t(item.name)}
+                            {t(item.label)}
                           </span>
                         </button>
                       ),
-                      children: subMenu(item.child),
+                      children: subMenu(item.children),
                     },
                   ]}
                 />

@@ -2,6 +2,7 @@ import React, { PropsWithChildren, useEffect } from 'react';
 import { Dropdown } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
+import classNames from 'classnames';
 
 import { Avatar } from '@/library/avatar';
 import { SGlobal } from '@/services';
@@ -9,7 +10,6 @@ import { Key, Out, User, Logo, DayNight } from '@/assets/svg';
 import { routerLinks, lang, APP_NAME } from '@/utils';
 
 import Menu from './menu';
-import classNames from 'classnames';
 
 const Layout = ({ children }: PropsWithChildren) => {
   const { t } = useTranslation('locale', { keyPrefix: 'layouts' });
@@ -73,7 +73,7 @@ const Header = () => {
           <div className="flex gap-5">
             <button
               className={classNames('hamburger', { active: sGlobal.isCollapseMenu })}
-              onClick={() => sGlobal.set({ isShowMenu: !sGlobal.isCollapseMenu })}
+              onClick={() => sGlobal.set({ isCollapseMenu: !sGlobal.isCollapseMenu })}
             >
               <span className="line" />
               <span className="line" />
@@ -157,7 +157,7 @@ const Header = () => {
                   const dataTheme = html?.getAttribute('data-theme');
                   const theme = dataTheme === 'light' ? 'dark' : 'light';
                   html?.setAttribute('data-theme', theme);
-                  localStorage.setItem('theme', 'theme');
+                  localStorage.setItem('theme', theme);
                 }}
               >
                 <DayNight className="size-6" />

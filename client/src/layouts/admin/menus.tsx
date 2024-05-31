@@ -8,35 +8,35 @@ import './index.less';
 const Layout: IMenu[] = [
   {
     icon: <Calendar className="h-6 w-5" />,
-    name: 'Dashboard',
+    label: 'Dashboard',
   },
   {
     icon: <User className="h-6 w-5" />,
-    name: 'User',
+    label: 'User',
     permission: keyRole.P_USER_INDEX,
     queryParams: { roleCode: 'SUPER-ADMIN' },
   },
   {
     icon: <Cog className="h-6 w-5" />,
-    name: 'Setting',
-    child: [
+    label: 'Setting',
+    children: [
       {
-        name: 'Code',
+        label: 'Code',
         permission: keyRole.P_CODE_INDEX,
         queryParams: { typeCode: 'POSITION' },
       },
       {
-        name: 'Content',
+        label: 'Content',
         permission: keyRole.P_CONTENT_INDEX,
         queryParams: { typeCode: 'MEMBERS' },
       },
       {
-        name: 'Post',
+        label: 'Post',
         permission: keyRole.P_POST_INDEX,
         queryParams: { typeCode: 'PROJECTS' },
       },
       {
-        name: 'Parameter',
+        label: 'Parameter',
         permission: keyRole.P_PARAMETER_INDEX,
         queryParams: { code: 'ADDRESS' },
       },
@@ -47,9 +47,9 @@ const Layout: IMenu[] = [
 export default Layout;
 
 interface IMenu {
-  name: string;
+  label: string;
   icon?: React.JSX.Element;
   permission?: keyRole;
   queryParams?: URLSearchParamsInit;
-  child?: IMenu[];
+  children?: IMenu[];
 }

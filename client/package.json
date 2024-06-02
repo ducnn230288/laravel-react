@@ -20,7 +20,7 @@
     "@dnd-kit/modifiers": "^7.0.0",
     "@dnd-kit/sortable": "^8.0.0",
     "@reduxjs/toolkit": "^2.2.1",
-    "antd": "^5.14.1",
+    "antd": "^5.17.4",
     "antd-input-otp": "^2.0.5",
     "echarts": "^5.5.0",
     "glightbox": "^3.3.0",

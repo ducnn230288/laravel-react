@@ -62,15 +62,14 @@ const Page = () => {
   const dataTableRef = useRef<ITableRefObject>(null);
   return (
     <Fragment>
-      <div className=" container mx-auto flex items-center justify-between px-2.5 py-3">
+      <div className="container mx-auto flex items-center justify-between px-2.5 py-3">
         <h2 className={'-intro-x text-xl font-bold'}>User</h2>
-        <div className={'intro-x breadcrumbs text-sm'}>
+        <div className={'intro-x breadcrumbs'}>
           <ul>
-            <li className="gap-1">
+            <li>
               <Home className="-mt-0.5 size-3" />
-              <a>Documents</a>
             </li>
-            <li>Add Document</li>
+            <li>{t('User')}</li>
           </ul>
         </div>
       </div>
@@ -85,8 +84,8 @@ const Page = () => {
           }}
         />
         <div className="-intro-x col-span-12 md:col-span-4 lg:col-span-3">
-          <div className="w-full overflow-hidden rounded-xl bg-white shadow">
-            <div className="flex h-14 items-center justify-between border-b border-gray-100 px-4 py-2">
+          <div className="w-full overflow-hidden rounded-xl bg-base-100 shadow">
+            <div className="flex h-14 items-center justify-between border-b border-base-300 px-4 py-2">
               <h3 className={'text-lg font-bold'}>{t('Role')}</h3>
             </div>
             <Spin spinning={sUserRole.isLoading}>
@@ -97,32 +96,18 @@ const Page = () => {
                   autoExpandParent
                   defaultExpandAll
                   switcherIcon={<Arrow className={'size-4'} />}
+                  defaultSelectedKeys={['SUPER-ADMIN']}
                   treeData={sUserRole.result?.data?.map((item: any) => ({
                     title: item?.name,
                     key: item?.code,
-                    value: item?.code,
                     isLeaf: true,
                     expanded: true,
                     children: [],
                   }))}
-                  titleRender={(data: any) => (
-                    <div
-                      className={classNames(
-                        { 'bg-gray-100': request.roleCode === data.value },
-                        'item text-gray-700 font-medium hover:bg-gray-100 flex justify-between items-center border-b border-gray-100 w-full text-left  group',
-                      )}
-                    >
-                      <button
-                        onClick={() => {
-                          request.roleCode = data.value;
-                          dataTableRef?.current?.onChange(request);
-                        }}
-                        className="flex-1 cursor-pointer truncate px-3 py-1 hover:text-teal-900"
-                      >
-                        {data.title}
-                      </button>
-                    </div>
-                  )}
+                  onSelect={(selectedKeys) => {
+                    request.roleCode = selectedKeys[0];
+                    dataTableRef?.current?.onChange(request);
+                  }}
                 />
               </div>
               <div className="block p-2 sm:hidden sm:p-0">

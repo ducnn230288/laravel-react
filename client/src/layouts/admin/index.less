@@ -1,111 +1,49 @@
-.hamburger {
-  @apply inline-block transition-all duration-300 ease-in-out z-10 cursor-pointer w-5;
+.l-admin {
+  @apply flex;
 
-  .line {
-    @apply bg-base-content block transition-all duration-300 ease-in-out rounded-sm  ~"h-0.5 my-1";
-
-    &:nth-child(1),
-    &:nth-child(2) {
-      @apply w-full;
+  aside {
+    @apply h-screen flex-none bg-base-100/50 border-r border-base-300 overflow-hidden duration-300 ease-in-out transition-all w-56;
+    &.active {
+      @apply w-12;
     }
-    &:nth-child(3) {
-      @apply w-1/2;
-    }
-  }
 
-  &.active {
-    .line {
-      &:nth-child(1),
-      &:nth-child(3) {
-        @apply ~"h-0.5" w-1/2;
+    .logo {
+      @apply flex items-center justify-center p-2 gap-3;
+      &.active {
+        @apply gap-0;
       }
-      &:nth-child(2) {
-        @apply transform translate-x-0 ~"h-0.5" w-full;
-        --tw-translate-x: 1px;
+
+      svg {
+        @apply h-8 text-primary;
       }
-      &:nth-child(1) {
-        @apply ~"translate-y-0.5 translate-x-3" rotate-45 w-4/6;
-        --tw-translate-y: 2px;
-      }
-      &:nth-child(3) {
-        @apply ~"-translate-y-0.5 translate-x-3" -rotate-45 w-4/6;
-        --tw-translate-y: -2px;
+
+      h1 {
+        @apply text-primary text-xl duration-500;
+        &.active {
+          @apply duration-300;
+          font-size: 0;
+        }
       }
     }
   }
-  &:not(.active):hover .line {
-    &:nth-child(1) {
-      @apply animate-burger-hover-2;
+
+  > section {
+    @apply grow bg-base-300/50 px-2 sm:px-0;
+    header {
+      @apply border-b border-base-300 bg-base-100 flex h-12 items-center justify-between px-5;
+      .right {
+        @apply flex items-center gap-2;
+        button {
+          @apply btn btn-ghost btn-sm;
+        }
+      }
     }
-    &:nth-child(2) {
-      @apply animate-burger-hover-4;
+    main {
+      @apply overflow-auto;
+      h: calc(100vh - 6rem);
     }
-    &:nth-child(3) {
-      @apply animate-burger-hover-6;
-    }
-  }
-}
-
-.ant-menu {
-  @apply bg-base-100;
-
-  > .ant-menu-item,
-  .ant-menu-submenu-title,
-  &.ant-menu-submenu-popup .ant-menu-vertical.ant-menu-sub .ant-menu-item {
-    @apply text-base-content;
-  }
-
-  &:not(.ant-menu-root) .ant-menu-item.ant-menu-item-selected,
-  &:not(.ant-menu-root) .ant-menu-submenu-selected > .ant-menu-submenu-title,
-  &:not(.ant-menu-sub) > .ant-menu-item:not(.ant-menu-item-selected):not(.ant-menu-submenu-selected):hover,
-  &.ant-menu-root
-    > .ant-menu-submenu:not(.ant-menu-item-selected):not(.ant-menu-submenu-selected)
-    > .ant-menu-submenu-title:hover,
-  &:not(.ant-menu-root) > .ant-menu-submenu > .ant-menu-submenu-title:hover,
-  &.ant-menu-submenu-popup .ant-menu-vertical.ant-menu-sub .ant-menu-item:hover,
-  .ant-menu-submenu .ant-menu-item:not(.ant-menu-item-selected):not(.ant-menu-submenu-selected):hover {
-    @apply text-primary bg-primary/10;
-    &::before {
-      @apply bg-primary;
-    }
-  }
-
-  &.ant-menu-root > .ant-menu-item-selected,
-  &.ant-menu-root > .ant-menu-submenu-selected > .ant-menu-submenu-title {
-    @apply bg-primary text-base-100;
-    &::before {
-      @apply bg-base-100;
-    }
-  }
-
-  &.ant-menu-submenu-popup .ant-menu-vertical.ant-menu-sub {
-    @apply bg-base-300;
-  }
-
-  .ant-menu-submenu-inline.ant-menu-submenu-open {
-    @apply bg-base-300/50;
-  }
-
-  &:not(.ant-menu-root) > .ant-menu-submenu > .ant-menu-submenu-title,
-  .ant-menu-sub .ant-menu-item:not(.ant-menu-submenu-selected) {
-    &::before {
-      content: '';
-      @apply mr-2 rounded-btn ~"-ml-2.5 w-1.5 h-0.5 bg-neutral/30";
-    }
-  }
-  .ant-menu-sub {
-    @apply -mt-1;
-  }
-
-  .ant-menu-item .ant-menu-item-icon + span,
-  .ant-menu-submenu-title .ant-menu-item-icon + span {
-    @apply ~'ml-2.5';
-  }
-
-  &-inline-collapsed {
-    > .ant-menu-item,
-    > .ant-menu-submenu > .ant-menu-submenu-title {
-      @apply ~'!px-2.5 !py-0.5' !w-10 !h-10;
+    footer {
+      @apply w-full ~'pt-1.5' text-center;
     }
   }
 }

@@ -204,8 +204,8 @@ export const Avatar = ({
     }
   };
 
-  const Avatar = ({ onClick, text, src, showName, size, index = 0 }: Type) => (
-    <div onClick={onClick} className={classNames({ 'flex items-center': showName })}>
+  const Avatar = ({ text, src, showName, size, index = 0 }: Type) => (
+    <div className={classNames({ 'flex items-center': showName })}>
       {!text || (src && src.indexOf('/defaultAvatar.png') === -1) ? (
         <div className={classNames({ '-ml-2': index > 0 }, 'h-' + size, 'w-' + size)}>
           <img
@@ -235,16 +235,14 @@ export const Avatar = ({
           <strong>{getFirstLetter(text as string)}</strong>
         </div>
       )}
-      {!!showName && !!text && (
-        <span className={classNames('ml-1', { 'link-click': !!onClick })}>{text as string}</span>
-      )}
+      {!!showName && !!text && <span className={classNames('ml-1')}>{text as string}</span>}
     </div>
   );
   if (typeof text !== 'object') {
-    return <Avatar onClick={onClick} text={text} src={src} showName={showName} size={size} />;
+    return <Avatar text={text} src={src} showName={showName} size={size} />;
   } else {
     return (
-      <div onClick={onClick} className="flex items-center">
+      <div className="flex items-center">
         {!!text &&
           text
             .filter((item, index: number) => index < maxCount)
@@ -287,7 +285,6 @@ export const Avatar = ({
 interface Type {
   src: string;
   text?: string | { [selector: string]: string }[];
-  onClick?: MouseEventHandler<HTMLDivElement>;
   size?: number;
   showName?: boolean;
   keySrc?: string;

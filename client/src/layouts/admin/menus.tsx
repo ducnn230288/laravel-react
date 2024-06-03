@@ -1,8 +1,8 @@
 import React from 'react';
 import { URLSearchParamsInit } from 'react-router-dom/dist/dom';
-
 import { keyRole, language, routerLinks } from '@/utils';
 import { Calendar, Cog, User } from '@/assets/svg';
+import { useTranslation } from 'react-i18next';
 
 interface IMenu {
   key?: string;
@@ -14,45 +14,47 @@ interface IMenu {
 }
 
 const Layout = ({ lang = language, permissions = [] }: { lang?: string; permissions?: string[] }): IMenu[] => {
+  const { t } = useTranslation('locale', { keyPrefix: 'menu' });
+
   const list: IMenu[] = [
     {
       key: `/${lang}${routerLinks('Dashboard')}`,
       icon: <Calendar className="h-6 w-5" />,
-      label: 'Dashboard',
+      label: t('Dashboard'),
     },
     {
       key: `/${lang}${routerLinks('User')}`,
       icon: <User className="h-6 w-5" />,
-      label: 'User',
+      label: t('User'),
       permission: keyRole.P_USER_INDEX,
       queryparams: { roleCode: 'SUPER-ADMIN' },
     },
     {
       key: `/${lang}${routerLinks('Setting')}`,
       icon: <Cog className="h-6 w-5" />,
-      label: 'Setting',
+      label: t('Setting'),
       children: [
         {
           key: `/${lang}${routerLinks('Code')}`,
-          label: 'Code',
+          label: t('Code'),
           permission: keyRole.P_CODE_INDEX,
           queryparams: { typeCode: 'POSITION' },
         },
         {
           key: `/${lang}${routerLinks('Content')}`,
-          label: 'Content',
+          label: t('Content'),
           permission: keyRole.P_CONTENT_INDEX,
           queryparams: { typeCode: 'MEMBERS' },
         },
         {
           key: `/${lang}${routerLinks('Post')}`,
-          label: 'Post',
+          label: t('Post'),
           permission: keyRole.P_POST_INDEX,
           queryparams: { typeCode: 'PROJECTS' },
         },
         {
           key: `/${lang}${routerLinks('Parameter')}`,
-          label: 'Parameter',
+          label: t('Parameter'),
           permission: keyRole.P_PARAMETER_INDEX,
           queryparams: { code: 'ADDRESS' },
         },

@@ -138,6 +138,8 @@ export const Pagination: any = ({
           <label htmlFor={idElement + '_page_size'}>
             {showSizeChanger && pageSizeOptions.length > 0 && (
               <Select
+                allowClear={false}
+                showSearch={false}
                 className={'w-full sm:w-auto'}
                 value={perPage}
                 onChange={(value) => onPageSizeChange(value)}
@@ -146,12 +148,12 @@ export const Pagination: any = ({
             )}
           </label>
           {showTotal && (
-            <span className="my-3 text-black sm:ml-3">
+            <span className="my-3 text-base-content sm:ml-3">
               {paginationDescription(_temp.ranges[0], _temp.ranges[1], total)}
             </span>
           )}
         </div>
-        <div className="right mt-3 flex justify-center rounded-xl bg-white p-1 sm:mt-0">
+        <div className="right mt-3 flex justify-center rounded-btn bg-base-200 p-1 sm:mt-0">
           <div className="flex justify-center transition-all duration-300 sm:flex-wrap">
             {listOfPageItem.current.map((item: any, index: number) => (
               <button
@@ -160,10 +162,10 @@ export const Pagination: any = ({
                 key={index}
                 id={idElement + '_' + item.type}
                 className={classNames('text-center p-1 text-sm font-medium leading-normal relative mx-1', {
-                  'text-teal-900': page !== item.index && !['next_5', 'prev_5'].includes(item.type),
-                  'bg-teal-900 rounded-full text-white !px-2.5 mx-1': page === item.index,
-                  'text-zinc-300': item.disabled,
-                  'text-gray-600 text-xs': ['next_5', 'prev_5'].includes(item.type),
+                  'text-base-content': page !== item.index && !['next_5', 'prev_5'].includes(item.type),
+                  'bg-primary rounded-btn text-primary-content !px-2.5 mx-1': page === item.index,
+                  '!text-base-content/20': item.disabled,
+                  '!text-base-content/60 text-xs': ['next_5', 'prev_5'].includes(item.type),
                 })}
                 onClick={() => onPageIndexChange(item)}
                 aria-label={item.type}

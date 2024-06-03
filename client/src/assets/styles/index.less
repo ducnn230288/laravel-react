@@ -195,9 +195,18 @@ h4 {
 .ant-tree {
   @apply bg-base-100 text-base-content;
 
-  .ant-tree-switcher-leaf-line:before,
-  .ant-tree-switcher-leaf-line::after {
-    @apply border-base-300;
+  &-list-holder-inner {
+    @apply pt-2;
+  }
+
+  .ant-tree-switcher-leaf-line {
+    &:before,
+    &::after {
+      @apply border-base-300;
+    }
+    &:before {
+      @apply -top-2;
+    }
   }
   .ant-tree-node-content-wrapper {
     @apply btn-sm mr-3;
@@ -208,7 +217,7 @@ h4 {
 }
 
 .icon-cud {
-  @apply size-6 ~'px-1' fill-white rounded-md;
+  @apply size-6 px-1 fill-white rounded-md;
 }
 svg {
   fill: currentColor;

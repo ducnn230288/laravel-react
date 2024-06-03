@@ -18,12 +18,13 @@ const Component = ({
   mode,
   firstLoad,
   className = '',
+  allowClear = true,
 }: Type) => {
   const [_temp, set_temp] = useState({ current: [], list: list || [] });
   const facade = get?.facade() || {};
   let __list = !get
     ? _temp.list
-    : (get?.key ? facade[get?.key] : facade.result.data)
+    : (get?.key ? facade[get?.key] : facade.result?.data)
         ?.map((e: any) => (get.format ? get.format(e) : e))
         .filter((item: any) => !!item.value);
   const loadData = async (fullTextSearch: string) => {
@@ -74,9 +75,9 @@ const Component = ({
       disabled={disabled}
       listHeight={200}
       filterOption={false}
-      showSearch={true}
+      showSearch={showSearch}
       loading={facade?.isLoading || false}
-      allowClear
+      allowClear={allowClear}
       onSearch={showSearch ? (value) => loadData(value) : undefined}
       value={value}
       maxTagPlaceholder={(array) => '+' + array.length}
@@ -109,5 +110,6 @@ interface Type {
   list?: ITableItemFilterList[];
   mode?: 'multiple' | 'tags';
   firstLoad?: (data: any) => any;
+  allowClear?: boolean;
 }
 export default Component;

@@ -152,11 +152,11 @@ export const DataTable = forwardRef(
         params.current = { ...request };
         if (save) {
           changeNavigate &&
-            navigate(location.hash.substring(1) + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
+            navigate(location.pathname.substring(1) + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
         }
       } else if (localStorage.getItem(idTable.current))
         params.current = JSON.parse(localStorage.getItem(idTable.current) ?? '{}');
-      if (showList && facade?.get) facade?.get(cleanObjectKeyNull({ ...request }));
+      if (showList && facade?.get) facade?.get(request);
     };
 
     if (params.current.like && Array.isArray(params.current.like)) {
@@ -460,7 +460,7 @@ export const DataTable = forwardRef(
     let table: HTMLTableElement;
     let wTable: number;
     return (
-      <div ref={tableRef} className={classNames(className, 'intro-x')}>
+      <div ref={tableRef} className={classNames(className)}>
         {(!!showSearch || !!leftHeader || !!rightHeader) && (
           <div className="mb-2.5 flex-wrap justify-between gap-y-2.5 lg:flex">
             {showSearch ? (
@@ -620,7 +620,7 @@ interface Type {
   defaultRequest?: IPaginationQuery;
   showPagination?: boolean;
   leftHeader?: JSX.Element;
-  rightHeader?: JSX.Element;
+  rightHeader?: JSX.Element | boolean;
   showSearch?: boolean;
   save?: boolean;
   searchPlaceholder?: string;

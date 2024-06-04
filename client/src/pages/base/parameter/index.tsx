@@ -1,22 +1,20 @@
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Select, Spin, Tree } from 'antd';
-import { useLocation, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 import classNames from 'classnames';
 import { createSearchParams } from 'react-router-dom';
 
 import { Arrow } from '@/assets/svg';
 import { EFormType } from '@/enums';
 import { Breadcrumbs } from '@/library/breadcrumbs';
-import { getQueryStringParams } from '@/library/data-table';
 import { Form } from '@/library/form';
 import { SParameter } from '@/services';
 import { lang, routerLinks } from '@/utils';
 
 const Page = () => {
   const sParameter = SParameter();
-  const location = useLocation();
-  const request = getQueryStringParams(location.search);
+  const request = JSON.parse(sParameter?.queryParams ?? '{}');
   useEffect(() => {
     if (!sParameter.result?.data) sParameter.get({});
     Breadcrumbs(t('Parameter'), [

@@ -43,9 +43,9 @@ export default {
                 value: item.code,
               }),
               params: (fullTextSearch: string, value) => ({
-                fullTextSearch,
-                filter: { type: 'position' },
-                extend: { code: value },
+                // fullTextSearch,
+                typeCode: 'POSITION',
+                // extend: { code: value },
               }),
             },
           },

@@ -161,9 +161,6 @@ const Main = () => {
             perPage: 1,
             include: 'position',
           }}
-          onRow={() => ({
-            // onDoubleClick: () => userService.getById({ id: data.id }),
-          })}
           paginationDescription={(from: number, to: number, total: number) => t('Pagination user', { from, to, total })}
           columns={_column.useTable()}
           rightHeader={

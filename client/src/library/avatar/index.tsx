@@ -1,11 +1,10 @@
-import React, { MouseEventHandler } from 'react';
+import React from 'react';
 import { Popover } from 'antd';
 import classNames from 'classnames';
 
 export const Avatar = ({
   text,
   src,
-  onClick,
   size = 7,
   showName = true,
   keySrc = 'avatarPath',

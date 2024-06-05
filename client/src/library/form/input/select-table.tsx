@@ -55,10 +55,10 @@ const Component = ({ mode, onChange, placeholder, disabled, get, value }: Type) 
               formatData={(data) => arrayUnique([..._temp.data, ...data], 'id')}
               ref={table}
               facade={facade}
-              showPagination={false}
-              showSearch={false}
               defaultRequest={{ page: 1, perPage: 10 }}
               save={false}
+              showSearch={false}
+              showPagination={false}
               onRow={(e) => ({
                 onClick: () => {
                   if (get?.format) {

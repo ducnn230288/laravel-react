@@ -5,7 +5,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import { TFunction } from 'i18next';
 
 import { Calendar, CheckCircle, CheckSquare, Search } from '@/assets/svg';
-import { ITableGet } from '@/interfaces';
+import { ITableGet, ITableItemFilterList } from '@/interfaces';
 import { cleanObjectKeyNull } from '@/utils';
 import { Mask } from '../form/input';
 import { Button } from '../button';
@@ -37,14 +37,14 @@ const columnSearch = (get: ITableGet, fullTextSearch = '', value?: any, facade: 
 };
 
 export const getColumnSearchCheckbox = ({
-  filters,
+  list,
   key,
   get,
   valueFilter,
   timeoutSearch,
   t,
 }: {
-  filters: CheckboxOptionType[];
+  list: ITableItemFilterList[];
   key: string;
   get: ITableGet;
   valueFilter: React.MutableRefObject<{ [selector: string]: boolean }>;
@@ -74,11 +74,15 @@ export const getColumnSearchCheckbox = ({
           )}
           <div>
             <Checkbox.Group
-              options={filters || facade?.result?.data?.map(get.format).filter((item: any) => !!item.value) || []}
+              options={
+                (list as CheckboxOptionType[]) ||
+                facade?.result?.data?.map(get.format).filter((item: any) => !!item.value) ||
+                []
+              }
               defaultValue={selectedKeys}
               onChange={(e) => setSelectedKeys(e)}
             />
-            {(filters?.length === 0 || facade?.result?.data?.length === 0) && (
+            {(list?.length === 0 || facade?.result?.data?.length === 0) && (
               <span className={'px-2'}>{t('No Data')}</span>
             )}
           </div>
@@ -93,14 +97,14 @@ export const getColumnSearchCheckbox = ({
 });
 
 export const getColumnSearchRadio = ({
-  filters,
+  list,
   key,
   get,
   valueFilter,
   timeoutSearch,
   t,
 }: {
-  filters: CheckboxOptionType[];
+  list: ITableItemFilterList[];
   key: string;
   get: ITableGet;
   valueFilter: React.MutableRefObject<{ [selector: string]: boolean }>;
@@ -130,11 +134,15 @@ export const getColumnSearchRadio = ({
           )}
           <div>
             <Radio.Group
-              options={filters || get?.facade?.result?.data?.map(get.format).filter((item: any) => !!item.value) || []}
+              options={
+                (list as CheckboxOptionType[]) ||
+                get?.facade?.result?.data?.map(get.format).filter((item: any) => !!item.value) ||
+                []
+              }
               value={selectedKeys}
               onChange={(e) => setSelectedKeys(e.target.value + '')}
             />
-            {(filters?.length === 0 || facade?.result?.data?.length === 0) && (
+            {(list?.length === 0 || facade?.result?.data?.length === 0) && (
               <span className={'px-2'}>{t('No Data')}</span>
             )}
           </div>

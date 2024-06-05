@@ -10,9 +10,7 @@ export const Pagination: any = ({
   perPage = 10,
   page = 1,
   queryParams = () => null,
-  pageSizeRender = (sizePage: number) => sizePage + ' / page',
   paginationDescription = (from: number, to: number, total: number) => from + '-' + to + ' of ' + total + ' items',
-  idElement = 'pagination',
   className = 'pagination',
   firstPageDisabled = ({ page }: { page: number }) => page - 10 < 0,
   lastPageDisabled = ({ page, lastIndex }: { page: number; lastIndex: number }) => page + 10 > lastIndex,
@@ -135,7 +133,7 @@ export const Pagination: any = ({
     total > 0 && (
       <div className={classNames(className, 'flex flex-col lg:flex-row items-center justify-between mt-3 select-none')}>
         <div className={'left relative flex items-center'}>
-          <label htmlFor={idElement + '_page_size'}>
+          <label>
             {showSizeChanger && pageSizeOptions.length > 0 && (
               <Select
                 allowClear={false}
@@ -143,7 +141,7 @@ export const Pagination: any = ({
                 className={'w-full sm:w-auto'}
                 value={perPage}
                 onChange={(value) => onPageSizeChange(value)}
-                list={pageSizeOptions.map((item: number) => ({ value: item, label: pageSizeRender(item) }))}
+                list={pageSizeOptions.map((item: number) => ({ value: item, label: item + ' / page' }))}
               />
             )}
           </label>
@@ -160,7 +158,6 @@ export const Pagination: any = ({
                 type={'button'}
                 disabled={item.disabled}
                 key={index}
-                id={idElement + '_' + item.type}
                 className={classNames('text-center p-1 text-sm font-medium leading-normal relative mx-1', {
                   'text-base-content': page !== item.index && !['next_5', 'prev_5'].includes(item.type),
                   'bg-primary rounded-btn text-primary-content !px-2.5 mx-1': page === item.index,
@@ -191,9 +188,7 @@ interface Type {
   perPage: number;
   page: number;
   queryParams: ({ perPage, page }: { perPage: number; page: number }) => void;
-  pageSizeRender: (sizePage: number) => string;
   paginationDescription: (from: number, to: number, total: number) => string;
-  idElement: string;
   className: string;
   firstPageDisabled: ({ page, lastIndex }: { page: number; lastIndex: number }) => boolean;
   lastPageDisabled: ({ page, lastIndex }: { page: number; lastIndex: number }) => boolean;

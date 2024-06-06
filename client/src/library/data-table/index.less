@@ -1,3 +1,19 @@
+.data-table {
+  .top-header {
+    @apply flex-col-reverse justify-between ~'mb-2.5 gap-y-2.5' flex lg:flex-row;
+
+    .search {
+      @apply relative;
+    }
+    .right {
+      @apply mt-2 sm:mt-0;
+    }
+  }
+  .no-data {
+    @apply py-4 text-base-content;
+  }
+}
+
 .ant-table {
   &-wrapper .ant-table {
     @apply bg-base-100 text-base-content;
@@ -16,26 +32,26 @@
       @apply font-bold bg-base-100 text-base-content border-none border-0;
       &.ant-table-cell-fix-left,
       &.ant-table-cell-fix-right {
-        @apply ~'mt-[1px]';
+        margin-top: 1px;
       }
     }
     .ant-table-tbody > tr.ant-table-row {
       &:nth-of-type(odd) > td {
         @apply border-b bg-base-200/50;
         &:first-child {
-          @apply rounded-bl-xl rounded-tl-xl;
+          @apply rounded-bl-btn rounded-tl-btn;
         }
         &:last-child {
-          @apply rounded-br-xl rounded-tr-xl;
+          @apply rounded-br-btn rounded-tr-btn;
         }
       }
       > td {
         @apply border-none bg-base-100;
         &:first-child {
-          @apply rounded-bl-xl rounded-tl-xl;
+          @apply rounded-bl-btn rounded-tl-btn;
         }
         &:last-child {
-          @apply rounded-br-xl rounded-tr-xl;
+          @apply rounded-br-btn rounded-tr-btn;
         }
       }
     }

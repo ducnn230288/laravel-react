@@ -9,10 +9,10 @@ export const Button = ({ text = '', icon, title, className, disabled, isLoading 
       type="button"
       disabled={disabled}
       title={title ?? text ?? ''}
-      className={className ?? classNames('btn btn-outline btn-sm h-10')}
+      className={className ?? classNames('btn btn-primary btn-sm h-10')}
       {...props}
     >
-      {!isLoading ? icon : <Spinner className={'size-4 animate-spin'} />}
+      {!isLoading ? icon : <Spinner className={'size-3 animate-spin'} />}
       {text}
     </button>
   );

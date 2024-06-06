@@ -86,10 +86,10 @@ export default {
       {
         title: t('Action'),
         tableItem: {
-          width: 100,
+          width: 90,
           align: ETableAlign.center,
           render: (text: string, data) => (
-            <div className={'flex gap-2'}>
+            <div className={'flex gap-1.5'}>
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_USER_UPDATE) && (
                 <ToolTip title={t(data.isDisable ? 'Disabled user' : 'Enabled user', { name: data.name })}>
                   <Popconfirm
@@ -103,11 +103,7 @@ export default {
                         name: data.name,
                       })}
                     >
-                      {data.isDisable ? (
-                        <Disable className="icon-cud bg-yellow-700 hover:bg-yellow-500" />
-                      ) : (
-                        <Check className="icon-cud bg-green-600 hover:bg-green-400" />
-                      )}
+                      {data.isDisable ? <Disable className="warning" /> : <Check className="success" />}
                     </button>
                   </Popconfirm>
                 </ToolTip>
@@ -118,7 +114,7 @@ export default {
                     title={t('Edit User', { name: data.name })}
                     onClick={() => sUser.getById({ id: data.id, params: { include: 'position' } })}
                   >
-                    <Edit className="icon-cud bg-teal-900 hover:bg-teal-700" />
+                    <Edit className="primary" />
                   </button>
                 </ToolTip>
               )}
@@ -130,7 +126,7 @@ export default {
                     onConfirm={() => sUser.delete(data.id)}
                   >
                     <button title={t('Delete user', { name: data.name })}>
-                      <Trash className="icon-cud bg-red-600 hover:bg-red-400" />
+                      <Trash className="error" />
                     </button>
                   </Popconfirm>
                 </ToolTip>

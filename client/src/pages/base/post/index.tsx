@@ -30,10 +30,10 @@ const Page = () => {
 
   const sPost = SPost();
   useEffect(() => {
-    Breadcrumbs(t('Post'), [
-      { title: t('Setting'), link: '' },
-      { title: t('Post'), link: '' },
-    ]);
+    // Breadcrumbs(t('Post'), [
+    //   { title: t('Setting'), link: '' },
+    //   { title: t('Post'), link: '' },
+    // ]);
     switch (sPost.status) {
       case EStatusState.putFulfilled:
       case EStatusState.postFulfilled:

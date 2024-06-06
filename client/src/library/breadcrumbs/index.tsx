@@ -1,20 +1,16 @@
-import React, { Fragment } from 'react';
-import * as ReactDOMServer from 'react-dom/server';
-import { Arrow } from '@/assets/svg';
-import classNames from 'classnames';
+import { Home } from '@/assets/svg';
+import React from 'react';
 
-export const Breadcrumbs = (title: string, breadcrumbs: { title: string; link: string }[]) => {
-  document.title = title;
-  document.querySelectorAll('.title-page').forEach((e) => (e.innerHTML = title));
-  document.querySelectorAll('.breadcrumbs-page').forEach(
-    (e) =>
-      (e.innerHTML = ReactDOMServer.renderToStaticMarkup(
-        breadcrumbs.map((item, i) => (
-          <Fragment key={i}>
-            <span className={classNames({ 'text-gray-400': i < breadcrumbs.length - 1 })}>{item.title}</span>{' '}
-            {i < breadcrumbs.length - 1 && <Arrow className={'mx-1.5 size-2.5'} />}
-          </Fragment>
-        )),
-      )),
-  );
-};
+export const Breadcrumbs = ({ title }: { title: string }) => (
+  <div className="wrapper-flex">
+    <h2 className={'-intro-x'}>{title}</h2>
+    <div className={'intro-x breadcrumbs'}>
+      <ul>
+        <li>
+          <Home />
+        </li>
+        <li>{title}</li>
+      </ul>
+    </div>
+  </div>
+);

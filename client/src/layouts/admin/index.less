@@ -38,10 +38,69 @@
         }
       }
     }
+
     main {
       @apply overflow-auto;
-      h: calc(100vh - 6rem);
+      height: calc(100vh - 6rem);
+
+      h2 {
+        @apply text-xl font-bold;
+      }
+
+      h3 {
+        @apply text-lg font-bold;
+      }
+
+      .breadcrumbs svg {
+        @apply ~'-mt-0.5' size-3;
+      }
+
+      .wrapper-flex {
+        @apply container mx-auto flex items-center justify-between ~'px-2.5' py-3;
+      }
+      .wrapper-grid {
+        @apply container mx-auto grid grid-cols-12 gap-3 ~'px-2.5';
+
+        .left {
+          @apply col-span-12 sm:col-span-4 lg:col-span-3;
+        }
+
+        .right {
+          @apply col-span-12 sm:col-span-8 lg:col-span-9;
+        }
+
+        .card {
+          @apply overflow-auto bg-base-100 shadow;
+
+          .header {
+            @apply flex h-14 items-center justify-between border-b border-base-300/60 px-4 py-2;
+          }
+          .desktop {
+            @apply relative hidden overflow-y-auto sm:block;
+            height: calc(100vh - 14rem);
+          }
+          .mobile {
+            @apply block p-2 sm:hidden sm:p-0;
+          }
+          .body {
+            @apply overflow-y-auto p-3 ~'sm:min-h-[calc(100vh-10.5rem)]';
+          }
+        }
+      }
+      .warning {
+        @apply size-5 px-1 fill-base-100 rounded-md bg-warning hover:bg-warning/50;
+      }
+      .success {
+        @apply size-5 px-1 fill-base-100 rounded-md bg-success hover:bg-success/50;
+      }
+      .primary {
+        @apply size-5 px-1 fill-base-100 rounded-md bg-primary hover:bg-primary/50;
+      }
+      .error {
+        @apply size-5 px-1 fill-base-100 rounded-md bg-error hover:bg-error/50;
+      }
     }
+
     footer {
       @apply w-full ~'pt-1.5' text-center;
     }

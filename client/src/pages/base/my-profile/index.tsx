@@ -16,7 +16,7 @@ const Page = () => {
   const sGlobal = SGlobal();
   useEffect(() => {
     sGlobal.profile();
-    Breadcrumbs(t('My Profile'), []);
+    // Breadcrumbs(t('My Profile'), []);
   }, []);
   useEffect(() => {
     if (EStatusGlobal.putProfileFulfilled) sGlobal.profile();

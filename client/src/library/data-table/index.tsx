@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { useDraggable } from '@dnd-kit/core';
 import queryString from 'query-string';
+import { useLocation } from 'react-router-dom';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
@@ -21,16 +22,12 @@ export const DataTable = forwardRef(
   (
     {
       columns = [],
-      defaultRequest = {
-        page: 1,
-        perPage: 1,
-      },
+      defaultRequest = {},
       rightHeader,
       save = true,
       paginationDescription = (from: number, to: number, total: number) => from + '-' + to + ' of ' + total + ' items',
       facade = {},
       data,
-      className = '',
       formatData = (data) => data,
       showPagination = true,
       showSearch = true,
@@ -40,16 +37,18 @@ export const DataTable = forwardRef(
   ) => {
     useImperativeHandle(ref, () => ({ onChange }));
 
+    const location = useLocation();
     const refPageSizeOptions = useRef<number[]>();
     const params = useRef(
       save && location.search && location.search.indexOf('=') > -1
         ? { ...defaultRequest, ...queryString.parse(location.search, { arrayFormat: 'index' }) }
-        : defaultRequest,
+        : { ...defaultRequest },
     );
+
     const scroll = useRef<{ x?: number; y?: number }>({ x: 1000, y: undefined });
     useEffect(() => {
-      if (params.current?.perPage === 1) params.current.perPage = getSizePageByHeight();
-      else if (params.current.perPage! < 5) params.current.perPage = 5;
+      if (!params.current?.perPage) params.current.perPage = getSizePageByHeight();
+      else if (params.current.perPage < 5) params.current.perPage = 5;
       else params.current.perPage = 10;
       const { perPage } = params.current;
       refPageSizeOptions.current = [perPage, perPage * 2, perPage * 3, perPage * 4, perPage * 5];
@@ -130,7 +129,7 @@ export const DataTable = forwardRef(
         params.current = { ...request };
         if (save) {
           isChangeNavigate &&
-            navigate(location.pathname.substring(1) + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
+            navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
         }
       }
       if (facade?.get) facade?.get(request);
@@ -182,30 +181,29 @@ export const DataTable = forwardRef(
       </th>
     );
     return (
-      <div ref={tableRef} className={className}>
-        {!!showSearch ||
-          (!!rightHeader && (
-            <div className="mb-2.5 flex-wrap justify-between gap-y-2.5 lg:flex">
-              {showSearch ? (
-                <CSearch
-                  params={params.current}
-                  timeoutSearch={timeoutSearch}
-                  t={t}
-                  handleTableChange={handleTableChange}
-                />
-              ) : (
-                <div />
-              )}
-              : ({!!rightHeader && <div className={'mt-2 sm:mt-0'}>{rightHeader}</div>}
-            </div>
-          ))}
+      <div ref={tableRef} className="data-table">
+        {(!!showSearch || !!rightHeader) && (
+          <div className="top-header">
+            {showSearch ? (
+              <CSearch
+                params={params.current}
+                timeoutSearch={timeoutSearch}
+                t={t}
+                handleTableChange={handleTableChange}
+              />
+            ) : (
+              <div />
+            )}
+            {!!rightHeader && <div className={'right'}>{rightHeader}</div>}
+          </div>
+        )}
 
         <CWrapper tableRef={tableRef}>
           <Table
             onRow={onRow}
             components={{ header: { cell: componentsCell } }}
             locale={{
-              emptyText: <div className="bg-gray-100 py-4 text-gray-400">{t('No Data')}</div>,
+              emptyText: <div className="no-data">{t('No Data')}</div>,
             }}
             loading={facade.isLoading}
             columns={cols.current}
@@ -223,6 +221,7 @@ export const DataTable = forwardRef(
               page={params.current.page!}
               perPage={params.current.perPage!}
               pageSizeOptions={refPageSizeOptions.current}
+              paginationDescription={paginationDescription}
               queryParams={(pagination: { page?: number; perPage?: number }) =>
                 handleTableChange(
                   pagination,
@@ -231,7 +230,6 @@ export const DataTable = forwardRef(
                   params.current.fullTextSearch,
                 )
               }
-              paginationDescription={paginationDescription}
             />
           )}
         </CWrapper>
@@ -248,7 +246,6 @@ interface Type {
   paginationDescription?: (from: number, to: number, total: number) => string;
   facade?: any;
   data?: any[];
-  className?: string;
   formatData?: (data: any) => any[];
   showPagination?: boolean;
   showSearch?: boolean;

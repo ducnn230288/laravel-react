@@ -27,10 +27,10 @@ const Page = () => {
 
   const sCode = SCode();
   useEffect(() => {
-    Breadcrumbs(t('Code'), [
-      { title: t('Setting'), link: '' },
-      { title: t('Code'), link: '' },
-    ]);
+    // Breadcrumbs(t('Code'), [
+    //   { title: t('Setting'), link: '' },
+    //   { title: t('Code'), link: '' },
+    // ]);
     switch (sCode.status) {
       case EStatusState.putFulfilled:
       case EStatusState.postFulfilled:

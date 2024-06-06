@@ -17,10 +17,10 @@ const Page = () => {
   const request = JSON.parse(sParameter?.queryParams ?? '{}');
   useEffect(() => {
     if (!sParameter.result?.data) sParameter.get({});
-    Breadcrumbs(t('Parameter'), [
-      { title: t('Setting'), link: '' },
-      { title: t('Parameter'), link: '' },
-    ]);
+    // Breadcrumbs(t('Parameter'), [
+    //   { title: t('Setting'), link: '' },
+    //   { title: t('Parameter'), link: '' },
+    // ]);
     sParameter.getById({ id: request.code });
   }, []);
 

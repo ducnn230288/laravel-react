@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
     {
       User::factory()->create(['role_code' => 'SUPER-ADMIN', 'email' => 'super-admin@gmail.com', 'position_code' => 'PC']);
       User::factory()->create(['role_code' => 'ADMIN', 'email' => 'admin@gmail.com', 'position_code' => 'AD']);
-      User::factory(10)->create(['role_code' => 'ADMIN', 'position_code' => 'DEV']);
+      User::factory(100)->create(['role_code' => 'ADMIN', 'position_code' => 'DEV']);
 
     }
 }

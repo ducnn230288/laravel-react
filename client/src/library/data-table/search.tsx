@@ -29,7 +29,7 @@ export const CSearch = ({
   const idTable = useRef('temp-' + uuidv4());
 
   return (
-    <div className="relative">
+    <div className="search">
       <Mask
         className={'h-10 pl-8'}
         id={idTable.current + '_input_search'}

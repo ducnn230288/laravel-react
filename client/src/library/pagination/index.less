@@ -1,0 +1,25 @@
+.pagination {
+  @apply flex flex-col-reverse lg:flex-row items-center justify-between mt-2;
+
+  .left {
+    @apply relative flex items-center gap-2 mt-2 sm:mt-0;
+  }
+
+  .right {
+    @apply flex justify-center rounded-btn bg-base-200 p-1 sm:flex-wrap gap-1;
+
+    > button {
+      @apply text-center text-sm font-medium min-w-8 hover:bg-neutral/50 rounded-btn text-base-content py-1.5 px-2.5;
+
+      &.active {
+        @apply bg-neutral text-neutral-content;
+      }
+      &.disabled {
+        @apply text-base-content/30;
+      }
+      svg {
+        @apply ~'size-2.5';
+      }
+    }
+  }
+}

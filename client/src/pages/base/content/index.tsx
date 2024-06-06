@@ -27,10 +27,10 @@ const Page = () => {
 
   const sContent = SContent();
   useEffect(() => {
-    Breadcrumbs(t('Content'), [
-      { title: t('Setting'), link: '' },
-      { title: t('Content'), link: '' },
-    ]);
+    // Breadcrumbs(t('Content'), [
+    //   { title: t('Setting'), link: '' },
+    //   { title: t('Content'), link: '' },
+    // ]);
     switch (sContent.status) {
       case EStatusState.putFulfilled:
       case EStatusState.postFulfilled:

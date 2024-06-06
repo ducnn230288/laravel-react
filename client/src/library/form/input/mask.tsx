@@ -16,7 +16,6 @@ const Component = forwardRef(
       addonAfter,
       form,
       disabled,
-      maxLength,
       placeholder,
       onBlur,
       onFocus,
@@ -41,13 +40,6 @@ const Component = forwardRef(
       if ('selectionStart' in el) {
         return el.selectionStart ?? 0;
       }
-      // if (el && document.selection) {
-      //   el.focus();
-      //   const sel = document.selection.createRange();
-      //   const selLen = document.selection.createRange().text.length;
-      //   sel.moveStart('character', -el.value.length);
-      //   return sel.text.length - selLen;
-      // }
       return 0;
     };
 
@@ -56,19 +48,12 @@ const Component = forwardRef(
         input.focus();
         input.setSelectionRange(selectionStart, selectionEnd);
       }
-      // else if (input.createTextRange) {
-      //   const range = input.createTextRange();
-      //   range.collapse(true);
-      //   range.moveEnd('character', selectionEnd);
-      //   range.moveStart('character', selectionStart);
-      //   range.select();
-      // }
     };
 
     return (
       <Fragment>
         <div
-          className={classNames('', {
+          className={classNames({
             'ant-input flex items-center border rounded-btn': !!addonBefore || !!addonAfter,
           })}
         >
@@ -77,7 +62,7 @@ const Component = forwardRef(
             id={id}
             ref={input}
             className={classNames(
-              'w-full text-base-content bg-base-100 px-4 ',
+              'w-full text-base-content bg-base-100 px-4',
               {
                 'ant-input': !addonBefore && !addonAfter,
                 'border rounded-btn': !addonBefore && !addonAfter,
@@ -91,7 +76,6 @@ const Component = forwardRef(
             autoFocus={autoFocus}
             readOnly={disabled}
             defaultValue={value}
-            maxLength={maxLength}
             placeholder={placeholder}
             onBlur={onBlur}
             onChange={onChange}
@@ -104,14 +88,14 @@ const Component = forwardRef(
           <div className={'mt-2 flex flex-wrap gap-2'}>
             {list.map((item, index) => (
               <Button
-                key={index}
+                key={item.value!.toString() + index}
                 text={item.label}
                 onClick={() => {
                   if (item.value) {
                     const value = input.current?.value ?? '';
                     const position = getCursorPosition(input.current!);
                     input.current!.value = value.slice(0, position) + item.value + value.slice(position);
-                    onChange && onChange({ target: input.current });
+                    if (onChange) onChange({ target: input.current });
                     setCaretPosition(
                       input.current!,
                       position + item.value.toString().length,

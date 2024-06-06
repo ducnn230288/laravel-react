@@ -6,18 +6,11 @@ import { Select } from '../form/input';
 
 export const Pagination: any = ({
   total = 4,
-  pageSizeOptions = [],
-  perPage = 10,
   page = 1,
-  queryParams = () => null,
+  perPage = 10,
+  pageSizeOptions = [],
   paginationDescription = (from: number, to: number, total: number) => from + '-' + to + ' of ' + total + ' items',
-  className = 'pagination',
-  firstPageDisabled = ({ page }: { page: number }) => page - 10 < 0,
-  lastPageDisabled = ({ page, lastIndex }: { page: number; lastIndex: number }) => page + 10 > lastIndex,
-  firstPage = ({ page }: { page: number }) => page - 10,
-  lastPage = ({ page }: { page: number }) => page + 10,
-  showSizeChanger = true,
-  showTotal = true,
+  queryParams = () => null,
 }: Type) => {
   const listOfPageItem = useRef<{ disabled: boolean; type: string; index: number }[]>([]);
   const [_temp, set_temp] = useState<{ ranges: [number, number] }>({
@@ -49,13 +42,13 @@ export const Pagination: any = ({
         index = page - 1;
         break;
       case 'prev_10':
-        index = firstPage({ page, lastIndex: lastNumber.current });
+        index = page - 10;
         break;
       case 'next':
         index = page + 1;
         break;
       case 'next_10':
-        index = lastPage({ page, lastIndex: lastNumber.current });
+        index = page + 10;
         break;
       default:
     }
@@ -67,7 +60,7 @@ export const Pagination: any = ({
       const prev10Item = {
         type: 'prev_10',
         index: -1,
-        disabled: firstPageDisabled({ page, lastIndex }),
+        disabled: page - 10 < 0,
       };
       const prevItem = {
         type: 'prev',
@@ -82,7 +75,7 @@ export const Pagination: any = ({
       const next10Item = {
         type: 'next_10',
         index: -1,
-        disabled: lastPageDisabled({ page, lastIndex }),
+        disabled: page + 10 > lastIndex,
       };
       lastNumber.current = listOfPage.length;
       return [prev10Item, prevItem, ...listOfPage, nextItem, next10Item];
@@ -131,51 +124,38 @@ export const Pagination: any = ({
 
   return (
     total > 0 && (
-      <div className={classNames(className, 'flex flex-col lg:flex-row items-center justify-between mt-3 select-none')}>
-        <div className={'left relative flex items-center'}>
-          <label>
-            {showSizeChanger && pageSizeOptions.length > 0 && (
-              <Select
-                allowClear={false}
-                showSearch={false}
-                className={'w-full sm:w-auto'}
-                value={perPage}
-                onChange={(value) => onPageSizeChange(value)}
-                list={pageSizeOptions.map((item: number) => ({ value: item, label: item + ' / page' }))}
-              />
-            )}
-          </label>
-          {showTotal && (
-            <span className="my-3 text-base-content sm:ml-3">
-              {paginationDescription(_temp.ranges[0], _temp.ranges[1], total)}
-            </span>
+      <div className={'pagination'}>
+        <div className={'left'}>
+          {pageSizeOptions.length > 0 && (
+            <Select
+              allowClear={false}
+              showSearch={false}
+              className={'w-full sm:w-auto'}
+              value={perPage}
+              onChange={(value) => onPageSizeChange(value)}
+              list={pageSizeOptions.map((item: number) => ({ value: item, label: item + ' / page' }))}
+            />
           )}
+          {!!paginationDescription && <label>{paginationDescription(_temp.ranges[0], _temp.ranges[1], total)}</label>}
         </div>
-        <div className="right mt-3 flex justify-center rounded-btn bg-base-200 p-1 sm:mt-0">
-          <div className="flex justify-center transition-all duration-300 sm:flex-wrap">
-            {listOfPageItem.current.map((item: any, index: number) => (
-              <button
-                type={'button'}
-                disabled={item.disabled}
-                key={index}
-                className={classNames('text-center p-1 text-sm font-medium leading-normal relative mx-1', {
-                  'text-base-content': page !== item.index && !['next_5', 'prev_5'].includes(item.type),
-                  'bg-primary rounded-btn text-primary-content !px-2.5 mx-1': page === item.index,
-                  '!text-base-content/20': item.disabled,
-                  '!text-base-content/60 text-xs': ['next_5', 'prev_5'].includes(item.type),
-                })}
-                onClick={() => onPageIndexChange(item)}
-                aria-label={item.type}
-              >
-                {item.type === 'prev' && <Arrow className={'size-3 rotate-180'} />}
-                {item.type === 'next' && <Arrow className={'size-3'} />}
-                {item.type === 'prev_10' && <DoubleArrow className={'size-3 rotate-180'} />}
-                {item.type === 'next_10' && <DoubleArrow className={'size-3'} />}
-                {item.type.indexOf('page') === 0 && item.index}
-                {(item.type === 'prev_5' || item.type === 'next_5') && '...'}
-              </button>
-            ))}
-          </div>
+        <div className="right">
+          {listOfPageItem.current.map((item: any) => (
+            <button
+              type={'button'}
+              disabled={item.disabled}
+              key={item.type}
+              className={classNames({ active: page === item.index, disabled: item.disabled })}
+              onClick={() => onPageIndexChange(item)}
+              aria-label={item.type}
+            >
+              {item.type === 'prev' && <Arrow className={'rotate-180'} />}
+              {item.type === 'next' && <Arrow />}
+              {item.type === 'prev_10' && <DoubleArrow className={'rotate-180'} />}
+              {item.type === 'next_10' && <DoubleArrow />}
+              {item.type.indexOf('page') === 0 && item.index}
+              {(item.type === 'prev_5' || item.type === 'next_5') && '...'}
+            </button>
+          ))}
         </div>
       </div>
     )
@@ -184,17 +164,10 @@ export const Pagination: any = ({
 
 interface Type {
   total: number;
-  pageSizeOptions: number[];
-  perPage: number;
   page: number;
-  queryParams: ({ perPage, page }: { perPage: number; page: number }) => void;
+  perPage: number;
+  pageSizeOptions: number[];
   paginationDescription: (from: number, to: number, total: number) => string;
-  className: string;
-  firstPageDisabled: ({ page, lastIndex }: { page: number; lastIndex: number }) => boolean;
-  lastPageDisabled: ({ page, lastIndex }: { page: number; lastIndex: number }) => boolean;
-  firstPage: ({ page, lastIndex }: { page: number; lastIndex: number }) => number;
-  lastPage: ({ page, lastIndex }: { page: number; lastIndex: number }) => number;
-  showSizeChanger: boolean;
-  showTotal: boolean;
+  queryParams: ({ perPage, page }: { perPage: number; page: number }) => void;
 }
 export default Pagination;

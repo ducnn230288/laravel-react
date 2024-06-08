@@ -93,6 +93,7 @@ export default {
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_USER_UPDATE) && (
                 <ToolTip title={t(data.isDisable ? 'Disabled user' : 'Enabled user', { name: data.name })}>
                   <Popconfirm
+                    destroyTooltipOnHide={true}
                     title={t(!data.isDisable ? 'Are you sure want disable user?' : 'Are you sure want enable user?', {
                       name: data.name,
                     })}
@@ -122,6 +123,7 @@ export default {
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_USER_DESTROY) && (
                 <ToolTip title={t('Delete user', { name: data.name })}>
                   <Popconfirm
+                    destroyTooltipOnHide={true}
                     title={t('Are you sure want delete user?', { name: data.name })}
                     onConfirm={() => sUser.delete(data.id)}
                   >
@@ -205,9 +207,6 @@ export default {
         formItem: {
           type: EFormType.date,
           rules: [{ type: EFormRuleType.required }],
-          disabledDate: (current) => {
-            return current && current >= dayjs().startOf('day');
-          },
         },
       },
       {

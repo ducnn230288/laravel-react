@@ -5,13 +5,14 @@ const Component = ({
   value = '',
   placeholder,
   disabled,
-  ...prop
+  onChange,
 }: {
   value?: string;
   placeholder: string;
   disabled?: boolean;
+  onChange?: (e: any) => any;
 }) => {
-  const [toggle, set_toggle] = useState(true);
+  const [toggle, setToggle] = useState(true);
 
   return (
     <div className="relative">
@@ -19,19 +20,12 @@ const Component = ({
         value={value}
         placeholder={placeholder}
         disabled={disabled}
-        {...prop}
         type={toggle ? 'password' : 'text'}
-        className="ant-input h-12 w-full rounded-btn border border-solid bg-base-100 py-2 pl-4 pr-9 text-base-content"
+        className="ant-input pr-9"
+        onChange={onChange}
       />
-      {!toggle && (
-        <Eye onClick={() => set_toggle(!toggle)} className="absolute right-3 top-3.5 z-10 size-5 fill-base-content" />
-      )}
-      {toggle && (
-        <EyeSlash
-          onClick={() => set_toggle(!toggle)}
-          className="absolute right-3 top-3.5 z-10 size-5 fill-base-content"
-        />
-      )}
+      {!toggle && <Eye onClick={() => setToggle(!toggle)} className="icon" />}
+      {toggle && <EyeSlash onClick={() => setToggle(!toggle)} className="icon" />}
     </div>
   );
 };

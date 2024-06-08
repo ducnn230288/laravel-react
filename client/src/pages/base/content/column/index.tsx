@@ -74,6 +74,7 @@ export default {
                   })}
                 >
                   <Popconfirm
+                    destroyTooltipOnHide={true}
                     title={t(
                       !data.isDisable ? 'Are you sure want disable content?' : 'Are you sure want enable content?',
                       {
@@ -119,6 +120,7 @@ export default {
                   })}
                 >
                   <Popconfirm
+                    destroyTooltipOnHide={true}
                     title={t('Are you sure want delete content?', {
                       name: data.name,
                     })}

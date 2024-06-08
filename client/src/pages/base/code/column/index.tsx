@@ -60,6 +60,7 @@ export default {
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_CODE_UPDATE) && (
                 <ToolTip title={t(data.isDisable ? 'Disabled code' : 'Enabled code', { name: data.name })}>
                   <Popconfirm
+                    destroyTooltipOnHide={true}
                     title={t(!data.isDisable ? 'Are you sure want disable code?' : 'Are you sure want enable code?', {
                       name: data.name,
                     })}
@@ -84,6 +85,7 @@ export default {
               )}
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_CODE_DESTROY) && (
                 <Popconfirm
+                  destroyTooltipOnHide={true}
                   title={t('Are you sure want delete code?', { name: data.name })}
                   onConfirm={() => sCode.delete(data.code)}
                 >

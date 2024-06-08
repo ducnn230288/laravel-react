@@ -1,16 +1,14 @@
 import React, { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Spin, Tree, TreeSelect } from 'antd';
+import { Popconfirm, Spin, Tree, TreeSelect } from 'antd';
 import classNames from 'classnames';
 
 import { Arrow, Edit, Plus, Trash } from '@/assets/svg';
 import { EStatusState } from '@/enums';
 import { ITableRefObject } from '@/interfaces';
-import { Breadcrumbs } from '@/library/breadcrumbs';
 import { Button } from '@/library/button';
 import { DataTable } from '@/library/data-table';
 import { DrawerForm } from '@/library/drawer';
-import { PopConfirm } from '@/library/pop-confirm';
 import { ToolTip } from '@/library/tooltip';
 import { SGlobal, SPost, SPostType } from '@/services';
 import { keyRole } from '@/utils';
@@ -128,7 +126,8 @@ const Page = () => {
                       )}
                       {sGlobal.user?.role?.permissions?.includes(keyRole.P_POST_TYPE_DESTROY) && !data.isPrimary && (
                         <ToolTip title={t('Delete type post', { name: data.name })}>
-                          <PopConfirm
+                          <Popconfirm
+                            destroyTooltipOnHide={true}
                             title={t('Are you sure want delete type post?', { name: data.name })}
                             onConfirm={() => sPostType.delete(data.code)}
                           >
@@ -138,7 +137,7 @@ const Page = () => {
                             >
                               <Trash className="icon-cud bg-red-600 hover:bg-red-400" />
                             </button>
-                          </PopConfirm>
+                          </Popconfirm>
                         </ToolTip>
                       )}
                     </div>

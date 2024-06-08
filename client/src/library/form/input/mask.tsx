@@ -9,7 +9,6 @@ const Component = forwardRef(
   (
     {
       id,
-      className = 'h-12',
       mask,
       value,
       addonBefore,
@@ -54,25 +53,20 @@ const Component = forwardRef(
       <Fragment>
         <div
           className={classNames({
-            'ant-input flex items-center border rounded-btn': !!addonBefore || !!addonAfter,
+            'ant-input': !!addonBefore || !!addonAfter,
           })}
         >
           {!!addonBefore && <div>{addonBefore(form)}</div>}
           <input
             id={id}
             ref={input}
-            className={classNames(
-              'w-full text-base-content bg-base-100 px-4',
-              {
-                'ant-input': !addonBefore && !addonAfter,
-                'border rounded-btn': !addonBefore && !addonAfter,
-                'rounded-l-btn border-r': !addonBefore && !!addonAfter,
-                'rounded-r-btn border-l': !!addonBefore && !addonAfter,
-                'border-r border-l': !!addonBefore && !!addonAfter,
-                'border-none focus:shadow-none text-base-300': disabled,
-              },
-              className,
-            )}
+            className={classNames({
+              'ant-input': !addonBefore && !addonAfter,
+              'rounded-l-btn border-r': !addonBefore && !!addonAfter,
+              'rounded-r-btn border-l': !!addonBefore && !addonAfter,
+              'border-r border-l': !!addonBefore && !!addonAfter,
+              disabled: disabled,
+            })}
             autoFocus={autoFocus}
             readOnly={disabled}
             defaultValue={value}
@@ -114,14 +108,12 @@ const Component = forwardRef(
 Component.displayName = 'Mask Input';
 interface Type {
   id?: string;
-  className?: string;
   mask?: any;
   value?: string;
   addonBefore?: (form?: FormInstance) => JSX.Element;
   addonAfter?: (form?: FormInstance) => JSX.Element;
   form?: FormInstance;
   disabled?: boolean;
-  maxLength?: number;
   placeholder: string;
   onBlur?: (e: any) => any;
   onFocus?: (e: any) => any;

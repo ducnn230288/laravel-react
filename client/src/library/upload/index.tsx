@@ -1,13 +1,12 @@
 import React, { Fragment, PropsWithChildren, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
+import { Popconfirm } from 'antd';
 
 import { notification } from '@/index';
 import { Arrow, Paste, Times, UploadSVG } from '@/assets/svg';
-import { API, keyToken, uuidv4 } from '@/utils';
-
+import { API, arrayMove, handleGetBase64, keyToken, uuidv4 } from '@/utils';
 import { Button } from '../button';
-import { PopConfirm } from '../pop-confirm';
 
 export const Upload = ({
   value = [],
@@ -37,37 +36,25 @@ export const Upload = ({
   const { t } = useTranslation('locale', { keyPrefix: 'library' });
   const isLoading = useRef(false);
   const ref = useRef<any>();
-  const [listFiles, set_listFiles] = useState(
-    multiple && value && typeof value === 'object'
-      ? value.map((_item: any) => {
-          if (_item.status) return _item;
-          return {
-            ..._item,
-            status: 'done',
-          };
-        })
-      : value
-        ? [value]
-        : [],
-  );
+  const [listFiles, setListFiles] = useState<any>([]);
   useEffect(() => {
-    const tempData =
-      !multiple && value && typeof value === 'object'
-        ? value.map((_item: any) => {
-            if (_item.status) return _item;
-            return {
-              ..._item,
-              status: 'done',
-            };
-          })
-        : value
-          ? [value]
-          : [];
+    let tempData: any = typeof value === 'string' ? [value] : [];
+    if (typeof value === 'object') {
+      tempData = value.map((_item: any) => {
+        if (_item.status) return _item;
+        return {
+          ..._item,
+          status: 'done',
+        };
+      });
+    }
+
+    console.log('1', value, tempData);
     if (
       JSON.stringify(listFiles) !== JSON.stringify(tempData) &&
       listFiles.filter((item: any) => item.status === 'uploading').length === 0
     ) {
-      set_listFiles(tempData);
+      setListFiles(tempData);
       setTimeout(() => GLightbox({}));
     }
   }, [value, multiple]);
@@ -75,27 +62,22 @@ export const Upload = ({
   useEffect(() => {
     setTimeout(() => GLightbox({}));
   }, []);
+  console.log('1', value, listFiles);
 
   const onUpload = async ({ target }: any) => {
-    for (let i = 0; i < target.files.length; i++) {
-      const file = target.files[i];
+    for (const file of target.files) {
       if (maxSize && file.size > maxSize * 1024 * 1024) {
-        await notification.error({
+        notification.error({
           message: `${file.name} (${(file.size / (1024 * 1024)).toFixed(1)}mb): ${t('You can only upload up to mb!', {
             max: maxSize,
           })}`,
         });
-        return set_listFiles(listFiles.filter((_item: any) => _item.id !== dataFile.id));
       }
 
-      if (!(await validation(file, listFiles))) {
-        return set_listFiles(listFiles.filter((_item: any) => _item.id !== dataFile.id));
+      if ((maxSize && file.size > maxSize * 1024 * 1024) || !(await validation(file, listFiles))) {
+        return setListFiles(listFiles.filter((_item: any) => _item.id !== dataFile.id));
       }
-      const thumbUrl = await new Promise((resolve) => {
-        const fileReader = new FileReader();
-        fileReader.onload = () => resolve(fileReader.result);
-        fileReader.readAsDataURL(file);
-      });
+      const thumbUrl = handleGetBase64(file);
       const dataFile = {
         lastModified: file.lastModified,
         lastModifiedDate: file.lastModifiedDate,
@@ -114,105 +96,90 @@ export const Upload = ({
         listFiles.push(dataFile);
       }
       isLoading.current = true;
-      set_listFiles(listFiles);
+      setListFiles([...listFiles]);
 
-      if (action) {
-        if (typeof action === 'string') {
-          const bodyFormData = new FormData();
-          bodyFormData.append('file', file);
-          const { data } = await API.responsible<any>({
-            url: action,
-            config: {
-              ...API.init(),
-              method,
-              body: bodyFormData,
-              headers: {
-                authorization: 'Bearer ' + (localStorage.getItem(keyToken) ?? ''),
-                'Accept-Language': localStorage.getItem('i18nextLng') ?? '',
-              },
+      if (typeof action === 'string') {
+        const bodyFormData = new FormData();
+        bodyFormData.append('file', file);
+        const { data } = await API.responsible<any>({
+          url: action,
+          config: {
+            ...API.init(),
+            method,
+            body: bodyFormData,
+            headers: {
+              authorization: 'Bearer ' + (localStorage.getItem(keyToken) ?? ''),
+              'Accept-Language': localStorage.getItem('i18nextLng') ?? '',
             },
-          });
-          if (data) {
-            const files = multiple
-              ? listFiles.map((item: any) => {
-                  if (item.id === dataFile.id) {
-                    item = { ...item, ...data, status: 'done' };
-                  }
-                  return item;
-                })
-              : [{ ...data, status: 'done' }];
-            isLoading.current = false;
-            set_listFiles(files);
-            onChange && (await onChange(files));
-          } else {
-            isLoading.current = false;
-            set_listFiles(listFiles.filter((_item: any) => _item.id !== dataFile.id));
-          }
-        } else {
-          try {
-            const data = await action(file, {
-              onUploadProgress: (event: any) => {
-                set_listFiles(
-                  listFiles.map((item: any) => {
-                    if (item.id === dataFile.id) {
-                      item.percent = (event.loaded / event.total) * 100;
-                      item.status = item.percent === 100 ? 'done' : 'uploading';
-                    }
-                    return item;
-                  }),
-                );
-              },
-            });
-            const files = multiple
-              ? listFiles.map((item: any) => {
-                  if (item.id === dataFile.id) {
-                    item = { ...item, ...data.data, status: 'done' };
-                  }
-                  return item;
-                })
-              : [{ ...data.data, status: 'done' }];
-            isLoading.current = false;
-            set_listFiles(files);
-            onChange && (await onChange(files));
-          } catch (e: any) {
-            isLoading.current = false;
-            set_listFiles(listFiles.filter((_item: any) => _item.id !== dataFile.id));
-          }
-        }
-        setTimeout(() => GLightbox({}));
+          },
+        });
+
+        formatData({ data, dataFile });
       }
+      setTimeout(() => GLightbox({}));
     }
     ref.current.value = '';
   };
+
+  const formatData = async ({
+    data,
+    dataFile,
+  }: {
+    data: any;
+    dataFile: {
+      lastModified: any;
+      lastModifiedDate: any;
+      name: any;
+      size: any;
+      type: any;
+      originFileObj: any;
+      thumbUrl: unknown;
+      id: string;
+      percent: number;
+      status: string;
+    };
+  }) => {
+    if (data) {
+      const files = multiple
+        ? listFiles.map((item: any) => {
+            if (item.id === dataFile.id) {
+              item = { ...item, ...data, status: 'done' };
+            }
+            return item;
+          })
+        : [{ ...data, status: 'done' }];
+      isLoading.current = false;
+      console.log(files);
+      setListFiles(files);
+      onChange && (await onChange(files));
+    } else {
+      isLoading.current = false;
+      setListFiles(listFiles.filter((_item: any) => _item.id !== dataFile.id));
+    }
+  };
   const moverImage = async (index: number, new_index: number) => {
     if (multiple) {
-      const files = array_move(listFiles, index, new_index);
-      set_listFiles(files);
+      const files = arrayMove(listFiles, index, new_index);
+      setListFiles(files);
       onChange && (await onChange(files));
     }
   };
+  console.log(listFiles);
 
-  const array_move = (arr: any[], old_index: number, new_index: number) => {
-    if (new_index >= arr.length) {
-      let k = new_index - arr.length + 1;
-      while (k--) {
-        arr.push(undefined);
-      }
-    }
-    arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
-    return arr.filter((item) => !!item);
-  };
   return (
     <Fragment>
       <div className={'mb-2 flex gap-2'}>
         <Button
+          isTiny={true}
           isLoading={isLoading.current}
           onClick={() => ref.current.click()}
-          className={'!px-2 !py-0.5 !font-normal'}
           icon={<UploadSVG className={'size-4'} />}
           text={'Upload'}
         />
-        <div
+        <Button
+          isTiny={true}
+          icon={<Paste className={'size-4'} />}
+          text={'Paste'}
           onPaste={async (event) => {
             const items = event.clipboardData.items;
             for (const index in items) {
@@ -223,66 +190,51 @@ export const Upload = ({
               }
             }
           }}
-          className={'cursor-pointer !px-2 !py-0.5 !font-normal'}
-        >
-          <Paste className={'size-4'} />
-          Paste
-        </div>
+        ></Button>
       </div>
 
       <input type="file" className={'hidden'} accept={accept} multiple={multiple} ref={ref} onChange={onUpload} />
 
       <div
-        className={classNames({
-          'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4': multiple,
+        className={classNames('upload', {
+          'upload-grid': multiple,
           'w-24': !multiple,
         })}
       >
         {listFiles.map((file: any, index: number) => (
-          <div
-            key={index}
-            className={classNames('relative', {
-              'bg-yellow-100': file.status === 'error',
-            })}
-          >
+          <div key={'file-' + index} className={classNames('relative')}>
             <a href={file[keyImage] ? file[keyImage] : file} className="glightbox">
-              <img
-                className={classNames('object-cover object-center h-24', {
-                  'w-full': multiple,
-                  'w-24': !multiple,
-                })}
-                src={file[keyImage] ? file[keyImage] : file}
-                alt={file.name}
-              />
+              <img src={file[keyImage] ? file[keyImage] : file} alt={file.name} />
             </a>
             {index > 0 && (
-              <div
+              <button
                 onClick={() => moverImage(index, index - 1)}
                 className={
-                  'absolute right-1 top-1 flex size-6 cursor-pointer items-center justify-center rounded-full bg-gray-300 text-white transition-all duration-300 hover:bg-teal-900'
+                  'top-1 absolute right-1 bg-gray-300 hover:bg-teal-900 size-5 cursor-pointer rounded-full text-white transition-all duration-300'
                 }
               >
-                <Arrow className={'size-3 rotate-180 fill-teal-700 hover:fill-white'} />
-              </div>
+                <Arrow className={'size-3 m-1 rotate-180 fill-teal-700 hover:fill-white'} />
+              </button>
             )}
 
             {index < listFiles.length - 1 && (
-              <div
+              <button
                 onClick={() => moverImage(index, index + 1)}
                 className={classNames(
-                  'absolute right-1 bg-gray-300 hover:bg-teal-900 text-white rounded-full cursor-pointer w-6 h-6 transition-all duration-300 flex items-center justify-center',
+                  'absolute right-1 bg-gray-300 hover:bg-teal-900 size-5 cursor-pointer rounded-full text-white transition-all duration-300',
                   {
                     'top-8': index > 0,
                     'top-1': index === 0,
                   },
                 )}
               >
-                <Arrow className={'size-3 fill-teal-700 hover:fill-white'} />
-              </div>
+                <Arrow className={'size-3 m-1 fill-teal-700 hover:fill-white'} />
+              </button>
             )}
 
             {showBtnDelete(file) && (
-              <PopConfirm
+              <Popconfirm
+                destroyTooltipOnHide={true}
                 title={t('Are you sure want delete?')}
                 onConfirm={async () => {
                   if (deleteFile && file?.id) {
@@ -294,18 +246,19 @@ export const Upload = ({
                   onChange?.(listFiles.filter((_item: any) => _item.id !== file.id));
                 }}
               >
-                <Button
-                  icon={<Times className={'size-3 fill-red-400 hover:fill-white'} />}
+                <div
                   className={classNames(
-                    '!bg-gray-300 !rounded-full absolute right-1 hover:!bg-red-500 text-white cursor-pointer w-6 h-6 transition-all duration-300 flex items-center justify-center',
+                    'hover:!bg-red-500 absolute right-1 bg-gray-300 size-5 cursor-pointer rounded-full text-white transition-all duration-300',
                     {
                       'top-16 ': listFiles.length > 1 && index > 0 && index < listFiles.length - 1,
                       'top-8': listFiles.length > 1 && (index === 0 || index === listFiles.length - 1),
                       'top-1': listFiles.length === 1,
                     },
                   )}
-                />
-              </PopConfirm>
+                >
+                  <Times className={'size-3 m-1 fill-red-400 hover:fill-white'} />
+                </div>
+              </Popconfirm>
             )}
           </div>
         ))}

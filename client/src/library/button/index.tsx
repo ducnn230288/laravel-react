@@ -3,13 +3,28 @@ import classNames from 'classnames';
 
 import { Spinner } from '@/assets/svg';
 
-export const Button = ({ text = '', icon, title, className, disabled, isLoading = false, ...props }: Type) => {
+export const Button = ({
+  text = '',
+  icon,
+  title,
+  className,
+  disabled,
+  isLoading = false,
+  isTiny = false,
+  ...props
+}: Type) => {
   return (
     <button
       type="button"
       disabled={disabled}
       title={title ?? text ?? ''}
-      className={className ?? classNames('btn btn-primary btn-sm h-10')}
+      className={
+        className ??
+        classNames('btn btn-primary', {
+          'btn-md': !isTiny,
+          'btn-xs': isTiny,
+        })
+      }
       {...props}
     >
       {!isLoading ? icon : <Spinner className={'size-3 animate-spin'} />}
@@ -20,13 +35,14 @@ export const Button = ({ text = '', icon, title, className, disabled, isLoading 
 
 interface Type {
   text?: any;
+  isTiny?: boolean;
   icon?: React.ReactNode;
   title?: string;
   className?: string;
   disabled?: boolean;
   isLoading?: boolean;
   onClick?: MouseEventHandler<HTMLButtonElement>;
-  onPaste?: any;
+  onPaste?: (event: any) => Promise<void>;
   id?: string;
   type?: 'button' | 'submit' | 'reset';
 }

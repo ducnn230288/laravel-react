@@ -130,7 +130,6 @@ export const Pagination: any = ({
             <Select
               allowClear={false}
               showSearch={false}
-              className={'w-full sm:w-auto'}
               value={perPage}
               onChange={(value) => onPageSizeChange(value)}
               list={pageSizeOptions.map((item: number) => ({ value: item, label: item + ' / page' }))}

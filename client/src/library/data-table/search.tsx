@@ -31,7 +31,6 @@ export const CSearch = ({
   return (
     <div className="search">
       <Mask
-        className={'h-10 pl-8'}
         id={idTable.current + '_input_search'}
         value={params.fullTextSearch}
         placeholder={t('Search')}

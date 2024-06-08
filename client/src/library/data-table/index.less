@@ -24,15 +24,18 @@
     > th:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before {
     @apply bg-base-content/20;
   }
-  &-wrapper .ant-table-tbody .ant-table-row > .ant-table-cell-row-hover {
-    @apply !bg-base-200;
-  }
   &-content {
     .ant-table-thead > tr > th {
       @apply font-bold bg-base-100 text-base-content border-none border-0;
       &.ant-table-cell-fix-left,
       &.ant-table-cell-fix-right {
         margin-top: 1px;
+      }
+    }
+    .ant-table-tbody > tr.ant-table-placeholder {
+      @apply bg-base-200 text-base-content;
+      td {
+        @apply border-base-200;
       }
     }
     .ant-table-tbody > tr.ant-table-row {
@@ -44,6 +47,9 @@
         &:last-child {
           @apply rounded-br-btn rounded-tr-btn;
         }
+      }
+      > .ant-table-cell-row-hover {
+        @apply !bg-base-200;
       }
       > td {
         @apply border-none bg-base-100;

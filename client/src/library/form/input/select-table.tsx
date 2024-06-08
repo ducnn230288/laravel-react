@@ -81,7 +81,6 @@ const Component = ({ mode, onChange, placeholder, disabled, get, value }: Type) 
           onBlur={onBlur}
           onFocus={onFocus}
           onChange={(e) => table.current?.onChange({ fullTextSearch: e.target.value, page: 1, perPage: 10 })}
-          className={'h-10'}
         />
       </Dropdown>
       <span className="absolute right-2.5 top-3 text-gray-400 opacity-100 transition-all duration-150 ease-in-out">

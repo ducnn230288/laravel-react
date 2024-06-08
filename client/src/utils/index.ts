@@ -13,7 +13,7 @@ export * from './convertFormValue';
 export const socket = io(import.meta.env.VITE_URL_SOCKET, { autoConnect: false });
 export const cleanObjectKeyNull = (obj: { [selector: string]: any }) => {
   for (const propName in obj) {
-    if (Object.prototype.hasOwnProperty.call(obj, propName)) {
+    if (Object.hasOwn(obj, propName)) {
       if (
         obj[propName] === null ||
         obj[propName] === undefined ||
@@ -63,8 +63,7 @@ export const arrayUnique = (array: any, key?: string) => {
   const a = array.concat();
   for (let i = 0; i < a.length; ++i) {
     for (let j = i + 1; j < a.length; ++j) {
-      if (key && a[i][key] === a[j][key]) a.splice(j--, 1);
-      else if (JSON.stringify(a[i]) === JSON.stringify(a[j])) a.splice(j--, 1);
+      if (key && a[i][key] === a[j][key] && JSON.stringify(a[i]) === JSON.stringify(a[j])) a.splice(j - 1, 1);
     }
   }
   return a;
@@ -76,8 +75,8 @@ export const handleDownloadCSV = async (url: string, name: string = 'file-csv') 
     cache: 'no-cache',
     credentials: 'same-origin',
     headers: {
-      authorization: 'Bearer ' + (localStorage.getItem(keyToken) || ''),
-      'Accept-Language': localStorage.getItem('i18nextLng') || '',
+      authorization: 'Bearer ' + (localStorage.getItem(keyToken) ?? ''),
+      'Accept-Language': localStorage.getItem('i18nextLng') ?? '',
     },
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
@@ -91,6 +90,22 @@ export const handleDownloadCSV = async (url: string, name: string = 'file-csv') 
   }
 };
 
+export const handleGetBase64 = async (file: File) =>
+  await new Promise((resolve) => {
+    const fileReader = new FileReader();
+    fileReader.onload = () => resolve(fileReader.result);
+    fileReader.readAsDataURL(file);
+  });
+export const arrayMove = (arr: any[], old_index: number, new_index: number) => {
+  if (new_index >= arr.length) {
+    let k = new_index - arr.length + 1;
+    while (k--) {
+      arr.push(undefined);
+    }
+  }
+  arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
+  return arr.filter((item) => !!item);
+};
 export const uuidv4 = () => {
   let d = new Date().getTime(); //Timestamp
   let d2 = (typeof performance !== 'undefined' && performance.now && performance.now() * 1000) || 0; //Time in microseconds since page-load or 0 if unsupported
@@ -113,7 +128,7 @@ export const isNumeric = (str: string) => {
   return !isNaN(Number(str)) && !isNaN(parseFloat(str));
 };
 
-export const mapTreeObject = (item: any) => {
+export const mapTreeObject = (item: any): any => {
   return {
     ...item,
     title: item?.name,
@@ -122,7 +137,7 @@ export const mapTreeObject = (item: any) => {
     isLeaf: !item?.children?.length,
     expanded: true,
     children: !item?.children ? null : item?.children?.map((i: any) => mapTreeObject(i)),
-  } as any;
+  };
 };
 export const textWidth = (text?: string, fontProp?: string) => {
   if (text) {
@@ -139,7 +154,7 @@ export const textWidth = (text?: string, fontProp?: string) => {
   }
   return 0;
 };
-export const getLongTextInArray = (arr: string[]) => arr.reduce((a, b) => (a.length > b.length ? a : b));
+export const getLongTextInArray = (arr: string[]) => arr.reduce((a: string, b) => (a.length > b.length ? a : b), '');
 export const reorderArray = (list: any[], startIndex: any, endIndex: any) => {
   const result = Array.from(list);
   const [removed] = result.splice(startIndex, 1);
@@ -167,10 +182,10 @@ export const cssInObject = (styles: string) =>
     : {};
 export const formatDataChart = (
   obj: any,
-  type: ETypeChart = ETypeChart.pie,
   title: string,
   level = 1,
   list?: string[],
+  type: ETypeChart = ETypeChart.pie,
 ) => {
   const listXy = [ETypeChart.scatter, ETypeChart.bubble];
   const listNumber = [ETypeChart.pie, ETypeChart.ring];
@@ -183,22 +198,20 @@ export const formatDataChart = (
     obj.meta
       .filter((i: any) => i.type === 'number' && (!list?.length || list.indexOf(i.field) > -1))
       .forEach((i: any, j: number, array: any[]) => {
-        switch (type) {
-          case ETypeChart.bubble:
-            if (j % 3 === 2)
-              listField.push({
-                name: array[j - 1].fullName + ' vs ' + array[j - 2].fullName + ' vs ' + i.fullName,
-                field: array[j - 1].field + '|' + array[j - 2].field + '|' + i.field,
-                value: [],
-              });
-            break;
-          default:
-            if (j % 2 === 1)
-              listField.push({
-                name: array[j - 1].fullName + ' vs ' + i.fullName,
-                field: array[j - 1].field + '|' + i.field,
-                value: [],
-              });
+        if (type === ETypeChart.bubble) {
+          if (j % 3 === 2) {
+            listField.push({
+              name: array[j - 1].fullName + ' vs ' + array[j - 2].fullName + ' vs ' + i.fullName,
+              field: array[j - 1].field + '|' + array[j - 2].field + '|' + i.field,
+              value: [],
+            });
+          }
+        } else if (j % 2 === 1) {
+          listField.push({
+            name: array[j - 1].fullName + ' vs ' + i.fullName,
+            field: array[j - 1].field + '|' + i.field,
+            value: [],
+          });
         }
       });
     obj.data

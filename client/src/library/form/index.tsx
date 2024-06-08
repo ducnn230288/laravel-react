@@ -9,8 +9,8 @@ import {
   Switch,
   TimePicker,
   Spin,
+  Input,
 } from 'antd';
-import { InputOTP } from 'antd-input-otp';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 import dayjs from 'dayjs';
@@ -110,12 +110,9 @@ export const Form = ({
         return (
           <textarea
             disabled={formItem.disabled?.(values, form)}
-            className={classNames(
-              'ant-input px-4 py-2.5 w-full rounded-xl text-gray-600 border border-solid input-description ',
-              {
-                'text-gray-400 !border-0': formItem.disabled?.(values, form),
-              },
-            )}
+            className={classNames('ant-input', {
+              disabled: formItem.disabled?.(values, form),
+            })}
             rows={4}
             maxLength={1000}
             placeholder={t(formItem.placeholder ?? 'Enter', { title: item.title.toLowerCase() })}
@@ -321,7 +318,7 @@ export const Form = ({
           />
         );
       case EFormType.otp:
-        return <InputOTP inputType="numeric" length={formItem.maxLength ?? 5} />;
+        return <Input.OTP length={formItem.maxLength ?? 5} />;
       default:
         return (
           <Mask
@@ -330,7 +327,6 @@ export const Form = ({
             mask={formItem.mask}
             addonBefore={formItem.addonBefore}
             addonAfter={formItem.addonAfter}
-            maxLength={formItem.maxLength}
             placeholder={t(formItem.placeholder ?? 'Enter', { title: item.title.toLowerCase() })}
             onBlur={(e: any) => formItem.onBlur?.(e.target.value, form, name)}
             onChange={(e: any) => formItem.onChange?.(e.target.value, form, reRender)}
@@ -649,7 +645,7 @@ export const Form = ({
                     !!column?.formItem?.condition(values[column.name], form, index, values)) && (
                     <div
                       className={classNames(
-                        'col-span-12 ' +
+                        'col-span-12 type-' +
                           (column?.formItem?.type || EFormType.text) +
                           (' sm:col-span-' + (column?.formItem?.col ?? 12)) +
                           (' lg:col-span-' + (column?.formItem?.col ?? 12)),

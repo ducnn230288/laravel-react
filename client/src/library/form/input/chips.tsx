@@ -112,7 +112,6 @@ const Component = ({
               !list ? (
                 <Mask
                   ref={inputRef}
-                  className={'h-8'}
                   placeholder={placeholder}
                   onPressEnter={() => handleInputConfirm(inputRef.current?.input.value)}
                   disabled={!!disabled}

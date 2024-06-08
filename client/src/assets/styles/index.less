@@ -215,10 +215,32 @@ h4 {
     }
   }
 }
+.ant-popover {
+  .ant-popover-inner {
+    @apply bg-base-100;
+
+    .ant-popconfirm-message-icon .anticon {
+      @apply text-warning;
+    }
+    .ant-popconfirm-title {
+      @apply text-base-content;
+    }
+    .ant-btn {
+      @apply btn btn-xs;
+      &.ant-btn-primary {
+        @apply btn-primary;
+      }
+    }
+  }
+}
 
 .icon-cud {
   @apply size-5 px-1 fill-white rounded-md;
 }
 svg {
   fill: currentColor;
+}
+.btn-md {
+  height: 2.5rem;
+  min-height: 2.5rem;
 }

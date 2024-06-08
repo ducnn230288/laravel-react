@@ -57,7 +57,6 @@ export const EditTable = ({
       if (type === 'number' && level === maxLevel) {
         return (
           <Mask
-            className={'border-0 text-right'}
             placeholder={'Nhập số'}
             mask={{
               alias: 'decimal',
@@ -77,7 +76,6 @@ export const EditTable = ({
       if (type === 'text') {
         return (
           <Mask
-            className={'border-0'}
             placeholder={'Nhập text'}
             onChange={(e: any) =>
               handleSum(e.target, e.target.value, indexRow, colBody[indexCol], table, type, maxLevel)

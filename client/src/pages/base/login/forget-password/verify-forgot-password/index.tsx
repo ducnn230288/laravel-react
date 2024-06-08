@@ -35,11 +35,8 @@ const Page = () => {
               name: 'otp',
               title: 'Code OTP',
               formItem: {
-                rules: [
-                  { type: EFormRuleType.required },
-                  { type: EFormRuleType.min, value: 6 },
-                  { type: EFormRuleType.max, value: 6 },
-                ],
+                type: EFormType.otp,
+                rules: [{ type: EFormRuleType.required }],
               },
             },
             {

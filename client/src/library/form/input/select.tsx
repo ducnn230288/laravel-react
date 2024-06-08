@@ -34,7 +34,7 @@ const Component = ({
         get.params ? get.params(fullTextSearch, form?.getFieldValue) : { fullTextSearch },
       );
       if (
-        !(get?.key ? facade[get?.key] : facade.result.data) ||
+        !(get?.key ? facade[get?.key] : facade.result?.data) ||
         new Date().getTime() > time ||
         JSON.stringify(params) != queryParams
       )
@@ -76,7 +76,7 @@ const Component = ({
       listHeight={200}
       filterOption={false}
       showSearch={showSearch}
-      loading={facade?.isLoading || false}
+      loading={(facade.result && facade?.isLoading) || false}
       allowClear={allowClear}
       onSearch={showSearch ? (value) => loadData(value) : undefined}
       value={value}
@@ -84,7 +84,6 @@ const Component = ({
       mode={mode}
       optionFilterProp="label"
       onBlur={onBlur}
-      // onSelect={(value) => formItem?.onSelect && formItem?.onSelect(value, form)}
       onDropdownVisibleChange={(open) => open && !!facade?.isLoading && loadData('')}
       className={className}
     >

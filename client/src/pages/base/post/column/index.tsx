@@ -79,6 +79,7 @@ export default {
                   })}
                 >
                   <Popconfirm
+                    destroyTooltipOnHide={true}
                     title={t(!data.isDisable ? 'Are you sure want disable post?' : 'Are you sure want enable post?', {
                       name: data.languages?.length
                         ? data.languages?.find((item: any) => item?.language === localStorage.getItem('i18nextLng'))
@@ -134,6 +135,7 @@ export default {
                   })}
                 >
                   <Popconfirm
+                    destroyTooltipOnHide={true}
                     title={t('Are you sure want delete post?', {
                       name: data.languages?.length
                         ? data.languages?.find((item: any) => item?.language === localStorage.getItem('i18nextLng'))

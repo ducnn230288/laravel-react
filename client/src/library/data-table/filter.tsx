@@ -11,28 +11,30 @@ import { Mask } from '../form/input';
 import { Button } from '../button';
 
 const groupButton = (confirm: any, clearFilters: any, key: any, value: any, t: any) => (
-  <div className="mt-2 grid grid-cols-2 gap-2 sm:mt-1">
+  <div className="mt-2 grid grid-cols-2 gap-2">
     <Button
+      isTiny={true}
       text={t('Reset')}
       onClick={() => {
         clearFilters();
         confirm();
       }}
-      className={'h-4/5 justify-center !bg-gray-300 !px-2 !text-black sm:h-auto sm:px-4'}
+      className=" "
     />
     <Button
-      icon={<Search className="size-3 fill-white" />}
+      isTiny={true}
+      icon={<Search className="size-3 fill-primary-content" />}
       text={t('Search')}
       onClick={() => confirm(value)}
-      className={'h-4/5 justify-center !px-2 sm:h-auto sm:px-4'}
     />
   </div>
 );
 const columnSearch = (get: ITableGet, fullTextSearch = '', value?: any, facade: any = {}) => {
   if (get?.facade) {
     const params = get.params ? get.params(fullTextSearch, value) : { fullTextSearch };
-    if (new Date().getTime() > facade.time || JSON.stringify(cleanObjectKeyNull(params)) != facade.queryParams)
+    if (new Date().getTime() > facade.time || JSON.stringify(cleanObjectKeyNull(params)) != facade.queryParams) {
       facade.get(cleanObjectKeyNull(params));
+    }
   }
 };
 
@@ -72,7 +74,7 @@ export const getColumnSearchCheckbox = ({
               onPressEnter={(e) => columnSearch(get, e.currentTarget.value, undefined, facade)}
             />
           )}
-          <div>
+          <div className="mt-1">
             <Checkbox.Group
               options={
                 (list as CheckboxOptionType[]) ||
@@ -92,7 +94,7 @@ export const getColumnSearchCheckbox = ({
     );
   },
   filterIcon: (filtered: boolean) => (
-    <CheckSquare className={classNames('h-3.5 w-3.5', { 'fill-blue-600': filtered, 'fill-gray-600': !filtered })} />
+    <CheckSquare className={classNames('size-3.5', { 'fill-blue-600': filtered, 'fill-base-content': !filtered })} />
   ),
 });
 
@@ -118,7 +120,6 @@ export const getColumnSearchRadio = ({
       columnSearch(get, '', undefined, facade);
       valueFilter.current[key] = false;
     }
-
     return (
       <Spin spinning={facade.isLoading === true}>
         <div className="p-1">
@@ -132,11 +133,11 @@ export const getColumnSearchRadio = ({
               onPressEnter={(e) => columnSearch(get, e.currentTarget.value, undefined, facade)}
             />
           )}
-          <div>
+          <div className="mt-1">
             <Radio.Group
               options={
                 (list as CheckboxOptionType[]) ||
-                get?.facade?.result?.data?.map(get.format).filter((item: any) => !!item.value) ||
+                facade?.result?.data?.map(get.format).filter((item: any) => !!item.value) ||
                 []
               }
               value={selectedKeys}
@@ -151,7 +152,9 @@ export const getColumnSearchRadio = ({
       </Spin>
     );
   },
-  filterIcon: () => <CheckCircle className="size-3.5 fill-gray-600" />,
+  filterIcon: (filtered: boolean) => (
+    <CheckCircle className={classNames('size-3.5', { 'fill-primary': filtered, 'fill-base-content': !filtered })} />
+  ),
 });
 export const getColumnSearchDate = ({ key, t }: { key: string; t: TFunction<'locale', 'library'> }) => ({
   filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }: any) => (
@@ -159,7 +162,7 @@ export const getColumnSearchDate = ({ key, t }: { key: string; t: TFunction<'loc
       <DatePicker.RangePicker
         renderExtraFooter={() => (
           <Button
-            icon={<CheckCircle className="size-5 fill-white" />}
+            icon={<CheckCircle className="size-5 fill-base-100" />}
             text={t('Ok')}
             onClick={() => (document.activeElement as HTMLElement).blur()}
             className={'w-full justify-center !py-0'}
@@ -180,7 +183,7 @@ export const getColumnSearchDate = ({ key, t }: { key: string; t: TFunction<'loc
     </div>
   ),
   filterIcon: (filtered: boolean) => (
-    <Calendar className={classNames('h-3.5 w-3.5', { 'fill-blue-600': filtered, 'fill-gray-600': !filtered })} />
+    <Calendar className={classNames('size-3.5', { 'fill-primary': filtered, 'fill-base-content': !filtered })} />
   ),
 });
 
@@ -198,7 +201,7 @@ export const getColumnSearchInput = ({ key, t }: { key: string; t: TFunction<'lo
     </div>
   ),
   filterIcon: (filtered: boolean) => (
-    <Search className={classNames('h-3.5 w-3.5', { 'fill-blue-600': filtered, 'fill-gray-600': !filtered })} />
+    <Search className={classNames('size-3.5', { 'fill-primary': filtered, 'fill-base-content': !filtered })} />
   ),
   onFilterDropdownOpenChange: (visible: boolean) => {
     if (visible) {

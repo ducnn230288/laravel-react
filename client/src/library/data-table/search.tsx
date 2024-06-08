@@ -58,7 +58,6 @@ export const CSearch = ({
       />
       {!params.fullTextSearch ? (
         <Search
-          className="absolute left-2.5 top-2 z-10 my-1 size-3.5 fill-gray-500 text-lg"
           onClick={() => {
             if (params.fullTextSearch) {
               (document.getElementById(idTable.current + '_input_search') as HTMLInputElement).value = '';
@@ -69,7 +68,6 @@ export const CSearch = ({
       ) : (
         !!params.fullTextSearch && (
           <Times
-            className="absolute right-3 top-2 z-10 my-1 size-3.5 fill-gray-500 text-lg"
             onClick={() => {
               if (params.fullTextSearch) {
                 (document.getElementById(idTable.current + '_input_search') as HTMLInputElement).value = '';

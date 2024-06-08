@@ -97,13 +97,7 @@
       }
     }
   }
-  .ant-checkbox-inner,
-  .ant-checkbox-checked:after {
-    @apply w-4 h-4 rounded border-2;
-  }
-  .ant-checkbox {
-    @apply top-1;
-  }
+
   .table .ant-form-item {
     @apply mb-0;
     .ant-input,
@@ -221,6 +215,40 @@
     .ant-picker-cell-in-view.ant-picker-cell-today .ant-picker-cell-inner::before {
       @apply border-primary;
     }
+  }
+}
+
+.ant-checkbox,
+.ant-radio {
+  &-inner,
+  &-checked:after {
+    @apply size-4 rounded-btn border-2;
+  }
+
+  &-wrapper {
+    @apply text-base-content;
+  }
+  &-wrapper &:not(&-disabled):hover &-inner,
+  &-wrapper:not(&-wrapper-disabled):hover &-inner {
+    @apply border-primary;
+  }
+
+  &-wrapper:not(&-wrapper-disabled):hover &-checked:not(&-disabled) &-inner,
+  &-wrapper &-checked:not(&-disabled) &-inner,
+  &-wrapper &-checked:not(&-disabled):hover &-inner {
+    @apply bg-primary border-primary;
+  }
+
+  &-wrapper .ant-checkbox-inner:after {
+    @apply border-base-100;
+  }
+  &-wrapper .ant-radio-inner::after {
+    @apply bg-base-100 size-7;
+    margin-block-start: -14px;
+    margin-inline-start: -14px;
+  }
+  &-wrapper &-inner {
+    @apply bg-base-100 border-base-content/20 size-5;
   }
 }
 

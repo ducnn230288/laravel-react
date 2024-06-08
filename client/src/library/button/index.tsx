@@ -18,13 +18,11 @@ export const Button = ({
       type="button"
       disabled={disabled}
       title={title ?? text ?? ''}
-      className={
-        className ??
-        classNames('btn btn-primary', {
-          'btn-md': !isTiny,
-          'btn-xs': isTiny,
-        })
-      }
+      className={classNames('btn', className, {
+        'btn-md': !isTiny,
+        'btn-xs': isTiny,
+        'btn-primary': !className,
+      })}
       {...props}
     >
       {!isLoading ? icon : <Spinner className={'size-3 animate-spin'} />}

@@ -4,6 +4,10 @@
 
     .search {
       @apply relative;
+
+      svg {
+        @apply absolute right-3 top-2 z-10 my-1 ~'size-3.5' fill-gray-500 text-lg;
+      }
     }
     .right {
       @apply mt-2 sm:mt-0;
@@ -63,6 +67,8 @@
     }
   }
   &-filter-dropdown {
+    @apply !bg-base-100 !rounded-btn;
+
     .ant-checkbox-group {
       @apply inline-block;
     }

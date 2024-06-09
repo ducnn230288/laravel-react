@@ -49,7 +49,6 @@ export const Upload = ({
       });
     }
 
-    console.log('1', value, tempData);
     if (
       JSON.stringify(listFiles) !== JSON.stringify(tempData) &&
       listFiles.filter((item: any) => item.status === 'uploading').length === 0
@@ -62,7 +61,6 @@ export const Upload = ({
   useEffect(() => {
     setTimeout(() => GLightbox({}));
   }, []);
-  console.log('1', value, listFiles);
 
   const onUpload = async ({ target }: any) => {
     for (const file of target.files) {
@@ -149,7 +147,6 @@ export const Upload = ({
           })
         : [{ ...data, status: 'done' }];
       isLoading.current = false;
-      console.log(files);
       setListFiles(files);
       onChange && (await onChange(files));
     } else {
@@ -164,7 +161,6 @@ export const Upload = ({
       onChange && (await onChange(files));
     }
   };
-  console.log(listFiles);
 
   return (
     <Fragment>

@@ -51,20 +51,14 @@ const Component = forwardRef(
 
     return (
       <Fragment>
-        <div
-          className={classNames({
-            'ant-input': !!addonBefore || !!addonAfter,
-          })}
-        >
-          {!!addonBefore && <div>{addonBefore(form)}</div>}
+        <div className={'relative'}>
+          {!!addonBefore && <span className="before">{addonBefore(form)}</span>}
           <input
             id={id}
             ref={input}
-            className={classNames({
-              'ant-input': !addonBefore && !addonAfter,
-              'rounded-l-btn border-r': !addonBefore && !!addonAfter,
-              'rounded-r-btn border-l': !!addonBefore && !addonAfter,
-              'border-r border-l': !!addonBefore && !!addonAfter,
+            className={classNames('ant-input', {
+              before: !!addonBefore,
+              after: !!addonAfter,
               disabled: disabled,
             })}
             autoFocus={autoFocus}
@@ -76,7 +70,7 @@ const Component = forwardRef(
             onFocus={onFocus}
             onKeyUp={(e) => e.keyCode === 13 && onPressEnter && onPressEnter(e)}
           />
-          {!!addonAfter && <div>{addonAfter(form)}</div>}
+          {!!addonAfter && <span className="after">{addonAfter(form)}</span>}
         </div>
         {list && (
           <div className={'mt-2 flex flex-wrap gap-2'}>

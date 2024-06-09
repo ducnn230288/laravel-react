@@ -1,8 +1,8 @@
 import React, { Fragment, useEffect } from 'react';
 
 import { EStatusState } from '@/enums';
-import { SGlobal, SUser, SUserRole } from '@/services';
 import { Breadcrumbs } from '@/library/breadcrumbs';
+import { SGlobal, SUser, SUserRole } from '@/services';
 
 const Page = () => {
   const sUser = SUser();
@@ -20,7 +20,7 @@ const Page = () => {
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.user' });
   return (
     <Fragment>
-      <Breadcrumbs title={t('User')} />
+      <Breadcrumbs title={t('User')} list={[t('User')]} />
       <Form />
       <div className={'wrapper-grid'}>
         <div className="-intro-x left">
@@ -38,7 +38,6 @@ export default Page;
 import { useTranslation } from 'react-i18next';
 import { DrawerForm } from '@/library/drawer';
 import _column from './column';
-
 const Form = () => {
   const sUser = SUser();
   const request = JSON.parse(sUser?.queryParams ?? '{}');
@@ -59,7 +58,7 @@ const Form = () => {
     <DrawerForm
       facade={sUser}
       columns={_column.useForm()}
-      title={t(sUser.data ? 'Edit User' : 'Add new User', {
+      title={t(sUser.data?.id ? 'Edit User' : 'Add new User', {
         name: sUserRole.result?.data?.find((item) => item.code === request.roleCode)?.name,
       })}
       onSubmit={(values) => {
@@ -74,7 +73,6 @@ import { useNavigate } from 'react-router';
 import queryString from 'query-string';
 import { Select, Spin, Tree } from 'antd';
 import { Arrow, Plus } from '@/assets/svg';
-
 const Side = () => {
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.user' });
   const sUserRole = SUserRole();
@@ -135,7 +133,6 @@ const Side = () => {
 import { Button } from '@/library/button';
 import { DataTable } from '@/library/data-table';
 import { keyRole } from '@/utils';
-
 const Main = () => {
   const sUser = SUser();
   const sGlobal = SGlobal();
@@ -147,8 +144,8 @@ const Main = () => {
     <div className="card">
       <div className="body">
         <DataTable
-          facade={sUser}
           defaultRequest={{ include: 'position' }}
+          facade={sUser}
           paginationDescription={(from: number, to: number, total: number) => t('Pagination user', { from, to, total })}
           columns={_column.useTable()}
           rightHeader={

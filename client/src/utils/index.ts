@@ -180,13 +180,19 @@ export const cssInObject = (styles: string) =>
           return acc;
         }, {})
     : {};
-export const formatDataChart = (
-  obj: any,
-  title: string,
+export const formatDataChart = ({
+  obj,
+  title,
   level = 1,
-  list?: string[],
-  type: ETypeChart = ETypeChart.pie,
-) => {
+  list,
+  type = ETypeChart.pie,
+}: {
+  obj: any;
+  title: string;
+  level?: number;
+  list?: string[];
+  type: ETypeChart;
+}) => {
   const listXy = [ETypeChart.scatter, ETypeChart.bubble];
   const listNumber = [ETypeChart.pie, ETypeChart.ring];
   let series: any[] = [];

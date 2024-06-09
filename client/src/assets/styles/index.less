@@ -38,20 +38,6 @@ h4 {
   }
 }
 
-.ant-tree-treenode,
-.ant-tree-node-content-wrapper {
-  @apply w-full;
-}
-
-.ant-tree-switcher {
-  svg {
-    @apply duration-300 transition-all ease-in-out mt-2;
-  }
-  &.ant-tree-switcher_open svg {
-    @apply rotate-90;
-  }
-}
-
 .image-shine,
 .glightbox {
   @apply relative overflow-hidden flex;
@@ -192,27 +178,42 @@ h4 {
 .ant-spin {
   @apply text-primary;
 }
-.ant-tree {
-  @apply bg-base-100 text-base-content;
+
+.ant-tree,
+.ant-select-tree {
+  @apply !bg-base-100 !text-base-content;
 
   &-list-holder-inner {
-    @apply pt-2;
+    @apply !pt-2;
   }
 
-  .ant-tree-switcher-leaf-line {
+  & &-switcher-leaf-line {
     &:before,
     &::after {
-      @apply border-base-300;
+      @apply !border-base-300;
     }
     &:before {
-      @apply -top-2;
+      @apply !-top-2;
     }
   }
-  .ant-tree-node-content-wrapper {
-    @apply btn-sm mr-3;
-    &.ant-tree-node-selected {
-      @apply text-primary bg-primary/10;
-    }
+  & &-node-content-wrapper {
+    @apply !btn-sm !mr-3;
+  }
+
+  & &-node-content-wrapper:hover,
+  & &-node-content-wrapper&-node-selected {
+    @apply !text-primary !bg-primary/10;
+  }
+
+  &-treenode,
+  &-node-content-wrapper {
+    @apply !w-full;
+  }
+  &-switcher svg {
+    @apply duration-300 transition-all ease-in-out mt-2;
+  }
+  &-switcher_open svg {
+    @apply !rotate-90;
   }
 }
 .ant-popover {

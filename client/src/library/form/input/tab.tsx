@@ -2,6 +2,7 @@
 import React from 'react';
 import { Form, Tabs } from 'antd';
 import classNames from 'classnames';
+import { useTranslation } from 'react-i18next';
 
 import { IForm } from '@/interfaces';
 
@@ -16,6 +17,8 @@ const Component = ({
   generateForm: any;
   list: any;
 }) => {
+  const { t } = useTranslation('locale', { keyPrefix: 'library' });
+
   return (
     <Form.List name={name}>
       {(fields) => (
@@ -41,7 +44,7 @@ const Component = ({
                     )}
                     key={index}
                   >
-                    {generateForm(col, index + '_' + i, true, [n, col.name])}
+                    {generateForm({ item: col, index: index + '_' + i, name: [n, col.name], t })}
                   </div>
                 ))}
               </div>

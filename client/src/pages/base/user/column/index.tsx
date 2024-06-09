@@ -89,7 +89,7 @@ export default {
           width: 90,
           align: ETableAlign.center,
           render: (text: string, data) => (
-            <div className={'flex gap-1.5'}>
+            <div className={'action'}>
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_USER_UPDATE) && (
                 <ToolTip title={t(data.isDisable ? 'Disabled user' : 'Enabled user', { name: data.name })}>
                   <Popconfirm

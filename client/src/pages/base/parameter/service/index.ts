@@ -27,6 +27,7 @@ export const SParameter = () => {
   };
 };
 export interface IParameter extends ICommonEntity {
+  name?: string;
   code?: string;
   vn?: string;
   en?: string;

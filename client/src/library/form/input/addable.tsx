@@ -2,6 +2,7 @@
 import React, { Fragment, useState } from 'react';
 import { Form, Checkbox, FormInstance } from 'antd';
 import classNames from 'classnames';
+import { useTranslation } from 'react-i18next';
 
 import { Trash, Plus } from '@/assets/svg';
 import { IForm } from '@/interfaces';
@@ -50,6 +51,8 @@ const Component = ({
       form.setFieldValue(name, array);
     }
   };
+  const { t } = useTranslation('locale', { keyPrefix: 'library' });
+
   return (
     <Form.List name={name}>
       {(fields, { add, remove }) =>
@@ -97,7 +100,7 @@ const Component = ({
                   <div className={'table-cell border bg-gray-300 text-center'}>{i + 1}</div>
                   {column.map((col: any, index: number) => (
                     <div className={'relative table-cell border'} key={index}>
-                      {generateForm(col, index + '_' + i, false, [n, col.name])}
+                      {generateForm({ item: col, index: index + '_' + i, showLabel: false, name: [n, col.name], t })}
                     </div>
                   ))}
                   <div className={'table-cell w-8 align-middle sm:w-8'}>
@@ -144,7 +147,7 @@ const Component = ({
                     )}
                     key={index}
                   >
-                    {generateForm(col, index + '_' + i, true, [n, col.name])}
+                    {generateForm({ item: col, index: index + '_' + i, name: [n, col.name], t })}
                   </div>
                 ))}
                 <div className={'table-cell w-8 align-middle'}>

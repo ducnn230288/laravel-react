@@ -1,142 +1,134 @@
-import React, { useEffect } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Select, Spin, Tree } from 'antd';
-import { useNavigate } from 'react-router';
-import classNames from 'classnames';
-import { createSearchParams } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router';
 
-import { Arrow } from '@/assets/svg';
-import { EFormType } from '@/enums';
 import { Breadcrumbs } from '@/library/breadcrumbs';
-import { Form } from '@/library/form';
 import { SParameter } from '@/services';
-import { lang, routerLinks } from '@/utils';
 
 const Page = () => {
   const sParameter = SParameter();
-  const request = JSON.parse(sParameter?.queryParams ?? '{}');
+  const location = useLocation();
   useEffect(() => {
     if (!sParameter.result?.data) sParameter.get({});
-    // Breadcrumbs(t('Parameter'), [
-    //   { title: t('Setting'), link: '' },
-    //   { title: t('Parameter'), link: '' },
-    // ]);
-    sParameter.getById({ id: request.code });
+    sParameter.getById({
+      id: queryString.parse(location.search, { arrayFormat: 'index' })?.code?.toString() ?? 'ADDRESS',
+    });
   }, []);
-
-  const navigate = useNavigate();
-  useEffect(() => {
-    if (
-      sParameter?.result?.data?.length &&
-      !sParameter?.result?.data?.filter((item) => item.code === request.code).length
-    ) {
-      navigate({
-        pathname: `/${lang}${routerLinks('Parameter')}`,
-        search: `?${createSearchParams({ code: 'ADDRESS' })}`,
-      });
-    }
-  }, [sParameter.result]);
 
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.parameter' });
   return (
-    <div className={'container mx-auto grid grid-cols-12 gap-3 px-2.5 pt-2.5'}>
-      <div className="-intro-x col-span-12 md:col-span-4 lg:col-span-3">
-        <div className="w-full overflow-hidden rounded-xl bg-white shadow">
-          <div className="flex h-14 items-center justify-between border-b border-gray-100 px-4 py-2">
-            <h3 className={'text-lg font-bold'}>{t('Parameter')}</h3>
-          </div>
-          <Spin spinning={sParameter.isLoading}>
-            <div className="relative hidden h-[calc(100vh-12rem)] overflow-y-auto sm:block">
-              <Tree
-                blockNode
-                showLine
-                autoExpandParent
-                defaultExpandAll
-                switcherIcon={<Arrow className={'size-4'} />}
-                treeData={sParameter.result?.data?.map((item: any) => ({
-                  title: item?.name,
-                  key: item?.code,
-                  value: item?.code,
-                  isLeaf: true,
-                  expanded: true,
-                  children: [],
-                }))}
-                titleRender={(data: any) => (
-                  <div
-                    className={classNames(
-                      { 'bg-gray-100': request.code === data.key },
-                      'item text-gray-700 font-medium hover:bg-gray-100 flex justify-between items-center border-b border-gray-100 w-full text-left  group',
-                    )}
-                  >
-                    <div
-                      onClick={() => {
-                        navigate({
-                          pathname: `/${lang}${routerLinks('Parameter')}`,
-                          search: `?${createSearchParams({ code: data.value! })}`,
-                        });
-                        sParameter.getById({ id: data.value! });
-                      }}
-                      className="flex-1 cursor-pointer truncate px-3 py-1 hover:text-teal-900"
-                    >
-                      {data.title}
-                    </div>
-                  </div>
-                )}
-              />
-            </div>
-            <div className="block p-2 sm:hidden sm:p-0">
-              <Select
-                value={request.code}
-                className={'w-full'}
-                options={sParameter.result?.data?.map((data) => ({ label: data.code, value: data.code }))}
-                onChange={(code) => {
-                  navigate({
-                    pathname: `/${lang}${routerLinks('Parameter')}`,
-                    search: `?${createSearchParams({ code })}`,
-                  });
-                  sParameter.getById({ id: code });
-                }}
-              />
-            </div>
-          </Spin>
+    <Fragment>
+      <Breadcrumbs title={t('Parameter')} list={[t('Setting'), t('Parameter')]} />
+      <div className={'wrapper-grid'}>
+        <div className="-intro-x left">
+          <Side />
+        </div>
+        <div className="intro-x right">
+          <Main />
         </div>
       </div>
-      <div className="intro-x col-span-12 md:col-span-8 lg:col-span-9">
-        <div className="w-full overflow-auto rounded-xl bg-white shadow">
-          <div className="flex h-14 items-center justify-between border-b border-gray-100 px-4 py-2">
-            <h3 className={'text-lg font-bold'}>{t('Edit Parameter', { code: request.code })}</h3>
-          </div>
-          <div className="overflow-y-auto p-3 sm:min-h-[calc(100vh-12rem)]">
-            <Spin spinning={sParameter.isLoading}>
-              <Form
-                values={{ ...sParameter.data }}
-                className="intro-x"
-                columns={[
-                  {
-                    title: t('Vietnamese parameter'),
-                    name: 'vn',
-                    formItem: {
-                      col: 6,
-                      type: EFormType.textarea,
-                    },
-                  },
-                  {
-                    title: t('English parameter'),
-                    name: 'en',
-                    formItem: {
-                      col: 6,
-                      type: EFormType.textarea,
-                    },
-                  },
-                ]}
-                handSubmit={(values) => sParameter.put({ ...values, id: sParameter.data!.code })}
-                disableSubmit={sParameter.isLoading}
-              />
-            </Spin>
-          </div>
+    </Fragment>
+  );
+};
+export default Page;
+
+import queryString from 'query-string';
+import { Select, Spin, Tree } from 'antd';
+import { Arrow } from '@/assets/svg';
+const Side = () => {
+  const { t } = useTranslation('locale', { keyPrefix: 'pages.base.parameter' });
+  const sParameter = SParameter();
+  const request = JSON.parse(sParameter?.queryParams ?? '{}');
+  const navigate = useNavigate();
+
+  return (
+    <div className="card">
+      <div className="header">
+        <h3>{t('Parameter')}</h3>
+      </div>
+      <Spin spinning={sParameter.isLoading}>
+        <div className="desktop">
+          {sParameter.result?.data && (
+            <Tree
+              blockNode
+              showLine
+              autoExpandParent
+              defaultExpandAll
+              switcherIcon={<Arrow className={'size-3'} />}
+              selectedKeys={[sParameter.data?.code ?? '']}
+              treeData={sParameter.result?.data?.map((item) => ({
+                title: item?.name,
+                key: item?.code,
+                isLeaf: true,
+                expanded: true,
+                children: [],
+              }))}
+              onSelect={(selectedKeys) => {
+                request.code = selectedKeys[0];
+                sParameter.getById({ id: request.code });
+                navigate(
+                  location.pathname.substring(1) + '?' + queryString.stringify(request, { arrayFormat: 'index' }),
+                );
+              }}
+            />
+          )}
         </div>
+        <div className="mobile">
+          <Select
+            value={sParameter.data?.code}
+            className={'w-full'}
+            options={sParameter?.result?.data?.map((data) => ({ label: data.name, value: data.code }))}
+            onChange={(e) => {
+              request.code = e;
+              sParameter.getById({ id: e });
+              navigate(location.pathname.substring(1) + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
+            }}
+          />
+        </div>
+      </Spin>
+    </div>
+  );
+};
+
+import { Form } from '@/library/form';
+import { EFormType } from '@/enums';
+const Main = () => {
+  const { t } = useTranslation('locale', { keyPrefix: 'pages.base.parameter' });
+  const sParameter = SParameter();
+
+  return (
+    <div className="card">
+      <div className="header">
+        <h3>{t('Edit Parameter', { code: sParameter.data?.name })}</h3>
+      </div>
+      <div className="desktop has-header">
+        <Spin spinning={sParameter.isLoading}>
+          <Form
+            values={{ ...sParameter.data }}
+            className="intro-x"
+            columns={[
+              {
+                title: t('Vietnamese parameter'),
+                name: 'vn',
+                formItem: {
+                  col: 6,
+                  type: EFormType.textarea,
+                },
+              },
+              {
+                title: t('English parameter'),
+                name: 'en',
+                formItem: {
+                  col: 6,
+                  type: EFormType.textarea,
+                },
+              },
+            ]}
+            handSubmit={(values) => sParameter.put({ ...values, id: sParameter.data!.code })}
+            disableSubmit={sParameter.isLoading}
+          />
+        </Spin>
       </div>
     </div>
   );
 };
-export default Page;

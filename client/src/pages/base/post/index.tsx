@@ -1,23 +1,13 @@
-import React, { useEffect, useRef } from 'react';
-import { useTranslation } from 'react-i18next';
+import React, { Fragment, useEffect } from 'react';
 import { Popconfirm, Spin, Tree, TreeSelect } from 'antd';
 import classNames from 'classnames';
 
 import { Arrow, Edit, Plus, Trash } from '@/assets/svg';
 import { EStatusState } from '@/enums';
-import { ITableRefObject } from '@/interfaces';
-import { Button } from '@/library/button';
-import { DataTable } from '@/library/data-table';
-import { DrawerForm } from '@/library/drawer';
 import { ToolTip } from '@/library/tooltip';
 import { SGlobal, SPost, SPostType } from '@/services';
-import { keyRole } from '@/utils';
-
-import _column from './column';
-import _columnType from './column/type';
 
 const Page = () => {
-  const sGlobal = SGlobal();
   const sPostType = SPostType();
   useEffect(() => {
     if (!sPostType.result?.data) sPostType.get({ include: 'children', postTypeId: '' });
@@ -27,166 +17,225 @@ const Page = () => {
   }, []);
 
   const sPost = SPost();
+
+  const { t } = useTranslation('locale', { keyPrefix: 'pages.base.post' });
+
+  return (
+    <Fragment>
+      <Breadcrumbs title={t('Post')} list={[t('Setting'), t('Post')]} />
+      <FormPost />
+      <FormPostType />
+      <div className={'wrapper-grid'}>
+        <div className="-intro-x left">
+          <Side />
+        </div>
+        <div className="intro-x right">
+          <Main />
+        </div>
+      </div>
+    </Fragment>
+  );
+};
+
+import { useTranslation } from 'react-i18next';
+import { DrawerForm } from '@/library/drawer';
+import _column from './column';
+import { Breadcrumbs } from '@/library/breadcrumbs';
+const FormPost = () => {
+  const sPost = SPost();
+  const request = JSON.parse(sPost?.queryParams ?? '{}');
+
   useEffect(() => {
-    // Breadcrumbs(t('Post'), [
-    //   { title: t('Setting'), link: '' },
-    //   { title: t('Post'), link: '' },
-    // ]);
     switch (sPost.status) {
-      case EStatusState.putFulfilled:
       case EStatusState.postFulfilled:
+      case EStatusState.putFulfilled:
       case EStatusState.deleteFulfilled:
-        dataTableRef?.current?.onChange(request);
+        sPost.get(request);
         break;
     }
   }, [sPost.status]);
+
+  const { t } = useTranslation('locale', { keyPrefix: 'pages.base.post' });
+  const sPostType = SPostType();
+  return (
+    <DrawerForm
+      size={'large'}
+      facade={sPost}
+      columns={_column.useForm()}
+      title={t(sPost.data?.id ? 'Edit Post' : 'Add new Post', {
+        name: sPostType.result?.data?.find((item) => item.code === request.typeCode)?.name,
+      })}
+      onSubmit={(values) => {
+        if (sPost.data) sPost.put({ ...values, id: sPost.data.id, typeCode: request.typeCode });
+        else sPost.post({ ...values, typeCode: request.typeCode });
+      }}
+    />
+  );
+};
+
+import _columnType from './column/type';
+const FormPostType = () => {
+  const sPostType = SPostType();
+  const request = JSON.parse(sPostType?.queryParams ?? '{}');
   useEffect(() => {
     switch (sPostType.status) {
       case EStatusState.postFulfilled:
       case EStatusState.putFulfilled:
       case EStatusState.deleteFulfilled:
-        sPostType.get(JSON.parse(sPostType.queryParams ?? '{}'));
+        sPostType.get(request);
         break;
     }
   }, [sPostType.status]);
 
-  const request = JSON.parse(sPost.queryParams ?? '{}');
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.post' });
-  const dataTableRef = useRef<ITableRefObject>(null);
+  return (
+    <DrawerForm
+      facade={sPostType}
+      columns={_columnType.useForm(sPostType.data?.id, sPostType.result?.data)}
+      title={t(sPostType.data?.id ? 'Edit Type Post' : 'Add new Type Post')}
+      onSubmit={(values) => {
+        if (sPostType.data) sPostType.put({ ...values, id: sPostType.data.id });
+        else sPostType.post({ ...values });
+      }}
+    />
+  );
+};
+
+import { useNavigate } from 'react-router';
+import queryString from 'query-string';
+const Side = () => {
+  const { t } = useTranslation('locale', { keyPrefix: 'pages.base.post' });
+  const sPostType = SPostType();
+
+  const sPost = SPost();
+  const request = JSON.parse(sPost?.queryParams ?? '{}');
+  const navigate = useNavigate();
+  const sGlobal = SGlobal();
 
   return (
-    <div className={'container mx-auto grid grid-cols-12 gap-3 px-2.5 pt-2.5'}>
-      <DrawerForm
-        facade={sPostType}
-        columns={_columnType.useForm(sPostType.data?.id, sPostType.result?.data)}
-        title={t(sPostType.data ? 'Edit Type Post' : 'Add new Type Post')}
-        onSubmit={(values) => {
-          if (sPostType.data) sPostType.put({ ...values, id: sPostType.data.code });
-          else sPostType.post({ ...values });
-        }}
-      />
-      <DrawerForm
-        size={'large'}
-        facade={sPost}
-        columns={_column.useForm(sPost.data?.id)}
-        title={t(sPost.data ? 'Edit Post' : 'Add new Post', { name: request.typeCode })}
-        onSubmit={(values) => {
-          if (sPost?.data?.id) sPost.put({ ...values, id: sPost.data.id, typeCode: request.typeCode });
-          else sPost.post({ ...values, typeCode: request.typeCode });
-        }}
-      />
-      <div className="-intro-x col-span-12 md:col-span-4 lg:col-span-3">
-        <div className="w-full overflow-hidden rounded-xl bg-white shadow">
-          <div className="flex h-14 items-center justify-between border-b border-gray-100 px-4 py-2">
-            <h3 className={'text-lg font-bold'}>{t('Type Post')}</h3>
-            <div className="flex items-center">
-              <Button
-                icon={<Plus className="icon-cud !h-5 !w-5" />}
-                text={t('Add new Type Post')}
-                onClick={() => sPostType.set({ data: undefined, isVisible: true })}
-              />
-            </div>
-          </div>
-          <Spin spinning={sPostType.isLoading}>
-            <div className="relative hidden h-[calc(100vh-12rem)] overflow-y-auto sm:block">
-              <Tree
-                blockNode
-                showLine
-                autoExpandParent
-                defaultExpandAll
-                switcherIcon={<Arrow className={'size-4'} />}
-                treeData={sPostType.result?.data}
-                titleRender={(data: any) => (
-                  <div
-                    className={classNames(
-                      { 'bg-gray-100': request.typeCode === data.code },
-                      'item text-gray-700 font-medium hover:bg-gray-100 flex justify-between items-center border-b border-gray-100 w-full text-left  group',
-                    )}
-                  >
-                    <button
-                      onClick={() => {
-                        request.typeCode = data.code;
-                        dataTableRef?.current?.onChange(request);
-                      }}
-                      className="flex-1 cursor-pointer truncate px-3 py-1 hover:text-teal-900"
-                    >
-                      {data.name}
-                    </button>
-                    <div className="flex w-16 justify-end gap-1">
-                      {sGlobal.user?.role?.permissions?.includes(keyRole.P_POST_TYPE_UPDATE) && (
-                        <ToolTip title={t('Edit Type Post', { name: data.name })}>
-                          <button
-                            className={'opacity-0 transition-all duration-300 group-hover:opacity-100 '}
-                            title={t('Edit Type Post', { name: data.name })}
-                            onClick={() => sPostType.getById({ id: data.code })}
-                          >
-                            <Edit className="icon-cud bg-teal-900 hover:bg-teal-700" />
-                          </button>
-                        </ToolTip>
-                      )}
-                      {sGlobal.user?.role?.permissions?.includes(keyRole.P_POST_TYPE_DESTROY) && !data.isPrimary && (
-                        <ToolTip title={t('Delete type post', { name: data.name })}>
-                          <Popconfirm
-                            destroyTooltipOnHide={true}
-                            title={t('Are you sure want delete type post?', { name: data.name })}
-                            onConfirm={() => sPostType.delete(data.code)}
-                          >
-                            <button
-                              className={'opacity-0 transition-all duration-300 group-hover:opacity-100'}
-                              title={t('Delete type post', { name: data.name })}
-                            >
-                              <Trash className="icon-cud bg-red-600 hover:bg-red-400" />
-                            </button>
-                          </Popconfirm>
-                        </ToolTip>
-                      )}
-                    </div>
-                  </div>
-                )}
-              />
-            </div>
-            <div className="block p-2 sm:hidden sm:p-0">
-              <TreeSelect
-                value={request.typeCode}
-                className={'w-full'}
-                treeData={sPostType.result?.data}
-                onChange={(e) => {
-                  if (request.typeCode !== e) request.typeCode = e;
-                  else delete request.typeCode;
-                  dataTableRef?.current?.onChange(request);
-                }}
-              />
-            </div>
-          </Spin>
-        </div>
+    <div className="card">
+      <div className="header">
+        <h3>{t('Type Post')}</h3>
+        <Button
+          icon={<Plus className="size-3" />}
+          onClick={() => sPostType.set({ data: undefined, isVisible: true })}
+        />
       </div>
-      <div className="intro-x col-span-12 md:col-span-8 lg:col-span-9">
-        <div className="w-full overflow-auto rounded-xl bg-white shadow">
-          <div className="overflow-y-auto p-3 sm:min-h-[calc(100vh-8.5rem)]">
-            <DataTable
-              facade={sPost}
-              ref={dataTableRef}
-              paginationDescription={(from: number, to: number, total: number) =>
-                t('Pagination post', { from, to, total })
-              }
-              defaultRequest={{ include: 'languages' }}
-              columns={_column.useTable()}
-              rightHeader={
-                <div className={'flex gap-2'}>
-                  {sGlobal.user?.role?.permissions?.includes(keyRole.P_POST_STORE) && (
-                    <Button
-                      icon={<Plus className="icon-cud !h-5 !w-5" />}
-                      text={t('Add new Post', { name: request.typeCode })}
-                      onClick={() => sPost.set({ data: undefined, isVisible: true })}
-                    />
-                  )}
-                </div>
-              }
+      <Spin spinning={sPostType.isLoading}>
+        <div className="desktop">
+          {sPostType.result?.data && (
+            <Tree
+              blockNode
+              showLine
+              autoExpandParent
+              defaultExpandAll
+              switcherIcon={<Arrow className={'size-3'} />}
+              defaultSelectedKeys={[request.typeCode]}
+              treeData={sPostType.result?.data?.map((item: any) => ({
+                title: item?.name,
+                key: item?.code,
+                isLeaf: true,
+                expanded: true,
+                children: [],
+              }))}
+              onSelect={(selectedKeys) => {
+                request.typeCode = selectedKeys[0];
+                sPost.get(request);
+                navigate(
+                  location.pathname.substring(1) + '?' + queryString.stringify(request, { arrayFormat: 'index' }),
+                );
+              }}
+              titleRender={(data: any) => (
+                <span className={classNames('item')}>
+                  {data.title}
+                  <div className="action">
+                    {sGlobal.user?.role?.permissions?.includes(keyRole.P_POST_TYPE_UPDATE) && (
+                      <ToolTip title={t('Edit Type Post', { name: data.name })}>
+                        <button
+                          title={t('Edit Type Post', { name: data.name })}
+                          onClick={() => sPostType.getById({ id: data.code })}
+                        >
+                          <Edit className="primary" />
+                        </button>
+                      </ToolTip>
+                    )}
+                    {sGlobal.user?.role?.permissions?.includes(keyRole.P_POST_TYPE_DESTROY) && (
+                      <ToolTip title={t('Delete type post', { name: data.name })}>
+                        <Popconfirm
+                          destroyTooltipOnHide={true}
+                          title={t('Are you sure want delete type post?', { name: data.name })}
+                          onConfirm={() => sPostType.delete(data.code)}
+                        >
+                          <button title={t('Delete type post', { name: data.name })}>
+                            <Trash className="error" />
+                          </button>
+                        </Popconfirm>
+                      </ToolTip>
+                    )}
+                  </div>
+                </span>
+              )}
             />
-          </div>
+          )}
         </div>
+        <div className="mobile">
+          <TreeSelect
+            treeLine
+            switcherIcon={<Arrow className={'size-3'} />}
+            value={request.typeCode}
+            className={'w-full'}
+            treeData={sPostType.result?.data?.map((item: any) => ({
+              title: item?.name,
+              value: item?.code,
+              isLeaf: true,
+              expanded: true,
+              children: [],
+            }))}
+            onChange={(e) => {
+              if (request.typeCode !== e) request.typeCode = e;
+              else delete request.typeCode;
+              sPost.get(request);
+              navigate(location.pathname.substring(1) + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
+            }}
+          />
+        </div>
+      </Spin>
+    </div>
+  );
+};
+
+import { Button } from '@/library/button';
+import { DataTable } from '@/library/data-table';
+import { keyRole } from '@/utils';
+const Main = () => {
+  const sPost = SPost();
+  const sGlobal = SGlobal();
+  const sPostType = SPostType();
+  const { t } = useTranslation('locale', { keyPrefix: 'pages.base.post' });
+  const request = JSON.parse(sPost?.queryParams ?? '{}');
+
+  return (
+    <div className="card">
+      <div className="body">
+        <DataTable
+          facade={sPost}
+          paginationDescription={(from: number, to: number, total: number) => t('Pagination post', { from, to, total })}
+          columns={_column.useTable()}
+          rightHeader={
+            sGlobal.user?.role?.permissions?.includes(keyRole.P_POST_STORE) && (
+              <Button
+                icon={<Plus className="size-3" />}
+                text={t('Add new Post', {
+                  name: sPostType.result?.data?.find((item) => item.code === request.typeCode)?.name,
+                })}
+                onClick={() => sPost.set({ data: undefined, isVisible: true })}
+              />
+            )
+          }
+        />
       </div>
     </div>
   );
 };
+
 export default Page;

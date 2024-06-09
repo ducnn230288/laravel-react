@@ -1,140 +1,165 @@
-import React, { useEffect, useRef } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Select, Spin, Tree } from 'antd';
-import classNames from 'classnames';
+import React, { Fragment, useEffect } from 'react';
 
-import { Arrow, Plus } from '@/assets/svg';
 import { EStatusState } from '@/enums';
-import { ITableRefObject } from '@/interfaces';
 import { Breadcrumbs } from '@/library/breadcrumbs';
-import { Button } from '@/library/button';
-import { DataTable } from '@/library/data-table';
-import { DrawerForm } from '@/library/drawer';
 import { SCode, SCodeType, SGlobal } from '@/services';
-import { keyRole } from '@/utils';
-
-import _column from './column';
 
 const Page = () => {
-  const sGlobal = SGlobal();
-  const sCodeType = SCodeType();
+  const sCode = SCode();
   useEffect(() => {
-    if (!sCodeType.result?.data) sCodeType.get({});
     return () => {
       sCode.set({ isLoading: true, status: EStatusState.idle });
     };
   }, []);
 
-  const sCode = SCode();
+  const sCodeType = SCodeType();
   useEffect(() => {
-    // Breadcrumbs(t('Code'), [
-    //   { title: t('Setting'), link: '' },
-    //   { title: t('Code'), link: '' },
-    // ]);
+    if (sCode.result && !sCodeType?.result) sCodeType.get({});
+  }, [sCode.result]);
+
+  const { t } = useTranslation('locale', { keyPrefix: 'pages.base.code' });
+  return (
+    <Fragment>
+      <Breadcrumbs title={t('Code')} list={[t('Setting'), t('Code')]} />
+      <Form />
+      <div className={'wrapper-grid'}>
+        <div className="-intro-x left">
+          <Side />
+        </div>
+        <div className="intro-x right">
+          <Main />
+        </div>
+      </div>
+    </Fragment>
+  );
+};
+export default Page;
+
+import { useTranslation } from 'react-i18next';
+import { DrawerForm } from '@/library/drawer';
+import _column from './column';
+const Form = () => {
+  const sCode = SCode();
+  const request = JSON.parse(sCode?.queryParams ?? '{}');
+
+  useEffect(() => {
     switch (sCode.status) {
-      case EStatusState.putFulfilled:
       case EStatusState.postFulfilled:
+      case EStatusState.putFulfilled:
       case EStatusState.deleteFulfilled:
-        dataTableRef?.current?.onChange(request);
+        sCode.get(request);
         break;
     }
   }, [sCode.status]);
 
-  const request = JSON.parse(sCode.queryParams ?? '{}');
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.code' });
-  const dataTableRef = useRef<ITableRefObject>(null);
+  const sCodeType = SCodeType();
   return (
-    <div className={'container mx-auto grid grid-cols-12 gap-3 px-2.5 pt-2.5'}>
-      <DrawerForm
-        facade={sCode}
-        columns={_column.useForm()}
-        title={t(sCode.data?.id ? 'Edit Code' : 'Add new Code', { name: request.typeCode })}
-        onSubmit={(values) => {
-          if (sCode.data) sCode.put({ ...values, id: sCode.data.code, typeCode: request.typeCode });
-          else sCode.post({ ...values, typeCode: request.typeCode });
-        }}
-      />
-      <div className="-intro-x col-span-12 md:col-span-4 lg:col-span-3">
-        <div className="w-full overflow-hidden rounded-xl bg-white shadow">
-          <div className="flex h-14 items-center justify-between border-b border-gray-100 px-4 py-2">
-            <h3 className={'text-lg font-bold'}>{t('Type code')}</h3>
-          </div>
-          <Spin spinning={sCodeType.isLoading}>
-            <div className="relative hidden h-[calc(100vh-12rem)] overflow-y-auto sm:block">
-              <Tree
-                blockNode
-                showLine
-                autoExpandParent
-                defaultExpandAll
-                switcherIcon={<Arrow className={'size-4'} />}
-                treeData={sCodeType.result?.data?.map((item: any) => ({
-                  title: item?.name,
-                  key: item?.code,
-                  value: item?.code,
-                  isLeaf: true,
-                  expanded: true,
-                  children: [],
-                }))}
-                titleRender={(data: any) => (
-                  <div
-                    className={classNames(
-                      { 'bg-gray-100': request.typeCode === data.value },
-                      'item text-gray-700 font-medium hover:bg-gray-100 flex justify-between items-center border-b border-gray-100 w-full text-left  group',
-                    )}
-                  >
-                    <button
-                      onClick={() => {
-                        request.typeCode = data.value;
-                        dataTableRef?.current?.onChange(request);
-                      }}
-                      className="flex-1 cursor-pointer truncate px-3 py-1 hover:text-teal-900"
-                    >
-                      {data.title}
-                    </button>
-                  </div>
-                )}
-              />
-            </div>
-            <div className="block p-2 sm:hidden sm:p-0">
-              <Select
-                value={request.typeCode}
-                className={'w-full'}
-                options={sCodeType.result?.data?.map((data) => ({ label: data.name, value: data.code }))}
-                onChange={(e) => {
-                  request.typeCode = e;
-                  dataTableRef?.current?.onChange(request);
-                }}
-              />
-            </div>
-          </Spin>
-        </div>
+    <DrawerForm
+      facade={sCode}
+      columns={_column.useForm()}
+      title={t(sCode.data?.id ? 'Edit Code' : 'Add new Code', {
+        name: sCodeType.result?.data?.find((item) => item.code === request.typeCode)?.name,
+      })}
+      onSubmit={(values) => {
+        if (sCode.data) sCode.put({ ...values, id: sCode.data.id, typeCode: request.typeCode });
+        else sCode.post({ ...values, typeCode: request.typeCode });
+      }}
+    />
+  );
+};
+
+import { useNavigate } from 'react-router';
+import queryString from 'query-string';
+import { Select, Spin, Tree } from 'antd';
+import { Arrow, Plus } from '@/assets/svg';
+const Side = () => {
+  const { t } = useTranslation('locale', { keyPrefix: 'pages.base.code' });
+  const sCodeType = SCodeType();
+
+  const sCode = SCode();
+  const request = JSON.parse(sCode?.queryParams ?? '{}');
+  const navigate = useNavigate();
+
+  return (
+    <div className="card">
+      <div className="header">
+        <h3>{t('Type code')}</h3>
       </div>
-      <div className="intro-x col-span-12 md:col-span-8 lg:col-span-9">
-        <div className="w-full overflow-auto rounded-xl bg-white shadow">
-          <div className="overflow-y-auto p-3 sm:min-h-[calc(100vh-8.5rem)]">
-            <DataTable
-              facade={sCode}
-              ref={dataTableRef}
-              paginationDescription={(from: number, to: number, total: number) =>
-                t('Pagination code', { from, to, total })
-              }
-              columns={_column.useTable()}
-              rightHeader={
-                <div className={'flex gap-2'}>
-                  {sGlobal.user?.role?.permissions?.includes(keyRole.P_CODE_STORE) && (
-                    <Button
-                      icon={<Plus className="icon-cud !h-5 !w-5" />}
-                      text={t('Add new Code', { name: request.typeCode })}
-                      onClick={() => sCode.set({ data: undefined, isVisible: true })}
-                    />
-                  )}
-                </div>
-              }
+      <Spin spinning={sCodeType.isLoading}>
+        <div className="desktop">
+          {sCodeType.result?.data && (
+            <Tree
+              blockNode
+              showLine
+              autoExpandParent
+              defaultExpandAll
+              switcherIcon={<Arrow className={'size-3'} />}
+              defaultSelectedKeys={[request.typeCode]}
+              treeData={sCodeType.result?.data?.map((item: any) => ({
+                title: item?.name,
+                key: item?.code,
+                isLeaf: true,
+                expanded: true,
+                children: [],
+              }))}
+              onSelect={(selectedKeys) => {
+                request.typeCode = selectedKeys[0];
+                sCode.get(request);
+                navigate(
+                  location.pathname.substring(1) + '?' + queryString.stringify(request, { arrayFormat: 'index' }),
+                );
+              }}
             />
-          </div>
+          )}
         </div>
+        <div className="mobile">
+          <Select
+            value={request.typeCode}
+            className={'w-full'}
+            options={sCodeType?.result?.data?.map((data) => ({ label: data.name, value: data.code }))}
+            onChange={(e) => {
+              request.typeCode = e;
+              sCode.get(request);
+              navigate(location.pathname.substring(1) + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
+            }}
+          />
+        </div>
+      </Spin>
+    </div>
+  );
+};
+
+import { Button } from '@/library/button';
+import { DataTable } from '@/library/data-table';
+import { keyRole } from '@/utils';
+const Main = () => {
+  const sCode = SCode();
+  const sGlobal = SGlobal();
+  const sCodeType = SCodeType();
+  const { t } = useTranslation('locale', { keyPrefix: 'pages.base.code' });
+  const request = JSON.parse(sCode?.queryParams ?? '{}');
+
+  return (
+    <div className="card">
+      <div className="body">
+        <DataTable
+          facade={sCode}
+          paginationDescription={(from: number, to: number, total: number) => t('Pagination code', { from, to, total })}
+          columns={_column.useTable()}
+          rightHeader={
+            sGlobal.user?.role?.permissions?.includes(keyRole.P_CODE_STORE) && (
+              <Button
+                icon={<Plus className="size-3" />}
+                text={t('Add new Code', {
+                  name: sCodeType.result?.data?.find((item) => item.code === request.typeCode)?.name,
+                })}
+                onClick={() => sCode.set({ data: undefined, isVisible: true })}
+              />
+            )
+          }
+        />
       </div>
     </div>
   );
 };
-export default Page;

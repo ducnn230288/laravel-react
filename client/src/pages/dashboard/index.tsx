@@ -1489,15 +1489,15 @@ const table2: IEditTable = {
 };
 
 const dataDefault: any[] = [
-  formatDataChart(table, ETypeChart.bar, 'Bar Chart'),
-  formatDataChart(table, ETypeChart.stackedBar, 'Stacked Bar Chart'),
-  formatDataChart(table, ETypeChart.pie, 'Pie Chart'),
-  formatDataChart(table, ETypeChart.ring, 'Ring Chart'),
-  formatDataChart(table, ETypeChart.line, 'Line Chart'),
-  formatDataChart(table, ETypeChart.scatter, 'Scatter Chart'),
-  formatDataChart(table, ETypeChart.bubble, 'Bubble Chart'),
-  formatDataChart(table, ETypeChart.area, 'Area Chart'),
-  formatDataChart(table, ETypeChart.stackedArea, 'Stacked Area Chart'),
-  formatDataChart(table, ETypeChart.lineBar, 'Line Bar Chart'),
+  formatDataChart({ obj: table, type: ETypeChart.bar, title: 'Bar Chart' }),
+  formatDataChart({ obj: table, type: ETypeChart.stackedBar, title: 'Stacked Bar Chart' }),
+  formatDataChart({ obj: table, type: ETypeChart.pie, title: 'Pie Chart' }),
+  formatDataChart({ obj: table, type: ETypeChart.ring, title: 'Ring Chart' }),
+  formatDataChart({ obj: table, type: ETypeChart.line, title: 'Line Chart' }),
+  formatDataChart({ obj: table, type: ETypeChart.scatter, title: 'Scatter Chart' }),
+  formatDataChart({ obj: table, type: ETypeChart.bubble, title: 'Bubble Chart' }),
+  formatDataChart({ obj: table, type: ETypeChart.area, title: 'Area Chart' }),
+  formatDataChart({ obj: table, type: ETypeChart.stackedArea, title: 'Stacked Area Chart' }),
+  formatDataChart({ obj: table, type: ETypeChart.lineBar, title: 'Line Bar Chart' }),
 ];
 export default Page;

@@ -78,6 +78,9 @@
           .desktop {
             @apply relative hidden overflow-y-auto sm:block;
             height: calc(100vh - 14rem);
+            &.has-header {
+              @apply block p-3;
+            }
           }
           .mobile {
             @apply block p-2 sm:hidden sm:p-0;
@@ -87,17 +90,38 @@
           }
         }
       }
-      .warning {
-        @apply size-5 px-1 fill-base-100 rounded-md bg-warning hover:bg-warning/50;
+      .action {
+        @apply flex ~'gap-1.5';
+
+        svg {
+          @apply size-5 px-1 fill-base-100 rounded-md;
+
+          &.warning {
+            @apply bg-warning hover:bg-warning/50;
+          }
+          &.success {
+            @apply bg-success hover:bg-success/50;
+          }
+          &.primary {
+            @apply bg-primary hover:bg-primary/50;
+          }
+          &.error {
+            @apply bg-error hover:bg-error/50;
+          }
+        }
       }
-      .success {
-        @apply size-5 px-1 fill-base-100 rounded-md bg-success hover:bg-success/50;
-      }
-      .primary {
-        @apply size-5 px-1 fill-base-100 rounded-md bg-primary hover:bg-primary/50;
-      }
-      .error {
-        @apply size-5 px-1 fill-base-100 rounded-md bg-error hover:bg-error/50;
+      .item {
+        @apply flex justify-between items-center h-8;
+        > .action {
+          @apply flex w-16 justify-end gap-1;
+
+          button {
+            @apply opacity-0 transition-all duration-300 ease-in-out;
+          }
+        }
+        &:hover > .action button {
+          @apply opacity-100;
+        }
       }
     }
 

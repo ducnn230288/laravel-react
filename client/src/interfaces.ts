@@ -1,5 +1,5 @@
-import {CheckboxOptionType, FormInstance} from "antd";
-import {EFormModeSelect, EFormPickerDate, EFormRuleType, EFormType, ETableAlign, ETableFilterType} from "@/enums";
+import { CheckboxOptionType, FormInstance } from 'antd';
+import { EFormModeSelect, EFormPickerDate, EFormRuleType, EFormType, ETableAlign, ETableFilterType } from '@/enums';
 
 export interface IResponses<T> {
   statusCode?: 200 | 201 | 500 | 404;
@@ -114,12 +114,12 @@ export interface IFormItem {
   symbol?: string;
   initialValues?: { start: string; end: string };
   convert?: (data: any) => any;
-  onChange?: (value: any, form: FormInstance, reRender: any) => void;
+  onChange?: (value: any, form: FormInstance) => void;
   onBlur?: (e: string, form: FormInstance, name: string) => void;
   disabledDate?: (current: any, form: FormInstance) => boolean;
   showTime?: boolean;
   picker?: EFormPickerDate;
-  onCalendarChange?: (current: any, form: FormInstance, reRender: any) => void;
+  onCalendarChange?: (current: any, form: FormInstance) => void;
   api?: IFormApi;
   get?: ITableGet;
   label?: string;
@@ -143,7 +143,7 @@ export interface IFormItem {
   idCheck?: any;
   firstLoad?: (data: any) => any;
   notDefaultValid?: boolean;
-  render?: (form: FormInstance, values: any, generateForm: void, index: number, reRender: void) => JSX.Element;
+  render?: (form: FormInstance, values: any, generateForm: any, index: number) => JSX.Element;
 }
 export interface IFormItemRule {
   type?: EFormRuleType;

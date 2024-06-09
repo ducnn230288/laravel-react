@@ -1,7 +1,7 @@
 import { Home } from '@/assets/svg';
 import React from 'react';
 
-export const Breadcrumbs = ({ title }: { title: string }) => (
+export const Breadcrumbs = ({ title, list }: { title: string; list: string[] }) => (
   <div className="wrapper-flex">
     <h2 className={'-intro-x'}>{title}</h2>
     <div className={'intro-x breadcrumbs'}>
@@ -9,7 +9,9 @@ export const Breadcrumbs = ({ title }: { title: string }) => (
         <li>
           <Home />
         </li>
-        <li>{title}</li>
+        {list.map((item) => (
+          <li key={item}>{item}</li>
+        ))}
       </ul>
     </div>
   </div>

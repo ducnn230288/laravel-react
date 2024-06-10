@@ -108,6 +108,11 @@ h4 {
     @apply text-base-content;
   }
 
+  & > &-item,
+  &&-inline > &-submenu > &-submenu-title {
+    @apply h-10;
+  }
+
   &:not(.ant-menu-root) .ant-menu-item.ant-menu-item-selected,
   &:not(.ant-menu-root) .ant-menu-submenu-selected > .ant-menu-submenu-title,
   &:not(.ant-menu-sub) > .ant-menu-item:not(.ant-menu-item-selected):not(.ant-menu-submenu-selected):hover,
@@ -164,7 +169,7 @@ h4 {
 }
 
 .ant-dropdown .ant-dropdown-menu {
-  @apply bg-base-200;
+  @apply bg-base-100;
 
   .ant-dropdown-menu-item {
     @apply text-base-content;

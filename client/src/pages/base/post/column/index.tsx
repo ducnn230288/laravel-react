@@ -69,7 +69,7 @@ export default {
           width: 100,
           align: ETableAlign.center,
           render: (text: string, data) => (
-            <div className={'flex gap-2'}>
+            <div className={'action'}>
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_POST_UPDATE) && (
                 <ToolTip
                   title={t(data.isDisable ? 'Disabled post' : 'Enabled post', {
@@ -96,11 +96,7 @@ export default {
                           : '',
                       })}
                     >
-                      {data.isDisable ? (
-                        <Disable className="icon-cud bg-yellow-700 hover:bg-yellow-500" />
-                      ) : (
-                        <Check className="icon-cud bg-green-600 hover:bg-green-400" />
-                      )}
+                      {data.isDisable ? <Disable className="warning" /> : <Check className="success" />}
                     </button>
                   </Popconfirm>
                 </ToolTip>
@@ -122,7 +118,7 @@ export default {
                     })}
                     onClick={() => sPost.getById({ id: data.id, params: { include: 'languages' } })}
                   >
-                    <Edit className="icon-cud bg-teal-900 hover:bg-teal-700" />
+                    <Edit className="primary" />
                   </button>
                 </ToolTip>
               )}
@@ -152,7 +148,7 @@ export default {
                           : '',
                       })}
                     >
-                      <Trash className="icon-cud bg-red-600 hover:bg-red-400" />
+                      <Trash className="error" />
                     </button>
                   </Popconfirm>
                 </ToolTip>

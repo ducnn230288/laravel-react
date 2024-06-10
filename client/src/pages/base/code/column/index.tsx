@@ -56,7 +56,7 @@ export default {
           width: 100,
           align: ETableAlign.center,
           render: (text: string, data) => (
-            <div className={'flex gap-2'}>
+            <div className={'action'}>
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_CODE_UPDATE) && (
                 <ToolTip title={t(data.isDisable ? 'Disabled code' : 'Enabled code', { name: data.name })}>
                   <Popconfirm
@@ -67,11 +67,7 @@ export default {
                     onConfirm={() => sCode.put({ id: data.code, isDisable: !data.isDisable })}
                   >
                     <button title={t(data.isDisable ? 'Disabled code' : 'Enabled code', { name: data.name })}>
-                      {data.isDisable ? (
-                        <Disable className="icon-cud bg-yellow-700 hover:bg-yellow-500" />
-                      ) : (
-                        <Check className="icon-cud bg-green-600 hover:bg-green-400" />
-                      )}
+                      {data.isDisable ? <Disable className="warning" /> : <Check className="success" />}
                     </button>
                   </Popconfirm>
                 </ToolTip>
@@ -79,22 +75,22 @@ export default {
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_CODE_UPDATE) && (
                 <ToolTip title={t('Edit Code', { name: data.name })}>
                   <button title={t('Edit Code', { name: data.name })} onClick={() => sCode.getById({ id: data.code })}>
-                    <Edit className="icon-cud bg-teal-900 hover:bg-teal-700" />
+                    <Edit className="primary" />
                   </button>
                 </ToolTip>
               )}
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_CODE_DESTROY) && (
-                <Popconfirm
-                  destroyTooltipOnHide={true}
-                  title={t('Are you sure want delete code?', { name: data.name })}
-                  onConfirm={() => sCode.delete(data.code)}
-                >
-                  <ToolTip title={t('Delete code', { name: data.name })}>
+                <ToolTip title={t('Delete code', { name: data.name })}>
+                  <Popconfirm
+                    destroyTooltipOnHide={true}
+                    title={t('Are you sure want delete code?', { name: data.name })}
+                    onConfirm={() => sCode.delete(data.code)}
+                  >
                     <button title={t('Delete code', { name: data.name })}>
-                      <Trash className="icon-cud bg-red-600 hover:bg-red-400" />
+                      <Trash className="error" />
                     </button>
-                  </ToolTip>
-                </Popconfirm>
+                  </Popconfirm>
+                </ToolTip>
               )}
             </div>
           ),

@@ -66,72 +66,42 @@ export default {
           width: 100,
           align: ETableAlign.center,
           render: (text: string, data) => (
-            <div className={'flex gap-2'}>
+            <div className={'action'}>
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_CONTENT_UPDATE) && (
-                <ToolTip
-                  title={t(data.isDisable ? 'Disabled content' : 'Enabled content', {
-                    name: data.name,
-                  })}
-                >
+                <ToolTip title={t(data.isDisable ? 'Disabled content' : 'Enabled content', { name: data.name })}>
                   <Popconfirm
                     destroyTooltipOnHide={true}
                     title={t(
                       !data.isDisable ? 'Are you sure want disable content?' : 'Are you sure want enable content?',
-                      {
-                        name: data.name,
-                      },
+                      { name: data.name },
                     )}
                     onConfirm={() => sContent.put({ id: data.id, isDisable: !data.isDisable })}
                   >
-                    <button
-                      title={t(data.isDisable ? 'Disabled content' : 'Enabled content', {
-                        name: data.name,
-                      })}
-                    >
-                      {data.isDisable ? (
-                        <Disable className="icon-cud bg-yellow-700 hover:bg-yellow-500" />
-                      ) : (
-                        <Check className="icon-cud bg-green-600 hover:bg-green-400" />
-                      )}
+                    <button title={t(data.isDisable ? 'Disabled content' : 'Enabled content', { name: data.name })}>
+                      {data.isDisable ? <Disable className="warning" /> : <Check className="success" />}
                     </button>
                   </Popconfirm>
                 </ToolTip>
               )}
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_CONTENT_UPDATE) && (
-                <ToolTip
-                  title={t('Edit Content', {
-                    name: data.name,
-                  })}
-                >
+                <ToolTip title={t('Edit Content', { name: data.name })}>
                   <button
-                    title={t('Edit Content', {
-                      name: data.name,
-                    })}
+                    title={t('Edit Content', { name: data.name })}
                     onClick={() => sContent.getById({ id: data.id, params: { include: 'languages' } })}
                   >
-                    <Edit className="icon-cud bg-teal-900 hover:bg-teal-700" />
+                    <Edit className="primary" />
                   </button>
                 </ToolTip>
               )}
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_CONTENT_DESTROY) && (
-                <ToolTip
-                  title={t('Delete content', {
-                    name: data.name,
-                  })}
-                >
+                <ToolTip title={t('Delete content', { name: data.name })}>
                   <Popconfirm
                     destroyTooltipOnHide={true}
-                    title={t('Are you sure want delete content?', {
-                      name: data.name,
-                    })}
+                    title={t('Are you sure want delete content?', { name: data.name })}
                     onConfirm={() => sContent.delete(data.id)}
                   >
-                    <button
-                      title={t('Delete content', {
-                        name: data.name,
-                      })}
-                    >
-                      <Trash className="icon-cud bg-red-600 hover:bg-red-400" />
+                    <button title={t('Delete content', { name: data.name })}>
+                      <Trash className="error" />
                     </button>
                   </Popconfirm>
                 </ToolTip>

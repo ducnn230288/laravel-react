@@ -54,12 +54,12 @@ export const Upload = ({
       listFiles.filter((item: any) => item.status === 'uploading').length === 0
     ) {
       setListFiles(tempData);
-      setTimeout(() => GLightbox({}));
+      setTimeout(() => GLightbox({}), 100);
     }
   }, [value, multiple]);
 
   useEffect(() => {
-    setTimeout(() => GLightbox({}));
+    setTimeout(() => GLightbox({}), 100);
   }, []);
 
   const onUpload = async ({ target }: any) => {
@@ -114,7 +114,7 @@ export const Upload = ({
 
         formatData({ data, dataFile });
       }
-      setTimeout(() => GLightbox({}));
+      setTimeout(() => GLightbox({}), 100);
     }
     ref.current.value = '';
   };
@@ -164,33 +164,7 @@ export const Upload = ({
 
   return (
     <Fragment>
-      <div className={'mb-2 flex gap-2'}>
-        <Button
-          isTiny={true}
-          isLoading={isLoading.current}
-          onClick={() => ref.current.click()}
-          icon={<UploadSVG className={'size-4'} />}
-          text={'Upload'}
-        />
-        <Button
-          isTiny={true}
-          icon={<Paste className={'size-4'} />}
-          text={'Paste'}
-          onPaste={async (event) => {
-            const items = event.clipboardData.items;
-            for (const index in items) {
-              const item = items[index];
-              if (item.kind === 'file') {
-                const blob = item.getAsFile();
-                await onUpload({ target: { files: [blob] } });
-              }
-            }
-          }}
-        ></Button>
-      </div>
-
       <input type="file" className={'hidden'} accept={accept} multiple={multiple} ref={ref} onChange={onUpload} />
-
       <div
         className={classNames('upload', {
           'upload-grid': multiple,
@@ -258,6 +232,30 @@ export const Upload = ({
             )}
           </div>
         ))}
+      </div>
+      <div className={'mt-2 flex gap-2'}>
+        <Button
+          isTiny={true}
+          isLoading={isLoading.current}
+          onClick={() => ref.current.click()}
+          icon={<UploadSVG className={'size-4'} />}
+          text={'Upload'}
+        />
+        <Button
+          isTiny={true}
+          icon={<Paste className={'size-4'} />}
+          text={'Paste'}
+          onPaste={async (event) => {
+            const items = event.clipboardData.items;
+            for (const index in items) {
+              const item = items[index];
+              if (item.kind === 'file') {
+                const blob = item.getAsFile();
+                await onUpload({ target: { files: [blob] } });
+              }
+            }
+          }}
+        ></Button>
       </div>
     </Fragment>
   );

@@ -23,6 +23,8 @@ import Out from './out.svg';
 import Logo from './logo.svg';
 import Home from './home.svg';
 import DayNight from './day-night.svg';
+import US from './us.svg';
+import VN from './vn.svg';
 
 export {
   Arrow,
@@ -50,4 +52,6 @@ export {
   Logo,
   Home,
   DayNight,
+  US,
+  VN,
 };

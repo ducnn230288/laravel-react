@@ -1,8 +1,15 @@
 .l-admin {
   @apply flex;
 
+  .overload {
+    @apply block md:hidden fixed w-screen h-screen top-0 -left-full bg-base-300/90 z-10 duration-75 ease-in-out transition-all;
+
+    &.active {
+      @apply left-0;
+    }
+  }
   aside {
-    @apply h-screen flex-none bg-base-100/50 border-r border-base-300 overflow-hidden duration-300 ease-in-out transition-all w-56;
+    @apply h-screen flex-none bg-base-100 border-r border-base-300 overflow-hidden duration-300 ease-in-out transition-all w-56 md:relative absolute left-0 top-0 z-10;
     &.active {
       @apply w-12;
     }
@@ -28,19 +35,28 @@
   }
 
   > section {
-    @apply grow bg-base-300/50 px-2 sm:px-0;
+    @apply grow bg-base-300/50 px-0;
     header {
       @apply border-b border-base-300 bg-base-100 flex h-12 items-center justify-between px-5;
+
+      @media only screen and (max-width: 768px) {
+        .hamburger {
+          @apply left-52 md:left-0 relative;
+          &.active {
+            @apply left-8;
+          }
+        }
+      }
       .right {
-        @apply flex items-center gap-2;
+        @apply flex items-center gap-3;
         button {
-          @apply btn btn-ghost btn-sm;
+          @apply btn btn-ghost btn-sm px-1;
         }
       }
     }
 
     main {
-      @apply overflow-auto;
+      @apply overflow-auto md:pl-0 pl-12;
       height: calc(100vh - 6rem);
 
       h2 {
@@ -128,5 +144,10 @@
     footer {
       @apply w-full ~'pt-1.5' text-center;
     }
+  }
+}
+.ant-dropdown {
+  button {
+    @apply flex gap-2 items-center;
   }
 }

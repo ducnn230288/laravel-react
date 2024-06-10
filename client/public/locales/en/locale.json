@@ -3,7 +3,9 @@
     "Footer": "React Company Ltd. ©{{year}}",
     "My Profile": "My Profile",
     "Change Password": "Change Password",
-    "Sign out": "Sign out"
+    "Sign out": "Sign out",
+    "en": "English",
+    "vn": "Vietnamese"
   },
   "library": {
     "Reset": "Reset",

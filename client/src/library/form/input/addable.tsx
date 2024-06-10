@@ -123,7 +123,7 @@ const Component = ({
                   add();
                   onAdd(form.getFieldValue(name), form);
                 }}
-                icon={<Plus className="icon-cud !h-5 !w-5" />}
+                icon={<Plus className="size-5" />}
                 text={textAdd}
               />
             </div>
@@ -165,7 +165,7 @@ const Component = ({
             ))}
             <div className={'flex justify-end'}>
               <Button
-                icon={<Plus className="icon-cud !h-5 !w-5" />}
+                icon={<Plus className="size-5" />}
                 text={textAdd}
                 onClick={() => {
                   add();

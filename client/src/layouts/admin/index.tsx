@@ -1,11 +1,11 @@
-import React, { PropsWithChildren } from 'react';
+import React, { Fragment, PropsWithChildren, useEffect } from 'react';
 import { Dropdown, Menu } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router';
 import { createSearchParams } from 'react-router-dom';
 import classNames from 'classnames';
 
-import { Key, Out, User, Logo, DayNight } from '@/assets/svg';
+import { Key, Out, User, Logo, DayNight, VN, US } from '@/assets/svg';
 import { Avatar } from '@/library/avatar';
 import { SGlobal } from '@/services';
 import { routerLinks, lang, APP_NAME } from '@/utils';
@@ -29,33 +29,48 @@ const Layout = ({ children }: PropsWithChildren) => {
 
 const CSide = () => {
   const sGlobal = SGlobal();
+
+  useEffect(() => {
+    checkReponsive();
+    window.addEventListener('resize', checkReponsive, { passive: true });
+  }, []);
+
+  const checkReponsive = () => {
+    if (innerWidth < 1024 && !sGlobal.isCollapseMenu) {
+      sGlobal.set({ isCollapseMenu: true });
+    }
+  };
+
   const location = useLocation();
   const navigate = useNavigate();
   const listMenu = menus({ lang: sGlobal.language, permissions: sGlobal.user?.role?.permissions });
 
   return (
-    <aside className={classNames({ active: sGlobal.isCollapseMenu })}>
-      <a href="/vn/dashboard" className={classNames('logo', { active: sGlobal.isCollapseMenu })}>
-        <Logo />
-        <h1 className={classNames({ active: sGlobal.isCollapseMenu })}>{APP_NAME}</h1>
-      </a>
-      <Menu
-        defaultSelectedKeys={[location.pathname]}
-        defaultOpenKeys={['/' + location.pathname.substring(1).split('/').slice(0, 2).join('/')]}
-        mode="inline"
-        inlineCollapsed={sGlobal.isCollapseMenu}
-        items={listMenu as any}
-        onSelect={({ key }) => {
-          const menu = findMenu(listMenu, key);
-          if (location.pathname !== key && menu) {
-            navigate({
-              pathname: menu.key,
-              search: `?${createSearchParams(menu.queryparams)}`,
-            });
-          }
-        }}
-      />
-    </aside>
+    <Fragment>
+      <div className={classNames('overload', { active: !sGlobal.isCollapseMenu })}></div>
+      <aside className={classNames({ active: sGlobal.isCollapseMenu })}>
+        <a href="/vn/dashboard" className={classNames('logo', { active: sGlobal.isCollapseMenu })}>
+          <Logo />
+          <h1 className={classNames({ active: sGlobal.isCollapseMenu })}>{APP_NAME}</h1>
+        </a>
+        <Menu
+          defaultSelectedKeys={[location.pathname]}
+          defaultOpenKeys={['/' + location.pathname.substring(1).split('/').slice(0, 2).join('/')]}
+          mode="inline"
+          inlineCollapsed={sGlobal.isCollapseMenu}
+          items={listMenu as any}
+          onSelect={({ key }) => {
+            const menu = findMenu(listMenu, key);
+            if (location.pathname !== key && menu) {
+              navigate({
+                pathname: menu.key,
+                search: `?${createSearchParams(menu.queryparams)}`,
+              });
+            }
+          }}
+        />
+      </aside>
+    </Fragment>
   );
 };
 const CHeader = () => {
@@ -76,7 +91,7 @@ const CHeader = () => {
     {
       key: 'My Profile',
       label: (
-        <button className="flex gap-2 items-center" onClick={() => changePage(`${routerLinks('MyProfile')}?tab=1`)}>
+        <button onClick={() => changePage(`${routerLinks('MyProfile')}?tab=1`)}>
           <User className="size-5" />
           {t('My Profile')}
         </button>
@@ -85,7 +100,7 @@ const CHeader = () => {
     {
       key: 'Change Password',
       label: (
-        <button className="flex gap-2 items-center" onClick={() => changePage(`${routerLinks('MyProfile')}?tab=2`)}>
+        <button onClick={() => changePage(`${routerLinks('MyProfile')}?tab=2`)}>
           <Key className="size-5" />
           {t('Change Password')}
         </button>
@@ -97,7 +112,7 @@ const CHeader = () => {
     {
       key: 'Sign out',
       label: (
-        <button className="flex gap-2 items-center" onClick={() => changePage(routerLinks('Login'))}>
+        <button onClick={() => changePage(routerLinks('Login'))}>
           <Out className="size-5" />
           {t('Sign out')}
         </button>
@@ -117,6 +132,30 @@ const CHeader = () => {
       </button>
 
       <div className="right">
+        <Dropdown
+          trigger={['click']}
+          menu={{
+            items: [
+              {
+                key: 'language',
+                label: (
+                  <button onClick={() => sGlobal.setLanguage(sGlobal.language === 'vn' ? 'en' : 'vn')}>
+                    {sGlobal.language === 'en' ? (
+                      <VN className="size-5 rounded-btn" />
+                    ) : (
+                      <US className="size-5 rounded-btn" />
+                    )}
+                    {t(sGlobal.language === 'vn' ? 'en' : 'vn')}
+                  </button>
+                ),
+              },
+            ],
+          }}
+        >
+          <button>
+            {sGlobal.language === 'en' ? <US className="size-6 rounded-btn" /> : <VN className="size-6 rounded-btn" />}
+          </button>
+        </Dropdown>
         <button onClick={changeTheme}>
           <DayNight className="size-6" />
         </button>

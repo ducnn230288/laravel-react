@@ -3,7 +3,9 @@
     "Footer": "Công ty cổ phần React. ©{{year}}",
     "My Profile": "Thông tin cá nhân",
     "Change Password": "Đổi mật khẩu",
-    "Sign out": "Đăng xuất"
+    "Sign out": "Đăng xuất",
+    "en": "Tiếng anh",
+    "vn": "Tiếng việt"
   },
   "library": {
     "Reset": "Cài lại",

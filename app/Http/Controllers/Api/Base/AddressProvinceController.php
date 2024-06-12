@@ -20,6 +20,7 @@ class AddressProvinceController extends Controller implements HasMiddleware
   public function __construct()
   {
     $this->relations = ['districts'];
+    $this->fullTextSearch = ['name', 'code', 'description'];
   }
   public static function middleware(): array
   {

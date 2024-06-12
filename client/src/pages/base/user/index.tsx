@@ -62,14 +62,14 @@ const Form = () => {
         name: sUserRole.result?.data?.find((item) => item.code === request.roleCode)?.name,
       })}
       onSubmit={(values) => {
-        if (sUser.data) sUser.put({ ...values, id: sUser.data.id, roleCode: request.roleCode });
+        if (sUser.data?.id) sUser.put({ ...values, id: sUser.data.id, roleCode: request.roleCode });
         else sUser.post({ ...values, roleCode: request.roleCode });
       }}
     />
   );
 };
 
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import queryString from 'query-string';
 import { Select, Spin, Tree } from 'antd';
 import { Arrow, Plus } from '@/assets/svg';
@@ -80,6 +80,7 @@ const Side = () => {
   const sUser = SUser();
   const request = JSON.parse(sUser?.queryParams ?? '{}');
   const navigate = useNavigate();
+  const location = useLocation();
 
   return (
     <div className="card">
@@ -106,9 +107,7 @@ const Side = () => {
               onSelect={(selectedKeys) => {
                 request.roleCode = selectedKeys[0];
                 sUser.get(request);
-                navigate(
-                  location.pathname.substring(1) + '?' + queryString.stringify(request, { arrayFormat: 'index' }),
-                );
+                navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
               }}
             />
           )}
@@ -121,7 +120,7 @@ const Side = () => {
             onChange={(e) => {
               request.roleCode = e;
               sUser.get(request);
-              navigate(location.pathname.substring(1) + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
+              navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
             }}
           />
         </div>

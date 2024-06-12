@@ -62,14 +62,14 @@ const Form = () => {
         name: sCodeType.result?.data?.find((item) => item.code === request.typeCode)?.name,
       })}
       onSubmit={(values) => {
-        if (sCode.data) sCode.put({ ...values, id: sCode.data.id, typeCode: request.typeCode });
+        if (sCode.data?.id) sCode.put({ ...values, id: sCode.data.id, typeCode: request.typeCode });
         else sCode.post({ ...values, typeCode: request.typeCode });
       }}
     />
   );
 };
 
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import queryString from 'query-string';
 import { Select, Spin, Tree } from 'antd';
 import { Arrow, Plus } from '@/assets/svg';
@@ -80,6 +80,7 @@ const Side = () => {
   const sCode = SCode();
   const request = JSON.parse(sCode?.queryParams ?? '{}');
   const navigate = useNavigate();
+  const location = useLocation();
 
   return (
     <div className="card">
@@ -106,9 +107,7 @@ const Side = () => {
               onSelect={(selectedKeys) => {
                 request.typeCode = selectedKeys[0];
                 sCode.get(request);
-                navigate(
-                  location.pathname.substring(1) + '?' + queryString.stringify(request, { arrayFormat: 'index' }),
-                );
+                navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
               }}
             />
           )}
@@ -121,7 +120,7 @@ const Side = () => {
             onChange={(e) => {
               request.typeCode = e;
               sCode.get(request);
-              navigate(location.pathname.substring(1) + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
+              navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
             }}
           />
         </div>

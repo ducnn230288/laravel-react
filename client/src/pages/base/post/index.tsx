@@ -66,7 +66,7 @@ const FormPost = () => {
         name: sPostType.result?.data?.find((item) => item.code === request.typeCode)?.name,
       })}
       onSubmit={(values) => {
-        if (sPost.data) sPost.put({ ...values, id: sPost.data.id, typeCode: request.typeCode });
+        if (sPost.data?.id) sPost.put({ ...values, id: sPost.data.id, typeCode: request.typeCode });
         else sPost.post({ ...values, typeCode: request.typeCode });
       }}
     />
@@ -94,14 +94,14 @@ const FormPostType = () => {
       columns={_columnType.useForm(sPostType.data?.id, sPostType.result?.data)}
       title={t(sPostType.data?.id ? 'Edit Type Post' : 'Add new Type Post')}
       onSubmit={(values) => {
-        if (sPostType.data) sPostType.put({ ...values, id: sPostType.data.id });
+        if (sPostType.data?.id) sPostType.put({ ...values, id: sPostType.data.id });
         else sPostType.post({ ...values });
       }}
     />
   );
 };
 
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import queryString from 'query-string';
 const Side = () => {
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.post' });
@@ -110,6 +110,7 @@ const Side = () => {
   const sPost = SPost();
   const request = JSON.parse(sPost?.queryParams ?? '{}');
   const navigate = useNavigate();
+  const location = useLocation();
   const sGlobal = SGlobal();
 
   return (
@@ -141,9 +142,7 @@ const Side = () => {
               onSelect={(selectedKeys) => {
                 request.typeCode = selectedKeys[0];
                 sPost.get(request);
-                navigate(
-                  location.pathname.substring(1) + '?' + queryString.stringify(request, { arrayFormat: 'index' }),
-                );
+                navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
               }}
               titleRender={(data: any) => (
                 <span className={classNames('item')}>
@@ -195,7 +194,7 @@ const Side = () => {
               if (request.typeCode !== e) request.typeCode = e;
               else delete request.typeCode;
               sPost.get(request);
-              navigate(location.pathname.substring(1) + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
+              navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
             }}
           />
         </div>
@@ -218,6 +217,7 @@ const Main = () => {
     <div className="card">
       <div className="body">
         <DataTable
+          defaultRequest={{ include: 'languages' }}
           facade={sPost}
           paginationDescription={(from: number, to: number, total: number) => t('Pagination post', { from, to, total })}
           columns={_column.useTable()}

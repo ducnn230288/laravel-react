@@ -147,8 +147,8 @@ export default {
                 type: EFormType.tab,
                 tab: 'language',
                 list: [
-                  { label: t('English content'), value: 'en' },
-                  { label: t('Vietnamese content'), value: 'vn' },
+                  { label: t('English'), value: 'en' },
+                  { label: t('Vietnamese'), value: 'vn' },
                 ],
                 column: [
                   { title: 'id', name: 'id', formItem: { type: EFormType.hidden } },

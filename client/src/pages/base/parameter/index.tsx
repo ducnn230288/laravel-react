@@ -40,6 +40,7 @@ const Side = () => {
   const sParameter = SParameter();
   const request = JSON.parse(sParameter?.queryParams ?? '{}');
   const navigate = useNavigate();
+  const location = useLocation();
 
   return (
     <div className="card">
@@ -66,9 +67,7 @@ const Side = () => {
               onSelect={(selectedKeys) => {
                 request.code = selectedKeys[0];
                 sParameter.getById({ id: request.code });
-                navigate(
-                  location.pathname.substring(1) + '?' + queryString.stringify(request, { arrayFormat: 'index' }),
-                );
+                navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
               }}
             />
           )}
@@ -81,7 +80,7 @@ const Side = () => {
             onChange={(e) => {
               request.code = e;
               sParameter.getById({ id: e });
-              navigate(location.pathname.substring(1) + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
+              navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
             }}
           />
         </div>

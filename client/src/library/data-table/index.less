@@ -39,6 +39,10 @@
     .ant-table-tbody {
       > tr.ant-table-placeholder {
         @apply bg-base-200 text-base-content;
+
+        &:hover > td {
+          @apply bg-base-200/50;
+        }
         td {
           @apply border-base-200;
         }

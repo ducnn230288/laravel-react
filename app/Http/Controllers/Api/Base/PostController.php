@@ -23,6 +23,7 @@ class PostController extends Controller implements HasMiddleware
   public function __construct(PostService $postService)
   {
     $this->relations = ['type', 'languages'];
+    $this->fullTextSearch = ['languages.name', 'languages.slug', 'languages.description'];
     $this->postService = $postService;
   }
 

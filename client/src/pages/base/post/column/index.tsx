@@ -21,7 +21,7 @@ export default {
     return [
       {
         title: t('Name Post'),
-        name: 'translations.name',
+        name: 'languages.name',
         tableItem: {
           filter: { type: ETableFilterType.search },
           sorter: true,
@@ -39,7 +39,7 @@ export default {
       },
       {
         title: 'Slug',
-        name: 'translations.slug',
+        name: 'languages.slug',
         tableItem: {
           filter: { type: ETableFilterType.search },
           sorter: true,

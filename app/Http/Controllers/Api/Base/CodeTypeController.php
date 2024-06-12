@@ -20,6 +20,7 @@ class CodeTypeController extends Controller implements HasMiddleware
   public function __construct()
   {
     $this->relations = ['codes'];
+    $this->fullTextSearch = ['name', 'code', 'description'];
   }
   public static function middleware(): array
   {

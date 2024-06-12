@@ -12,6 +12,7 @@ use Illuminate\Support\Str;
 abstract class Controller
 {
   public array $relations = [];
+  public array $fullTextSearch = [];
   public function loadRelationships(
     Model|QueryBuilder|EloquentBuilder $for, ?array $relations = null
   ) : Model|QueryBuilder|EloquentBuilder
@@ -36,6 +37,7 @@ abstract class Controller
   public function filter(Model|QueryBuilder|EloquentBuilder $for, ?array $relations = null) : Model|QueryBuilder|EloquentBuilder
   {
     $this->selectColumnsByQuery($for);
+    $this->filterByQueryFullTextSearch($for);
     $this->filterByQueryString($for);
     $this->filterByQueryStringContains($for);
     $this->filterByQueryArrayContains($for);
@@ -55,14 +57,49 @@ abstract class Controller
     return $for;
   }
 
+  protected function filterByQueryFullTextSearch(Model|QueryBuilder|EloquentBuilder $for) : Model|QueryBuilder|EloquentBuilder
+  {
+    $value = \request()->query('fullTextSearch');
+    if ($this->fullTextSearch && $value) {
+      $for->where(function ($query) use ($value) {
+        $array = [];
+        foreach ($this->fullTextSearch as $key) {
+          $keys = array_map('trim', explode('.', $key));
+          if (count($keys) > 1) {
+            $array[$keys[0]][] = $keys[1];
+          } else {
+            $query->orWhere(Str::snake($key), 'like', "%$value%");
+          }
+        }
+        foreach ($array as $key => $names) {
+          $query->whereHas(Str::snake($key), function ($q) use ($names, $value){
+            foreach ($names as $name) {
+              $q->where(Str::snake($name), 'like', "%$value%");
+            }
+          });
+        }
+      });
+
+    }
+    return $for;
+  }
+
   protected function filterByQueryString(Model|QueryBuilder|EloquentBuilder $for) : Model|QueryBuilder|EloquentBuilder
   {
-    $filters = ['select', 'like', 'in', 'between', 'sort', 'include','page','perPage'];
+    $filters = ['select', 'like', 'in', 'between', 'sort', 'include','page','perPage','fullTextSearch'];
     $queries = \request()->query();
     if ($queries) {
+      $array = [];
       foreach ($queries as $key => $value) {
         if (!in_array($key, $filters)) {
-          $for->where(Str::snake($key), $value);
+          $keys = array_map('trim', explode('.', $key));
+          if (count($keys) > 1) {
+            $for->whereHas(Str::snake($keys[0]), function ($q) use ($value, $keys){
+                $q->where(Str::snake($keys[1]), 'like', "%$value%");
+            });
+          } else {
+            $for->where(Str::snake($key), $value);
+          }
         }
       }
     }
@@ -75,7 +112,14 @@ abstract class Controller
     if ($likes) {
       foreach ($likes as $like) {
         $like = array_map('trim', explode(',', $like));
-        $for->where(Str::snake($like[0]), 'like', "%$like[1]%");
+        $keys = array_map('trim', explode('.', $like[0]));
+        if (count($keys) > 1) {
+          $for->whereHas(Str::snake($keys[0]), function ($q) use ($like, $keys){
+            $q->where(Str::snake($keys[1]), 'like', "%$like[1]%");
+          });
+        } else {
+          $for->where(Str::snake($like[0]), 'like', "%$like[1]%");
+        }
       }
     }
     return $for;
@@ -87,7 +131,14 @@ abstract class Controller
     if ($ins) {
       foreach ($ins as $in) {
         $in = array_map('trim', explode(',', $in));
-        $for->whereIn(Str::snake($in[0]), array_slice($in, 1));
+        $keys = array_map('trim', explode('.', $in[0]));
+        if (count($keys) > 1) {
+          $for->whereHas(Str::snake($keys[0]), function ($q) use ($in, $keys){
+            $q->whereIn(Str::snake($keys[1]), array_slice($in, 1));
+          });
+        } else {
+          $for->whereIn(Str::snake($in[0]), array_slice($in, 1));
+        }
       }
     }
     return $for;
@@ -99,7 +150,14 @@ abstract class Controller
     if ($betweenTwo) {
       foreach ($betweenTwo as $between) {
         $between = array_map('trim', explode(',', $between));
-        $for->whereBetween(Str::snake($between[0]), array_slice($between, 1));
+        $keys = array_map('trim', explode('.', $between[0]));
+        if (count($keys) > 1) {
+          $for->whereHas(Str::snake($keys[0]), function ($q) use ($between, $keys){
+            $q->whereBetween(Str::snake($keys[1]), array_slice($between, 1));
+          });
+        } else {
+          $for->whereBetween(Str::snake($between[0]), array_slice($between, 1));
+        }
       }
     }
     return $for;
@@ -111,7 +169,14 @@ abstract class Controller
     $sort = \request()->query('sort');
     if ($sort) {
       $sort = array_map('trim', explode(',', $sort));
-      $for->orderBy(Str::snake($sort[0]), $sort[1]);
+      $keys = array_map('trim', explode('.', $sort[0]));
+      if (count($keys) > 1) {
+        $for->whereHas(Str::snake($keys[0]), function ($q) use ($sort, $keys){
+          $q->orderBy(Str::snake($keys[1]), $sort[1]);
+        });
+      } else {
+        $for->orderBy(Str::snake($sort[0]), $sort[1]);
+      }
     }
     return $for;
   }

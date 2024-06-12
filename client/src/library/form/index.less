@@ -281,14 +281,21 @@
 }
 
 .sun-editor {
+  @apply bg-base-100 text-base-content;
+  .se-toolbar {
+    @apply bg-base-300/50 outline-base-content/20;
+  }
   .se-container > input {
     @apply hidden;
   }
   .se-btn {
-    @apply w-8 h-8 leading-6;
+    @apply w-8 h-8 leading-6 text-base-content;
   }
-  .sun-editor-editable {
-    @apply text-justify;
+  .se-resizing-bar {
+    @apply bg-base-300/50 text-base-content border-base-content/20;
+  }
+  & &-editable {
+    @apply text-justify bg-base-100 text-base-content;
     figure {
       @apply inline-block text-center w-full py-5;
       figcaption {

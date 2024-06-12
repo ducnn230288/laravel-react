@@ -45,7 +45,7 @@ export const DataTable = forwardRef(
         : { ...defaultRequest },
     );
 
-    const scroll = useRef<{ x?: number; y?: number }>({ x: 1000, y: undefined });
+    const scroll = useRef<{ x?: number; y?: number }>({ x: undefined, y: undefined });
     useEffect(() => {
       if (!params.current?.perPage) params.current.perPage = getSizePageByHeight();
       else if (params.current.perPage < 5) params.current.perPage = 5;
@@ -62,11 +62,7 @@ export const DataTable = forwardRef(
           .filter(([, value]) => !!value)
           .map(([key, value]) => `${key},${value}`),
       });
-      if (
-        (facade && !facade.result?.data) ||
-        new Date().getTime() > facade.time ||
-        JSON.stringify(params.current) != facade.queryParams
-      ) {
+      if (facade || new Date().getTime() > facade.time || JSON.stringify(params.current) != facade.queryParams) {
         onChange(params.current, false);
       }
       if (!scroll.current.x) {

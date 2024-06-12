@@ -20,6 +20,7 @@ class ContentTypeController extends Controller implements HasMiddleware
   public function __construct()
   {
     $this->relations = ['contents'];
+    $this->fullTextSearch = ['name', 'code', 'description'];
   }
   public static function middleware(): array
   {

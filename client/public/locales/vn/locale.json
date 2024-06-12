@@ -81,8 +81,8 @@
         "Are you sure want delete content?": "Bạn có chắc muốn xóa nội dung {{name}}?",
         "Code": "Mã",
         "Image": "Ảnh",
-        "English content": "Nội dung tiếng Anh",
-        "Vietnamese content": "Nội dung tiếng Việt",
+        "English": "Tiếng Anh",
+        "Vietnamese": "Tiếng Việt",
         "Name": "Tên",
         "Position": "Vị trí",
         "Description": "Mô tả"

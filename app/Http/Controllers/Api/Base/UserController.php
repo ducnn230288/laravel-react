@@ -20,6 +20,7 @@ class UserController extends Controller implements HasMiddleware
   public function __construct()
   {
     $this->relations = ['role', 'position'];
+    $this->fullTextSearch = ['name', 'email', 'phone_number'];
   }
 
   public static function middleware(): array

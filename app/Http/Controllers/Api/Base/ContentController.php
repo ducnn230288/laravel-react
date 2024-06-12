@@ -22,6 +22,7 @@ class ContentController extends Controller implements HasMiddleware
   public function __construct(ContentService $contentService)
   {
     $this->relations = ['type', 'languages'];
+    $this->fullTextSearch = ['name'];
     $this->contentService = $contentService;
   }
 

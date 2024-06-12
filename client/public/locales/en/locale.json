@@ -82,8 +82,8 @@
         "Are you sure want delete content?": "Are you sure want delete content {{name}}?",
         "Code": "Code",
         "Image": "Image",
-        "English content": "English content",
-        "Vietnamese content": "Vietnamese content",
+        "English": "English",
+        "Vietnamese": "Vietnamese",
         "Name": "Name",
         "Position": "Position",
         "Description": "Description"

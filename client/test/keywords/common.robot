@@ -6,7 +6,7 @@ Library                 DateTime
 
 *** Variables ***
 ${BROWSER}              chromium
-${HEADLESS}             ${True}
+${HEADLESS}             ${False}
 ${BROWSER_TIMEOUT}      6 seconds
 ${SHOULD_TIMEOUT}       0.1 seconds
 
@@ -14,16 +14,20 @@ ${URL_DEFAULT}          %{HOST_ADDRESS=http://localhost:4000}
 ${STATE}                Evaluate  json.loads("""{}""")  json
 
 # Admin's default information #
-${name_admin}           May Rodriguez PhD
-${email_admin}          admin@admin.com
-${phone_admin}          053702170206
+${EMAIL_ADMIN}          admin@gmail.com
+${PASSWORD_ADMIN}       Password1!
+
+
+${email_admin}          admin@gmail.com
 ${password_admin}       Password1!
+${name_admin}           May Rodriguez PhD
+${phone_admin}          053702170206
 ${new_password}         Password1#
 
 *** Keywords ***
 Login to admin
-  Enter "email" in "Tên đăng nhập" with "admin@admin.com"
-  Enter "text" in "Mật khẩu" with "Password1!"
+  Enter "email" in "Tên đăng nhập" with "${EMAIL_ADMIN}"
+  Enter "text" in "Mật khẩu" with "${PASSWORD_ADMIN}"
   Click "Đăng nhập" button
   User look message "Thành công" popup
 
@@ -39,6 +43,7 @@ Tear Down
 Wait Until Element Is Existent
   [Arguments]               ${locator}  ${message}=${EMPTY}   ${timeout}=${BROWSER_TIMEOUT}
   Wait For Elements State   ${locator}  attached              ${timeout}                    ${message}
+# Login
 
 Wait Until Element Is Visible
   [Arguments]               ${locator}  ${message}=${EMPTY}   ${timeout}=${BROWSER_TIMEOUT}
@@ -47,6 +52,7 @@ Wait Until Element Is Visible
 Wait Until Page Does Not Contain Element
   [Arguments]               ${locator}  ${message}=${EMPTY}   ${timeout}=${BROWSER_TIMEOUT}
   Wait For Elements State   ${locator}  detached              ${timeout}                    ${message}
+# Login
 
 Element Should Be Exist
   [Arguments]               ${locator}  ${message}=${EMPTY}   ${timeout}=${SHOULD_TIMEOUT}
@@ -55,10 +61,12 @@ Element Should Be Exist
 Element Should Be Visible
   [Arguments]               ${locator}  ${message}=${EMPTY}   ${timeout}=${SHOULD_TIMEOUT}
   Wait For Elements State   ${locator}  visible               ${timeout}                    ${message}
+# Login
 
 Element Text Should Be
   [Arguments]               ${locator}  ${expected}           ${message}=${EMPTY}           ${ignore_case}=${EMPTY}
   Get Text                  ${locator}  equal                 ${expected}                   ${message}
+# Login
 
 Element Should Not Be Visible
   [Arguments]               ${locator}  ${message}=${EMPTY}   ${timeout}=${SHOULD_TIMEOUT}
@@ -72,6 +80,7 @@ Check Text
     ${text}=                Set Variable                      ${STATE["${containsS[0]}"]}
   END
   RETURN    ${text}
+# Login
 
 ###  -----  Form  -----  ###
 Get Random Text
@@ -122,14 +131,17 @@ Get Random Text
     ${text}=                Replace String                    ${text}                       ${symbol}                   ${new_text}
   END
   RETURN    ${text}
+# LOGIN
 
 Get Element Form Item By Name
   [Arguments]               ${name}                           ${xpath}=${EMPTY}
   RETURN                  xpath=//*[contains(@class, "ant-form-item-label")]/label[text()="${name}"]/../../*[contains(@class, "ant-form-item")]${xpath}
+# LOGIN
 
 Required message "${text}" displayed under "${name}" field
   ${element}=               Get Element Form Item By Name     ${name}                       //*[contains(@class, "ant-form-item-explain-error")]
   Element Text Should Be    ${element}                        ${text}
+# LOGIN
 
 Enter "${type}" in "${name}" with "${text}"
   Wait Until Element Spin
@@ -145,6 +157,7 @@ Enter "${type}" in "${name}" with "${text}"
   IF  ${cnt} > 0
     Set Global Variable     \${STATE["${name}"]}              ${text}
   END
+# LOGIN
 
 Enter "${type}" in editor "${name}" with "${text}"
   Wait Until Element Spin
@@ -328,6 +341,7 @@ Click "${text}" button
     Click                     xpath=//button[text() = "${text}"]
     Scroll By                 ${None}
   END
+# LOGIN
 
 # Click "${text}" tab button
 #   Click                       //*[contains(@class, "ant-tabs-tab-btn") and contains(text(), "${text}")]
@@ -357,13 +371,8 @@ User look message "${message}" popup
   IF  ${cnt} > 0
     ${message}=             Replace String                    ${message}                    _@${contains[0]}@_          ${STATE["${contains[0]}"]}
   END
-  Element Text Should Be    id=swal2-html-container           ${message}
-  ${element}=               Set Variable                      xpath=//button[contains(@class, "swal2-close")]
-  ${passed}                 Run Keyword And Return Status
-                            ...   Element Should Be Visible   ${element}
-  IF    "${passed}" == "True"
-        Click               ${element}
-  END
+  Element Text Should Be    xpath=//div[@class="ant-notification-notice-message"]           ${message}
+# LOGIN
 
 Click Confirm To Action
   # ${element}                Set Variable                      //*[contains(@class, "ant-popover ant-popconfirm")]//*[contains(@class, "ant-btn-primary")]
@@ -394,12 +403,14 @@ Wait Until Element Spin
   IF    ${count} > 0
     Wait Until Page Does Not Contain Element                  ${element}
   END
+# LOGIN
 
 ### ----- NEW ----- ###
 Click on eye icon in "${name}" field
   Wait Until Element Spin
   ${element}=                Get Element                       //label[@title="${name}"]//ancestor::div[contains(@class,"ant-row")]//div[contains(@class,"relative")]//*[@id="Layer_1"]
   Click                      ${element}
+# LOGIN
 
 Click on cross icon in input search box
   Click                      //input[contains(@id,"input_search")]//following-sibling::*[contains(@id,"Layer_1")]
@@ -409,6 +420,7 @@ The hidden password in "${name}" field should be visibled as "${text}"
   ${element}=               Get Element                        //*[contains(@class, "ant-form-item-label")]/label[text()="${name}"]/../../*[contains(@class, "ant-form-item")]//input
   Get Property              ${element}                         type                       ==                             text
   Get Text                  ${element}                         equal                      ${text}
+# LOGIN
 
 Click on "${name}" tab
   ${text}                   Evaluate                           "${name}".lower()
@@ -627,6 +639,7 @@ Heading should contain "${text}" inner text
   ${text}=                  Check Text                        ${text}
   ${element}=               Set Variable                      //*[self::h1 or self::h2 or self::h3 or self::h4 or self::h5 or self::h6][contains(text(),"${text}")]
   Wait Until Element Is Existent                              ${element}
+# LOGIN
 
 Heading of separated group should contain "${text}" inner text
   ${text}=                  Check Text                        ${text}
@@ -643,11 +656,13 @@ Webpage should contain "${name}" input field
   ${element}=               Get Element                       (//label[@title="${name}"]//ancestor::div[contains(@class,"ant-row")][1]//div[@class="ant-form-item-control-input"])[1]
   ${count}=                 Get Element Count                 ${element}
   Should Be True            ${count} >= 1
+# LOGIN
 
 Webpage should contain "${name}" button
   ${element}=               Set Variable                      //button[(text()="${name}")]
   ${cnt}=                   Get Element Count                 ${element}
   Should Be True            ${cnt} > 0
+# LOGIN
 
 Webpage should contain "${name}" select field
   ${element}=               Set Variable                      //label[contains(@title,"${name}")]//ancestor::div[contains(@class,"ant-row")][1]//div[contains(@class,"ant-select-selector")]

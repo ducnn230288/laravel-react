@@ -38,7 +38,7 @@ class AuthController extends Controller implements HasMiddleware
     }
     if (!Hash::check($request->password, $user->password)) {
       throw ValidationException::withMessages([
-        'email' => __('auth.password')
+        'email' => __('auth.failed')
       ]);
     }
 
@@ -55,6 +55,21 @@ class AuthController extends Controller implements HasMiddleware
   public function logout(Request $request): JsonResponse
   {
     $request->user()->tokens()->delete();
+    return response()->json(['message' => __('messages.Success')]);
+  }
+
+  public function forgottenPassword(Request $request)
+  {
+    $request->validate([
+      'email' => 'required|email',
+    ]);
+    $user = User::where('email', $request->email)->first();
+    if (!$user) {
+      throw ValidationException::withMessages([
+        'email' => __('auth.failed')
+      ]);
+    }
+
     return response()->json(['message' => __('messages.Success')]);
   }
 

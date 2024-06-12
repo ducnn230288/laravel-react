@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('/auth/login', [\App\Http\Controllers\Api\Base\AuthController::class, 'login']);
 Route::post('/auth/logout', [\App\Http\Controllers\Api\Base\AuthController::class, 'logout']);
 Route::post('/auth/register', [\App\Http\Controllers\Api\Base\AuthController::class, 'register']);
+Route::post('/auth/forgotten-password', [\App\Http\Controllers\Api\Base\AuthController::class, 'forgottenPassword']);
 Route::get('/auth/profile', [\App\Http\Controllers\Api\Base\AuthController::class, 'profile']);
 Route::put('/auth/profile', [\App\Http\Controllers\Api\Base\AuthController::class, 'update']);
 Route::get('/auth/refresh-token', [\App\Http\Controllers\Api\Base\AuthController::class, 'refreshToken'])->middleware('auth:sanctum', 'ability:' . ETokenAbility::ISSUE_ACCESS_TOKEN->value);

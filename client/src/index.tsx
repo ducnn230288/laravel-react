@@ -38,7 +38,7 @@ export let notification: NotificationInstance;
 const Context = () => {
   const sGlobal = SGlobal();
   const [api, contextHolder] = noti.useNotification({
-    placement: 'bottomLeft',
+    placement: 'topLeft',
     duration: 3,
   });
 

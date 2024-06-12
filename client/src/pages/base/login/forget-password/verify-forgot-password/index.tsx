@@ -33,7 +33,7 @@ const Page = () => {
           columns={[
             {
               name: 'otp',
-              title: 'Code OTP',
+              title: t('Code OTP'),
               formItem: {
                 type: EFormType.otp,
                 rules: [{ type: EFormRuleType.required }],

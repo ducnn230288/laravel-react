@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 import { Popconfirm } from 'antd';
 
-import { notification } from '@/index';
+import { message } from '@/index';
 import { Arrow, Paste, Times, UploadSVG } from '@/assets/svg';
 import { API, arrayMove, handleGetBase64, keyToken, uuidv4 } from '@/utils';
 import { Button } from '../button';
@@ -65,11 +65,11 @@ export const Upload = ({
   const onUpload = async ({ target }: any) => {
     for (const file of target.files) {
       if (maxSize && file.size > maxSize * 1024 * 1024) {
-        notification.error({
-          message: `${file.name} (${(file.size / (1024 * 1024)).toFixed(1)}mb): ${t('You can only upload up to mb!', {
+        message.error(
+          `${file.name} (${(file.size / (1024 * 1024)).toFixed(1)}mb): ${t('You can only upload up to mb!', {
             max: maxSize,
           })}`,
-        });
+        );
       }
 
       if ((maxSize && file.size > maxSize * 1024 * 1024) || !(await validation(file, listFiles))) {

@@ -1,6 +1,6 @@
 import queryString from 'query-string';
 
-import { notification } from '@/index';
+import { message } from '@/index';
 import { keyRefreshToken, keyToken, linkApi, routerLinks } from '@/utils';
 import { IResponses } from '@/interfaces';
 
@@ -43,7 +43,7 @@ export const API = {
     );
     const res: IResponses<T> = await response.json();
     if (response.ok) {
-      if (showMessage && res.message) notification.success({ message: res.message });
+      if (showMessage && res.message) message.success(res.message);
       return res;
     }
     if (
@@ -59,7 +59,7 @@ export const API = {
         return (await response.json()) as IResponses<T>;
       }
     } else if (res.message) {
-      if (!throwError) notification.error({ message: res.message });
+      if (!throwError) message.error(res.message);
       else throw new Error(res.message);
     }
 

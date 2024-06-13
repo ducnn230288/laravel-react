@@ -4,8 +4,8 @@ import i18n from 'i18next';
 import XHR from 'i18next-xhr-backend';
 import { initReactI18next } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { ConfigProvider, notification as noti, Spin } from 'antd';
-import { NotificationInstance } from 'antd/es/notification/interface';
+import { ConfigProvider, message as noti, Spin } from 'antd';
+import { MessageInstance } from 'antd/lib/message/interface';
 
 import { SGlobal, setupStore } from '@/services';
 import { reportWebVitals, lang } from '@/utils';
@@ -33,12 +33,11 @@ i18n
   });
 const store = setupStore();
 let container: HTMLElement;
-export let notification: NotificationInstance;
+export let message: MessageInstance;
 
 const Context = () => {
   const sGlobal = SGlobal();
-  const [api, contextHolder] = noti.useNotification({
-    placement: 'topLeft',
+  const [api, contextHolder] = noti.useMessage({
     duration: 3,
   });
 
@@ -49,7 +48,7 @@ const Context = () => {
       }
     }
     sGlobal.setLanguage(lang);
-    notification = api;
+    message = api;
   }, []);
   return (
     <ConfigProvider

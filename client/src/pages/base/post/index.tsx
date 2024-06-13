@@ -140,18 +140,20 @@ const Side = () => {
                 children: [],
               }))}
               onSelect={(selectedKeys) => {
-                request.typeCode = selectedKeys[0];
-                sPost.get(request);
-                navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
+                if (selectedKeys[0]) {
+                  request.typeCode = selectedKeys[0];
+                  sPost.get(request);
+                  navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
+                }
               }}
               titleRender={(data: any) => (
                 <span className={classNames('item')}>
                   {data.title}
                   <div className="action">
                     {sGlobal.user?.role?.permissions?.includes(keyRole.P_POST_TYPE_UPDATE) && (
-                      <ToolTip title={t('Edit Type Post', { name: data.name })}>
+                      <ToolTip title={t('Edit Type Post', { name: data.title })}>
                         <button
-                          title={t('Edit Type Post', { name: data.name })}
+                          title={t('Edit Type Post', { name: data.title })}
                           onClick={() => sPostType.getById({ id: data.code })}
                         >
                           <Edit className="primary" />
@@ -159,13 +161,13 @@ const Side = () => {
                       </ToolTip>
                     )}
                     {sGlobal.user?.role?.permissions?.includes(keyRole.P_POST_TYPE_DESTROY) && (
-                      <ToolTip title={t('Delete type post', { name: data.name })}>
+                      <ToolTip title={t('Delete type post', { name: data.title })}>
                         <Popconfirm
                           destroyTooltipOnHide={true}
-                          title={t('Are you sure want delete type post?', { name: data.name })}
+                          title={t('Are you sure want delete type post?', { name: data.title })}
                           onConfirm={() => sPostType.delete(data.code)}
                         >
-                          <button title={t('Delete type post', { name: data.name })}>
+                          <button title={t('Delete type post', { name: data.title })}>
                             <Trash className="error" />
                           </button>
                         </Popconfirm>
@@ -191,10 +193,11 @@ const Side = () => {
               children: [],
             }))}
             onChange={(e) => {
-              if (request.typeCode !== e) request.typeCode = e;
-              else delete request.typeCode;
-              sPost.get(request);
-              navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
+              if (e) {
+                request.typeCode = e;
+                sPost.get(request);
+                navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
+              }
             }}
           />
         </div>

@@ -177,6 +177,8 @@ abstract class Controller
       } else {
         $for->orderBy(Str::snake($sort[0]), $sort[1]);
       }
+    } else {
+      $for->orderBy('created_at', 'desc');
     }
     return $for;
   }

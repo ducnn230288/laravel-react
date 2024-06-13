@@ -47,7 +47,9 @@ export const generateInput = ({
       case EFormType.hidden:
         return <input type={'hidden'} name={item.name} tabIndex={-1} />;
       case EFormType.tab:
-        return <Tab name={item.name} generateForm={generateForm} column={formItem.column} list={formItem.list} />;
+        return (
+          <Tab name={item.name} generateForm={generateForm} form={form} column={formItem.column} list={formItem.list} />
+        );
       case EFormType.addable:
         return (
           <Addable
@@ -113,7 +115,9 @@ export const generateInput = ({
         return (
           <DatePicker
             format={
-              !formItem.picker || formItem.picker === 'date' ? formatDate + (formItem.showTime ?? ' HH:mm') : formatDate
+              !formItem.picker || formItem.picker === 'date'
+                ? formatDate + (formItem.showTime ? ' HH:mm' : '')
+                : formatDate
             }
             onChange={(date: any) => formItem.onChange?.(date, form)}
             disabledDate={(current: any) => (formItem.disabledDate ? formItem.disabledDate(current, form) : false)}

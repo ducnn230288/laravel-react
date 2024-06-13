@@ -186,8 +186,8 @@ export default {
           type: EFormType.tab,
           tab: 'language',
           list: [
-            { label: t('English post'), value: 'en' },
-            { label: t('Vietnamese post'), value: 'vn' },
+            { label: t('English'), value: 'en' },
+            { label: t('Vietnamese'), value: 'vn' },
           ],
           column: [
             { title: 'id', name: 'id', formItem: { type: EFormType.hidden } },
@@ -198,6 +198,7 @@ export default {
                 col: 6,
                 rules: [{ type: EFormRuleType.required }],
                 onBlur: (value, form, name) => {
+                  console.log(form, name);
                   if (value && !form.getFieldValue(['languages', name[0], 'slug'])) {
                     form.setFieldValue(['languages', name[0], 'slug'], slug(value));
                   }

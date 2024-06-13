@@ -7,7 +7,7 @@ Library                 DateTime
 *** Variables ***
 ${BROWSER}              chromium
 ${HEADLESS}             ${False}
-${BROWSER_TIMEOUT}      6 seconds
+${BROWSER_TIMEOUT}      20 seconds
 ${SHOULD_TIMEOUT}       0.1 seconds
 
 ${URL_DEFAULT}          %{HOST_ADDRESS=http://localhost:4000}
@@ -298,7 +298,6 @@ Click on the "${text}" button in the "${name}" table line
   ${name}=                  Check Text                        ${name}
   ${element}=               Get Element Table Item By Name    ${name}                       //button[@title = "${text}"]
   Click                     ${element}
-  # Sleep    0.2
   Click Confirm To Action
 
 The status button in the "${name}" table line change to "${status}"
@@ -333,14 +332,8 @@ Click on the "${name}" tree to edit
 ###  -----  Element  -----  ###
 Click "${text}" button
   Sleep                       ${SHOULD_TIMEOUT}
-  ${cnt}=                     Get Element Count               //button[@title = "${text}"]
-  IF    ${cnt} > 0
-    Click                     xpath=//button[@title = "${text}"]
-    Scroll By                 ${None}
-  ELSE
-    Click                     xpath=//button[text() = "${text}"]
-    Scroll By                 ${None}
-  END
+  Click                     xpath=//button[@title = "${text}"]
+  Scroll By                 ${None}
 # LOGIN
 
 # Click "${text}" tab button
@@ -353,15 +346,14 @@ Click "${text}" button
 
 Select on the "${text}" item line
   Wait Until Element Spin
-  ${element}=               Set Variable                      //*[contains(@class,"item")]/*[contains(@class,"item-text") and contains(.,"${text}")]
+  ${element}=               Set Variable                      //*[@class="item" and contains(.,"${text}")]
   Click                     ${element}
 
 Click "${name}" menu
-  Click                     xpath=//ul[@id="menu-sidebar"]//span[contains(text(),"${name}")]
+  Click                     xpath=//aside//ul[contains(@class, "ant-menu")]//span[@class="ant-menu-title-content" and contains(text(), "${name}")]
 
-Click "${text}" sub menu to "${url}"
-  Wait Until Element Spin
-  Click                     xpath=//a[contains(@class, "sub-menu") and descendant::span[contains(text(), "${text}")]]
+Click "${name}" sub menu to "${url}"
+  Click                     xpath=//aside//ul[contains(@class, "ant-menu")]//span[@class="ant-menu-title-content" and contains(text(), "${name}")]
   ${curent_url}=            Get Url
   Should Contain            ${curent_url}                     ${URL_DEFAULT}${url}
 
@@ -371,7 +363,7 @@ User look message "${message}" popup
   IF  ${cnt} > 0
     ${message}=             Replace String                    ${message}                    _@${contains[0]}@_          ${STATE["${contains[0]}"]}
   END
-  Element Text Should Be    xpath=//div[@class="ant-notification-notice-message"]           ${message}
+  Element Text Should Be    xpath=//div[contains(@class, "ant-message-custom-content")]/span[text()="${message}"]           ${message}
 # LOGIN
 
 Click Confirm To Action
@@ -423,9 +415,7 @@ The hidden password in "${name}" field should be visibled as "${text}"
 # LOGIN
 
 Click on "${name}" tab
-  ${text}                   Evaluate                           "${name}".lower()
-  ${text2}                  Evaluate                           "${text}".capitalize()
-  ${element}=               Set Variable                       //*[contains(@class,"ant-tabs")]//*[@role="tab" and text()="${text2}"]
+  ${element}=               Set Variable                       //*[contains(@class,"ant-tabs")]//*[@role="tab" and text()="${name}"]
   Click                     ${element}
 
 Click "${name}" line in the avatar's account
@@ -637,20 +627,12 @@ Get the image's information in "${name}" field
 ### --- Check UI --- ###
 Heading should contain "${text}" inner text
   ${text}=                  Check Text                        ${text}
-  ${element}=               Set Variable                      //*[self::h1 or self::h2 or self::h3 or self::h4 or self::h5 or self::h6][contains(text(),"${text}")]
-  Wait Until Element Is Existent                              ${element}
+  Wait Until Element Is Existent                              //div[@class="ant-drawer-title" and text()="${text}"]
 # LOGIN
 
 Heading of separated group should contain "${text}" inner text
   ${text}=                  Check Text                        ${text}
-  ${element}=               Set Variable                      //*[contains(@class,"mx-auto")]//*[contains(@class, "text-xl") and contains(text(),"${text}")]
-  ${cnt}=                   Get Element Count                 ${element}
-  IF    ${cnt} > 0
-    Wait Until Element Is Existent                            ${element}
-  ELSE
-    ${element}=             Set Variable                      //*[contains(@class,"mx-auto")]//*[contains(@class, "text-lg") and contains(text(),"${text}")]
-    Wait Until Element Is Existent                            ${element}
-  END
+  Wait Until Element Is Existent                              //div[@class="ant-drawer-title" and text()="${text}"]
 
 Webpage should contain "${name}" input field
   ${element}=               Get Element                       (//label[@title="${name}"]//ancestor::div[contains(@class,"ant-row")][1]//div[@class="ant-form-item-control-input"])[1]
@@ -674,9 +656,7 @@ Webpage should contain the profile information group with name and role
   Should Be True            ${count} >= 1
 
 Webpage should contain "${name}" tab
-  ${text}                   Evaluate                           "${name}".lower()
-  ${text2}                  Evaluate                           "${text}".capitalize()
-  ${element}=               Set Variable                       //*[contains(@class,"ant-tabs")]//*[@role="tab" and text()="${text2}"]
+  ${element}=               Set Variable                       //*[contains(@class,"ant-tabs")]//*[@role="tab" and text()="${name}"]
   Wait Until Element Is Existent                               ${element}
 
 Webpage should contain "${name}" column with sort and search function
@@ -710,7 +690,7 @@ Webpage should contain "${name}" column
   END
 
 Webpage should contain "${name}" group
-  ${element}=               Set Variable                        //h3[text() = "${name}"]//ancestor::div[contains(@class,"shadow")]/div[contains(@class,"ant-spin-nested-loading")]
+  ${element}=               Set Variable                        //h3[text() = "${name}"]//ancestor::div[contains(@class,"left")]
   Element Should Be Exist                                       ${element}
 
 Webpage should contain the list data from database
@@ -729,10 +709,10 @@ The status button in the "${name}" table line should change to "${text}"
 
 Confirm locating exactly in "${name}" page of "${menu}" menu
   Wait Until Element Spin
-  ${element}=               Set Variable                       //header//span[contains(@class,"text-gray-400") and text()="${menu}"]
+  ${element}=               Set Variable                       //main//div[contains(@class, "breadcrumbs")]//li[text()="${menu}"]
   Element Should Be Exist                                      ${element}
-  ${cnt}=                   Get Element Count                  ${element}/../span[contains(text(),"${name}")]
-  Should Be True            ${cnt} > 0
+  ${cnt}=                   Get Element Count                  //main//*[text()="${name}"]
+  Should Be True            ${cnt} == 2
 
 ### Relate to number of list page ###
 Count the number account in list

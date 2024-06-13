@@ -11,11 +11,13 @@ const Component = ({
   column = [],
   generateForm,
   list,
+  form,
 }: {
   name?: string;
   column?: IForm[];
   generateForm: any;
   list: any;
+  form: FormInstance;
 }) => {
   const { t } = useTranslation('locale', { keyPrefix: 'library' });
 
@@ -44,7 +46,7 @@ const Component = ({
                     )}
                     key={index}
                   >
-                    {generateForm({ item: col, index: index + '_' + i, name: [n, col.name], t })}
+                    {generateForm({ item: col, index: index + '_' + i, name: [n, col.name], t, form })}
                   </div>
                 ))}
               </div>

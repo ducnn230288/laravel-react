@@ -1,7 +1,7 @@
 import React, { Suspense, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
-import i18n from 'i18next';
-import XHR from 'i18next-xhr-backend';
+import i18next from 'i18next';
+import i18nextHttpBackend from 'i18next-http-backend';
 import { initReactI18next } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { ConfigProvider, message as noti, Spin } from 'antd';
@@ -17,10 +17,10 @@ const fallbackLng = localStorage.getItem('i18nextLng');
 
 if (!fallbackLng) {
   localStorage.setItem('i18nextLng', 'en');
+  document.querySelector('html')?.setAttribute('lang', 'en');
 }
-i18n
-  .use(XHR)
-  // .use(LanguageDetector)
+i18next
+  .use(i18nextHttpBackend)
   .use(initReactI18next)
   .init({
     backend: {

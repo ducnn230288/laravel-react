@@ -23,7 +23,7 @@
     "antd": "^5.17.4",
     "echarts": "^5.5.0",
     "glightbox": "^3.3.0",
-    "i18next-xhr-backend": "^3.2.2",
+    "i18next-http-backend": "^2.5.2",
     "query-string": "^9.0.0",
     "rc-tween-one": "^3.0.6",
     "react": "^18.2.0",

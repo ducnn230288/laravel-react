@@ -23,7 +23,7 @@ export const EditTable = ({
     return length;
   };
   const getArrayByDepth = (array: any[], depth = 0, i: number, key = 'children'): any =>
-    array.flatMap((j) => {
+    array.flatMap(j => {
       if (depth !== i && j[key]) return getArrayByDepth(j[key], depth + 1, i, key);
       return j[key] || [];
     });
@@ -93,7 +93,7 @@ export const EditTable = ({
       </p>
     );
   };
-  const listFormula = table.meta ? table.meta.filter((i) => !!i.formula).map((i) => i.formula!) : [];
+  const listFormula = table.meta ? table.meta.filter(i => !!i.formula).map(i => i.formula!) : [];
   const handleSum = (
     e: Element,
     text: string | number,
@@ -120,10 +120,10 @@ export const EditTable = ({
       const handleChangeTable = (item: any, i: number) => {
         if (level >= item.level) {
           if (tbody && level > item.level && item.level !== maxLevel) {
-            const meta = table.meta?.filter((j) => j.field === name)[0];
+            const meta = table.meta?.filter(j => j.field === name)[0];
             if (meta?.formula) {
               let formula = meta?.formula;
-              table.meta?.forEach((i) => {
+              table.meta?.forEach(i => {
                 if (i.field && formula.indexOf(i.field) > -1) {
                   formula = formula.replaceAll(i.field, item[i.field]);
                 }
@@ -135,11 +135,11 @@ export const EditTable = ({
                   : 0;
             } else if (item.level <= row.level - 2) {
               total = table.data
-                ?.filter((i) => i.level === item.level + 1 && !i.isSummary)
+                ?.filter(i => i.level === item.level + 1 && !i.isSummary)
                 .reduce((value, j) => value + j[name], 0);
             } else {
               total = table.data
-                ?.filter((i) => i.idBieuNoiDung === row.idBieuNoiDung && i.maCha === row.maCha && i.level === row.level)
+                ?.filter(i => i.idBieuNoiDung === row.idBieuNoiDung && i.maCha === row.maCha && i.level === row.level)
                 .reduce((value, j) => value + j[name], 0);
             }
             if (table.data) table.data[i][name] = total;
@@ -169,12 +169,12 @@ export const EditTable = ({
         });
       }
       if (listFormula.length) {
-        listFormula.forEach((i) => {
+        listFormula.forEach(i => {
           if (i.indexOf(name) > -1) {
-            const meta = table.meta?.filter((j) => j.formula === i)[0];
+            const meta = table.meta?.filter(j => j.formula === i)[0];
             if (meta?.field && meta?.type) {
               let formula = i;
-              table.meta?.forEach((i) => {
+              table.meta?.forEach(i => {
                 if (i.field && formula.indexOf(i.field) > -1) {
                   formula = formula.replaceAll(i.field, row[i.field]);
                 }
@@ -201,7 +201,7 @@ export const EditTable = ({
     const colBody = [
       ...(table.fields.rows ? table.fields.rows.map((key: any) => ({ key })) : []),
       ...table.fields.columns,
-    ].flatMap((e) => getTree(e, 'key'));
+    ].flatMap(e => getTree(e, 'key'));
     const defaultData = colBody.reduce((a, v) => ({ ...a, [v]: undefined }), {});
     if (table?.totals?.row?.subTotalsDimensions) {
       const data: any = {};

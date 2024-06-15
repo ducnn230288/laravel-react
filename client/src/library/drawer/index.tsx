@@ -54,7 +54,7 @@ export const DrawerForm = forwardRef(
         closeIcon={null}
       >
         <Form
-          className="intro-x"
+          className='intro-x'
           values={{ ...facade[keyData] }}
           formAnt={form}
           columns={columns}

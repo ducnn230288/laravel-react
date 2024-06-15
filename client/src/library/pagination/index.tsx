@@ -20,7 +20,7 @@ export const Pagination: any = ({
   const buildIndexes = useCallback(() => {
     const lastIndex = getLastIndex(total, perPage);
     listOfPageItem.current = getListOfPageItem(page, lastIndex);
-    set_temp((pre) => ({ ...pre, ranges: [(page - 1) * perPage + 1, Math.min(page * perPage, total)] }));
+    set_temp(pre => ({ ...pre, ranges: [(page - 1) * perPage + 1, Math.min(page * perPage, total)] }));
   }, [page, perPage, total]);
 
   useEffect(() => {
@@ -131,13 +131,13 @@ export const Pagination: any = ({
               allowClear={false}
               showSearch={false}
               value={perPage}
-              onChange={(value) => onPageSizeChange(value)}
+              onChange={value => onPageSizeChange(value)}
               list={pageSizeOptions.map((item: number) => ({ value: item, label: item + ' / page' }))}
             />
           )}
           {!!paginationDescription && <label>{paginationDescription(_temp.ranges[0], _temp.ranges[1], total)}</label>}
         </div>
-        <div className="right">
+        <div className='right'>
           {listOfPageItem.current.map((item: any) => (
             <button
               type={'button'}

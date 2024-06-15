@@ -83,7 +83,7 @@ const Page = () => {
             },
           ]}
           textSubmit={t('Submit')}
-          handSubmit={(values) => sGlobal.resetPassword({ ...values })}
+          handSubmit={values => sGlobal.resetPassword({ ...values })}
           disableSubmit={sGlobal.isLoading}
         />
       </Spin>

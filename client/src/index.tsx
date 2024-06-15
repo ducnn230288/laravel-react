@@ -79,7 +79,7 @@ document.addEventListener(
       document.querySelector('html')?.setAttribute('data-theme', localStorage.getItem('theme') ?? 'light');
 
       root.render(
-        <Suspense fallback={<Spin size={'large'} className="flex h-screen w-screen items-center justify-center" />}>
+        <Suspense fallback={<Spin size={'large'} className='flex h-screen w-screen items-center justify-center' />}>
           <Provider store={store}>
             <Context />
           </Provider>
@@ -89,4 +89,4 @@ document.addEventListener(
   },
   { passive: true },
 );
-reportWebVitals((e) => console.log(e));
+reportWebVitals(e => console.log(e));

@@ -26,7 +26,7 @@ const Component = ({
       picker={picker}
       disabled={disabled}
       {...props}
-      onOpenChange={(e) => {
+      onOpenChange={e => {
         if (!e) {
           const { value }: any = document.getElementById(id);
           const selectDate = dayjs(value, format ?? 'DD/MM/YYYY');

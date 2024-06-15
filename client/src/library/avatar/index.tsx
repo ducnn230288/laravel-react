@@ -23,7 +23,7 @@ export const Avatar = ({
       const g = parseInt(color.substring(2, 4), 16);
       const b = parseInt(color.substring(4, 6), 16);
       const uiColors = [r / 255, g / 255, b / 255];
-      const c = uiColors.map((col) => {
+      const c = uiColors.map(col => {
         if (col <= 0.03928) {
           return col / 12.92;
         }
@@ -241,7 +241,7 @@ export const Avatar = ({
     return <Avatar text={text} src={src} showName={showName} size={size} />;
   } else {
     return (
-      <div className="flex items-center">
+      <div className='flex items-center'>
         {!!text &&
           text
             .filter((item, index: number) => index < maxCount)

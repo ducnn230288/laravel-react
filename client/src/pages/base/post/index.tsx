@@ -26,10 +26,10 @@ const Page = () => {
       <FormPost />
       <FormPostType />
       <div className={'wrapper-grid'}>
-        <div className="-intro-x left">
+        <div className='-intro-x left'>
           <Side />
         </div>
-        <div className="intro-x right">
+        <div className='intro-x right'>
           <Main />
         </div>
       </div>
@@ -63,9 +63,9 @@ const FormPost = () => {
       facade={sPost}
       columns={_column.useForm()}
       title={t(sPost.data?.id ? 'Edit Post' : 'Add new Post', {
-        name: sPostType.result?.data?.find((item) => item.code === request.typeCode)?.name,
+        name: sPostType.result?.data?.find(item => item.code === request.typeCode)?.name,
       })}
-      onSubmit={(values) => {
+      onSubmit={values => {
         if (sPost.data?.id) sPost.put({ ...values, id: sPost.data.id, typeCode: request.typeCode });
         else sPost.post({ ...values, typeCode: request.typeCode });
       }}
@@ -93,7 +93,7 @@ const FormPostType = () => {
       facade={sPostType}
       columns={_columnType.useForm(sPostType.data?.id, sPostType.result?.data)}
       title={t(sPostType.data?.id ? 'Edit Type Post' : 'Add new Type Post')}
-      onSubmit={(values) => {
+      onSubmit={values => {
         if (sPostType.data?.id) sPostType.put({ ...values, id: sPostType.data.id });
         else sPostType.post({ ...values });
       }}
@@ -114,16 +114,16 @@ const Side = () => {
   const sGlobal = SGlobal();
 
   return (
-    <div className="card">
-      <div className="header">
+    <div className='card'>
+      <div className='header'>
         <h3>{t('Type Post')}</h3>
         <Button
-          icon={<Plus className="size-3" />}
+          icon={<Plus className='size-3' />}
           onClick={() => sPostType.set({ data: undefined, isVisible: true })}
         />
       </div>
       <Spin spinning={sPostType.isLoading}>
-        <div className="desktop">
+        <div className='desktop'>
           {sPostType.result?.data && (
             <Tree
               blockNode
@@ -139,7 +139,7 @@ const Side = () => {
                 expanded: true,
                 children: [],
               }))}
-              onSelect={(selectedKeys) => {
+              onSelect={selectedKeys => {
                 if (selectedKeys[0]) {
                   request.typeCode = selectedKeys[0];
                   sPost.get(request);
@@ -149,14 +149,14 @@ const Side = () => {
               titleRender={(data: any) => (
                 <span className={classNames('item')}>
                   {data.title}
-                  <div className="action">
+                  <div className='action'>
                     {sGlobal.user?.role?.permissions?.includes(keyRole.P_POST_TYPE_UPDATE) && (
                       <ToolTip title={t('Edit Type Post', { name: data.title })}>
                         <button
                           title={t('Edit Type Post', { name: data.title })}
                           onClick={() => sPostType.getById({ id: data.code })}
                         >
-                          <Edit className="primary" />
+                          <Edit className='primary' />
                         </button>
                       </ToolTip>
                     )}
@@ -168,7 +168,7 @@ const Side = () => {
                           onConfirm={() => sPostType.delete(data.code)}
                         >
                           <button title={t('Delete type post', { name: data.title })}>
-                            <Trash className="error" />
+                            <Trash className='error' />
                           </button>
                         </Popconfirm>
                       </ToolTip>
@@ -179,7 +179,7 @@ const Side = () => {
             />
           )}
         </div>
-        <div className="mobile">
+        <div className='mobile'>
           <TreeSelect
             treeLine
             switcherIcon={<Arrow className={'size-3'} />}
@@ -192,7 +192,7 @@ const Side = () => {
               expanded: true,
               children: [],
             }))}
-            onChange={(e) => {
+            onChange={e => {
               if (e) {
                 request.typeCode = e;
                 sPost.get(request);
@@ -217,8 +217,8 @@ const Main = () => {
   const request = JSON.parse(sPost?.queryParams ?? '{}');
 
   return (
-    <div className="card">
-      <div className="body">
+    <div className='card'>
+      <div className='body'>
         <DataTable
           defaultRequest={{ include: 'languages' }}
           facade={sPost}
@@ -227,9 +227,9 @@ const Main = () => {
           rightHeader={
             sGlobal.user?.role?.permissions?.includes(keyRole.P_POST_STORE) && (
               <Button
-                icon={<Plus className="size-3" />}
+                icon={<Plus className='size-3' />}
                 text={t('Add new Post', {
-                  name: sPostType.result?.data?.find((item) => item.code === request.typeCode)?.name,
+                  name: sPostType.result?.data?.find(item => item.code === request.typeCode)?.name,
                 })}
                 onClick={() => sPost.set({ data: undefined, isVisible: true })}
               />

@@ -164,7 +164,7 @@ export const Upload = ({
 
   return (
     <Fragment>
-      <input type="file" className={'hidden'} accept={accept} multiple={multiple} ref={ref} onChange={onUpload} />
+      <input type='file' className={'hidden'} accept={accept} multiple={multiple} ref={ref} onChange={onUpload} />
       <div
         className={classNames('upload', {
           'upload-grid': multiple,
@@ -173,7 +173,7 @@ export const Upload = ({
       >
         {listFiles.map((file: any, index: number) => (
           <div key={'file-' + index} className={classNames('relative')}>
-            <a href={file[keyImage] ? file[keyImage] : file} className="glightbox">
+            <a href={file[keyImage] ? file[keyImage] : file} className='glightbox'>
               <img src={file[keyImage] ? file[keyImage] : file} alt={file.name} />
             </a>
             {index > 0 && (
@@ -245,7 +245,7 @@ export const Upload = ({
           isTiny={true}
           icon={<Paste className={'size-4'} />}
           text={'Paste'}
-          onPaste={async (event) => {
+          onPaste={async event => {
             const items = event.clipboardData.items;
             for (const index in items) {
               const item = items[index];

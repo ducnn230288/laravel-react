@@ -47,10 +47,10 @@ const Page = () => {
             },
           ]}
           extendForm={() => (
-            <div className="-mt-2 text-right">
+            <div className='-mt-2 text-right'>
               <button
-                className="text-base-content/60"
-                type="button"
+                className='text-base-content/60'
+                type='button'
                 onClick={() => navigate(`/${lang}${routerLinks('ForgetPassword')}`)}
               >
                 {t('Forgot Password')}

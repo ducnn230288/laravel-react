@@ -23,10 +23,10 @@ const Page = () => {
       <Breadcrumbs title={t('User')} list={[t('User')]} />
       <Form />
       <div className={'wrapper-grid'}>
-        <div className="-intro-x left">
+        <div className='-intro-x left'>
           <Side />
         </div>
-        <div className="intro-x right">
+        <div className='intro-x right'>
           <Main />
         </div>
       </div>
@@ -59,9 +59,9 @@ const Form = () => {
       facade={sUser}
       columns={_column.useForm()}
       title={t(sUser.data?.id ? 'Edit User' : 'Add new User', {
-        name: sUserRole.result?.data?.find((item) => item.code === request.roleCode)?.name,
+        name: sUserRole.result?.data?.find(item => item.code === request.roleCode)?.name,
       })}
-      onSubmit={(values) => {
+      onSubmit={values => {
         if (sUser.data?.id) sUser.put({ ...values, id: sUser.data.id, roleCode: request.roleCode });
         else sUser.post({ ...values, roleCode: request.roleCode });
       }}
@@ -83,12 +83,12 @@ const Side = () => {
   const location = useLocation();
 
   return (
-    <div className="card">
-      <div className="header">
+    <div className='card'>
+      <div className='header'>
         <h3>{t('Role')}</h3>
       </div>
       <Spin spinning={sUserRole.isLoading}>
-        <div className="desktop">
+        <div className='desktop'>
           {sUserRole.result?.data && (
             <Tree
               blockNode
@@ -104,7 +104,7 @@ const Side = () => {
                 expanded: true,
                 children: [],
               }))}
-              onSelect={(selectedKeys) => {
+              onSelect={selectedKeys => {
                 request.roleCode = selectedKeys[0];
                 sUser.get(request);
                 navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
@@ -112,12 +112,12 @@ const Side = () => {
             />
           )}
         </div>
-        <div className="mobile">
+        <div className='mobile'>
           <Select
             value={request.roleCode}
             className={'w-full'}
-            options={sUserRole?.result?.data?.map((data) => ({ label: data.name, value: data.code }))}
-            onChange={(e) => {
+            options={sUserRole?.result?.data?.map(data => ({ label: data.name, value: data.code }))}
+            onChange={e => {
               request.roleCode = e;
               sUser.get(request);
               navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
@@ -140,8 +140,8 @@ const Main = () => {
   const request = JSON.parse(sUser?.queryParams ?? '{}');
 
   return (
-    <div className="card">
-      <div className="body">
+    <div className='card'>
+      <div className='body'>
         <DataTable
           defaultRequest={{ include: 'position' }}
           facade={sUser}
@@ -150,9 +150,9 @@ const Main = () => {
           rightHeader={
             sGlobal.user?.role?.permissions?.includes(keyRole.P_USER_STORE) && (
               <Button
-                icon={<Plus className="size-3" />}
+                icon={<Plus className='size-3' />}
                 text={t('Add new User', {
-                  name: sUserRole.result?.data?.find((item) => item.code === request.roleCode)?.name,
+                  name: sUserRole.result?.data?.find(item => item.code === request.roleCode)?.name,
                 })}
                 onClick={() => sUser.set({ data: undefined, isVisible: true })}
               />

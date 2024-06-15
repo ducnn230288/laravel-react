@@ -33,8 +33,8 @@ const Component = ({
       showSelectAll={false}
       dataSource={_temp.dataSource}
       targetKeys={_temp.targetKeys}
-      onChange={(targetKeys) => {
-        set_temp((pre) => ({ ...pre, targetKeys }));
+      onChange={targetKeys => {
+        set_temp(pre => ({ ...pre, targetKeys }));
         onChange && onChange(targetKeys);
       }}
       // filterOption={(inputValue, item) =>
@@ -56,16 +56,16 @@ const Component = ({
         return (
           <Table
             rowSelection={{
-              getCheckboxProps: (item) => ({ disabled: listDisabled || item.disabled }),
+              getCheckboxProps: item => ({ disabled: listDisabled || item.disabled }),
               selectedRowKeys: listSelectedKeys,
               onSelectAll(selected, selectedRows) {
-                const treeSelectedKeys: any = selectedRows.filter((item) => !item.disabled).map(({ key }) => key);
+                const treeSelectedKeys: any = selectedRows.filter(item => !item.disabled).map(({ key }) => key);
                 const diffKeys = selected
                   ? treeSelectedKeys
                       .filter((x: any) => !listSelectedKeys.includes(x))
-                      .concat(listSelectedKeys.filter((x) => !treeSelectedKeys.includes(x)))
+                      .concat(listSelectedKeys.filter(x => !treeSelectedKeys.includes(x)))
                   : listSelectedKeys
-                      .filter((x) => !treeSelectedKeys.includes(x))
+                      .filter(x => !treeSelectedKeys.includes(x))
                       .concat(treeSelectedKeys.filter((x: any) => !listSelectedKeys.includes(x)));
                 onItemSelectAll(diffKeys, selected);
               },
@@ -75,7 +75,7 @@ const Component = ({
             }}
             columns={columns}
             dataSource={filteredItems}
-            size="small"
+            size='small'
             style={{ pointerEvents: listDisabled ? 'none' : undefined }}
             onRow={({ key, disabled: itemDisabled }: any) => ({
               onClick: () => {

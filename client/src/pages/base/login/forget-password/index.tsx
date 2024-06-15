@@ -36,11 +36,11 @@ const Page = () => {
             },
           ]}
           textSubmit={t('Get OTP')}
-          handSubmit={(values) => sGlobal.forgottenPassword({ ...values })}
+          handSubmit={values => sGlobal.forgottenPassword({ ...values })}
           disableSubmit={sGlobal.isLoading}
         />
       </Spin>
-      <div className="mt-3 text-center">
+      <div className='mt-3 text-center'>
         <button onClick={() => navigate(`/${lang}${routerLinks('Login')}`)}>{t('Go back to login')}</button>
       </div>
     </Fragment>

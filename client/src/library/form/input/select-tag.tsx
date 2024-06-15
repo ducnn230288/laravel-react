@@ -44,25 +44,25 @@ const Component = ({ tag, onChange, form, value, disabled, maxTagCount, placehol
       {...prop}
       listHeight={200}
       value={value || []}
-      onSearch={(fullTextSearch) => loadData(fullTextSearch, value)}
+      onSearch={fullTextSearch => loadData(fullTextSearch, value)}
       onBlur={() => loadData()}
-      mode="multiple"
-      optionFilterProp="label"
+      mode='multiple'
+      optionFilterProp='label'
       showArrow
       filterOption={false}
-      maxTagPlaceholder={(array) => '+' + array.length}
+      maxTagPlaceholder={array => '+' + array.length}
       tagRender={({ label, onClose }) => (
-        <div className="relative -left-2.5 mr-2.5 rounded-xl bg-teal-100 px-2 py-1">
+        <div className='relative -left-2.5 mr-2.5 rounded-xl bg-teal-100 px-2 py-1'>
           <Button
-            icon={<Times className="size-5 fill-red-600" />}
-            className="absolute -right-2 -top-1 z-auto rounded-full !bg-red-100 leading-none !text-red-600"
+            icon={<Times className='size-5 fill-red-600' />}
+            className='absolute -right-2 -top-1 z-auto rounded-full !bg-red-100 leading-none !text-red-600'
             onClick={onClose}
             disabled={disabled}
           />
           {label}
         </div>
       )}
-      onChange={(value) => {
+      onChange={value => {
         onChange && onChange(value);
         loadData('', value);
       }}

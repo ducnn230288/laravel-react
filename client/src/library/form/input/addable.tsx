@@ -59,7 +59,7 @@ const Component = ({
         isTable ? (
           <Fragment>
             <div className={'table w-full border-collapse'} style={{ minWidth: column.length * 150 }}>
-              <div className="table-row">
+              <div className='table-row'>
                 {!!idCheck && (
                   <div className={'table-cell w-10 p-1 text-center font-bold'}>
                     <Checkbox
@@ -88,11 +88,11 @@ const Component = ({
                 <div className={'h-1 w-8'} />
               </div>
               {fields.map(({ name: n }, i) => (
-                <div className="table-row" key={i}>
+                <div className='table-row' key={i}>
                   {!!idCheck && (
                     <div className={'table-cell text-center'}>
                       <Checkbox
-                        onChange={(e) => onCheckChange(e, form.getFieldValue(name), n)}
+                        onChange={e => onCheckChange(e, form.getFieldValue(name), n)}
                         checked={_temp.checkedList.indexOf(form.getFieldValue(name)[n][idCheck]) > -1}
                       />
                     </div>
@@ -106,7 +106,7 @@ const Component = ({
                   <div className={'table-cell w-8 align-middle sm:w-8'}>
                     {showRemove(form.getFieldValue([[name], n]), n) && (
                       <Trash
-                        className="size-8 cursor-pointer fill-red-600 hover:fill-red-400"
+                        className='size-8 cursor-pointer fill-red-600 hover:fill-red-400'
                         onClick={() => {
                           remove(n);
                           onAdd(form.getFieldValue(name), form);
@@ -123,7 +123,7 @@ const Component = ({
                   add();
                   onAdd(form.getFieldValue(name), form);
                 }}
-                icon={<Plus className="size-5" />}
+                icon={<Plus className='size-5' />}
                 text={textAdd}
               />
             </div>
@@ -153,7 +153,7 @@ const Component = ({
                 <div className={'table-cell w-8 align-middle'}>
                   {showRemove(form.getFieldValue([[name], n]), n) && (
                     <Trash
-                      className="size-8 cursor-pointer fill-red-600 hover:fill-red-400"
+                      className='size-8 cursor-pointer fill-red-600 hover:fill-red-400'
                       onClick={() => {
                         remove(n);
                         onAdd(form.getFieldValue(name), form);
@@ -165,7 +165,7 @@ const Component = ({
             ))}
             <div className={'flex justify-end'}>
               <Button
-                icon={<Plus className="size-5" />}
+                icon={<Plus className='size-5' />}
                 text={textAdd}
                 onClick={() => {
                   add();

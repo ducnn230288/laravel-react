@@ -20,10 +20,10 @@ const Page = () => {
     <Fragment>
       <Breadcrumbs title={t('Parameter')} list={[t('Setting'), t('Parameter')]} />
       <div className={'wrapper-grid'}>
-        <div className="-intro-x left">
+        <div className='-intro-x left'>
           <Side />
         </div>
-        <div className="intro-x right">
+        <div className='intro-x right'>
           <Main />
         </div>
       </div>
@@ -43,12 +43,12 @@ const Side = () => {
   const location = useLocation();
 
   return (
-    <div className="card">
-      <div className="header">
+    <div className='card'>
+      <div className='header'>
         <h3>{t('Parameter')}</h3>
       </div>
       <Spin spinning={sParameter.isLoading}>
-        <div className="desktop">
+        <div className='desktop'>
           {sParameter.result?.data && (
             <Tree
               blockNode
@@ -57,14 +57,14 @@ const Side = () => {
               defaultExpandAll
               switcherIcon={<Arrow className={'size-3'} />}
               selectedKeys={[sParameter.data?.code ?? '']}
-              treeData={sParameter.result?.data?.map((item) => ({
+              treeData={sParameter.result?.data?.map(item => ({
                 title: item?.name,
                 key: item?.code,
                 isLeaf: true,
                 expanded: true,
                 children: [],
               }))}
-              onSelect={(selectedKeys) => {
+              onSelect={selectedKeys => {
                 request.code = selectedKeys[0];
                 sParameter.getById({ id: request.code });
                 navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
@@ -72,12 +72,12 @@ const Side = () => {
             />
           )}
         </div>
-        <div className="mobile">
+        <div className='mobile'>
           <Select
             value={sParameter.data?.code}
             className={'w-full'}
-            options={sParameter?.result?.data?.map((data) => ({ label: data.name, value: data.code }))}
-            onChange={(e) => {
+            options={sParameter?.result?.data?.map(data => ({ label: data.name, value: data.code }))}
+            onChange={e => {
               request.code = e;
               sParameter.getById({ id: e });
               navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
@@ -96,15 +96,15 @@ const Main = () => {
   const sParameter = SParameter();
 
   return (
-    <div className="card">
-      <div className="header">
+    <div className='card'>
+      <div className='header'>
         <h3>{t('Edit Parameter', { code: sParameter.data?.name })}</h3>
       </div>
-      <div className="desktop has-header">
+      <div className='desktop has-header'>
         <Spin spinning={sParameter.isLoading}>
           <Form
             values={{ ...sParameter.data }}
-            className="intro-x"
+            className='intro-x'
             columns={[
               {
                 title: t('Vietnamese parameter'),
@@ -123,7 +123,7 @@ const Main = () => {
                 },
               },
             ]}
-            handSubmit={(values) => sParameter.put({ ...values, id: sParameter.data!.code })}
+            handSubmit={values => sParameter.put({ ...values, id: sParameter.data!.code })}
             disableSubmit={sParameter.isLoading}
           />
         </Spin>

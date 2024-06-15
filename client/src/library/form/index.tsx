@@ -54,11 +54,11 @@ export const Form = ({
         className={classNames(className)}
         form={form}
         layout={!widthLabel ? 'vertical' : 'horizontal'}
-        onFinishFailed={(failed) =>
+        onFinishFailed={failed =>
           failed?.errorFields?.length && form?.scrollToField(failed?.errorFields[0].name, { behavior: 'smooth' })
         }
         onFinish={handFinish}
-        onValuesChange={async (objValue) => {
+        onValuesChange={async objValue => {
           if (form && checkHidden) {
             clearTimeout(timeout.current);
             timeout.current = setTimeout(async () => {

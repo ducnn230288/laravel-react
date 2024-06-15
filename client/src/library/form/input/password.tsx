@@ -15,17 +15,17 @@ const Component = ({
   const [toggle, setToggle] = useState(true);
 
   return (
-    <div className="relative">
+    <div className='relative'>
       <input
         value={value}
         placeholder={placeholder}
         disabled={disabled}
         type={toggle ? 'password' : 'text'}
-        className="ant-input pr-9"
+        className='ant-input pr-9'
         onChange={onChange}
       />
-      {!toggle && <Eye onClick={() => setToggle(!toggle)} className="icon" />}
-      {toggle && <EyeSlash onClick={() => setToggle(!toggle)} className="icon" />}
+      {!toggle && <Eye onClick={() => setToggle(!toggle)} className='icon' />}
+      {toggle && <EyeSlash onClick={() => setToggle(!toggle)} className='icon' />}
     </div>
   );
 };

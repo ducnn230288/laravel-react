@@ -138,7 +138,7 @@ const Component = ({ formItem, placeholder, onChange, value, form, disabled, sho
       multiple={formItem.mode === 'multiple'}
       loadData={loadDataTree}
       options={_list}
-      tagRender={(props) => {
+      tagRender={props => {
         const item = handleGetData(_list, props.value);
         const arrayValue = value.map((item: any) => item.value);
         if (
@@ -162,10 +162,10 @@ const Component = ({ formItem, placeholder, onChange, value, form, disabled, sho
           }
           return (
             checkShow && (
-              <div className="relative -left-2.5 mr-2.5 rounded-xl bg-teal-100 px-2 py-1">
+              <div className='relative -left-2.5 mr-2.5 rounded-xl bg-teal-100 px-2 py-1'>
                 <Button
-                  icon={<Times className="size-5 fill-red-600" />}
-                  className="absolute -right-2 -top-1 z-10 rounded-full !bg-red-100 leading-none !text-red-600"
+                  icon={<Times className='size-5 fill-red-600' />}
+                  className='absolute -right-2 -top-1 z-10 rounded-full !bg-red-100 leading-none !text-red-600'
                   onClick={() => onChange && onChange(clearTag(item[0], value))}
                   disabled={disabled}
                 />

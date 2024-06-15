@@ -23,10 +23,10 @@ const Page = () => {
       <Breadcrumbs title={t('Code')} list={[t('Setting'), t('Code')]} />
       <Form />
       <div className={'wrapper-grid'}>
-        <div className="-intro-x left">
+        <div className='-intro-x left'>
           <Side />
         </div>
-        <div className="intro-x right">
+        <div className='intro-x right'>
           <Main />
         </div>
       </div>
@@ -59,9 +59,9 @@ const Form = () => {
       facade={sCode}
       columns={_column.useForm()}
       title={t(sCode.data?.id ? 'Edit Code' : 'Add new Code', {
-        name: sCodeType.result?.data?.find((item) => item.code === request.typeCode)?.name,
+        name: sCodeType.result?.data?.find(item => item.code === request.typeCode)?.name,
       })}
-      onSubmit={(values) => {
+      onSubmit={values => {
         if (sCode.data?.id) sCode.put({ ...values, id: sCode.data.id, typeCode: request.typeCode });
         else sCode.post({ ...values, typeCode: request.typeCode });
       }}
@@ -83,12 +83,12 @@ const Side = () => {
   const location = useLocation();
 
   return (
-    <div className="card">
-      <div className="header">
+    <div className='card'>
+      <div className='header'>
         <h3>{t('Type code')}</h3>
       </div>
       <Spin spinning={sCodeType.isLoading}>
-        <div className="desktop">
+        <div className='desktop'>
           {sCodeType.result?.data && (
             <Tree
               blockNode
@@ -104,7 +104,7 @@ const Side = () => {
                 expanded: true,
                 children: [],
               }))}
-              onSelect={(selectedKeys) => {
+              onSelect={selectedKeys => {
                 request.typeCode = selectedKeys[0];
                 sCode.get(request);
                 navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
@@ -112,12 +112,12 @@ const Side = () => {
             />
           )}
         </div>
-        <div className="mobile">
+        <div className='mobile'>
           <Select
             value={request.typeCode}
             className={'w-full'}
-            options={sCodeType?.result?.data?.map((data) => ({ label: data.name, value: data.code }))}
-            onChange={(e) => {
+            options={sCodeType?.result?.data?.map(data => ({ label: data.name, value: data.code }))}
+            onChange={e => {
               request.typeCode = e;
               sCode.get(request);
               navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
@@ -140,8 +140,8 @@ const Main = () => {
   const request = JSON.parse(sCode?.queryParams ?? '{}');
 
   return (
-    <div className="card">
-      <div className="body">
+    <div className='card'>
+      <div className='body'>
         <DataTable
           facade={sCode}
           paginationDescription={(from: number, to: number, total: number) => t('Pagination code', { from, to, total })}
@@ -149,9 +149,9 @@ const Main = () => {
           rightHeader={
             sGlobal.user?.role?.permissions?.includes(keyRole.P_CODE_STORE) && (
               <Button
-                icon={<Plus className="size-3" />}
+                icon={<Plus className='size-3' />}
                 text={t('Add new Code', {
-                  name: sCodeType.result?.data?.find((item) => item.code === request.typeCode)?.name,
+                  name: sCodeType.result?.data?.find(item => item.code === request.typeCode)?.name,
                 })}
                 onClick={() => sCode.set({ data: undefined, isVisible: true })}
               />

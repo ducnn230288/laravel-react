@@ -41,7 +41,7 @@ export const Gantt = ({
     const addEndDate = end.date() + 1;
     if (addEndDate * (widthColumnDay / perRow) < widthMonthYear)
       end = end.add(Math.ceil(widthMonthYear / widthColumnDay) * perRow - addEndDate, 'days');
-    set_temp((pre) => ({ ...pre, dateStart: date }));
+    set_temp(pre => ({ ...pre, dateStart: date }));
     const endMonth = end.month() - date.month() + 1 + (end.year() - date.year()) * 12;
     const objDate: any = {};
     let totalDay = date.date();
@@ -84,12 +84,12 @@ export const Gantt = ({
     if (data.length && _temp.date.total === 0) {
       start = data[0].startDate;
       end = data[0].endDate || data[0].startDate.add(1, 'months');
-      data.forEach((item) => {
+      data.forEach(item => {
         if (item.startDate < start) start = item.startDate;
         if (item.endDate && item.endDate > end) end = item.endDate;
       });
     }
-    set_temp((pre) => ({ ...pre, date: remainingMonths(start, end) }));
+    set_temp(pre => ({ ...pre, date: remainingMonths(start, end) }));
   }, [data]);
 
   useEffect(() => {
@@ -115,7 +115,7 @@ export const Gantt = ({
   const handleHover = (e: any) => {
     if (e.target) {
       const index = parseInt(loopGetDataset(e.target as HTMLElement, 'index').dataset.index!) + 1;
-      ['left', 'right'].forEach((className) =>
+      ['left', 'right'].forEach(className =>
         document
           .querySelector(`#${id.current} .${className} tbody > tr:nth-of-type(${index})`)
           ?.querySelectorAll('td')
@@ -129,7 +129,7 @@ export const Gantt = ({
 
     let isCheck = true;
     let currentLevel: number | undefined;
-    set_temp((pre) => ({
+    set_temp(pre => ({
       ...pre,
       task: _temp.task.map((item, trIndex) => {
         if (isCheck && trIndex > index) {
@@ -147,14 +147,14 @@ export const Gantt = ({
 
   const handleScroll = (e: any) => {
     (document.querySelector(`#${id.current} .event`) as any)!.style.top = e.target.scrollTop + 'px';
-    ['left', 'right'].forEach((className) =>
+    ['left', 'right'].forEach(className =>
       document.querySelector(`#${id.current} .${className} .overflow-scroll`)!.scrollTo({ top: e.target.scrollTop }),
     );
     if (e.target.dataset.scrollX)
       document.querySelector(`#${id.current} ${e.target.dataset.scrollX}`)!.scrollTo({ left: e.target.scrollLeft });
   };
   const NameColumn = ({ name }: { name: string; isDrag?: boolean }) => (
-    <th align={'left'} className="relative h-12 truncate border px-4 text-xs capitalize">
+    <th align={'left'} className='relative h-12 truncate border px-4 text-xs capitalize'>
       {name}
     </th>
   );
@@ -164,10 +164,10 @@ export const Gantt = ({
       const startTop = i * 24 + 4 + 8;
       const startLeft = (endDate.diff(_temp.dateStart, 'day') + perRow / 10) * (widthColumnDay / perRow);
       return item.success.split(',').map((id, index) => {
-        const listData = _temp.task.filter((item) => !item.hidden && item.id === id);
+        const listData = _temp.task.filter(item => !item.hidden && item.id === id);
         if (listData.length) {
           const data = listData[0];
-          const endTop = _temp.task.filter((item) => !item.hidden).indexOf(data) * 24 + (data.endDate ? 4 : 7);
+          const endTop = _temp.task.filter(item => !item.hidden).indexOf(data) * 24 + (data.endDate ? 4 : 7);
           const endLeft =
             (data.startDate.diff(_temp.dateStart, 'day') + (data.endDate ? 0 : 1) + perRow / 8) *
               (widthColumnDay / perRow) +
@@ -182,7 +182,7 @@ export const Gantt = ({
                       } ${startTop + 10} L ${endLeft} ${startTop + 10} L ${endLeft} ${endTop} `
                     : `M ${startLeft - 1} ${startTop} L ${endLeft} ${startTop} L ${endLeft} ${endTop}`
                 }
-                fill="transparent"
+                fill='transparent'
                 stroke={!item.endDate ? 'black' : '#2563eb'}
                 strokeWidth={1}
                 aria-label={item.name}
@@ -288,8 +288,8 @@ export const Gantt = ({
   let dragStart = true;
   let height = 0;
   return (
-    <div id={id.current} className="relative">
-      <div className="relative">
+    <div id={id.current} className='relative'>
+      <div className='relative'>
         <DndContext
           modifiers={[restrictToHorizontalAxis]}
           onDragEnd={() => (dragStart = true)}
@@ -325,7 +325,7 @@ export const Gantt = ({
                 </table>
               </div>
 
-              <div className="overflow-scroll" data-scroll-x={'.left-scroll'} onScroll={handleScroll}>
+              <div className='overflow-scroll' data-scroll-x={'.left-scroll'} onScroll={handleScroll}>
                 <table className={'body min-w-[600px] border-b'}>
                   <tbody>
                     {_temp.task.map(
@@ -338,7 +338,7 @@ export const Gantt = ({
                             data-index={index}
                             data-level={item.level}
                           >
-                            <td className="h-6 overflow-hidden border-x py-0 pl-5">
+                            <td className='h-6 overflow-hidden border-x py-0 pl-5'>
                               <div
                                 className={'flex items-center gap-1'}
                                 style={{ paddingLeft: item.level * (widthColumnDay / perRow) + 'px' }}
@@ -356,7 +356,7 @@ export const Gantt = ({
                                 <span className={'truncate'}>{item.name}</span>
                               </div>
                             </td>
-                            <td className="h-6 truncate border-x px-4 py-0">{item.assignee}</td>
+                            <td className='h-6 truncate border-x px-4 py-0'>{item.assignee}</td>
                             <td
                               className={classNames('border-x px-4 py-0 h-6 text-white truncate', {
                                 'bg-blue-600': item.status === 'In Progress',
@@ -375,10 +375,10 @@ export const Gantt = ({
                             >
                               {item.priority}
                             </td>
-                            <td className="h-6 truncate border-x px-4 py-0">
+                            <td className='h-6 truncate border-x px-4 py-0'>
                               {item.planned} {item.planned ? 'hours' : ''}
                             </td>
-                            <td className="h-6 truncate border-x px-4 py-0">
+                            <td className='h-6 truncate border-x px-4 py-0'>
                               {item.work} {item.work ? 'days' : ''}
                             </td>
                           </tr>
@@ -397,7 +397,7 @@ export const Gantt = ({
                 >
                   <thead>
                     <tr>
-                      {Object.keys(_temp.date.obj).map((year) =>
+                      {Object.keys(_temp.date.obj).map(year =>
                         Object.keys(_temp.date.obj[year]).map((month, index) => (
                           <th
                             key={index}
@@ -418,8 +418,8 @@ export const Gantt = ({
                 >
                   <thead>
                     <tr>
-                      {Object.keys(_temp.date.obj).map((year) =>
-                        Object.keys(_temp.date.obj[year]).map((month) =>
+                      {Object.keys(_temp.date.obj).map(year =>
+                        Object.keys(_temp.date.obj[year]).map(month =>
                           _temp.date.obj[year][month].map((day: Dayjs, index: number) => (
                             <th
                               key={index}
@@ -435,9 +435,9 @@ export const Gantt = ({
                   </thead>
                 </table>
               </div>
-              <div className="relative overflow-scroll" data-scroll-x={'.right-scroll'} onScroll={handleScroll}>
+              <div className='relative overflow-scroll' data-scroll-x={'.right-scroll'} onScroll={handleScroll}>
                 <div
-                  className="event absolute left-0 top-0 z-10 flex h-full"
+                  className='event absolute left-0 top-0 z-10 flex h-full'
                   style={{ width: _temp.date.total * widthColumnDay + 'px' }}
                 >
                   {event.map((item, index) => {
@@ -452,7 +452,7 @@ export const Gantt = ({
                           }}
                         >
                           <div
-                            className="rotate-90 whitespace-nowrap text-center"
+                            className='rotate-90 whitespace-nowrap text-center'
                             style={{ marginTop: -item.name.length * 6 + 'px' }}
                           >
                             {item.name}
@@ -470,7 +470,7 @@ export const Gantt = ({
                             left: item.startDate.diff(_temp.dateStart, 'day') * (widthColumnDay / perRow) + 'px',
                           }}
                         >
-                          <div className="rounded-r-xl bg-red-500 px-2 py-1 text-white">{item.name}</div>
+                          <div className='rounded-r-xl bg-red-500 px-2 py-1 text-white'>{item.name}</div>
                         </div>
                       );
                   })}
@@ -479,13 +479,13 @@ export const Gantt = ({
                   className={'absolute left-0 top-0 z-10'}
                   style={{
                     width: _temp.date.total * widthColumnDay + 'px',
-                    height: _temp.task.filter((item) => !item.hidden).length * 24 + 'px',
+                    height: _temp.task.filter(item => !item.hidden).length * 24 + 'px',
                   }}
                 >
-                  {_temp.task.filter((item) => !item.hidden).map((item, i) => renderSvg(item, i))}
+                  {_temp.task.filter(item => !item.hidden).map((item, i) => renderSvg(item, i))}
                 </svg>
                 <div
-                  className="task absolute left-0 top-0 z-10 flex"
+                  className='task absolute left-0 top-0 z-10 flex'
                   style={{ width: _temp.date.total * widthColumnDay + 'px' }}
                 >
                   {_temp.task.map((item, index) => renderProgress(item, index))}
@@ -503,8 +503,8 @@ export const Gantt = ({
                         data-index={index}
                         data-level={item.level}
                       >
-                        {Object.keys(_temp.date.obj).map((year) =>
-                          Object.keys(_temp.date.obj[year]).map((month) =>
+                        {Object.keys(_temp.date.obj).map(year =>
+                          Object.keys(_temp.date.obj[year]).map(month =>
                             _temp.date.obj[year][month].map((day: Dayjs, i: number) => (
                               <td key={i} className={'relative h-6 border-x py-0 font-normal capitalize'} />
                             )),

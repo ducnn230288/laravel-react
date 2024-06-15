@@ -23,10 +23,10 @@ const Page = () => {
       <Breadcrumbs title={t('Content')} list={[t('Setting'), t('Content')]} />
       <Form />
       <div className={'wrapper-grid'}>
-        <div className="-intro-x left">
+        <div className='-intro-x left'>
           <Side />
         </div>
-        <div className="intro-x right">
+        <div className='intro-x right'>
           <Main />
         </div>
       </div>
@@ -59,9 +59,9 @@ const Form = () => {
       facade={sContent}
       columns={_column.useForm()}
       title={t(sContent.data?.id ? 'Edit Content' : 'Add new Content', {
-        name: sContentType.result?.data?.find((item) => item.code === request.typeCode)?.name,
+        name: sContentType.result?.data?.find(item => item.code === request.typeCode)?.name,
       })}
-      onSubmit={(values) => {
+      onSubmit={values => {
         if (sContent.data?.id) sContent.put({ ...values, id: sContent.data.id, typeCode: request.typeCode });
         else sContent.post({ ...values, typeCode: request.typeCode });
       }}
@@ -83,12 +83,12 @@ const Side = () => {
   const location = useLocation();
 
   return (
-    <div className="card">
-      <div className="header">
+    <div className='card'>
+      <div className='header'>
         <h3>{t('Type content')}</h3>
       </div>
       <Spin spinning={sContentType.isLoading}>
-        <div className="desktop">
+        <div className='desktop'>
           {sContentType.result?.data && (
             <Tree
               blockNode
@@ -104,7 +104,7 @@ const Side = () => {
                 expanded: true,
                 children: [],
               }))}
-              onSelect={(selectedKeys) => {
+              onSelect={selectedKeys => {
                 request.typeCode = selectedKeys[0];
                 sContent.get(request);
                 navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
@@ -112,12 +112,12 @@ const Side = () => {
             />
           )}
         </div>
-        <div className="mobile">
+        <div className='mobile'>
           <Select
             value={request.typeCode}
             className={'w-full'}
-            options={sContentType?.result?.data?.map((data) => ({ label: data.name, value: data.code }))}
-            onChange={(e) => {
+            options={sContentType?.result?.data?.map(data => ({ label: data.name, value: data.code }))}
+            onChange={e => {
               request.typeCode = e;
               sContent.get(request);
               navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
@@ -140,8 +140,8 @@ const Main = () => {
   const request = JSON.parse(sContent?.queryParams ?? '{}');
 
   return (
-    <div className="card">
-      <div className="body">
+    <div className='card'>
+      <div className='body'>
         <DataTable
           defaultRequest={{ include: 'languages' }}
           facade={sContent}
@@ -152,9 +152,9 @@ const Main = () => {
           rightHeader={
             sGlobal.user?.role?.permissions?.includes(keyRole.P_CONTENT_STORE) && (
               <Button
-                icon={<Plus className="size-3" />}
+                icon={<Plus className='size-3' />}
                 text={t('Add new Content', {
-                  name: sContentType.result?.data?.find((item) => item.code === request.typeCode)?.name,
+                  name: sContentType.result?.data?.find(item => item.code === request.typeCode)?.name,
                 })}
                 onClick={() => sContent.set({ data: undefined, isVisible: true })}
               />

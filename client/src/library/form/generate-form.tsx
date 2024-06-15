@@ -34,8 +34,8 @@ export const generateForm = ({
 
     if (item.formItem.rules) {
       item.formItem.rules
-        .filter((item) => !!item)
-        .map((rule) => {
+        .filter(item => !!item)
+        .map(rule => {
           if (item.formItem) {
             switch (rule.type) {
               case EFormRuleType.required:

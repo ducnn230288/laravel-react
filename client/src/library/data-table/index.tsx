@@ -28,7 +28,7 @@ export const DataTable = forwardRef(
       paginationDescription = (from: number, to: number, total: number) => from + '-' + to + ' of ' + total + ' items',
       facade = {},
       data,
-      formatData = (data) => data,
+      formatData = data => data,
       showPagination = true,
       showSearch = true,
       onRow,
@@ -67,7 +67,7 @@ export const DataTable = forwardRef(
       }
       if (!scroll.current.x) {
         scroll.current.x = 0;
-        columns.forEach((item) => {
+        columns.forEach(item => {
           if (item.tableItem) {
             scroll.current.x! += item.tableItem?.width ?? 150;
           }
@@ -85,11 +85,11 @@ export const DataTable = forwardRef(
           if (parseInt(table!.style.width.replace('px', '')) - widthTable < 100) table!.style.width = widthTable + 'px';
           let totalWidth = 0;
           let number = 0;
-          cols?.forEach((i) => {
+          cols?.forEach(i => {
             if (i.style.width) totalWidth += parseInt(i.style.width.replace('px', ''));
             if (!i.style.width) number += 1;
           });
-          cols?.forEach((i) => {
+          cols?.forEach(i => {
             if (!i.style.width) i.style.width = (widthTable - totalWidth) / number + 'px';
           });
         }, 10);
@@ -97,7 +97,7 @@ export const DataTable = forwardRef(
 
     if (params.current.like && Array.isArray(params.current.like)) {
       const like: Record<string, any> = {};
-      params.current.like.forEach((item) => (like[item.split(',')[0] || ''] = item.split(',')[1]));
+      params.current.like.forEach(item => (like[item.split(',')[0] || ''] = item.split(',')[1]));
       params.current.like = like;
     }
     if (params.current.sort && typeof params.current.sort === 'string')
@@ -164,7 +164,7 @@ export const DataTable = forwardRef(
     if (!data) data = facade.result?.data;
     const loopData = (array?: any[]): any[] =>
       array
-        ? formatData(array).map((item) => ({
+        ? formatData(array).map(item => ({
             ...item,
             key: item.id || uuidv4(),
             children: item.children && loopData(item.children),
@@ -177,9 +177,9 @@ export const DataTable = forwardRef(
       </th>
     );
     return (
-      <div ref={tableRef} className="data-table">
+      <div ref={tableRef} className='data-table'>
         {(!!showSearch || !!rightHeader) && (
-          <div className="top-header">
+          <div className='top-header'>
             {showSearch ? (
               <CSearch
                 params={params.current}
@@ -199,7 +199,7 @@ export const DataTable = forwardRef(
             onRow={onRow}
             components={{ header: { cell: componentsCell } }}
             locale={{
-              emptyText: <div className="no-data">{t('No Data')}</div>,
+              emptyText: <div className='no-data'>{t('No Data')}</div>,
             }}
             loading={facade.isLoading}
             columns={cols.current}
@@ -209,7 +209,7 @@ export const DataTable = forwardRef(
               return handleTableChange(undefined, filters, sort as SorterResult<any>, params.current.fullTextSearch);
             }}
             scroll={scroll.current}
-            size="small"
+            size='small'
           />
           {refPageSizeOptions.current && showPagination && (
             <Pagination

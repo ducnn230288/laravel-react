@@ -87,7 +87,7 @@ export const generateInput = ({
             rows={4}
             maxLength={1000}
             placeholder={t(formItem.placeholder ?? 'Enter', { title: item.title.toLowerCase() })}
-            onChange={(e) => formItem.onChange?.(e.target.value, form)}
+            onChange={e => formItem.onChange?.(e.target.value, form)}
           />
         );
       case EFormType.slider:
@@ -104,7 +104,7 @@ export const generateInput = ({
           <Slider
             range
             tooltip={{
-              formatter: (value) =>
+              formatter: value =>
                 (value ? value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : '0') +
                 (formItem.symbol ? formItem.symbol : ''),
             }}
@@ -132,21 +132,21 @@ export const generateInput = ({
       case EFormType.dateRange:
         return (
           <DateAntDesign.RangePicker
-            onCalendarChange={(date) => {
+            onCalendarChange={date => {
               form.setFieldValue(
                 item.name,
-                date?.filter((i) => !!i),
+                date?.filter(i => !!i),
               );
               formItem.onChange?.(
-                date?.filter((i) => !!i),
+                date?.filter(i => !!i),
                 form,
               );
             }}
-            onOpenChange={(open) => {
+            onOpenChange={open => {
               if (!open && form.getFieldValue(item.name)?.length < 2) form.resetFields([item.name]);
             }}
             format={formatDate + (formItem.showTime ? ' HH:mm' : '')}
-            disabledDate={(current) => (formItem.disabledDate ? formItem.disabledDate(current, form) : false)}
+            disabledDate={current => (formItem.disabledDate ? formItem.disabledDate(current, form) : false)}
             defaultValue={
               formItem.initialValues && [dayjs(formItem.initialValues.start), dayjs(formItem.initialValues.end)]
             }
@@ -170,21 +170,21 @@ export const generateInput = ({
         return (
           <TimePicker.RangePicker
             minuteStep={10}
-            onCalendarChange={(date) => {
+            onCalendarChange={date => {
               form.setFieldValue(
                 item.name,
-                date?.filter((i) => !!i),
+                date?.filter(i => !!i),
               );
               formItem.onChange?.(
-                date?.filter((i) => !!i),
+                date?.filter(i => !!i),
                 form,
               );
             }}
-            onOpenChange={(open) => {
+            onOpenChange={open => {
               if (!open && form.getFieldValue(item.name)?.length < 2) form.resetFields([item.name]);
             }}
             format={'HH:mm'}
-            disabledDate={(current) => (formItem.disabledDate ? formItem.disabledDate(current, form) : false)}
+            disabledDate={current => (formItem.disabledDate ? formItem.disabledDate(current, form) : false)}
             defaultValue={
               formItem.initialValues && [dayjs(formItem.initialValues.start), dayjs(formItem.initialValues.end)]
             }
@@ -195,12 +195,12 @@ export const generateInput = ({
         return formItem.list ? (
           <Checkbox.Group
             options={formItem.list}
-            onChange={(value) => formItem.onChange?.(value, form)}
+            onChange={value => formItem.onChange?.(value, form)}
             disabled={formItem.disabled?.(values, form)}
           />
         ) : (
           <Checkbox
-            onChange={(value) => formItem.onChange?.(value.target.checked, form)}
+            onChange={value => formItem.onChange?.(value.target.checked, form)}
             disabled={formItem.disabled?.(values, form)}
           >
             {formItem.label}
@@ -280,10 +280,10 @@ export const generateInput = ({
       case EFormType.switch:
         return (
           <Switch
-            checkedChildren={<Check className="size-5 fill-white" />}
-            unCheckedChildren={<Times className="size-5 fill-white" />}
+            checkedChildren={<Check className='size-5 fill-white' />}
+            unCheckedChildren={<Times className='size-5 fill-white' />}
             defaultChecked={!!values && values[item.name || ''] === 1}
-            onChange={(e) => formItem.onChange?.(e, form)}
+            onChange={e => formItem.onChange?.(e, form)}
           />
         );
       case EFormType.otp:

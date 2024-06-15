@@ -23,11 +23,11 @@ const Component = ({ formItem, placeholder, onChange, value, form, disabled, sho
             if (formItem.mode === 'multiple' && value?.length) {
               const array = formItem.api.convertData ? formItem.api.convertData(list) : list;
               set_temp({ list, checkAll: array.length === value.length });
-            } else set_temp((pre) => ({ ...pre, list }));
+            } else set_temp(pre => ({ ...pre, list }));
           }
         }
       } else if (formItem.renderList) {
-        set_temp((pre) => ({ ...pre, list: formItem.renderList(form.getFieldValue) }));
+        set_temp(pre => ({ ...pre, list: formItem.renderList(form.getFieldValue) }));
       }
     },
     [form, formItem, value],
@@ -42,7 +42,7 @@ const Component = ({ formItem, placeholder, onChange, value, form, disabled, sho
       onChange && onChange(value.map((item: any) => ({ value: item, label: item })));
     }
     if ((_temp.list.length === 0 && formItem.api) || formItem.renderList) await loadData('');
-    set_temp((pre) => ({ ...pre, checkAll: value?.length > 0 && value?.length === allValue.current.length }));
+    set_temp(pre => ({ ...pre, checkAll: value?.length > 0 && value?.length === allValue.current.length }));
   }, [formItem, loadData, _temp.list, allValue, value, onChange]);
 
   useEffect(() => {
@@ -52,7 +52,7 @@ const Component = ({ formItem, placeholder, onChange, value, form, disabled, sho
   const loadDataTree = async (treeNode: any) => {
     if (formItem.api.loadData) {
       const data = await formItem.api.loadData(treeNode, _temp.list);
-      set_temp((pre) => ({ ...pre, list: data }));
+      set_temp(pre => ({ ...pre, list: data }));
     }
   };
 
@@ -130,7 +130,7 @@ const Component = ({ formItem, placeholder, onChange, value, form, disabled, sho
           onChange && onChange(data);
         }
       }}
-      dropdownRender={(originNode) => (
+      dropdownRender={originNode => (
         <Fragment>
           {formItem.mode === 'multiple' && (
             <Fragment>
@@ -153,7 +153,7 @@ const Component = ({ formItem, placeholder, onChange, value, form, disabled, sho
       treeCheckable={formItem.mode === 'multiple'}
       loadData={loadDataTree}
       treeData={_temp.list}
-      tagRender={(props) => {
+      tagRender={props => {
         const item = handleGetData(_temp.list, props.value);
         const arrayValue = value.map((item: any) => item.value);
         if (
@@ -177,10 +177,10 @@ const Component = ({ formItem, placeholder, onChange, value, form, disabled, sho
           }
           return (
             checkShow && (
-              <div className="relative -left-2.5 mr-2.5 rounded-xl bg-teal-100 px-2 py-1">
+              <div className='relative -left-2.5 mr-2.5 rounded-xl bg-teal-100 px-2 py-1'>
                 <Button
-                  icon={<Times className="size-5 fill-red-600" />}
-                  className="absolute -right-2 -top-1 z-10 rounded-full !bg-red-100 leading-none !text-red-600"
+                  icon={<Times className='size-5 fill-red-600' />}
+                  className='absolute -right-2 -top-1 z-10 rounded-full !bg-red-100 leading-none !text-red-600'
                   onClick={() => onChange && onChange(clearTag(item[0], value))}
                   disabled={disabled}
                 />

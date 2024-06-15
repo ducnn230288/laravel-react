@@ -11,7 +11,7 @@ import { Mask } from '../form/input';
 import { Button } from '../button';
 
 const groupButton = (confirm: any, clearFilters: any, key: any, value: any, t: any) => (
-  <div className="mt-2 grid grid-cols-2 gap-2">
+  <div className='mt-2 grid grid-cols-2 gap-2'>
     <Button
       isTiny={true}
       text={t('Reset')}
@@ -19,11 +19,11 @@ const groupButton = (confirm: any, clearFilters: any, key: any, value: any, t: a
         clearFilters();
         confirm();
       }}
-      className=" "
+      className=' '
     />
     <Button
       isTiny={true}
-      icon={<Search className="size-3 fill-primary-content" />}
+      icon={<Search className='size-3 fill-primary-content' />}
       text={t('Search')}
       onClick={() => confirm(value)}
     />
@@ -63,18 +63,18 @@ export const getColumnSearchCheckbox = ({
 
     return (
       <Spin spinning={facade.isLoading === true}>
-        <div className="p-1">
+        <div className='p-1'>
           {!!get?.facade && (
             <Mask
               placeholder={t('Search')}
-              onChange={(e) => {
+              onChange={e => {
                 clearTimeout(timeoutSearch.current);
                 timeoutSearch.current = setTimeout(() => columnSearch(get, e.target.value, selectedKeys, facade), 500);
               }}
-              onPressEnter={(e) => columnSearch(get, e.currentTarget.value, undefined, facade)}
+              onPressEnter={e => columnSearch(get, e.currentTarget.value, undefined, facade)}
             />
           )}
-          <div className="mt-1">
+          <div className='mt-1'>
             <Checkbox.Group
               options={
                 (list as CheckboxOptionType[]) ||
@@ -82,7 +82,7 @@ export const getColumnSearchCheckbox = ({
                 []
               }
               defaultValue={selectedKeys}
-              onChange={(e) => setSelectedKeys(e)}
+              onChange={e => setSelectedKeys(e)}
             />
             {(list?.length === 0 || facade?.result?.data?.length === 0) && (
               <span className={'px-2'}>{t('No Data')}</span>
@@ -122,18 +122,18 @@ export const getColumnSearchRadio = ({
     }
     return (
       <Spin spinning={facade.isLoading === true}>
-        <div className="p-1">
+        <div className='p-1'>
           {get?.facade && (
             <Mask
               placeholder={t('Search')}
-              onChange={(e) => {
+              onChange={e => {
                 clearTimeout(timeoutSearch.current);
                 timeoutSearch.current = setTimeout(() => columnSearch(get, e.target.value, selectedKeys), 500);
               }}
-              onPressEnter={(e) => columnSearch(get, e.currentTarget.value, undefined, facade)}
+              onPressEnter={e => columnSearch(get, e.currentTarget.value, undefined, facade)}
             />
           )}
-          <div className="mt-1">
+          <div className='mt-1'>
             <Radio.Group
               options={
                 (list as CheckboxOptionType[]) ||
@@ -141,7 +141,7 @@ export const getColumnSearchRadio = ({
                 []
               }
               value={selectedKeys}
-              onChange={(e) => setSelectedKeys(e.target.value + '')}
+              onChange={e => setSelectedKeys(e.target.value + '')}
             />
             {(list?.length === 0 || facade?.result?.data?.length === 0) && (
               <span className={'px-2'}>{t('No Data')}</span>
@@ -162,7 +162,7 @@ export const getColumnSearchDate = ({ key, t }: { key: string; t: TFunction<'loc
       <DatePicker.RangePicker
         renderExtraFooter={() => (
           <Button
-            icon={<CheckCircle className="size-5 fill-base-100" />}
+            icon={<CheckCircle className='size-5 fill-base-100' />}
             text={t('Ok')}
             onClick={() => (document.activeElement as HTMLElement).blur()}
             className={'w-full justify-center !py-0'}
@@ -189,12 +189,12 @@ export const getColumnSearchDate = ({ key, t }: { key: string; t: TFunction<'loc
 
 export const getColumnSearchInput = ({ key, t }: { key: string; t: TFunction<'locale', 'library'> }) => ({
   filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }: any) => (
-    <div className="p-1">
+    <div className='p-1'>
       <Mask
         id={'_input_filter_' + key}
         placeholder={t('Search')}
         value={selectedKeys}
-        onChange={(e) => setSelectedKeys(e.target.value)}
+        onChange={e => setSelectedKeys(e.target.value)}
         onPressEnter={() => confirm()}
       />
       {groupButton(confirm, clearFilters, key, selectedKeys, t)}

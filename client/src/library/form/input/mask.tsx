@@ -52,7 +52,7 @@ const Component = forwardRef(
     return (
       <Fragment>
         <div className={'relative'}>
-          {!!addonBefore && <span className="before">{addonBefore(form)}</span>}
+          {!!addonBefore && <span className='before'>{addonBefore(form)}</span>}
           <input
             id={id}
             ref={input}
@@ -68,9 +68,9 @@ const Component = forwardRef(
             onBlur={onBlur}
             onChange={onChange}
             onFocus={onFocus}
-            onKeyUp={(e) => e.keyCode === 13 && onPressEnter && onPressEnter(e)}
+            onKeyUp={e => e.keyCode === 13 && onPressEnter && onPressEnter(e)}
           />
-          {!!addonAfter && <span className="after">{addonAfter(form)}</span>}
+          {!!addonAfter && <span className='after'>{addonAfter(form)}</span>}
         </div>
         {list && (
           <div className={'mt-2 flex flex-wrap gap-2'}>

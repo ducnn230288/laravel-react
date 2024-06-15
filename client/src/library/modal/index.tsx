@@ -54,12 +54,12 @@ export const Modal = forwardRef(
     useEffect(() => {
       if (name) {
         if (facade[keyState] && !searchParams.has('modal')) {
-          setSearchParams((params) => {
+          setSearchParams(params => {
             params.set('modal', name);
             return params;
           });
         } else if (searchParams.has('modal')) {
-          setSearchParams((params) => {
+          setSearchParams(params => {
             params.delete('modal');
             return params;
           });
@@ -73,7 +73,7 @@ export const Modal = forwardRef(
         destroyOnClose={true}
         centered={true}
         width={widthModal}
-        title={title && <h3 className="text-lg font-bold">{title(data)}</h3>}
+        title={title && <h3 className='text-lg font-bold'>{title(data)}</h3>}
         open={state[keyState]}
         onOk={handleOk}
         onCancel={handleCancel}
@@ -81,16 +81,16 @@ export const Modal = forwardRef(
         footer={
           !!onOk &&
           ((footerCustom && footerCustom(handleOk, handleCancel)) || (
-            <div className="flex justify-end gap-2">
+            <div className='flex justify-end gap-2'>
               <Button
                 text={typeof textCancel === 'string' ? t(textCancel) : textCancel}
-                className="!bg-white !text-teal-900"
+                className='!bg-white !text-teal-900'
                 onClick={handleCancel}
               />
               <Button
                 isLoading={isLoading}
                 text={typeof textCancel === 'string' ? t(textSubmit) : textSubmit}
-                className="!bg-teal-900"
+                className='!bg-teal-900'
                 disabled={!firstChange}
                 onClick={handleOk}
               />

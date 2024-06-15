@@ -99,7 +99,7 @@ const Pages = () => {
                     <Suspense
                       fallback={
                         <Spin>
-                          <div className="h-screen w-screen" />
+                          <div className='h-screen w-screen' />
                         </Spin>
                       }
                     >
@@ -115,7 +115,7 @@ const Pages = () => {
             </Route>
           ))}
         </Route>
-        <Route path="*" element={<Navigate to={'/' + lang + '/'} />} />
+        <Route path='*' element={<Navigate to={'/' + lang + '/'} />} />
       </Routes>
     </HashRouter>
   );

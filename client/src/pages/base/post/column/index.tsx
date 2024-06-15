@@ -56,7 +56,7 @@ export default {
           width: 120,
           filter: { type: ETableFilterType.date },
           sorter: true,
-          render: (text) => (
+          render: text => (
             <ToolTip title={dayjs(text).format(sGlobal.formatDate + ' HH:mm:ss')}>
               {dayjs(text).format(sGlobal.formatDate)}
             </ToolTip>
@@ -96,7 +96,7 @@ export default {
                           : '',
                       })}
                     >
-                      {data.isDisable ? <Disable className="warning" /> : <Check className="success" />}
+                      {data.isDisable ? <Disable className='warning' /> : <Check className='success' />}
                     </button>
                   </Popconfirm>
                 </ToolTip>
@@ -118,7 +118,7 @@ export default {
                     })}
                     onClick={() => sPost.getById({ id: data.id, params: { include: 'languages' } })}
                   >
-                    <Edit className="primary" />
+                    <Edit className='primary' />
                   </button>
                 </ToolTip>
               )}
@@ -148,7 +148,7 @@ export default {
                           : '',
                       })}
                     >
-                      <Trash className="error" />
+                      <Trash className='error' />
                     </button>
                   </Popconfirm>
                 </ToolTip>

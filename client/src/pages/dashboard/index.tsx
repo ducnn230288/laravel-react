@@ -11,8 +11,8 @@ import { formatDataChart } from '@/utils';
 
 const Page = () => {
   return (
-    <div className="h-full pb-10">
-      <h1 className="mb-14 text-center text-3xl font-bold text-teal-900 ">{'Welcome'}</h1>
+    <div className='h-full pb-10'>
+      <h1 className='mb-14 text-center text-3xl font-bold text-teal-900 '>{'Welcome'}</h1>
       <Gantt data={task} event={event} />
       <EditTable table={table2} />
       <EditTable table={table} />

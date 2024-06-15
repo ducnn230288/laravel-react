@@ -23,7 +23,7 @@ const Component = ({
 
   return (
     <Form.List name={name}>
-      {(fields) => (
+      {fields => (
         <Tabs
           destroyInactiveTabPane={true}
           items={fields.map(({ name: n }, i) => ({

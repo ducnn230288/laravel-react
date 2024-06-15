@@ -19,19 +19,19 @@ const Layout = ({ lang = language, permissions = [] }: { lang?: string; permissi
   const list: IMenu[] = [
     {
       key: `/${lang}${routerLinks('Dashboard')}`,
-      icon: <Calendar className="h-6 w-5" />,
+      icon: <Calendar className='h-6 w-5' />,
       label: t('Dashboard'),
     },
     {
       key: `/${lang}${routerLinks('User')}`,
-      icon: <User className="h-6 w-5" />,
+      icon: <User className='h-6 w-5' />,
       label: t('User'),
       permission: keyRole.P_USER_INDEX,
       queryparams: { roleCode: 'SUPER-ADMIN' },
     },
     {
       key: `/${lang}${routerLinks('Setting')}`,
-      icon: <Cog className="h-6 w-5" />,
+      icon: <Cog className='h-6 w-5' />,
       label: t('Setting'),
       children: [
         {
@@ -61,12 +61,12 @@ const Layout = ({ lang = language, permissions = [] }: { lang?: string; permissi
       ],
     },
   ];
-  return list.filter((item) => {
+  return list.filter(item => {
     return (
       !item.permission ||
       (!item.children && item.permission && permissions?.includes(item.permission!)) ||
       (item.children &&
-        item.children.filter((subItem) => !subItem.permission || permissions?.includes(subItem.permission)).length > 0)
+        item.children.filter(subItem => !subItem.permission || permissions?.includes(subItem.permission)).length > 0)
     );
   });
 };

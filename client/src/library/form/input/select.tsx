@@ -40,7 +40,7 @@ const Component = ({
       )
         facade[get.method || 'get'](params);
     } else if (list) {
-      set_temp((pre) => ({
+      set_temp(pre => ({
         ...pre,
         list: list.filter(
           (item: any) =>
@@ -60,7 +60,7 @@ const Component = ({
       let data = get.data();
       if (get?.format && data) {
         data = mode === 'multiple' ? data.map(get.format) : [get.format(data)];
-        if (JSON.stringify(data) !== JSON.stringify(_temp.current)) set_temp((pre) => ({ ...pre, current: data }));
+        if (JSON.stringify(data) !== JSON.stringify(_temp.current)) set_temp(pre => ({ ...pre, current: data }));
       }
     }
   }, [get?.data]);
@@ -78,13 +78,13 @@ const Component = ({
       showSearch={showSearch}
       loading={(facade.result && facade?.isLoading) || false}
       allowClear={allowClear}
-      onSearch={showSearch ? (value) => loadData(value) : undefined}
+      onSearch={showSearch ? value => loadData(value) : undefined}
       value={value}
-      maxTagPlaceholder={(array) => '+' + array.length}
+      maxTagPlaceholder={array => '+' + array.length}
       mode={mode}
-      optionFilterProp="label"
+      optionFilterProp='label'
       onBlur={onBlur}
-      onDropdownVisibleChange={(open) => open && !!facade?.isLoading && loadData('')}
+      onDropdownVisibleChange={open => open && !!facade?.isLoading && loadData('')}
       className={className}
     >
       {__list?.map((item: any, index: number) => (

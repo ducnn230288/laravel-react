@@ -15,7 +15,7 @@ export const Button = ({
 }: Type) => {
   return (
     <button
-      type="button"
+      type='button'
       disabled={disabled}
       title={title ?? text ?? ''}
       className={classNames('btn', className, {

@@ -47,7 +47,7 @@ const Component = ({
   }, [inputVisible]);
 
   const handleClose = (removedTag: any) => {
-    onChange && onChange(value.filter((tag) => tag !== removedTag));
+    onChange && onChange(value.filter(tag => tag !== removedTag));
   };
 
   const showInput = () => {
@@ -58,7 +58,7 @@ const Component = ({
     if (typeof inputValue === 'string' && inputValue && value.indexOf(inputValue) === -1) {
       onChange && onChange([...value, inputValue]);
     } else if (typeof inputValue === 'object') {
-      onChange && onChange([...value, ...inputValue.filter((i) => value.indexOf(i) === -1)]);
+      onChange && onChange([...value, ...inputValue.filter(i => value.indexOf(i) === -1)]);
     }
 
     !list && setInputVisible(false);
@@ -70,8 +70,8 @@ const Component = ({
       return;
     }
     if (active.id !== over.id) {
-      const oldIndex = value.findIndex((item) => item === active.id);
-      const newIndex = value.findIndex((item) => item === over.id);
+      const oldIndex = value.findIndex(item => item === active.id);
+      const newIndex = value.findIndex(item => item === over.id);
       onChange && onChange(reorderArray(value, oldIndex, newIndex));
     }
   };
@@ -87,7 +87,7 @@ const Component = ({
         appear={false}
         enter={{ scale: 0.8, opacity: 0, type: 'from', duration: 100 }}
         leave={{ opacity: 0, width: 0, scale: 0, duration: 200 }}
-        onEnd={(e) => {
+        onEnd={e => {
           if (e.type === 'appear' || e.type === 'enter') {
             (e.target as any).style = 'display: inline-block';
           }
@@ -96,7 +96,7 @@ const Component = ({
       >
         <DndContext sensors={sensors} onDragEnd={handleDragEnd} collisionDetection={closestCenter}>
           <SortableContext items={value} strategy={horizontalListSortingStrategy}>
-            {value.map((tag) => (
+            {value.map(tag => (
               <DraggableTag
                 disabled={!!disabled}
                 tag={tag}
@@ -122,13 +122,13 @@ const Component = ({
                   onBlur={() => setInputVisible(false)}
                   disabled={!!disabled}
                   mode={'multiple'}
-                  list={list.filter((i) => i.value && value.indexOf(i.value.toString()) === -1)}
+                  list={list.filter(i => i.value && value.indexOf(i.value.toString()) === -1)}
                 />
               )
             ) : (
               <Button
-                icon={<Plus className="size-8 p-2" />}
-                className="inline-block rounded-full border"
+                icon={<Plus className='size-8 p-2' />}
+                className='inline-block rounded-full border'
                 onClick={showInput}
                 disabled={disabled}
               />
@@ -159,18 +159,18 @@ const DraggableTag = ({
 
   return (
     <div
-      className="relative inline-block cursor-move rounded-xl border bg-teal-100 px-2 py-1.5"
+      className='relative inline-block cursor-move rounded-xl border bg-teal-100 px-2 py-1.5'
       style={style}
       ref={setNodeRef}
       {...listeners}
     >
       <Button
-        icon={<Times className="size-4 p-1" />}
-        className="absolute -right-2 -top-1.5 rounded-full"
+        icon={<Times className='size-4 p-1' />}
+        className='absolute -right-2 -top-1.5 rounded-full'
         onClick={onClose}
         disabled={disabled}
       />
-      {list ? list.filter((i) => i.value === tag)[0].label : tag}
+      {list ? list.filter(i => i.value === tag)[0].label : tag}
     </div>
   );
 };

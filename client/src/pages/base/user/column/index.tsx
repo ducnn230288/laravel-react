@@ -76,7 +76,7 @@ export default {
           width: 120,
           filter: { type: ETableFilterType.date },
           sorter: true,
-          render: (text) => (
+          render: text => (
             <ToolTip title={dayjs(text).format(sGlobal.formatDate + ' HH:mm:ss')}>
               {dayjs(text).format(sGlobal.formatDate)}
             </ToolTip>
@@ -104,7 +104,7 @@ export default {
                         name: data.name,
                       })}
                     >
-                      {data.isDisable ? <Disable className="warning" /> : <Check className="success" />}
+                      {data.isDisable ? <Disable className='warning' /> : <Check className='success' />}
                     </button>
                   </Popconfirm>
                 </ToolTip>
@@ -115,7 +115,7 @@ export default {
                     title={t('Edit User', { name: data.name })}
                     onClick={() => sUser.getById({ id: data.id, params: { include: 'position' } })}
                   >
-                    <Edit className="primary" />
+                    <Edit className='primary' />
                   </button>
                 </ToolTip>
               )}
@@ -128,7 +128,7 @@ export default {
                     onConfirm={() => sUser.delete(data.id)}
                   >
                     <button title={t('Delete user', { name: data.name })}>
-                      <Trash className="error" />
+                      <Trash className='error' />
                     </button>
                   </Popconfirm>
                 </ToolTip>
@@ -221,7 +221,7 @@ export default {
               fullTextSearch,
               typeCode: 'position',
             }),
-            format: (item) => ({
+            format: item => ({
               label: item.name,
               value: item.code,
             }),

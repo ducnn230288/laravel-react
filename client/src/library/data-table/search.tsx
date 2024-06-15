@@ -29,7 +29,7 @@ export const CSearch = ({
   const idTable = useRef('temp-' + uuidv4());
 
   return (
-    <div className="search">
+    <div className='search'>
       <Mask
         id={idTable.current + '_input_search'}
         value={params.fullTextSearch}

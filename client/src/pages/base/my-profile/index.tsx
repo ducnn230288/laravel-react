@@ -37,18 +37,18 @@ const Page = () => {
   return (
     <Fragment>
       <Breadcrumbs title={t('My Profile')} list={[t('My Profile')]} />
-      <div className="wrapper-grid profile">
-        <div className="-intro-x left">
+      <div className='wrapper-grid profile'>
+        <div className='-intro-x left'>
           <Side form={form} />
         </div>
-        <div className="intro-x right">
-          <div className="card">
-            <div className="body">
+        <div className='intro-x right'>
+          <div className='card'>
+            <div className='body'>
               <Tabs
-                className="-mt-3"
+                className='-mt-3'
                 onTabClick={(key: string) => onChangeTab(key)}
                 activeKey={activeKey.current}
-                size="large"
+                size='large'
                 items={[
                   {
                     key: '1',
@@ -75,8 +75,8 @@ const Side = ({ form }: { form: FormInstance }) => {
   const sGlobal = SGlobal();
 
   return (
-    <div className="card">
-      <div className="body">
+    <div className='card'>
+      <div className='body'>
         <Form
           values={{ ...sGlobal.data }}
           formAnt={form}
@@ -94,10 +94,10 @@ const Side = ({ form }: { form: FormInstance }) => {
               formItem: {
                 render: (_, values) => (
                   <Fragment>
-                    <h2 className="text-center">{values.name}</h2>
-                    <div className="line"></div>
-                    <div className="wrapper-flex">
-                      <User className="size-5" />
+                    <h2 className='text-center'>{values.name}</h2>
+                    <div className='line'></div>
+                    <div className='wrapper-flex'>
+                      <User className='size-5' />
                       <h3>{sGlobal.user?.role?.name}</h3>
                     </div>
                   </Fragment>
@@ -170,7 +170,7 @@ const FormProfile = ({ form }: { form: FormInstance }) => {
                 fullTextSearch,
                 typeCode: 'position',
               }),
-              format: (item) => ({
+              format: item => ({
                 label: item?.name,
                 value: item?.code,
               }),
@@ -206,7 +206,7 @@ const FormProfile = ({ form }: { form: FormInstance }) => {
         },
       ]}
       disableSubmit={sGlobal.isLoading}
-      handSubmit={(values) => sGlobal.putProfile({ ...values, avatar: form.getFieldValue('avatar')[0].url })}
+      handSubmit={values => sGlobal.putProfile({ ...values, avatar: form.getFieldValue('avatar')[0].url })}
     />
   );
 };
@@ -264,7 +264,7 @@ const FormChangePassword = () => {
       ]}
       disableSubmit={sGlobal.isLoading}
       textSubmit={t('Change Password')}
-      handSubmit={(values) => {
+      handSubmit={values => {
         const { name, email, phoneNumber, dob, positionCode, description } = sGlobal.user!;
         sGlobal.putProfile({ name, email, phoneNumber, dob, positionCode, description, ...values });
       }}

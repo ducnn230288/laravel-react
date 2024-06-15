@@ -16,7 +16,7 @@ const Layout = ({ children }: PropsWithChildren) => {
   const { t } = useTranslation('locale', { keyPrefix: 'layouts' });
 
   return (
-    <div className="l-admin">
+    <div className='l-admin'>
       <CSide />
       <section>
         <CHeader />
@@ -49,14 +49,14 @@ const CSide = () => {
     <Fragment>
       <div className={classNames('overload', { active: !sGlobal.isCollapseMenu })}></div>
       <aside className={classNames({ active: sGlobal.isCollapseMenu })}>
-        <a href="/vn/dashboard" className={classNames('logo', { active: sGlobal.isCollapseMenu })}>
+        <a href='/vn/dashboard' className={classNames('logo', { active: sGlobal.isCollapseMenu })}>
           <Logo />
           <h1 className={classNames({ active: sGlobal.isCollapseMenu })}>{APP_NAME}</h1>
         </a>
         <Menu
           defaultSelectedKeys={[location.pathname]}
           defaultOpenKeys={['/' + location.pathname.substring(1).split('/').slice(0, 2).join('/')]}
-          mode="inline"
+          mode='inline'
           inlineCollapsed={sGlobal.isCollapseMenu}
           items={listMenu as any}
           onSelect={({ key }) => {
@@ -92,7 +92,7 @@ const CHeader = () => {
       key: 'My Profile',
       label: (
         <button onClick={() => changePage(`${routerLinks('MyProfile')}?tab=1`)}>
-          <User className="size-5" />
+          <User className='size-5' />
           {t('My Profile')}
         </button>
       ),
@@ -101,7 +101,7 @@ const CHeader = () => {
       key: 'Change Password',
       label: (
         <button onClick={() => changePage(`${routerLinks('MyProfile')}?tab=2`)}>
-          <Key className="size-5" />
+          <Key className='size-5' />
           {t('Change Password')}
         </button>
       ),
@@ -113,7 +113,7 @@ const CHeader = () => {
       key: 'Sign out',
       label: (
         <button onClick={() => changePage(routerLinks('Login'))}>
-          <Out className="size-5" />
+          <Out className='size-5' />
           {t('Sign out')}
         </button>
       ),
@@ -126,12 +126,12 @@ const CHeader = () => {
         className={classNames('hamburger', { active: sGlobal.isCollapseMenu })}
         onClick={() => sGlobal.set({ isCollapseMenu: !sGlobal.isCollapseMenu })}
       >
-        <span className="line" />
-        <span className="line" />
-        <span className="line" />
+        <span className='line' />
+        <span className='line' />
+        <span className='line' />
       </button>
 
-      <div className="right">
+      <div className='right'>
         <Dropdown
           trigger={['click']}
           menu={{
@@ -141,9 +141,9 @@ const CHeader = () => {
                 label: (
                   <button onClick={() => sGlobal.setLanguage(sGlobal.language === 'vn' ? 'en' : 'vn')}>
                     {sGlobal.language === 'en' ? (
-                      <VN className="size-5 rounded-btn" />
+                      <VN className='size-5 rounded-btn' />
                     ) : (
-                      <US className="size-5 rounded-btn" />
+                      <US className='size-5 rounded-btn' />
                     )}
                     {t(sGlobal.language === 'vn' ? 'en' : 'vn')}
                   </button>
@@ -153,18 +153,18 @@ const CHeader = () => {
           }}
         >
           <button>
-            {sGlobal.language === 'en' ? <US className="size-6 rounded-btn" /> : <VN className="size-6 rounded-btn" />}
+            {sGlobal.language === 'en' ? <US className='size-6 rounded-btn' /> : <VN className='size-6 rounded-btn' />}
           </button>
         </Dropdown>
         <button onClick={changeTheme}>
-          <DayNight className="size-6" />
+          <DayNight className='size-6' />
         </button>
-        <Dropdown trigger={['click']} menu={{ items: listDropdown }} placement="bottomRight">
-          <div className="flex cursor-pointer gap-1.5">
+        <Dropdown trigger={['click']} menu={{ items: listDropdown }} placement='bottomRight'>
+          <div className='flex cursor-pointer gap-1.5'>
             <Avatar src={sGlobal.user?.avatar ?? ''} size={8} />
-            <div className="leading-none">
-              <p className="text-sm font-semibold">{sGlobal.user?.name}</p>
-              <span className="text-xs text-gray-500">{sGlobal.user?.email}</span>
+            <div className='leading-none'>
+              <p className='text-sm font-semibold'>{sGlobal.user?.name}</p>
+              <span className='text-xs text-gray-500'>{sGlobal.user?.email}</span>
             </div>
           </div>
         </Dropdown>

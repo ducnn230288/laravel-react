@@ -43,7 +43,7 @@ export default {
           width: 120,
           filter: { type: ETableFilterType.date },
           sorter: true,
-          render: (text) => (
+          render: text => (
             <ToolTip title={dayjs(text).format(sGlobal.formatDate + ' HH:mm:ss')}>
               {dayjs(text).format(sGlobal.formatDate)}
             </ToolTip>
@@ -67,7 +67,7 @@ export default {
                     onConfirm={() => sCode.put({ id: data.code, isDisable: !data.isDisable })}
                   >
                     <button title={t(data.isDisable ? 'Disabled code' : 'Enabled code', { name: data.name })}>
-                      {data.isDisable ? <Disable className="warning" /> : <Check className="success" />}
+                      {data.isDisable ? <Disable className='warning' /> : <Check className='success' />}
                     </button>
                   </Popconfirm>
                 </ToolTip>
@@ -75,7 +75,7 @@ export default {
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_CODE_UPDATE) && (
                 <ToolTip title={t('Edit Code', { name: data.name })}>
                   <button title={t('Edit Code', { name: data.name })} onClick={() => sCode.getById({ id: data.code })}>
-                    <Edit className="primary" />
+                    <Edit className='primary' />
                   </button>
                 </ToolTip>
               )}
@@ -87,7 +87,7 @@ export default {
                     onConfirm={() => sCode.delete(data.code)}
                   >
                     <button title={t('Delete code', { name: data.name })}>
-                      <Trash className="error" />
+                      <Trash className='error' />
                     </button>
                   </Popconfirm>
                 </ToolTip>

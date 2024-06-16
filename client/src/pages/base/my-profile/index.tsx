@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router';
 import { Form as AntForm, type FormInstance, Tabs } from 'antd';
 import { useSearchParams } from 'react-router-dom';
 
-import { User } from '@/assets/svg';
+import { SvgIcon } from '@/library/svg-icon';
 import { EFormRuleType, EFormType, ETableFilterType } from '@/enums';
 import { Breadcrumbs } from '@/library/breadcrumbs';
 import { Form } from '@/library/form';
@@ -97,7 +97,7 @@ const Side = ({ form }: { form: FormInstance }) => {
                     <h2 className='text-center'>{values.name}</h2>
                     <div className='line'></div>
                     <div className='wrapper-flex'>
-                      <User className='size-5' />
+                      <SvgIcon name='user' size={20} />
                       <h3>{sGlobal.user?.role?.name}</h3>
                     </div>
                   </Fragment>

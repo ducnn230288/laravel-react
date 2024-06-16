@@ -4,7 +4,8 @@ import classNames from 'classnames';
 import { Popconfirm } from 'antd';
 
 import { message } from '@/index';
-import { Arrow, Paste, Times, UploadSVG } from '@/assets/svg';
+import { SvgIcon } from '../svg-icon';
+
 import { API, arrayMove, handleGetBase64, keyToken, uuidv4 } from '@/utils';
 import { Button } from '../button';
 
@@ -180,10 +181,10 @@ export const Upload = ({
               <button
                 onClick={() => moverImage(index, index - 1)}
                 className={
-                  'top-1 absolute right-1 bg-gray-300 hover:bg-teal-900 size-5 cursor-pointer rounded-full text-white transition-all duration-300'
+                  'top-1 absolute right-1 bg-base-200 hover:bg-primary size-5 cursor-pointer rounded-full text-base-content transition-all duration-300'
                 }
               >
-                <Arrow className={'size-3 m-1 rotate-180 fill-teal-700 hover:fill-white'} />
+                <SvgIcon name='arrow' size={12} className={'m-1 rotate-180 fill-primary hover:fill-base-content'} />
               </button>
             )}
 
@@ -191,14 +192,14 @@ export const Upload = ({
               <button
                 onClick={() => moverImage(index, index + 1)}
                 className={classNames(
-                  'absolute right-1 bg-gray-300 hover:bg-teal-900 size-5 cursor-pointer rounded-full text-white transition-all duration-300',
+                  'absolute right-1 bg-base-200 hover:bg-primary size-5 cursor-pointer rounded-full text-base-content transition-all duration-300',
                   {
                     'top-8': index > 0,
                     'top-1': index === 0,
                   },
                 )}
               >
-                <Arrow className={'size-3 m-1 fill-teal-700 hover:fill-white'} />
+                <SvgIcon name='arrow' size={12} className={'m-1 fill-primary hover:fill-base-content'} />
               </button>
             )}
 
@@ -218,7 +219,7 @@ export const Upload = ({
               >
                 <div
                   className={classNames(
-                    'hover:!bg-red-500 absolute right-1 bg-gray-300 size-5 cursor-pointer rounded-full text-white transition-all duration-300',
+                    'hover:!bg-error absolute right-1 bg-base-200 size-5 cursor-pointer rounded-full text-base-content transition-all duration-300',
                     {
                       'top-16 ': listFiles.length > 1 && index > 0 && index < listFiles.length - 1,
                       'top-8': listFiles.length > 1 && (index === 0 || index === listFiles.length - 1),
@@ -226,7 +227,7 @@ export const Upload = ({
                     },
                   )}
                 >
-                  <Times className={'size-3 m-1 fill-red-400 hover:fill-white'} />
+                  <SvgIcon name='times' size={12} className={'m-1 fill-error hover:fill-base-content'} />
                 </div>
               </Popconfirm>
             )}
@@ -238,12 +239,12 @@ export const Upload = ({
           isTiny={true}
           isLoading={isLoading.current}
           onClick={() => ref.current.click()}
-          icon={<UploadSVG className={'size-4'} />}
+          icon={<SvgIcon name='upload' size={16} />}
           text={'Upload'}
         />
         <Button
           isTiny={true}
-          icon={<Paste className={'size-4'} />}
+          icon={<SvgIcon name='paste' size={16} />}
           text={'Paste'}
           onPaste={async event => {
             const items = event.clipboardData.items;

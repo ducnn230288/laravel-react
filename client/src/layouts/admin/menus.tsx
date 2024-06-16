@@ -1,8 +1,9 @@
 import React from 'react';
 import type { URLSearchParamsInit } from 'react-router-dom/dist/dom';
-import { keyRole, language, routerLinks } from '@/utils';
-import { Calendar, Cog, User } from '@/assets/svg';
 import { useTranslation } from 'react-i18next';
+
+import { SvgIcon } from '@/library/svg-icon';
+import { keyRole, language, routerLinks } from '@/utils';
 
 interface IMenu {
   key?: string;
@@ -19,19 +20,19 @@ const Layout = ({ lang = language, permissions = [] }: { lang?: string; permissi
   const list: IMenu[] = [
     {
       key: `/${lang}${routerLinks('Dashboard')}`,
-      icon: <Calendar className='h-6 w-5' />,
+      icon: <SvgIcon name='calendar' size={24} />,
       label: t('Dashboard'),
     },
     {
       key: `/${lang}${routerLinks('User')}`,
-      icon: <User className='h-6 w-5' />,
+      icon: <SvgIcon name='user' size={24} />,
       label: t('User'),
       permission: keyRole.P_USER_INDEX,
       queryparams: { roleCode: 'SUPER-ADMIN' },
     },
     {
       key: `/${lang}${routerLinks('Setting')}`,
-      icon: <Cog className='h-6 w-5' />,
+      icon: <SvgIcon name='cog' size={24} />,
       label: t('Setting'),
       children: [
         {

@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { TweenOneGroup } from 'rc-tween-one';
 import {
   closestCenter,
@@ -16,7 +16,7 @@ import {
   useSortable,
 } from '@dnd-kit/sortable';
 
-import { Plus, Times } from '@/assets/svg';
+import { SvgIcon } from '../../svg-icon';
 import type { ITableItemFilterList } from '@/interfaces';
 import { reorderArray } from '@/utils';
 
@@ -82,61 +82,59 @@ const Component = ({
   );
 
   return (
-    <Fragment>
-      <TweenOneGroup
-        appear={false}
-        enter={{ scale: 0.8, opacity: 0, type: 'from', duration: 100 }}
-        leave={{ opacity: 0, width: 0, scale: 0, duration: 200 }}
-        onEnd={e => {
-          if (e.type === 'appear' || e.type === 'enter') {
-            (e.target as any).style = 'display: inline-block';
-          }
-        }}
-        className={'flex flex-wrap gap-2.5 py-2'}
-      >
-        <DndContext sensors={sensors} onDragEnd={handleDragEnd} collisionDetection={closestCenter}>
-          <SortableContext items={value} strategy={horizontalListSortingStrategy}>
-            {value.map(tag => (
-              <DraggableTag
+    <TweenOneGroup
+      appear={false}
+      enter={{ scale: 0.8, opacity: 0, type: 'from', duration: 100 }}
+      leave={{ opacity: 0, width: 0, scale: 0, duration: 200 }}
+      onEnd={e => {
+        if (e.type === 'appear' || e.type === 'enter') {
+          (e.target as any).style = 'display: inline-block';
+        }
+      }}
+      className={'flex flex-wrap gap-2.5 py-2'}
+    >
+      <DndContext sensors={sensors} onDragEnd={handleDragEnd} collisionDetection={closestCenter}>
+        <SortableContext items={value} strategy={horizontalListSortingStrategy}>
+          {value.map(tag => (
+            <DraggableTag
+              disabled={!!disabled}
+              tag={tag}
+              key={tag}
+              list={list}
+              onClose={(e: any) => {
+                e.preventDefault();
+                handleClose(tag);
+              }}
+            />
+          ))}
+          {inputVisible ? (
+            !list ? (
+              <Mask
+                ref={inputRef}
+                placeholder={placeholder}
+                onPressEnter={() => handleInputConfirm(inputRef.current?.input.value)}
                 disabled={!!disabled}
-                tag={tag}
-                key={tag}
-                list={list}
-                onClose={(e: any) => {
-                  e.preventDefault();
-                  handleClose(tag);
-                }}
               />
-            ))}
-            {inputVisible ? (
-              !list ? (
-                <Mask
-                  ref={inputRef}
-                  placeholder={placeholder}
-                  onPressEnter={() => handleInputConfirm(inputRef.current?.input.value)}
-                  disabled={!!disabled}
-                />
-              ) : (
-                <Select
-                  onChange={(value: any) => handleInputConfirm(value)}
-                  onBlur={() => setInputVisible(false)}
-                  disabled={!!disabled}
-                  mode={'multiple'}
-                  list={list.filter(i => i.value && value.indexOf(i.value.toString()) === -1)}
-                />
-              )
             ) : (
-              <Button
-                icon={<Plus className='size-8 p-2' />}
-                className='inline-block rounded-full border'
-                onClick={showInput}
-                disabled={disabled}
+              <Select
+                onChange={(value: any) => handleInputConfirm(value)}
+                onBlur={() => setInputVisible(false)}
+                disabled={!!disabled}
+                mode={'multiple'}
+                list={list.filter(i => i.value && value.indexOf(i.value.toString()) === -1)}
               />
-            )}
-          </SortableContext>
-        </DndContext>
-      </TweenOneGroup>
-    </Fragment>
+            )
+          ) : (
+            <Button
+              icon={<SvgIcon name='plus' size={32} className='p-2' />}
+              className='inline-block rounded-full border'
+              onClick={showInput}
+              disabled={disabled}
+            />
+          )}
+        </SortableContext>
+      </DndContext>
+    </TweenOneGroup>
   );
 };
 export default Component;
@@ -165,7 +163,7 @@ const DraggableTag = ({
       {...listeners}
     >
       <Button
-        icon={<Times className='size-4 p-1' />}
+        icon={<SvgIcon name='times' size={16} className='p-1' />}
         className='absolute -right-2 -top-1.5 rounded-full'
         onClick={onClose}
         disabled={disabled}

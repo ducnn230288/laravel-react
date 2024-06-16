@@ -1,5 +1,5 @@
-import { Home } from '@/assets/svg';
 import React from 'react';
+import { SvgIcon } from '../svg-icon';
 
 export const Breadcrumbs = ({ title, list }: { title: string; list: string[] }) => (
   <div className='wrapper-flex'>
@@ -7,7 +7,7 @@ export const Breadcrumbs = ({ title, list }: { title: string; list: string[] }) 
     <div className={'intro-x breadcrumbs'}>
       <ul>
         <li>
-          <Home />
+          <SvgIcon name='home' />
         </li>
         {list.map(item => (
           <li key={item}>{item}</li>

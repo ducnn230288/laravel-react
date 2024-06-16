@@ -6,6 +6,7 @@ import { initReactI18next } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { ConfigProvider, message as noti, Spin } from 'antd';
 import type { MessageInstance } from 'antd/lib/message/interface';
+import 'virtual:svg-icons-register';
 
 import { SGlobal, setupStore } from '@/services';
 import { reportWebVitals, lang } from '@/utils';

@@ -2,8 +2,8 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Cascader, type FormInstance } from 'antd';
 
 import { API } from '@/utils';
-import { Times } from '@/assets/svg';
 import { Button } from '../../button';
+import { SvgIcon } from '../../svg-icon';
 
 const Component = ({ formItem, placeholder, onChange, value, form, disabled, showSearch = true }: Type) => {
   const [_list, set_list] = useState(formItem.list || []);
@@ -13,7 +13,7 @@ const Component = ({ formItem, placeholder, onChange, value, form, disabled, sho
   const loadData = useCallback(
     async (fullTextSearch: string) => {
       if (formItem.api) {
-        if (!formItem.api.condition || formItem.api.condition({value: form.getFieldValue})) {
+        if (!formItem.api.condition || formItem.api.condition({ value: form.getFieldValue })) {
           const url = formItem.api.link(form.getFieldValue);
           if (url) {
             const params = formItem.api.params
@@ -164,8 +164,8 @@ const Component = ({ formItem, placeholder, onChange, value, form, disabled, sho
             checkShow && (
               <div className='relative -left-2.5 mr-2.5 rounded-xl bg-teal-100 px-2 py-1'>
                 <Button
-                  icon={<Times className='size-5 fill-red-600' />}
-                  className='absolute -right-2 -top-1 z-10 rounded-full !bg-red-100 leading-none !text-red-600'
+                  icon={<SvgIcon name='times' size={20} className='fill-error' />}
+                  className='absolute -right-2 -top-1 z-10 rounded-full !bg-error/20 leading-none !text-error'
                   onClick={() => onChange && onChange(clearTag(item[0], value))}
                   disabled={disabled}
                 />

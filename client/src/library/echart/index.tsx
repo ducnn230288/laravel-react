@@ -228,7 +228,7 @@ export const EChart = forwardRef(({ option, style = { height: '20rem' } }: Type,
       if (!_myChart.current)
         setTimeout(() => {
           _myChart.current = echarts.init(document.getElementById(_id.current));
-          _myChart.current.setOption({ title, xAxis, yAxis, series, tooltip, legend, grid });
+          _myChart.current?.setOption({ title, xAxis, yAxis, series, tooltip, legend, grid });
         });
       else _myChart.current.setOption({ title, xAxis, yAxis, series, tooltip, legend, grid }, true);
     }

@@ -34,7 +34,7 @@ export default Page;
 
 import queryString from 'query-string';
 import { Select, Spin, Tree } from 'antd';
-import { Arrow } from '@/assets/svg';
+import { SvgIcon } from '@/library/svg-icon';
 const Side = () => {
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.parameter' });
   const sParameter = SParameter();
@@ -55,7 +55,7 @@ const Side = () => {
               showLine
               autoExpandParent
               defaultExpandAll
-              switcherIcon={<Arrow className={'size-3'} />}
+              switcherIcon={<SvgIcon name='arrow' size={12} />}
               selectedKeys={[sParameter.data?.code ?? '']}
               treeData={sParameter.result?.data?.map(item => ({
                 title: item?.name,

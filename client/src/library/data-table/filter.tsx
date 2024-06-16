@@ -4,13 +4,24 @@ import classNames from 'classnames';
 import dayjs, { type Dayjs } from 'dayjs';
 import type { TFunction } from 'i18next';
 
-import { Calendar, CheckCircle, CheckSquare, Search } from '@/assets/svg';
 import type { ITableGet, ITableItemFilterList } from '@/interfaces';
 import { cleanObjectKeyNull } from '@/utils';
 import { Mask } from '../form/input';
 import { Button } from '../button';
+import { SvgIcon } from '../svg-icon';
 
-const groupButton = ({confirm, clearFilters, value, t}: {confirm: any, clearFilters: any, key: any, value: any, t: any}) => (
+const groupButton = ({
+  confirm,
+  clearFilters,
+  value,
+  t,
+}: {
+  confirm: any;
+  clearFilters: any;
+  key: any;
+  value: any;
+  t: any;
+}) => (
   <div className='mt-2 grid grid-cols-2 gap-2'>
     <Button
       isTiny={true}
@@ -23,7 +34,7 @@ const groupButton = ({confirm, clearFilters, value, t}: {confirm: any, clearFilt
     />
     <Button
       isTiny={true}
-      icon={<Search className='size-3 fill-primary-content' />}
+      icon={<SvgIcon name='search' size={12} className='fill-primary-content' />}
       text={t('Search')}
       onClick={() => confirm(value)}
     />
@@ -88,13 +99,17 @@ export const getColumnSearchCheckbox = ({
               <span className={'px-2'}>{t('No Data')}</span>
             )}
           </div>
-          {groupButton({confirm, clearFilters, key, value: selectedKeys, t})}
+          {groupButton({ confirm, clearFilters, key, value: selectedKeys, t })}
         </div>
       </Spin>
     );
   },
   filterIcon: (filtered: boolean) => (
-    <CheckSquare className={classNames('size-3.5', { 'fill-blue-600': filtered, 'fill-base-content': !filtered })} />
+    <SvgIcon
+      name='check-square'
+      size={14}
+      className={classNames({ 'fill-primary': filtered, 'fill-base-content': !filtered })}
+    />
   ),
 });
 
@@ -147,13 +162,17 @@ export const getColumnSearchRadio = ({
               <span className={'px-2'}>{t('No Data')}</span>
             )}
           </div>
-          {groupButton({confirm, clearFilters, key,value: selectedKeys, t})}
+          {groupButton({ confirm, clearFilters, key, value: selectedKeys, t })}
         </div>
       </Spin>
     );
   },
   filterIcon: (filtered: boolean) => (
-    <CheckCircle className={classNames('size-3.5', { 'fill-primary': filtered, 'fill-base-content': !filtered })} />
+    <SvgIcon
+      name='check-circle'
+      size={14}
+      className={classNames({ 'fill-primary': filtered, 'fill-base-content': !filtered })}
+    />
   ),
 });
 export const getColumnSearchDate = ({ key, t }: { key: string; t: TFunction<'locale', 'library'> }) => ({
@@ -162,10 +181,10 @@ export const getColumnSearchDate = ({ key, t }: { key: string; t: TFunction<'loc
       <DatePicker.RangePicker
         renderExtraFooter={() => (
           <Button
-            icon={<CheckCircle className='size-5 fill-base-100' />}
+            icon={<SvgIcon name='check-circle' size={20} className='fill-base-100' />}
             text={t('Ok')}
             onClick={() => (document.activeElement as HTMLElement).blur()}
-            className={'w-full justify-center !py-0'}
+            className={'w-full justify-center py-0'}
           />
         )}
         format={['DD-MM-YYYY', 'DD-MM-YY']}
@@ -179,11 +198,15 @@ export const getColumnSearchDate = ({ key, t }: { key: string; t: TFunction<'loc
           }
         }}
       />
-      {groupButton({confirm, clearFilters, key, value: selectedKeys, t})}
+      {groupButton({ confirm, clearFilters, key, value: selectedKeys, t })}
     </div>
   ),
   filterIcon: (filtered: boolean) => (
-    <Calendar className={classNames('size-3.5', { 'fill-primary': filtered, 'fill-base-content': !filtered })} />
+    <SvgIcon
+      name='calendar'
+      size={14}
+      className={classNames({ 'fill-primary': filtered, 'fill-base-content': !filtered })}
+    />
   ),
 });
 
@@ -197,11 +220,15 @@ export const getColumnSearchInput = ({ key, t }: { key: string; t: TFunction<'lo
         onChange={e => setSelectedKeys(e.target.value)}
         onPressEnter={() => confirm()}
       />
-      {groupButton({confirm, clearFilters, key, value: selectedKeys, t})}
+      {groupButton({ confirm, clearFilters, key, value: selectedKeys, t })}
     </div>
   ),
   filterIcon: (filtered: boolean) => (
-    <Search className={classNames('size-3.5', { 'fill-primary': filtered, 'fill-base-content': !filtered })} />
+    <SvgIcon
+      name='search'
+      size={14}
+      className={classNames({ 'fill-primary': filtered, 'fill-base-content': !filtered })}
+    />
   ),
   onFilterDropdownOpenChange: (visible: boolean) => {
     if (visible) {

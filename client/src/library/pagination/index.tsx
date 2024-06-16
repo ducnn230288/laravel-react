@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useCallback, useState } from 'react';
 import classNames from 'classnames';
-import { Arrow, DoubleArrow } from '@/assets/svg';
+import { SvgIcon } from '../svg-icon';
 
 import { Select } from '../form/input';
 
@@ -147,10 +147,10 @@ export const Pagination: any = ({
               onClick={() => onPageIndexChange(item)}
               aria-label={item.type}
             >
-              {item.type === 'prev' && <Arrow className={'rotate-180'} />}
-              {item.type === 'next' && <Arrow />}
-              {item.type === 'prev_10' && <DoubleArrow className={'rotate-180'} />}
-              {item.type === 'next_10' && <DoubleArrow />}
+              {item.type === 'prev' && <SvgIcon name='arrow' className={'rotate-180'} />}
+              {item.type === 'next' && <SvgIcon name='arrow' />}
+              {item.type === 'prev_10' && <SvgIcon name='double-arrow' className={'rotate-180'} />}
+              {item.type === 'next_10' && <SvgIcon name='double-arrow' />}
               {item.type.indexOf('page') === 0 && item.index}
               {(item.type === 'prev_5' || item.type === 'next_5') && '...'}
             </button>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Eye, EyeSlash } from '@/assets/svg';
+import { SvgIcon } from '../../svg-icon';
 
 const Component = ({
   value = '',
@@ -24,8 +24,8 @@ const Component = ({
         className='ant-input pr-9'
         onChange={onChange}
       />
-      {!toggle && <Eye onClick={() => setToggle(!toggle)} className='icon' />}
-      {toggle && <EyeSlash onClick={() => setToggle(!toggle)} className='icon' />}
+      {!toggle && <SvgIcon name='eye' onClick={() => setToggle(!toggle)} className='icon' />}
+      {toggle && <SvgIcon name='eye-slash' onClick={() => setToggle(!toggle)} className='icon' />}
     </div>
   );
 };

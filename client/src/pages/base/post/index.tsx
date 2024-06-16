@@ -2,7 +2,6 @@ import React, { Fragment, useEffect } from 'react';
 import { Popconfirm, Spin, Tree, TreeSelect } from 'antd';
 import classNames from 'classnames';
 
-import { Arrow, Edit, Plus, Trash } from '@/assets/svg';
 import { EStatusState } from '@/enums';
 import { ToolTip } from '@/library/tooltip';
 import { SGlobal, SPost, SPostType } from '@/services';
@@ -41,6 +40,7 @@ import { useTranslation } from 'react-i18next';
 import { DrawerForm } from '@/library/drawer';
 import _column from './column';
 import { Breadcrumbs } from '@/library/breadcrumbs';
+import { SvgIcon } from '@/library/svg-icon';
 const FormPost = () => {
   const sPost = SPost();
   const request = JSON.parse(sPost?.queryParams ?? '{}');
@@ -118,7 +118,7 @@ const Side = () => {
       <div className='header'>
         <h3>{t('Type Post')}</h3>
         <Button
-          icon={<Plus className='size-3' />}
+          icon={<SvgIcon name='plus' size={12} />}
           onClick={() => sPostType.set({ data: undefined, isVisible: true })}
         />
       </div>
@@ -130,7 +130,7 @@ const Side = () => {
               showLine
               autoExpandParent
               defaultExpandAll
-              switcherIcon={<Arrow className={'size-3'} />}
+              switcherIcon={<SvgIcon name='arrow' size={12} />}
               defaultSelectedKeys={[request.typeCode]}
               treeData={sPostType.result?.data?.map((item: any) => ({
                 title: item?.name,
@@ -156,7 +156,7 @@ const Side = () => {
                           title={t('Edit Type Post', { name: data.title })}
                           onClick={() => sPostType.getById({ id: data.code })}
                         >
-                          <Edit className='primary' />
+                          <SvgIcon name='edit' className='primary' />
                         </button>
                       </ToolTip>
                     )}
@@ -168,7 +168,7 @@ const Side = () => {
                           onConfirm={() => sPostType.delete(data.code)}
                         >
                           <button title={t('Delete type post', { name: data.title })}>
-                            <Trash className='error' />
+                            <SvgIcon name='trash' className='error' />
                           </button>
                         </Popconfirm>
                       </ToolTip>
@@ -182,7 +182,7 @@ const Side = () => {
         <div className='mobile'>
           <TreeSelect
             treeLine
-            switcherIcon={<Arrow className={'size-3'} />}
+            switcherIcon={<SvgIcon name='arrow' size={12} />}
             value={request.typeCode}
             className={'w-full'}
             treeData={sPostType.result?.data?.map((item: any) => ({
@@ -227,7 +227,7 @@ const Main = () => {
           rightHeader={
             sGlobal.user?.role?.permissions?.includes(keyRole.P_POST_STORE) && (
               <Button
-                icon={<Plus className='size-3' />}
+                icon={<SvgIcon name='plus' size={12} />}
                 text={t('Add new Post', {
                   name: sPostType.result?.data?.find(item => item.code === request.typeCode)?.name,
                 })}

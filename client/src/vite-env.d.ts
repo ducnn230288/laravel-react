@@ -1,13 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-declare module '*.svg' {
-  import * as echarts from 'echarts';
-  import * as GLightbox from 'glightbox';
-  import * as React from 'react';
-  const ReactComponent: React.FunctionComponent<React.ComponentProps<'svg'> & { title?: string }>;
-
-  export default ReactComponent;
-}
-
 /// <reference types="vite/client" />
 interface ImportMetaEnv {
   readonly VITE_URL_SOCKET: string;

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import slug from 'slug';
 import { Popconfirm } from 'antd';
 
-import { Check, Disable, Edit, Trash } from '@/assets/svg';
+import { SvgIcon } from '@/library/svg-icon';
 import { EFormRuleType, EFormType, ETableAlign, ETableFilterType } from '@/enums';
 import type { IDataTable, IForm } from '@/interfaces';
 import { Avatar } from '@/library/avatar';
@@ -96,7 +96,11 @@ export default {
                           : '',
                       })}
                     >
-                      {data.isDisable ? <Disable className='warning' /> : <Check className='success' />}
+                      {data.isDisable ? (
+                        <SvgIcon name='disable' className='warning' />
+                      ) : (
+                        <SvgIcon name='check' className='success' />
+                      )}
                     </button>
                   </Popconfirm>
                 </ToolTip>
@@ -118,7 +122,7 @@ export default {
                     })}
                     onClick={() => sPost.getById({ id: data.id, params: { include: 'languages' } })}
                   >
-                    <Edit className='primary' />
+                    <SvgIcon name='edit' className='primary' />
                   </button>
                 </ToolTip>
               )}
@@ -148,7 +152,7 @@ export default {
                           : '',
                       })}
                     >
-                      <Trash className='error' />
+                      <SvgIcon name='trash' className='error' />
                     </button>
                   </Popconfirm>
                 </ToolTip>

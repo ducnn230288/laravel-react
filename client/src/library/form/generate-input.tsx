@@ -13,7 +13,6 @@ import classNames from 'classnames';
 import dayjs from 'dayjs';
 import type { TFunction } from 'i18next';
 
-import { Check, Times } from '@/assets/svg';
 import { EFormType } from '@/enums';
 import {
   Addable,
@@ -32,6 +31,7 @@ import {
 } from './input';
 import { Upload } from '../upload';
 import type { IForm } from '@/interfaces';
+import { SvgIcon } from '../svg-icon';
 
 export const generateInput = ({
   item,
@@ -289,8 +289,8 @@ export const generateInput = ({
       case EFormType.switch:
         return (
           <Switch
-            checkedChildren={<Check className='size-5 fill-white' />}
-            unCheckedChildren={<Times className='size-5 fill-white' />}
+            checkedChildren={<SvgIcon name='check' size={20} className='fill-white' />}
+            unCheckedChildren={<SvgIcon name='times' size={20} className='fill-white' />}
             defaultChecked={!!values && values[item.name || ''] === 1}
             onChange={e => formItem.onChange?.(e, form)}
           />

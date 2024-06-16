@@ -5,8 +5,8 @@ import { useLocation, useNavigate } from 'react-router';
 import { createSearchParams } from 'react-router-dom';
 import classNames from 'classnames';
 
-import { Key, Out, User, Logo, DayNight, VN, US } from '@/assets/svg';
 import { Avatar } from '@/library/avatar';
+import { SvgIcon } from '@/library/svg-icon';
 import { SGlobal } from '@/services';
 import { routerLinks, lang, APP_NAME } from '@/utils';
 import menus, { findMenu } from './menus';
@@ -50,7 +50,7 @@ const CSide = () => {
       <div className={classNames('overload', { active: !sGlobal.isCollapseMenu })}></div>
       <aside className={classNames({ active: sGlobal.isCollapseMenu })}>
         <a href='/vn/dashboard' className={classNames('logo', { active: sGlobal.isCollapseMenu })}>
-          <Logo />
+          <SvgIcon name='logo' />
           <h1 className={classNames({ active: sGlobal.isCollapseMenu })}>{APP_NAME}</h1>
         </a>
         <Menu
@@ -92,7 +92,7 @@ const CHeader = () => {
       key: 'My Profile',
       label: (
         <button onClick={() => changePage(`${routerLinks('MyProfile')}?tab=1`)}>
-          <User className='size-5' />
+          <SvgIcon name='user-circle' size={20} />
           {t('My Profile')}
         </button>
       ),
@@ -101,7 +101,7 @@ const CHeader = () => {
       key: 'Change Password',
       label: (
         <button onClick={() => changePage(`${routerLinks('MyProfile')}?tab=2`)}>
-          <Key className='size-5' />
+          <SvgIcon name='key' size={20} />
           {t('Change Password')}
         </button>
       ),
@@ -113,7 +113,7 @@ const CHeader = () => {
       key: 'Sign out',
       label: (
         <button onClick={() => changePage(routerLinks('Login'))}>
-          <Out className='size-5' />
+          <SvgIcon name='out' size={20} />
           {t('Sign out')}
         </button>
       ),
@@ -141,9 +141,9 @@ const CHeader = () => {
                 label: (
                   <button onClick={() => sGlobal.setLanguage(sGlobal.language === 'vn' ? 'en' : 'vn')}>
                     {sGlobal.language === 'en' ? (
-                      <VN className='size-5 rounded-btn' />
+                      <SvgIcon name='vn' size={20} className='rounded-btn' />
                     ) : (
-                      <US className='size-5 rounded-btn' />
+                      <SvgIcon name='us' size={20} className='rounded-btn' />
                     )}
                     {t(sGlobal.language === 'vn' ? 'en' : 'vn')}
                   </button>
@@ -153,11 +153,15 @@ const CHeader = () => {
           }}
         >
           <button>
-            {sGlobal.language === 'en' ? <US className='size-6 rounded-btn' /> : <VN className='size-6 rounded-btn' />}
+            {sGlobal.language === 'en' ? (
+              <SvgIcon name='en' size={24} className='rounded-btn' />
+            ) : (
+              <SvgIcon name='vn' size={24} className='rounded-btn' />
+            )}
           </button>
         </Dropdown>
         <button onClick={changeTheme}>
-          <DayNight className='size-6' />
+          <SvgIcon name='out' size={24} />
         </button>
         <Dropdown trigger={['click']} menu={{ items: listDropdown }} placement='bottomRight'>
           <div className='flex cursor-pointer gap-1.5'>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { type FormInstance, Select } from 'antd';
 
-import { Times } from '@/assets/svg';
+import { SvgIcon } from '../../svg-icon';
 import { API } from '@/utils';
 
 import { Button } from '../../button';
@@ -54,8 +54,8 @@ const Component = ({ tag, onChange, form, value, disabled, maxTagCount, placehol
       tagRender={({ label, onClose }) => (
         <div className='relative -left-2.5 mr-2.5 rounded-xl bg-teal-100 px-2 py-1'>
           <Button
-            icon={<Times className='size-5 fill-red-600' />}
-            className='absolute -right-2 -top-1 z-auto rounded-full !bg-red-100 leading-none !text-red-600'
+            icon={<SvgIcon name='times' size={20} className='fill-error' />}
+            className='absolute -right-2 -top-1 z-auto rounded-full !bg-error/20 leading-none !text-error'
             onClick={onClose}
             disabled={disabled}
           />

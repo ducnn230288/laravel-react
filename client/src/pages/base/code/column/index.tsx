@@ -7,7 +7,7 @@ import { Popconfirm } from 'antd';
 import { EFormRuleType, EFormType, ETableAlign, ETableFilterType } from '@/enums';
 import type { IDataTable, IForm } from '@/interfaces';
 
-import { Check, Disable, Edit, Trash } from '@/assets/svg';
+import { SvgIcon } from '@/library/svg-icon';
 import { ToolTip } from '@/library/tooltip';
 import { SCode, SGlobal } from '@/services';
 import { keyRole } from '@/utils';
@@ -67,7 +67,11 @@ export default {
                     onConfirm={() => sCode.put({ id: data.code, isDisable: !data.isDisable })}
                   >
                     <button title={t(data.isDisable ? 'Disabled code' : 'Enabled code', { name: data.name })}>
-                      {data.isDisable ? <Disable className='warning' /> : <Check className='success' />}
+                      {data.isDisable ? (
+                        <SvgIcon name='disable' className='warning' />
+                      ) : (
+                        <SvgIcon name='check' className='success' />
+                      )}
                     </button>
                   </Popconfirm>
                 </ToolTip>
@@ -75,7 +79,7 @@ export default {
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_CODE_UPDATE) && (
                 <ToolTip title={t('Edit Code', { name: data.name })}>
                   <button title={t('Edit Code', { name: data.name })} onClick={() => sCode.getById({ id: data.code })}>
-                    <Edit className='primary' />
+                    <SvgIcon name='edit' className='primary' />
                   </button>
                 </ToolTip>
               )}
@@ -87,7 +91,7 @@ export default {
                     onConfirm={() => sCode.delete(data.code)}
                   >
                     <button title={t('Delete code', { name: data.name })}>
-                      <Trash className='error' />
+                      <SvgIcon name='trash' className='error' />
                     </button>
                   </Popconfirm>
                 </ToolTip>
@@ -117,7 +121,7 @@ export default {
         title: t('Code'),
         name: 'code',
         formItem: {
-          condition: ({values}) => !values?.id,
+          condition: ({ values }) => !values?.id,
           rules: [{ type: EFormRuleType.required }, { type: EFormRuleType.max, value: 100 }],
         },
       },

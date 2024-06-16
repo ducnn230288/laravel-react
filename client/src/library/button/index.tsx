@@ -1,7 +1,7 @@
 import React, { type MouseEventHandler } from 'react';
 import classNames from 'classnames';
 
-import { Spinner } from '@/assets/svg';
+import { SvgIcon } from '../svg-icon';
 
 export const Button = ({
   text = '',
@@ -25,7 +25,7 @@ export const Button = ({
       })}
       {...props}
     >
-      {!isLoading ? icon : <Spinner className={'size-3 animate-spin'} />}
+      {!isLoading ? icon : <SvgIcon name='spinner' size={12} />}
       {text}
     </button>
   );

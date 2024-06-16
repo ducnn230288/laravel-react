@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 import { Popconfirm } from 'antd';
 
-import { Check, Disable, Edit, Trash } from '@/assets/svg';
+import { SvgIcon } from '@/library/svg-icon';
 import { EFormRuleType, EFormType, ETableAlign, ETableFilterType } from '@/enums';
 import type { IDataTable, IForm } from '@/interfaces';
 import { Avatar } from '@/library/avatar';
@@ -104,7 +104,11 @@ export default {
                         name: data.name,
                       })}
                     >
-                      {data.isDisable ? <Disable className='warning' /> : <Check className='success' />}
+                      {data.isDisable ? (
+                        <SvgIcon name='disable' className='warning' />
+                      ) : (
+                        <SvgIcon name='check' className='success' />
+                      )}
                     </button>
                   </Popconfirm>
                 </ToolTip>
@@ -115,7 +119,7 @@ export default {
                     title={t('Edit User', { name: data.name })}
                     onClick={() => sUser.getById({ id: data.id, params: { include: 'position' } })}
                   >
-                    <Edit className='primary' />
+                    <SvgIcon name='edit' className='primary' />
                   </button>
                 </ToolTip>
               )}
@@ -128,7 +132,7 @@ export default {
                     onConfirm={() => sUser.delete(data.id)}
                   >
                     <button title={t('Delete user', { name: data.name })}>
-                      <Trash className='error' />
+                      <SvgIcon name='trash' className='error' />
                     </button>
                   </Popconfirm>
                 </ToolTip>
@@ -167,7 +171,7 @@ export default {
         name: 'password',
         formItem: {
           type: EFormType.password,
-          condition: ({values}) => !values?.id,
+          condition: ({ values }) => !values?.id,
           rules: [{ type: EFormRuleType.required }],
         },
       },
@@ -176,7 +180,7 @@ export default {
         name: 'passwordConfirmation',
         formItem: {
           type: EFormType.password,
-          condition: ({values}) => !values?.id,
+          condition: ({ values }) => !values?.id,
           rules: [
             { type: EFormRuleType.required },
             { type: EFormRuleType.min, value: 8 },

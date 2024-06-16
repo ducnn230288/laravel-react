@@ -72,7 +72,7 @@ const Form = () => {
 import { useLocation, useNavigate } from 'react-router';
 import queryString from 'query-string';
 import { Select, Spin, Tree } from 'antd';
-import { Arrow, Plus } from '@/assets/svg';
+import { SvgIcon } from '@/library/svg-icon';
 const Side = () => {
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.user' });
   const sUserRole = SUserRole();
@@ -95,7 +95,7 @@ const Side = () => {
               showLine
               autoExpandParent
               defaultExpandAll
-              switcherIcon={<Arrow className={'size-3'} />}
+              switcherIcon={<SvgIcon name='arrow' size={12} />}
               defaultSelectedKeys={[request.roleCode]}
               treeData={sUserRole.result?.data?.map((item: any) => ({
                 title: item?.name,
@@ -150,7 +150,7 @@ const Main = () => {
           rightHeader={
             sGlobal.user?.role?.permissions?.includes(keyRole.P_USER_STORE) && (
               <Button
-                icon={<Plus className='size-3' />}
+                icon={<SvgIcon name='plus' size={12} />}
                 text={t('Add new User', {
                   name: sUserRole.result?.data?.find(item => item.code === request.roleCode)?.name,
                 })}

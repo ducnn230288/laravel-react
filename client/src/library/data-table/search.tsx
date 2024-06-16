@@ -2,10 +2,10 @@ import React, { useRef } from 'react';
 import type { SorterResult } from 'antd/lib/table/interface';
 import type { TFunction } from 'i18next';
 
-import { Search, Times } from '@/assets/svg';
 import type { IPaginationQuery } from '@/interfaces';
 import { uuidv4 } from '@/utils';
 import { Mask } from '../form/input';
+import { SvgIcon } from '../svg-icon';
 
 export const CSearch = ({
   params,
@@ -57,7 +57,8 @@ export const CSearch = ({
         }
       />
       {!params.fullTextSearch ? (
-        <Search
+        <SvgIcon
+          name='search'
           onClick={() => {
             if (params.fullTextSearch) {
               (document.getElementById(idTable.current + '_input_search') as HTMLInputElement).value = '';
@@ -67,7 +68,8 @@ export const CSearch = ({
         />
       ) : (
         !!params.fullTextSearch && (
-          <Times
+          <SvgIcon
+            name='times'
             onClick={() => {
               if (params.fullTextSearch) {
                 (document.getElementById(idTable.current + '_input_search') as HTMLInputElement).value = '';

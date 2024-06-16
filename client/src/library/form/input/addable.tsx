@@ -4,9 +4,8 @@ import { Form, Checkbox, type FormInstance } from 'antd';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 
-import { Trash, Plus } from '@/assets/svg';
 import type { IForm } from '@/interfaces';
-
+import { SvgIcon } from '../../svg-icon';
 import { Button } from '../../button';
 
 const Component = ({
@@ -97,7 +96,7 @@ const Component = ({
                       />
                     </div>
                   )}
-                  <div className={'table-cell border bg-gray-300 text-center'}>{i + 1}</div>
+                  <div className={'table-cell border bg-base-200 text-center'}>{i + 1}</div>
                   {column.map((col: any, index: number) => (
                     <div className={'relative table-cell border'} key={index}>
                       {generateForm({ item: col, index: index + '_' + i, showLabel: false, name: [n, col.name], t })}
@@ -105,8 +104,10 @@ const Component = ({
                   ))}
                   <div className={'table-cell w-8 align-middle sm:w-8'}>
                     {showRemove(form.getFieldValue([[name], n]), n) && (
-                      <Trash
-                        className='size-8 cursor-pointer fill-red-600 hover:fill-red-400'
+                      <SvgIcon
+                        name='trash'
+                        size={32}
+                        className='cursor-pointer fill-error hover:fill-error/50'
                         onClick={() => {
                           remove(n);
                           onAdd(form.getFieldValue(name), form);

@@ -1,7 +1,7 @@
-import React, { PropsWithChildren } from 'react';
+import React, { type PropsWithChildren } from 'react';
 import { Tooltip } from 'antd';
 import type { RenderFunction } from 'antd/es/_util/getRenderPropValue';
-import { TooltipPlacement } from 'antd/es/tooltip';
+import type { TooltipPlacement } from 'antd/es/tooltip';
 
 export const ToolTip = ({
   children,

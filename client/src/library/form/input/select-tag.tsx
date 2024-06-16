@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { FormInstance, Select } from 'antd';
+import { type FormInstance, Select } from 'antd';
 
 import { Times } from '@/assets/svg';
 import { API } from '@/utils';

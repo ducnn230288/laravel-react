@@ -1,9 +1,9 @@
-import React, { forwardRef, Ref, useImperativeHandle } from 'react';
+import React, { forwardRef, type Ref, useImperativeHandle } from 'react';
 import { Drawer, Form as FormAnt } from 'antd';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 
-import { IForm, IFormModalRefObject } from '@/interfaces';
+import type { IForm, IFormModalRefObject } from '@/interfaces';
 import { convertFormValue } from '@/utils';
 
 import { Form } from '../form';

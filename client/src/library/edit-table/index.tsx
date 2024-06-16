@@ -1,7 +1,7 @@
-import React, { Fragment, PropsWithChildren } from 'react';
+import React, { Fragment, type PropsWithChildren } from 'react';
 import classNames from 'classnames';
 
-import { IEditTable } from '@/interfaces';
+import type { IEditTable } from '@/interfaces';
 import { cssInObject } from '@/utils';
 import { Mask } from '../form/input';
 
@@ -118,40 +118,38 @@ export const EditTable = ({
       const tbody = e.closest('tbody');
       let total: number = 0;
       const handleChangeTable = (item: any, i: number) => {
-        if (level >= item.level) {
-          if (tbody && level > item.level && item.level !== maxLevel) {
-            const meta = table.meta?.filter(j => j.field === name)[0];
-            if (meta?.formula) {
-              let formula = meta?.formula;
-              table.meta?.forEach(i => {
-                if (i.field && formula.indexOf(i.field) > -1) {
-                  formula = formula.replaceAll(i.field, item[i.field]);
-                }
-              });
-              const value = eval(formula);
-              total =
-                !!value && value !== Infinity && !isNaN(value)
-                  ? (/^\d+$/.test(value) ? value : parseFloat(value.toFixed(2))).toLocaleString('vi')
-                  : 0;
-            } else if (item.level <= row.level - 2) {
-              total = table.data
-                ?.filter(i => i.level === item.level + 1 && !i.isSummary)
-                .reduce((value, j) => value + j[name], 0);
-            } else {
-              total = table.data
-                ?.filter(i => i.idBieuNoiDung === row.idBieuNoiDung && i.maCha === row.maCha && i.level === row.level)
-                .reduce((value, j) => value + j[name], 0);
-            }
-            if (table.data) table.data[i][name] = total;
-            tbody!.querySelector(`tr:nth-child(${i + 1}) td[data-name="${name}"] > *`)!.innerHTML =
-              total.toLocaleString('vi');
-            if (item.isSummary && i > 0 && table.data && table.data[i - 1].level === item.level) {
-              if (table.data) table.data[i - 1][name] = total;
-              tbody!.querySelector(`tr:nth-child(${i}) td[data-name="${name}"] > *`)!.innerHTML =
-                total.toLocaleString('vi');
-            }
-            level = item.level;
+        if (level >= item.level && tbody && level > item.level && item.level !== maxLevel) {
+          const meta = table.meta?.filter(j => j.field === name)[0];
+          if (meta?.formula) {
+            let formula = meta?.formula;
+            table.meta?.forEach(i => {
+              if (i.field && formula.indexOf(i.field) > -1) {
+                formula = formula.replaceAll(i.field, item[i.field]);
+              }
+            });
+            const value = eval(formula);
+            total =
+              !!value && value !== Infinity && !isNaN(value)
+                ? (/^\d+$/.test(value) ? value : parseFloat(value.toFixed(2))).toLocaleString('vi')
+                : 0;
+          } else if (item.level <= row.level - 2) {
+            total = table.data
+              ?.filter(i => i.level === item.level + 1 && !i.isSummary)
+              .reduce((value, j) => value + j[name], 0);
+          } else {
+            total = table.data
+              ?.filter(i => i.idBieuNoiDung === row.idBieuNoiDung && i.maCha === row.maCha && i.level === row.level)
+              .reduce((value, j) => value + j[name], 0);
           }
+          if (table.data) table.data[i][name] = total;
+          tbody!.querySelector(`tr:nth-child(${i + 1}) td[data-name="${name}"] > *`)!.innerHTML =
+            total.toLocaleString('vi');
+          if (item.isSummary && i > 0 && table.data && table.data[i - 1].level === item.level) {
+            if (table.data) table.data[i - 1][name] = total;
+            tbody!.querySelector(`tr:nth-child(${i}) td[data-name="${name}"] > *`)!.innerHTML =
+              total.toLocaleString('vi');
+          }
+          level = item.level;
         }
       };
       if (table?.totals?.row?.reverseSubLayout === true || table?.totals?.row?.reverseSubLayout === undefined)

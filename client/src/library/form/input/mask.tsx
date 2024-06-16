@@ -1,8 +1,8 @@
-import React, { forwardRef, Fragment, Ref, useEffect, useImperativeHandle, useRef } from 'react';
+import React, { forwardRef, Fragment, type Ref, useEffect, useImperativeHandle, useRef } from 'react';
 import classNames from 'classnames';
-import { FormInstance } from 'antd';
+import type { FormInstance } from 'antd';
 
-import { ITableItemFilterList } from '@/interfaces';
+import type { ITableItemFilterList } from '@/interfaces';
 import { Button } from '../../button';
 
 const Component = forwardRef(

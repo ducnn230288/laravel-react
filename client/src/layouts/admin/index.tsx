@@ -1,4 +1,4 @@
-import React, { Fragment, PropsWithChildren, useEffect } from 'react';
+import React, { Fragment, type PropsWithChildren, useEffect } from 'react';
 import { Dropdown, Menu } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router';
@@ -10,7 +10,7 @@ import { Avatar } from '@/library/avatar';
 import { SGlobal } from '@/services';
 import { routerLinks, lang, APP_NAME } from '@/utils';
 import menus, { findMenu } from './menus';
-import { ItemType } from 'antd/es/menu/interface';
+import type { ItemType } from 'antd/es/menu/interface';
 
 const Layout = ({ children }: PropsWithChildren) => {
   const { t } = useTranslation('locale', { keyPrefix: 'layouts' });

@@ -3,7 +3,7 @@ import { TweenOneGroup } from 'rc-tween-one';
 import {
   closestCenter,
   DndContext,
-  DragEndEvent,
+  type DragEndEvent,
   KeyboardSensor,
   PointerSensor,
   useSensor,
@@ -17,7 +17,7 @@ import {
 } from '@dnd-kit/sortable';
 
 import { Plus, Times } from '@/assets/svg';
-import { ITableItemFilterList } from '@/interfaces';
+import type { ITableItemFilterList } from '@/interfaces';
 import { reorderArray } from '@/utils';
 
 import { Button } from '../../button';

@@ -1,4 +1,4 @@
-import React, { forwardRef, useImperativeHandle, PropsWithChildren, Ref, useEffect } from 'react';
+import React, { forwardRef, useImperativeHandle, type PropsWithChildren, type Ref, useEffect } from 'react';
 import { Modal as AntModal, Spin } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';

@@ -1,9 +1,9 @@
 import React from 'react';
-import { Form as AntForm, FormInstance } from 'antd';
-import { TFunction } from 'i18next';
+import { Form as AntForm, type FormInstance } from 'antd';
+import type { TFunction } from 'i18next';
 
 import { EFormRuleType, EFormType } from '@/enums';
-import { IForm } from '@/interfaces';
+import type { IForm } from '@/interfaces';
 import { generateInput } from './generate-input';
 export const generateForm = ({
   item,
@@ -39,30 +39,32 @@ export const generateForm = ({
           if (item.formItem) {
             switch (rule.type) {
               case EFormRuleType.required:
-                switch (item.formItem.type) {
-                  case EFormType.text:
-                  case EFormType.name:
-                  case EFormType.number:
-                  case EFormType.hidden:
-                  case EFormType.password:
-                  case EFormType.textarea:
-                    rules.push({
-                      required: true,
-                      whitespace: true,
-                      message: t(rule.message ?? 'Please enter', {
-                        title: item.title.toLowerCase(),
-                      }),
-                    });
-                    break;
-                  default:
-                    rules.push({
-                      required: true,
-                      message: t(
-                        rule.message ?? (item.formItem.type !== EFormType.otp ? 'Please choose' : 'Please enter'),
-                        { title: item.title.toLowerCase() },
-                      ),
-                    });
-                    break;
+                if (
+                  item.formItem.type &&
+                  [
+                    EFormType.text,
+                    EFormType.name,
+                    EFormType.number,
+                    EFormType.hidden,
+                    EFormType.password,
+                    EFormType.textarea,
+                  ].includes(item.formItem.type)
+                ) {
+                  rules.push({
+                    required: true,
+                    whitespace: true,
+                    message: t(rule.message ?? 'Please enter', {
+                      title: item.title.toLowerCase(),
+                    }),
+                  });
+                } else {
+                  rules.push({
+                    required: true,
+                    message: t(
+                      rule.message ?? (item.formItem.type !== EFormType.otp ? 'Please choose' : 'Please enter'),
+                      { title: item.title.toLowerCase() },
+                    ),
+                  });
                 }
                 break;
               case EFormRuleType.email:
@@ -76,8 +78,9 @@ export const generateForm = ({
                       typeof value === 'object' &&
                       value.length > 0 &&
                       value.filter((item: any) => !regexEmail.test(item)).length === 0
-                    )
+                    ) {
                       return Promise.resolve();
+                    }
                     return Promise.reject(new Error(t(rule.message || 'Please enter a valid email address!')));
                   },
                 }));
@@ -100,26 +103,20 @@ export const generateForm = ({
                 if (item.formItem.type === EFormType.number)
                   rules.push(() => ({
                     validator(_: any, value: any) {
-                      if (!value || /^0$|^-?[1-9]\d*(\.\d+)?$/.test(value)) {
-                        if (/^0$|^-?[1-9]\d*(\.\d+)?$/.test(value)) {
-                          if (parseFloat(value) < rule.value) {
-                            return Promise.reject(
-                              new Error(t(rule.message || 'Please enter minimum number!', { min: rule.value })),
-                            );
-                          }
-                        }
+                      if (!value || (/^0$|^-?[1-9]\d*(\.\d+)?$/.test(value) && parseFloat(value) < rule.value)) {
+                        return Promise.reject(
+                          new Error(t(rule.message || 'Please enter minimum number!', { min: rule.value })),
+                        );
                       }
                       return Promise.resolve();
                     },
                   }));
                 else {
                   if (!rule.message) {
-                    switch (item.formItem.type) {
-                      case EFormType.onlyNumber:
-                        rule.message = t('Please enter at least number characters!', { min: rule.value });
-                        break;
-                      default:
-                        rule.message = t('Please enter minimum number!', { min: rule.value });
+                    if (item.formItem.type) {
+                      rule.message = t('Please enter at least number characters!', { min: rule.value });
+                    } else {
+                      rule.message = t('Please enter minimum number!', { min: rule.value });
                     }
                   }
                   rules.push({
@@ -133,26 +130,20 @@ export const generateForm = ({
                 if (item.formItem.type === EFormType.number)
                   rules.push(() => ({
                     validator(_: any, value: any) {
-                      if (!value || /^0$|^-?[1-9]\d*(\.\d+)?$/.test(value)) {
-                        if (/^0$|^-?[1-9]\d*(\.\d+)?$/.test(value)) {
-                          if (parseFloat(value) > rule.value) {
-                            return Promise.reject(
-                              new Error(t(rule.message || 'Please enter maximum number!', { max: rule.value })),
-                            );
-                          }
-                        }
+                      if (!value || (/^0$|^-?[1-9]\d*(\.\d+)?$/.test(value) && parseFloat(value) > rule.value)) {
+                        return Promise.reject(
+                          new Error(t(rule.message ?? 'Please enter maximum number!', { max: rule.value })),
+                        );
                       }
                       return Promise.resolve();
                     },
                   }));
                 else {
                   if (!rule.message) {
-                    switch (item.formItem.type) {
-                      case EFormType.onlyNumber:
-                        rule.message = t('Please enter maximum number characters!', { max: rule.value });
-                        break;
-                      default:
-                        rule.message = t('Please enter maximum number!', { max: rule.value });
+                    if (item.formItem.type === EFormType.onlyNumber) {
+                      rule.message = t('Please enter maximum number characters!', { max: rule.value });
+                    } else {
+                      rule.message = t('Please enter maximum number!', { max: rule.value });
                     }
                   }
                   rules.push({

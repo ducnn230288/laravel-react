@@ -5,7 +5,7 @@ import { Popconfirm } from 'antd';
 
 import { Check, Disable, Edit, Trash } from '@/assets/svg';
 import { EFormRuleType, EFormType, ETableAlign, ETableFilterType } from '@/enums';
-import { IDataTable, IForm } from '@/interfaces';
+import type { IDataTable, IForm } from '@/interfaces';
 import { Avatar } from '@/library/avatar';
 import { ToolTip } from '@/library/tooltip';
 import { SCode, SGlobal, SUser } from '@/services';
@@ -43,9 +43,9 @@ export default {
                 value: item.code,
               }),
               params: (fullTextSearch: string, value) => ({
-                // fullTextSearch,
+                fullTextSearch,
                 typeCode: 'POSITION',
-                // extend: { code: value },
+                extend: { code: value },
               }),
             },
           },

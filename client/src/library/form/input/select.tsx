@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { FormInstance, Select } from 'antd';
+import { type FormInstance, Select } from 'antd';
 
-import { ITableGet, ITableItemFilterList } from '@/interfaces';
+import type { ITableGet, ITableItemFilterList } from '@/interfaces';
 import { arrayUnique, cleanObjectKeyNull } from '@/utils';
 
 const Component = ({

@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { Dropdown } from 'antd';
 
-import { ITableGet, ITableRefObject } from '@/interfaces';
+import type { ITableGet, ITableRefObject } from '@/interfaces';
 import { arrayUnique } from '@/utils';
 
 import { DataTable } from '../../data-table';

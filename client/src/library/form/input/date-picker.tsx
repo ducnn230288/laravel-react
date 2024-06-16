@@ -1,5 +1,5 @@
 import React from 'react';
-import { DatePicker, FormInstance } from 'antd';
+import { DatePicker, type FormInstance } from 'antd';
 import dayjs from 'dayjs';
 
 import { uuidv4 } from '@/utils';

@@ -1,6 +1,6 @@
-import React, { Ref, forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
+import React, { type Ref, forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 import { Table } from 'antd';
-import { SorterResult } from 'antd/lib/table/interface';
+import type { SorterResult } from 'antd/lib/table/interface';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { useDraggable } from '@dnd-kit/core';
@@ -10,7 +10,7 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 
-import { IDataTable, IPaginationQuery, ITableRefObject } from '@/interfaces';
+import type { IDataTable, IPaginationQuery, ITableRefObject } from '@/interfaces';
 import { cleanObjectKeyNull, getSizePageByHeight, uuidv4 } from '@/utils';
 
 import { Pagination } from '../pagination';

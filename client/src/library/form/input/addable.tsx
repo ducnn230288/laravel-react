@@ -1,11 +1,11 @@
 // @ts-nocheck
 import React, { Fragment, useState } from 'react';
-import { Form, Checkbox, FormInstance } from 'antd';
+import { Form, Checkbox, type FormInstance } from 'antd';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 
 import { Trash, Plus } from '@/assets/svg';
-import { IForm } from '@/interfaces';
+import type { IForm } from '@/interfaces';
 
 import { Button } from '../../button';
 

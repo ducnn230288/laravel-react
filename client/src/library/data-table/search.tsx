@@ -1,9 +1,9 @@
 import React, { useRef } from 'react';
-import { SorterResult } from 'antd/lib/table/interface';
-import { TFunction } from 'i18next';
+import type { SorterResult } from 'antd/lib/table/interface';
+import type { TFunction } from 'i18next';
 
 import { Search, Times } from '@/assets/svg';
-import { IPaginationQuery } from '@/interfaces';
+import type { IPaginationQuery } from '@/interfaces';
 import { uuidv4 } from '@/utils';
 import { Mask } from '../form/input';
 

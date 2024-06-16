@@ -1,10 +1,10 @@
 import React, { useEffect, useRef } from 'react';
-import { Form as AntForm, FormInstance, Spin } from 'antd';
+import { Form as AntForm, type FormInstance, Spin } from 'antd';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 
 import { EFormType } from '@/enums';
-import { IForm } from '@/interfaces';
+import type { IForm } from '@/interfaces';
 import { SGlobal } from '@/services';
 import { convertFormValue } from '@/utils';
 

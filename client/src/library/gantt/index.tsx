@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs, { type Dayjs } from 'dayjs';
 import classNames from 'classnames';
 import TweenOne from 'rc-tween-one';
 import { DndContext, useDraggable } from '@dnd-kit/core';

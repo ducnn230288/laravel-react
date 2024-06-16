@@ -1,7 +1,7 @@
-import React, { forwardRef, Ref, useImperativeHandle } from 'react';
+import React, { forwardRef, type Ref, useImperativeHandle } from 'react';
 import { Form as FormAnt } from 'antd';
 
-import { IForm, IFormModalRefObject } from '@/interfaces';
+import type { IForm, IFormModalRefObject } from '@/interfaces';
 import { convertFormValue } from '@/utils';
 
 import { Form } from '../../form';

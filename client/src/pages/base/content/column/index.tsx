@@ -5,7 +5,7 @@ import { Popconfirm } from 'antd';
 
 import { Check, Disable, Edit, Trash } from '@/assets/svg';
 import { EFormRuleType, EFormType, ETableAlign, ETableFilterType } from '@/enums';
-import { IDataTable, IForm } from '@/interfaces';
+import type { IDataTable, IForm } from '@/interfaces';
 import { Avatar } from '@/library/avatar';
 import { ToolTip } from '@/library/tooltip';
 import { SContent, SGlobal } from '@/services';

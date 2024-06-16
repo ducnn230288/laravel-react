@@ -1,11 +1,11 @@
 import React from 'react';
-import { Checkbox, CheckboxOptionType, DatePicker, Radio, Spin } from 'antd';
+import { Checkbox, type CheckboxOptionType, DatePicker, Radio, Spin } from 'antd';
 import classNames from 'classnames';
-import dayjs, { Dayjs } from 'dayjs';
-import { TFunction } from 'i18next';
+import dayjs, { type Dayjs } from 'dayjs';
+import type { TFunction } from 'i18next';
 
 import { Calendar, CheckCircle, CheckSquare, Search } from '@/assets/svg';
-import { ITableGet, ITableItemFilterList } from '@/interfaces';
+import type { ITableGet, ITableItemFilterList } from '@/interfaces';
 import { cleanObjectKeyNull } from '@/utils';
 import { Mask } from '../form/input';
 import { Button } from '../button';

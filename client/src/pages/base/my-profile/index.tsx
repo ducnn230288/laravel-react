@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
-import { Form as AntForm, FormInstance, Tabs } from 'antd';
+import { Form as AntForm, type FormInstance, Tabs } from 'antd';
 import { useSearchParams } from 'react-router-dom';
 
 import { User } from '@/assets/svg';

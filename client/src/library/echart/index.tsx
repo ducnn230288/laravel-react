@@ -1,5 +1,5 @@
-import React, { forwardRef, Ref, useEffect, useImperativeHandle, useRef } from 'react';
-import {
+import React, { forwardRef, type Ref, useEffect, useImperativeHandle, useRef } from 'react';
+import type {
   LegendComponentOption,
   TitleOption,
   TooltipOption,
@@ -7,8 +7,8 @@ import {
   YAXisOption,
   GridOption,
 } from 'echarts/types/dist/shared';
-import { EChartsType, SeriesOption } from 'echarts';
-import { CallbackDataParams, CommonTooltipOption, OptionDataValue } from 'echarts/types/src/util/types';
+import type { EChartsType, SeriesOption } from 'echarts';
+import type { CallbackDataParams, CommonTooltipOption, OptionDataValue } from 'echarts/types/src/util/types';
 
 import { ETypeChart } from '@/enums';
 import { uuidv4 } from '@/utils';

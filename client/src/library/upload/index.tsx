@@ -1,4 +1,4 @@
-import React, { Fragment, PropsWithChildren, useEffect, useRef, useState } from 'react';
+import React, { Fragment, type PropsWithChildren, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 import { Popconfirm } from 'antd';

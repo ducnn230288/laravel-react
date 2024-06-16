@@ -4,7 +4,7 @@ import { Form, Tabs } from 'antd';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 
-import { IForm } from '@/interfaces';
+import type { IForm } from '@/interfaces';
 
 const Component = ({
   name,

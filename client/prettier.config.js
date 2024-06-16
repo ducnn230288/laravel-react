@@ -1,3 +1,5 @@
+// Configuration document: https://prettier.io/
+
 /** @type {import('prettier').Config} */
 export default {
   // Maximum width per line, beyond line breaks

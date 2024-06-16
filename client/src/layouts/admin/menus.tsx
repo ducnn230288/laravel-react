@@ -1,5 +1,5 @@
 import React from 'react';
-import { URLSearchParamsInit } from 'react-router-dom/dist/dom';
+import type { URLSearchParamsInit } from 'react-router-dom/dist/dom';
 import { keyRole, language, routerLinks } from '@/utils';
 import { Calendar, Cog, User } from '@/assets/svg';
 import { useTranslation } from 'react-i18next';

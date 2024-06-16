@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment, useCallback, useRef } from 'react';
-import { TreeSelect, Checkbox, FormInstance } from 'antd';
+import { TreeSelect, Checkbox, type FormInstance } from 'antd';
 
 import { Times } from '@/assets/svg';
 import { API } from '@/utils';

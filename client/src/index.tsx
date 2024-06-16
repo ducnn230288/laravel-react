@@ -5,7 +5,7 @@ import i18nextHttpBackend from 'i18next-http-backend';
 import { initReactI18next } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { ConfigProvider, message as noti, Spin } from 'antd';
-import { MessageInstance } from 'antd/lib/message/interface';
+import type { MessageInstance } from 'antd/lib/message/interface';
 
 import { SGlobal, setupStore } from '@/services';
 import { reportWebVitals, lang } from '@/utils';

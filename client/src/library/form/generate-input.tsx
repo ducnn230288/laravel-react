@@ -1,8 +1,17 @@
 import React from 'react';
-import { Checkbox, DatePicker as DateAntDesign, Radio, Slider, Switch, TimePicker, Input, FormInstance } from 'antd';
+import {
+  Checkbox,
+  DatePicker as DateAntDesign,
+  Radio,
+  Slider,
+  Switch,
+  TimePicker,
+  Input,
+  type FormInstance,
+} from 'antd';
 import classNames from 'classnames';
 import dayjs from 'dayjs';
-import { TFunction } from 'i18next';
+import type { TFunction } from 'i18next';
 
 import { Check, Times } from '@/assets/svg';
 import { EFormType } from '@/enums';
@@ -22,7 +31,7 @@ import {
   TreeSelect,
 } from './input';
 import { Upload } from '../upload';
-import { IForm } from '@/interfaces';
+import type { IForm } from '@/interfaces';
 
 export const generateInput = ({
   item,

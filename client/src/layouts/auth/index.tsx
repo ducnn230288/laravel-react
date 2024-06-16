@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useEffect } from 'react';
+import React, { type PropsWithChildren, useEffect } from 'react';
 
 import { Logo } from '@/assets/svg';
 import { SGlobal } from '@/services';

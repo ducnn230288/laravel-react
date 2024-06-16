@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { FormInstance, Table, Transfer } from 'antd';
+import { type FormInstance, Table, Transfer } from 'antd';
 
 const Component = ({
   formItem,

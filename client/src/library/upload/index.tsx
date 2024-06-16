@@ -3,13 +3,12 @@ import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 import { Popconfirm } from 'antd';
 
-import { message } from '@/index';
-import { SvgIcon } from '../svg-icon';
-
 import { API, arrayMove, handleGetBase64, keyToken, uuidv4 } from '@/utils';
-import { Button } from '../button';
+import { message } from '@/index';
+import { CButton } from '../button';
+import { CSvgIcon } from '../svg-icon';
 
-export const Upload = ({
+export const CUpload = ({
   value = [],
   onChange,
   deleteFile,
@@ -184,7 +183,7 @@ export const Upload = ({
                   'top-1 absolute right-1 bg-base-200 hover:bg-primary size-5 cursor-pointer rounded-full text-base-content transition-all duration-300'
                 }
               >
-                <SvgIcon name='arrow' size={12} className={'m-1 rotate-180 fill-primary hover:fill-base-content'} />
+                <CSvgIcon name='arrow' size={12} className={'m-1 rotate-180 fill-primary hover:fill-base-content'} />
               </button>
             )}
 
@@ -199,7 +198,7 @@ export const Upload = ({
                   },
                 )}
               >
-                <SvgIcon name='arrow' size={12} className={'m-1 fill-primary hover:fill-base-content'} />
+                <CSvgIcon name='arrow' size={12} className={'m-1 fill-primary hover:fill-base-content'} />
               </button>
             )}
 
@@ -227,7 +226,7 @@ export const Upload = ({
                     },
                   )}
                 >
-                  <SvgIcon name='times' size={12} className={'m-1 fill-error hover:fill-base-content'} />
+                  <CSvgIcon name='times' size={12} className={'m-1 fill-error hover:fill-base-content'} />
                 </div>
               </Popconfirm>
             )}
@@ -235,16 +234,16 @@ export const Upload = ({
         ))}
       </div>
       <div className={'mt-2 flex gap-2'}>
-        <Button
+        <CButton
           isTiny={true}
           isLoading={isLoading.current}
           onClick={() => ref.current.click()}
-          icon={<SvgIcon name='upload' size={16} />}
+          icon={<CSvgIcon name='upload' size={16} />}
           text={'Upload'}
         />
-        <Button
+        <CButton
           isTiny={true}
-          icon={<SvgIcon name='paste' size={16} />}
+          icon={<CSvgIcon name='paste' size={16} />}
           text={'Paste'}
           onPaste={async event => {
             const items = event.clipboardData.items;
@@ -256,7 +255,7 @@ export const Upload = ({
               }
             }
           }}
-        ></Button>
+        ></CButton>
       </div>
     </Fragment>
   );

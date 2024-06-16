@@ -3,11 +3,11 @@ import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 import { Popconfirm } from 'antd';
 
-import { SvgIcon } from '@/library/svg-icon';
+import { CSvgIcon } from '@/library/svg-icon';
 import { EFormRuleType, EFormType, ETableAlign, ETableFilterType } from '@/enums';
 import type { IDataTable, IForm } from '@/interfaces';
-import { Avatar } from '@/library/avatar';
-import { ToolTip } from '@/library/tooltip';
+import { CAvatar } from '@/library/avatar';
+import { CTooltip } from '@/library/tooltip';
 import { SCode, SGlobal, SUser } from '@/services';
 import { keyRole } from '@/utils';
 
@@ -26,7 +26,7 @@ export default {
           width: 210,
           fixed: window.innerWidth > 767 ? 'left' : '',
           sorter: true,
-          render: (text: string, item: any) => text && <Avatar src={item.avatar} text={item.name} />,
+          render: (text: string, item: any) => text && <CAvatar src={item.avatar} text={item.name} />,
         },
       },
       {
@@ -77,9 +77,9 @@ export default {
           filter: { type: ETableFilterType.date },
           sorter: true,
           render: text => (
-            <ToolTip title={dayjs(text).format(sGlobal.formatDate + ' HH:mm:ss')}>
+            <CTooltip title={dayjs(text).format(sGlobal.formatDate + ' HH:mm:ss')}>
               {dayjs(text).format(sGlobal.formatDate)}
-            </ToolTip>
+            </CTooltip>
           ),
         },
       },
@@ -91,7 +91,7 @@ export default {
           render: (_: string, data) => (
             <div className={'action'}>
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_USER_UPDATE) && (
-                <ToolTip title={t(data.isDisable ? 'Disabled user' : 'Enabled user', { name: data.name })}>
+                <CTooltip title={t(data.isDisable ? 'Disabled user' : 'Enabled user', { name: data.name })}>
                   <Popconfirm
                     destroyTooltipOnHide={true}
                     title={t(!data.isDisable ? 'Are you sure want disable user?' : 'Are you sure want enable user?', {
@@ -105,37 +105,37 @@ export default {
                       })}
                     >
                       {data.isDisable ? (
-                        <SvgIcon name='disable' className='warning' />
+                        <CSvgIcon name='disable' className='warning' />
                       ) : (
-                        <SvgIcon name='check' className='success' />
+                        <CSvgIcon name='check' className='success' />
                       )}
                     </button>
                   </Popconfirm>
-                </ToolTip>
+                </CTooltip>
               )}
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_USER_UPDATE) && (
-                <ToolTip title={t('Edit User', { name: data.name })}>
+                <CTooltip title={t('Edit User', { name: data.name })}>
                   <button
                     title={t('Edit User', { name: data.name })}
                     onClick={() => sUser.getById({ id: data.id, params: { include: 'position' } })}
                   >
-                    <SvgIcon name='edit' className='primary' />
+                    <CSvgIcon name='edit' className='primary' />
                   </button>
-                </ToolTip>
+                </CTooltip>
               )}
 
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_USER_DESTROY) && (
-                <ToolTip title={t('Delete user', { name: data.name })}>
+                <CTooltip title={t('Delete user', { name: data.name })}>
                   <Popconfirm
                     destroyTooltipOnHide={true}
                     title={t('Are you sure want delete user?', { name: data.name })}
                     onConfirm={() => sUser.delete(data.id)}
                   >
                     <button title={t('Delete user', { name: data.name })}>
-                      <SvgIcon name='trash' className='error' />
+                      <CSvgIcon name='trash' className='error' />
                     </button>
                   </Popconfirm>
-                </ToolTip>
+                </CTooltip>
               )}
             </div>
           ),

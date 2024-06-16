@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router';
 import { Spin } from 'antd';
 
 import { EFormRuleType, EFormType } from '@/enums';
-import { Form } from '@/library/form';
+import { CForm } from '@/library/form';
 import { EStatusGlobal, SGlobal } from '@/services';
 import { lang, routerLinks } from '@/utils';
 import { useTranslation } from 'react-i18next';
@@ -28,7 +28,7 @@ const Page = () => {
       <h1>{t('Forgot Password')}</h1>
       <h5>{t('Please enter the OTP code that has been sent to your email.')}</h5>
       <Spin spinning={sGlobal.isLoading}>
-        <Form
+        <CForm
           values={{ ...sGlobal.data }}
           columns={[
             {

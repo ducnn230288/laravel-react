@@ -2,8 +2,8 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Cascader, type FormInstance } from 'antd';
 
 import { API } from '@/utils';
-import { Button } from '../../button';
-import { SvgIcon } from '../../svg-icon';
+import { CButton } from '../../button';
+import { CSvgIcon } from '../../svg-icon';
 
 const Component = ({ formItem, placeholder, onChange, value, form, disabled, showSearch = true }: Type) => {
   const [_list, set_list] = useState(formItem.list || []);
@@ -163,8 +163,8 @@ const Component = ({ formItem, placeholder, onChange, value, form, disabled, sho
           return (
             checkShow && (
               <div className='relative -left-2.5 mr-2.5 rounded-xl bg-teal-100 px-2 py-1'>
-                <Button
-                  icon={<SvgIcon name='times' size={20} className='fill-error' />}
+                <CButton
+                  icon={<CSvgIcon name='times' size={20} className='fill-error' />}
                   className='absolute -right-2 -top-1 z-10 rounded-full !bg-error/20 leading-none !text-error'
                   onClick={() => onChange && onChange(clearTag(item[0], value))}
                   disabled={disabled}

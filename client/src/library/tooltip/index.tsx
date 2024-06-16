@@ -3,7 +3,7 @@ import { Tooltip } from 'antd';
 import type { RenderFunction } from 'antd/es/_util/getRenderPropValue';
 import type { TooltipPlacement } from 'antd/es/tooltip';
 
-export const ToolTip = ({
+export const CTooltip = ({
   children,
   title,
   placement,
@@ -17,4 +17,4 @@ export const ToolTip = ({
     </Tooltip>
   );
 };
-ToolTip.displayName = 'Tooltip';
+CTooltip.displayName = 'Tooltip';

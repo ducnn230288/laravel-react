@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Form as AntForm, type FormInstance, Spin } from 'antd';
+import { Form, type FormInstance, Spin } from 'antd';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 
@@ -8,10 +8,10 @@ import type { IForm } from '@/interfaces';
 import { SGlobal } from '@/services';
 import { convertFormValue } from '@/utils';
 
-import { Button } from '../button';
+import { CButton } from '../button';
 import { generateForm } from './generate-form';
 
-export const Form = ({
+export const CForm = ({
   className,
   columns,
   textSubmit,
@@ -28,7 +28,7 @@ export const Form = ({
   spinning = false,
   formAnt,
 }: Type) => {
-  const [forms] = AntForm.useForm();
+  const [forms] = Form.useForm();
   const form = formAnt || forms;
   useEffect(() => {
     if (form) {
@@ -48,7 +48,7 @@ export const Form = ({
   const timeout = useRef<any>();
   return (
     <Spin spinning={spinning}>
-      <AntForm
+      <Form
         scrollToFirstError={true}
         requiredMark={true}
         className={classNames(className)}
@@ -76,7 +76,7 @@ export const Form = ({
               .map(
                 (column: any, index: number) =>
                   (!column?.formItem?.condition ||
-                    !!column?.formItem?.condition({value: values[column.name], form, index, values})) && (
+                    !!column?.formItem?.condition({ value: values[column.name], form, index, values })) && (
                     <div
                       className={classNames(
                         'col-span-12 type-' +
@@ -113,7 +113,7 @@ export const Form = ({
           })}
         >
           {handCancel && (
-            <Button
+            <CButton
               text={textCancel ?? t('Cancel')}
               className={'w-full justify-center !border-black sm:w-auto sm:min-w-32'}
               onClick={handCancel}
@@ -121,7 +121,7 @@ export const Form = ({
           )}
           {extendButton?.(form)}
           {handSubmit && (
-            <Button
+            <CButton
               text={textSubmit ?? t('Save')}
               id={idSubmit}
               onClick={() => form?.submit()}
@@ -130,7 +130,7 @@ export const Form = ({
             />
           )}
         </div>
-      </AntForm>
+      </Form>
     </Spin>
   );
 };

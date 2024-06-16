@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect } from 'react';
 
 import { EStatusState } from '@/enums';
-import { Breadcrumbs } from '@/library/breadcrumbs';
+import { CBreadcrumbs } from '@/library/breadcrumbs';
 import { SGlobal, SUser, SUserRole } from '@/services';
 
 const Page = () => {
@@ -20,7 +20,7 @@ const Page = () => {
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.user' });
   return (
     <Fragment>
-      <Breadcrumbs title={t('User')} list={[t('User')]} />
+      <CBreadcrumbs title={t('User')} list={[t('User')]} />
       <Form />
       <div className={'wrapper-grid'}>
         <div className='-intro-x left'>
@@ -36,7 +36,7 @@ const Page = () => {
 export default Page;
 
 import { useTranslation } from 'react-i18next';
-import { DrawerForm } from '@/library/drawer';
+import { CDrawerForm } from '@/library/drawer';
 import _column from './column';
 const Form = () => {
   const sUser = SUser();
@@ -55,7 +55,7 @@ const Form = () => {
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.user' });
   const sUserRole = SUserRole();
   return (
-    <DrawerForm
+    <CDrawerForm
       facade={sUser}
       columns={_column.useForm()}
       title={t(sUser.data?.id ? 'Edit User' : 'Add new User', {
@@ -72,7 +72,7 @@ const Form = () => {
 import { useLocation, useNavigate } from 'react-router';
 import queryString from 'query-string';
 import { Select, Spin, Tree } from 'antd';
-import { SvgIcon } from '@/library/svg-icon';
+import { CSvgIcon } from '@/library/svg-icon';
 const Side = () => {
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.user' });
   const sUserRole = SUserRole();
@@ -95,7 +95,7 @@ const Side = () => {
               showLine
               autoExpandParent
               defaultExpandAll
-              switcherIcon={<SvgIcon name='arrow' size={12} />}
+              switcherIcon={<CSvgIcon name='arrow' size={12} />}
               defaultSelectedKeys={[request.roleCode]}
               treeData={sUserRole.result?.data?.map((item: any) => ({
                 title: item?.name,
@@ -129,8 +129,8 @@ const Side = () => {
   );
 };
 
-import { Button } from '@/library/button';
-import { DataTable } from '@/library/data-table';
+import { CButton } from '@/library/button';
+import { CDataTable } from '@/library/data-table';
 import { keyRole } from '@/utils';
 const Main = () => {
   const sUser = SUser();
@@ -142,15 +142,15 @@ const Main = () => {
   return (
     <div className='card'>
       <div className='body'>
-        <DataTable
+        <CDataTable
           defaultRequest={{ include: 'position' }}
           facade={sUser}
           paginationDescription={(from: number, to: number, total: number) => t('Pagination user', { from, to, total })}
           columns={_column.useTable()}
           rightHeader={
             sGlobal.user?.role?.permissions?.includes(keyRole.P_USER_STORE) && (
-              <Button
-                icon={<SvgIcon name='plus' size={12} />}
+              <CButton
+                icon={<CSvgIcon name='plus' size={12} />}
                 text={t('Add new User', {
                   name: sUserRole.result?.data?.find(item => item.code === request.roleCode)?.name,
                 })}

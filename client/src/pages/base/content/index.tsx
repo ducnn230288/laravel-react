@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect } from 'react';
 
 import { EStatusState } from '@/enums';
-import { Breadcrumbs } from '@/library/breadcrumbs';
+import { CBreadcrumbs } from '@/library/breadcrumbs';
 import { SContent, SContentType, SGlobal } from '@/services';
 
 const Page = () => {
@@ -20,7 +20,7 @@ const Page = () => {
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.content' });
   return (
     <Fragment>
-      <Breadcrumbs title={t('Content')} list={[t('Setting'), t('Content')]} />
+      <CBreadcrumbs title={t('Content')} list={[t('Setting'), t('Content')]} />
       <Form />
       <div className={'wrapper-grid'}>
         <div className='-intro-x left'>
@@ -36,7 +36,7 @@ const Page = () => {
 export default Page;
 
 import { useTranslation } from 'react-i18next';
-import { DrawerForm } from '@/library/drawer';
+import { CDrawerForm } from '@/library/drawer';
 import _column from './column';
 const Form = () => {
   const sContent = SContent();
@@ -55,7 +55,7 @@ const Form = () => {
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.content' });
   const sContentType = SContentType();
   return (
-    <DrawerForm
+    <CDrawerForm
       facade={sContent}
       columns={_column.useForm()}
       title={t(sContent.data?.id ? 'Edit Content' : 'Add new Content', {
@@ -72,7 +72,7 @@ const Form = () => {
 import { useLocation, useNavigate } from 'react-router';
 import queryString from 'query-string';
 import { Select, Spin, Tree } from 'antd';
-import { SvgIcon } from '@/library/svg-icon';
+import { CSvgIcon } from '@/library/svg-icon';
 const Side = () => {
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.content' });
   const sContentType = SContentType();
@@ -95,7 +95,7 @@ const Side = () => {
               showLine
               autoExpandParent
               defaultExpandAll
-              switcherIcon={<SvgIcon name='arrow' size={12} />}
+              switcherIcon={<CSvgIcon name='arrow' size={12} />}
               defaultSelectedKeys={[request.typeCode]}
               treeData={sContentType.result?.data?.map((item: any) => ({
                 title: item?.name,
@@ -129,8 +129,8 @@ const Side = () => {
   );
 };
 
-import { Button } from '@/library/button';
-import { DataTable } from '@/library/data-table';
+import { CButton } from '@/library/button';
+import { CDataTable } from '@/library/data-table';
 import { keyRole } from '@/utils';
 const Main = () => {
   const sContent = SContent();
@@ -142,7 +142,7 @@ const Main = () => {
   return (
     <div className='card'>
       <div className='body'>
-        <DataTable
+        <CDataTable
           defaultRequest={{ include: 'languages' }}
           facade={sContent}
           paginationDescription={(from: number, to: number, total: number) =>
@@ -151,8 +151,8 @@ const Main = () => {
           columns={_column.useTable()}
           rightHeader={
             sGlobal.user?.role?.permissions?.includes(keyRole.P_CONTENT_STORE) && (
-              <Button
-                icon={<SvgIcon name='plus' size={12} />}
+              <CButton
+                icon={<CSvgIcon name='plus' size={12} />}
                 text={t('Add new Content', {
                   name: sContentType.result?.data?.find(item => item.code === request.typeCode)?.name,
                 })}

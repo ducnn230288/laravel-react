@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { type FormInstance, Select } from 'antd';
 
-import { SvgIcon } from '../../svg-icon';
 import { API } from '@/utils';
-
-import { Button } from '../../button';
-import { Avatar } from '../../avatar';
+import { CAvatar } from '../../avatar';
+import { CButton } from '../../button';
+import { CSvgIcon } from '../../svg-icon';
 
 const Component = ({ tag, onChange, form, value, disabled, maxTagCount, placeholder, ...prop }: Type) => {
   const [_options, set_options] = useState([]);
@@ -19,7 +18,7 @@ const Component = ({ tag, onChange, form, value, disabled, maxTagCount, placehol
         set_options(
           data?.data?.map((item: any, index: number) => ({
             label: tag.avatar ? (
-              <Avatar key={index} size={5} src={item[tag.avatar]} text={item[tag.label]} />
+              <CAvatar key={index} size={5} src={item[tag.avatar]} text={item[tag.label]} />
             ) : (
               item[tag.label]
             ),
@@ -48,13 +47,12 @@ const Component = ({ tag, onChange, form, value, disabled, maxTagCount, placehol
       onBlur={() => loadData()}
       mode='multiple'
       optionFilterProp='label'
-      showArrow
       filterOption={false}
       maxTagPlaceholder={array => '+' + array.length}
       tagRender={({ label, onClose }) => (
         <div className='relative -left-2.5 mr-2.5 rounded-xl bg-teal-100 px-2 py-1'>
-          <Button
-            icon={<SvgIcon name='times' size={20} className='fill-error' />}
+          <CButton
+            icon={<CSvgIcon name='times' size={20} className='fill-error' />}
             className='absolute -right-2 -top-1 z-auto rounded-full !bg-error/20 leading-none !text-error'
             onClick={onClose}
             disabled={disabled}
@@ -63,7 +61,7 @@ const Component = ({ tag, onChange, form, value, disabled, maxTagCount, placehol
         </div>
       )}
       onChange={value => {
-        onChange && onChange(value);
+        onChange?.(value);
         loadData('', value);
       }}
       style={{ width: '100%' }}

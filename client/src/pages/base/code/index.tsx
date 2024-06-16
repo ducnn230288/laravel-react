@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect } from 'react';
 
 import { EStatusState } from '@/enums';
-import { Breadcrumbs } from '@/library/breadcrumbs';
+import { CBreadcrumbs } from '@/library/breadcrumbs';
 import { SCode, SCodeType, SGlobal } from '@/services';
 
 const Page = () => {
@@ -20,7 +20,7 @@ const Page = () => {
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.code' });
   return (
     <Fragment>
-      <Breadcrumbs title={t('Code')} list={[t('Setting'), t('Code')]} />
+      <CBreadcrumbs title={t('Code')} list={[t('Setting'), t('Code')]} />
       <Form />
       <div className={'wrapper-grid'}>
         <div className='-intro-x left'>
@@ -36,7 +36,7 @@ const Page = () => {
 export default Page;
 
 import { useTranslation } from 'react-i18next';
-import { DrawerForm } from '@/library/drawer';
+import { CDrawerForm } from '@/library/drawer';
 import _column from './column';
 const Form = () => {
   const sCode = SCode();
@@ -55,7 +55,7 @@ const Form = () => {
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.code' });
   const sCodeType = SCodeType();
   return (
-    <DrawerForm
+    <CDrawerForm
       facade={sCode}
       columns={_column.useForm()}
       title={t(sCode.data?.id ? 'Edit Code' : 'Add new Code', {
@@ -72,7 +72,7 @@ const Form = () => {
 import { useLocation, useNavigate } from 'react-router';
 import queryString from 'query-string';
 import { Select, Spin, Tree } from 'antd';
-import { SvgIcon } from '@/library/svg-icon';
+import { CSvgIcon } from '@/library/svg-icon';
 const Side = () => {
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.code' });
   const sCodeType = SCodeType();
@@ -95,7 +95,7 @@ const Side = () => {
               showLine
               autoExpandParent
               defaultExpandAll
-              switcherIcon={<SvgIcon name='arrow' size={12} />}
+              switcherIcon={<CSvgIcon name='arrow' size={12} />}
               defaultSelectedKeys={[request.typeCode]}
               treeData={sCodeType.result?.data?.map((item: any) => ({
                 title: item?.name,
@@ -129,8 +129,8 @@ const Side = () => {
   );
 };
 
-import { Button } from '@/library/button';
-import { DataTable } from '@/library/data-table';
+import { CButton } from '@/library/button';
+import { CDataTable } from '@/library/data-table';
 import { keyRole } from '@/utils';
 const Main = () => {
   const sCode = SCode();
@@ -142,14 +142,14 @@ const Main = () => {
   return (
     <div className='card'>
       <div className='body'>
-        <DataTable
+        <CDataTable
           facade={sCode}
           paginationDescription={(from: number, to: number, total: number) => t('Pagination code', { from, to, total })}
           columns={_column.useTable()}
           rightHeader={
             sGlobal.user?.role?.permissions?.includes(keyRole.P_CODE_STORE) && (
-              <Button
-                icon={<SvgIcon name='plus' size={12} />}
+              <CButton
+                icon={<CSvgIcon name='plus' size={12} />}
                 text={t('Add new Code', {
                   name: sCodeType.result?.data?.find(item => item.code === request.typeCode)?.name,
                 })}

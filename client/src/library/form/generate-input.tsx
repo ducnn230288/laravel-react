@@ -14,24 +14,24 @@ import dayjs from 'dayjs';
 import type { TFunction } from 'i18next';
 
 import { EFormType } from '@/enums';
-import {
-  Addable,
-  Cascader,
-  Chips,
-  Editor,
-  DatePicker,
-  Mask,
-  Password,
-  Select,
-  SelectTable,
-  SelectTag,
-  Tab,
-  TableTransfer,
-  TreeSelect,
-} from './input';
-import { Upload } from '../upload';
 import type { IForm } from '@/interfaces';
-import { SvgIcon } from '../svg-icon';
+import {
+  CIAddable,
+  CICascader,
+  CIChips,
+  CIEditor,
+  CIDatePicker,
+  CIMask,
+  CIPassword,
+  CISelect,
+  CISelectTable,
+  CISelectTag,
+  CITab,
+  CITableTransfer,
+  CITreeSelect,
+} from './input';
+import { CUpload } from '../upload';
+import { CSvgIcon } from '../svg-icon';
 
 export const generateInput = ({
   item,
@@ -57,11 +57,17 @@ export const generateInput = ({
         return <input type={'hidden'} name={item.name} tabIndex={-1} />;
       case EFormType.tab:
         return (
-          <Tab name={item.name} generateForm={generateForm} form={form} column={formItem.column} list={formItem.list} />
+          <CITab
+            name={item.name}
+            generateForm={generateForm}
+            form={form}
+            column={formItem.column}
+            list={formItem.list}
+          />
         );
       case EFormType.addable:
         return (
-          <Addable
+          <CIAddable
             name={item.name}
             column={formItem.column}
             textAdd={formItem.textAdd}
@@ -74,14 +80,14 @@ export const generateInput = ({
           />
         );
       case EFormType.editor:
-        return <Editor placeholder={t(formItem.placeholder ?? 'Enter', { title: item.title.toLowerCase() })} />;
+        return <CIEditor placeholder={t(formItem.placeholder ?? 'Enter', { title: item.title.toLowerCase() })} />;
       case EFormType.upload:
-        return <Upload multiple={!!formItem.mode} />;
+        return <CUpload multiple={!!formItem.mode} />;
       case EFormType.tableTransfer:
-        return <TableTransfer formItem={formItem} form={form} />;
+        return <CITableTransfer formItem={formItem} form={form} />;
       case EFormType.password:
         return (
-          <Password
+          <CIPassword
             placeholder={t(formItem.placeholder ?? 'Enter', { title: item.title.toLowerCase() })}
             disabled={formItem.disabled?.(values, form)}
           />
@@ -122,7 +128,7 @@ export const generateInput = ({
         );
       case EFormType.date:
         return (
-          <DatePicker
+          <CIDatePicker
             format={
               !formItem.picker || formItem.picker === 'date'
                 ? formatDate + (formItem.showTime ? ' HH:mm' : '')
@@ -226,7 +232,7 @@ export const generateInput = ({
         );
       case EFormType.tag:
         return (
-          <SelectTag
+          <CISelectTag
             maxTagCount={formItem.maxTagCount ?? 'responsive'}
             placeholder={t(formItem.placeholder ?? 'Choose', { title: item.title.toLowerCase() })}
             tag={formItem.tag}
@@ -236,7 +242,7 @@ export const generateInput = ({
         );
       case EFormType.chips:
         return (
-          <Chips
+          <CIChips
             placeholder={t(formItem.placeholder ?? 'Enter', { title: item.title.toLowerCase() })}
             disabled={formItem.disabled?.(values, form)}
             list={formItem.list}
@@ -244,7 +250,7 @@ export const generateInput = ({
         );
       case EFormType.select:
         return (
-          <Select
+          <CISelect
             showSearch={formItem.showSearch}
             maxTagCount={formItem.maxTagCount ?? 'responsive'}
             onChange={(value: any) => formItem.onChange?.(value, form)}
@@ -258,7 +264,7 @@ export const generateInput = ({
         );
       case EFormType.selectTable:
         return (
-          <SelectTable
+          <CISelectTable
             onChange={(value: any) => formItem.onChange?.(value, form)}
             placeholder={t(formItem.placeholder ?? 'Choose', { title: item.title.toLowerCase() })}
             disabled={formItem.disabled?.(values, form)}
@@ -268,7 +274,7 @@ export const generateInput = ({
         );
       case EFormType.treeSelect:
         return (
-          <TreeSelect
+          <CITreeSelect
             formItem={formItem}
             showSearch={formItem.showSearch}
             form={form}
@@ -278,7 +284,7 @@ export const generateInput = ({
         );
       case EFormType.cascader:
         return (
-          <Cascader
+          <CICascader
             formItem={formItem}
             showSearch={formItem.showSearch}
             form={form}
@@ -289,8 +295,8 @@ export const generateInput = ({
       case EFormType.switch:
         return (
           <Switch
-            checkedChildren={<SvgIcon name='check' size={20} className='fill-white' />}
-            unCheckedChildren={<SvgIcon name='times' size={20} className='fill-white' />}
+            checkedChildren={<CSvgIcon name='check' size={20} className='fill-white' />}
+            unCheckedChildren={<CSvgIcon name='times' size={20} className='fill-white' />}
             defaultChecked={!!values && values[item.name || ''] === 1}
             onChange={e => formItem.onChange?.(e, form)}
           />
@@ -299,7 +305,7 @@ export const generateInput = ({
         return <Input.OTP length={formItem.maxLength ?? 5} />;
       default:
         return (
-          <Mask
+          <CIMask
             list={formItem.list}
             form={form}
             mask={formItem.mask}

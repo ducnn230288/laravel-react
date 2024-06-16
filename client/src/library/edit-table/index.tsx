@@ -3,9 +3,9 @@ import classNames from 'classnames';
 
 import type { IEditTable } from '@/interfaces';
 import { cssInObject } from '@/utils';
-import { Mask } from '../form/input';
+import { CIMask } from '../form/input';
 
-export const EditTable = ({
+export const CEditTable = ({
   table,
 }: PropsWithChildren<{
   table: IEditTable;
@@ -56,7 +56,7 @@ export const EditTable = ({
     if (!formula) {
       if (type === 'number' && level === maxLevel) {
         return (
-          <Mask
+          <CIMask
             placeholder={'Nhập số'}
             mask={{
               alias: 'decimal',
@@ -75,7 +75,7 @@ export const EditTable = ({
       }
       if (type === 'text') {
         return (
-          <Mask
+          <CIMask
             placeholder={'Nhập text'}
             onChange={(e: any) =>
               handleSum(e.target, e.target.value, indexRow, colBody[indexCol], table, type, maxLevel)
@@ -273,4 +273,4 @@ export const EditTable = ({
   };
   return <Fragment>{table.data && renderTable(table)}</Fragment>;
 };
-EditTable.displayName = 'EditTable';
+CEditTable.displayName = 'CEditTable';

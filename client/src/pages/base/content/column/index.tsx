@@ -3,11 +3,11 @@ import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 import { Popconfirm } from 'antd';
 
-import { SvgIcon } from '@/library/svg-icon';
+import { CSvgIcon } from '@/library/svg-icon';
 import { EFormRuleType, EFormType, ETableAlign, ETableFilterType } from '@/enums';
 import type { IDataTable, IForm } from '@/interfaces';
-import { Avatar } from '@/library/avatar';
-import { ToolTip } from '@/library/tooltip';
+import { CAvatar } from '@/library/avatar';
+import { CTooltip } from '@/library/tooltip';
 import { SContent, SGlobal } from '@/services';
 import { keyRole } from '@/utils';
 
@@ -25,7 +25,7 @@ export default {
           filter: { type: ETableFilterType.search },
           sorter: true,
           render: (text: string, item: any) => (
-            <Avatar
+            <CAvatar
               src={item.image}
               text={
                 text ||
@@ -54,9 +54,9 @@ export default {
           filter: { type: ETableFilterType.date },
           sorter: true,
           render: text => (
-            <ToolTip title={dayjs(text).format(sGlobal.formatDate + ' HH:mm:ss')}>
+            <CTooltip title={dayjs(text).format(sGlobal.formatDate + ' HH:mm:ss')}>
               {dayjs(text).format(sGlobal.formatDate)}
-            </ToolTip>
+            </CTooltip>
           ),
         },
       },
@@ -68,7 +68,7 @@ export default {
           render: (_: string, data) => (
             <div className={'action'}>
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_CONTENT_UPDATE) && (
-                <ToolTip title={t(data.isDisable ? 'Disabled content' : 'Enabled content', { name: data.name })}>
+                <CTooltip title={t(data.isDisable ? 'Disabled content' : 'Enabled content', { name: data.name })}>
                   <Popconfirm
                     destroyTooltipOnHide={true}
                     title={t(
@@ -79,36 +79,36 @@ export default {
                   >
                     <button title={t(data.isDisable ? 'Disabled content' : 'Enabled content', { name: data.name })}>
                       {data.isDisable ? (
-                        <SvgIcon name='disable' className='warning' />
+                        <CSvgIcon name='disable' className='warning' />
                       ) : (
-                        <SvgIcon name='check' className='success' />
+                        <CSvgIcon name='check' className='success' />
                       )}
                     </button>
                   </Popconfirm>
-                </ToolTip>
+                </CTooltip>
               )}
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_CONTENT_UPDATE) && (
-                <ToolTip title={t('Edit Content', { name: data.name })}>
+                <CTooltip title={t('Edit Content', { name: data.name })}>
                   <button
                     title={t('Edit Content', { name: data.name })}
                     onClick={() => sContent.getById({ id: data.id, params: { include: 'languages' } })}
                   >
-                    <SvgIcon name='edit' className='primary' />
+                    <CSvgIcon name='edit' className='primary' />
                   </button>
-                </ToolTip>
+                </CTooltip>
               )}
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_CONTENT_DESTROY) && (
-                <ToolTip title={t('Delete content', { name: data.name })}>
+                <CTooltip title={t('Delete content', { name: data.name })}>
                   <Popconfirm
                     destroyTooltipOnHide={true}
                     title={t('Are you sure want delete content?', { name: data.name })}
                     onConfirm={() => sContent.delete(data.id)}
                   >
                     <button title={t('Delete content', { name: data.name })}>
-                      <SvgIcon name='trash' className='error' />
+                      <CSvgIcon name='trash' className='error' />
                     </button>
                   </Popconfirm>
-                </ToolTip>
+                </CTooltip>
               )}
             </div>
           ),

@@ -3,7 +3,8 @@ import { Popconfirm, Spin, Tree, TreeSelect } from 'antd';
 import classNames from 'classnames';
 
 import { EStatusState } from '@/enums';
-import { ToolTip } from '@/library/tooltip';
+import { CTooltip } from '@/library/tooltip';
+import { CBreadcrumbs } from '@/library/breadcrumbs';
 import { SGlobal, SPost, SPostType } from '@/services';
 
 const Page = () => {
@@ -21,7 +22,7 @@ const Page = () => {
 
   return (
     <Fragment>
-      <Breadcrumbs title={t('Post')} list={[t('Setting'), t('Post')]} />
+      <CBreadcrumbs title={t('Post')} list={[t('Setting'), t('Post')]} />
       <FormPost />
       <FormPostType />
       <div className={'wrapper-grid'}>
@@ -37,10 +38,9 @@ const Page = () => {
 };
 
 import { useTranslation } from 'react-i18next';
-import { DrawerForm } from '@/library/drawer';
+import { CDrawerForm } from '@/library/drawer';
 import _column from './column';
-import { Breadcrumbs } from '@/library/breadcrumbs';
-import { SvgIcon } from '@/library/svg-icon';
+import { CSvgIcon } from '@/library/svg-icon';
 const FormPost = () => {
   const sPost = SPost();
   const request = JSON.parse(sPost?.queryParams ?? '{}');
@@ -58,7 +58,7 @@ const FormPost = () => {
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.post' });
   const sPostType = SPostType();
   return (
-    <DrawerForm
+    <CDrawerForm
       size={'large'}
       facade={sPost}
       columns={_column.useForm()}
@@ -89,7 +89,7 @@ const FormPostType = () => {
 
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.post' });
   return (
-    <DrawerForm
+    <CDrawerForm
       facade={sPostType}
       columns={_columnType.useForm(sPostType.data?.id, sPostType.result?.data)}
       title={t(sPostType.data?.id ? 'Edit Type Post' : 'Add new Type Post')}
@@ -117,8 +117,8 @@ const Side = () => {
     <div className='card'>
       <div className='header'>
         <h3>{t('Type Post')}</h3>
-        <Button
-          icon={<SvgIcon name='plus' size={12} />}
+        <CButton
+          icon={<CSvgIcon name='plus' size={12} />}
           onClick={() => sPostType.set({ data: undefined, isVisible: true })}
         />
       </div>
@@ -130,7 +130,7 @@ const Side = () => {
               showLine
               autoExpandParent
               defaultExpandAll
-              switcherIcon={<SvgIcon name='arrow' size={12} />}
+              switcherIcon={<CSvgIcon name='arrow' size={12} />}
               defaultSelectedKeys={[request.typeCode]}
               treeData={sPostType.result?.data?.map((item: any) => ({
                 title: item?.name,
@@ -151,27 +151,27 @@ const Side = () => {
                   {data.title}
                   <div className='action'>
                     {sGlobal.user?.role?.permissions?.includes(keyRole.P_POST_TYPE_UPDATE) && (
-                      <ToolTip title={t('Edit Type Post', { name: data.title })}>
+                      <CTooltip title={t('Edit Type Post', { name: data.title })}>
                         <button
                           title={t('Edit Type Post', { name: data.title })}
                           onClick={() => sPostType.getById({ id: data.code })}
                         >
-                          <SvgIcon name='edit' className='primary' />
+                          <CSvgIcon name='edit' className='primary' />
                         </button>
-                      </ToolTip>
+                      </CTooltip>
                     )}
                     {sGlobal.user?.role?.permissions?.includes(keyRole.P_POST_TYPE_DESTROY) && (
-                      <ToolTip title={t('Delete type post', { name: data.title })}>
+                      <CTooltip title={t('Delete type post', { name: data.title })}>
                         <Popconfirm
                           destroyTooltipOnHide={true}
                           title={t('Are you sure want delete type post?', { name: data.title })}
                           onConfirm={() => sPostType.delete(data.code)}
                         >
                           <button title={t('Delete type post', { name: data.title })}>
-                            <SvgIcon name='trash' className='error' />
+                            <CSvgIcon name='trash' className='error' />
                           </button>
                         </Popconfirm>
-                      </ToolTip>
+                      </CTooltip>
                     )}
                   </div>
                 </span>
@@ -182,7 +182,7 @@ const Side = () => {
         <div className='mobile'>
           <TreeSelect
             treeLine
-            switcherIcon={<SvgIcon name='arrow' size={12} />}
+            switcherIcon={<CSvgIcon name='arrow' size={12} />}
             value={request.typeCode}
             className={'w-full'}
             treeData={sPostType.result?.data?.map((item: any) => ({
@@ -206,8 +206,8 @@ const Side = () => {
   );
 };
 
-import { Button } from '@/library/button';
-import { DataTable } from '@/library/data-table';
+import { CButton } from '@/library/button';
+import { CDataTable } from '@/library/data-table';
 import { keyRole } from '@/utils';
 const Main = () => {
   const sPost = SPost();
@@ -219,15 +219,15 @@ const Main = () => {
   return (
     <div className='card'>
       <div className='body'>
-        <DataTable
+        <CDataTable
           defaultRequest={{ include: 'languages' }}
           facade={sPost}
           paginationDescription={(from: number, to: number, total: number) => t('Pagination post', { from, to, total })}
           columns={_column.useTable()}
           rightHeader={
             sGlobal.user?.role?.permissions?.includes(keyRole.P_POST_STORE) && (
-              <Button
-                icon={<SvgIcon name='plus' size={12} />}
+              <CButton
+                icon={<CSvgIcon name='plus' size={12} />}
                 text={t('Add new Post', {
                   name: sPostType.result?.data?.find(item => item.code === request.typeCode)?.name,
                 })}

@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import type { FormInstance } from 'antd';
 
 import type { ITableItemFilterList } from '@/interfaces';
-import { Button } from '../../button';
+import { CButton } from '../../button';
 
 const Component = forwardRef(
   (
@@ -75,7 +75,7 @@ const Component = forwardRef(
         {list && (
           <div className={'mt-2 flex flex-wrap gap-2'}>
             {list.map((item, index) => (
-              <Button
+              <CButton
                 key={item.value!.toString() + index}
                 text={item.label}
                 onClick={() => {

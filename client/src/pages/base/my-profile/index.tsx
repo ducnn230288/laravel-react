@@ -1,13 +1,11 @@
 import React, { Fragment, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
-import { Form as AntForm, type FormInstance, Tabs } from 'antd';
+import { Form, type FormInstance, Tabs } from 'antd';
 import { useSearchParams } from 'react-router-dom';
 
-import { SvgIcon } from '@/library/svg-icon';
 import { EFormRuleType, EFormType, ETableFilterType } from '@/enums';
-import { Breadcrumbs } from '@/library/breadcrumbs';
-import { Form } from '@/library/form';
+import { CBreadcrumbs } from '@/library/breadcrumbs';
 import { SCode, EStatusGlobal, SGlobal } from '@/services';
 import { lang, routerLinks } from '@/utils';
 import './index.less';
@@ -32,11 +30,11 @@ const Page = () => {
     navigate(`/${lang}${routerLinks('MyProfile')}?tab=${key}`);
   };
 
-  const [form] = AntForm.useForm();
+  const [form] = Form.useForm();
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.my-profile' });
   return (
     <Fragment>
-      <Breadcrumbs title={t('My Profile')} list={[t('My Profile')]} />
+      <CBreadcrumbs title={t('My Profile')} list={[t('My Profile')]} />
       <div className='wrapper-grid profile'>
         <div className='-intro-x left'>
           <Side form={form} />
@@ -71,13 +69,15 @@ const Page = () => {
 };
 export default Page;
 
+import { CForm } from '@/library/form';
+import { CSvgIcon } from '@/library/svg-icon';
 const Side = ({ form }: { form: FormInstance }) => {
   const sGlobal = SGlobal();
 
   return (
     <div className='card'>
       <div className='body'>
-        <Form
+        <CForm
           values={{ ...sGlobal.data }}
           formAnt={form}
           columns={[
@@ -97,7 +97,7 @@ const Side = ({ form }: { form: FormInstance }) => {
                     <h2 className='text-center'>{values.name}</h2>
                     <div className='line'></div>
                     <div className='wrapper-flex'>
-                      <SvgIcon name='user' size={20} />
+                      <CSvgIcon name='user' size={20} />
                       <h3>{sGlobal.user?.role?.name}</h3>
                     </div>
                   </Fragment>
@@ -117,7 +117,7 @@ const FormProfile = ({ form }: { form: FormInstance }) => {
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.my-profile' });
 
   return (
-    <Form
+    <CForm
       values={{ ...sGlobal.data }}
       columns={[
         {
@@ -215,7 +215,7 @@ const FormChangePassword = () => {
   const sGlobal = SGlobal();
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.my-profile' });
   return (
-    <Form
+    <CForm
       values={{ ...sGlobal.data }}
       columns={[
         {

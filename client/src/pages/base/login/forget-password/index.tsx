@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router';
 import { Spin } from 'antd';
 
 import { EFormRuleType } from '@/enums';
-import { Form } from '@/library/form';
+import { CForm } from '@/library/form';
 import { EStatusGlobal, SGlobal } from '@/services';
 import { lang, routerLinks } from '@/utils';
 
@@ -24,7 +24,7 @@ const Page = () => {
       <h1>{t('Forgot Password')}</h1>
       <h5>{t('Please enter your email. An OTP verification code will be sent to you.')}</h5>
       <Spin spinning={sGlobal.isLoading}>
-        <Form
+        <CForm
           values={{ ...sGlobal.data }}
           columns={[
             {

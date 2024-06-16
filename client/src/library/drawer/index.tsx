@@ -6,10 +6,10 @@ import { useTranslation } from 'react-i18next';
 import type { IForm, IFormModalRefObject } from '@/interfaces';
 import { convertFormValue } from '@/utils';
 
-import { Form } from '../form';
-import { Button } from '../button';
+import { CForm } from '../form';
+import { CButton } from '../button';
 
-export const DrawerForm = forwardRef(
+export const CDrawerForm = forwardRef(
   (
     {
       size,
@@ -35,12 +35,12 @@ export const DrawerForm = forwardRef(
         size={size}
         footer={
           <div className={classNames('gap-3 flex mt-2 items-center sm:flex-row justify-end')}>
-            <Button
+            <CButton
               text={typeof textCancel === 'string' ? t(textCancel) : textCancel}
               className={'w-full sm:w-auto sm:min-w-36'}
               onClick={() => facade.set({ [keyData]: undefined, [keyState]: false })}
             />
-            <Button
+            <CButton
               text={typeof textCancel === 'string' ? t(textSubmit) : textSubmit}
               onClick={async () => onSubmit(convertFormValue(columns, await form.validateFields()))}
               disabled={facade[keyIsLoading]}
@@ -53,7 +53,7 @@ export const DrawerForm = forwardRef(
         onClose={() => facade.set({ [keyData]: undefined, [keyState]: false })}
         closeIcon={null}
       >
-        <Form
+        <CForm
           className='intro-x'
           values={{ ...facade[keyData] }}
           formAnt={form}
@@ -64,7 +64,7 @@ export const DrawerForm = forwardRef(
     );
   },
 );
-DrawerForm.displayName = 'DrawerForm';
+CDrawerForm.displayName = 'CDrawerForm';
 interface Type {
   facade: any;
   size?: undefined | 'large';

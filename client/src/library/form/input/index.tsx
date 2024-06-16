@@ -1,29 +1,29 @@
-import Chips from './chips';
-import Cascader from './cascader';
-import DatePicker from './date-picker';
-import Editor from './editor';
-import Password from './password';
-import Mask from './mask';
-import SelectTag from './select-tag';
-import Select from './select';
-import SelectTable from './select-table';
-import TreeSelect from './tree-select';
-import TableTransfer from './table-transfer';
-import Addable from './addable';
-import Tab from './tab';
+import CIChips from './chips';
+import CICascader from './cascader';
+import CIDatePicker from './date-picker';
+import CIEditor from './editor';
+import CIPassword from './password';
+import CIMask from './mask';
+import CISelectTag from './select-tag';
+import CISelect from './select';
+import CISelectTable from './select-table';
+import CITreeSelect from './tree-select';
+import CITableTransfer from './table-transfer';
+import CIAddable from './addable';
+import CITab from './tab';
 
 export {
-  Chips,
-  Cascader,
-  DatePicker,
-  Editor,
-  Password,
-  Mask,
-  SelectTag,
-  Select,
-  SelectTable,
-  TreeSelect,
-  TableTransfer,
-  Addable,
-  Tab,
+  CIChips,
+  CICascader,
+  CIDatePicker,
+  CIEditor,
+  CIPassword,
+  CIMask,
+  CISelectTag,
+  CISelect,
+  CISelectTable,
+  CITreeSelect,
+  CITableTransfer,
+  CIAddable,
+  CITab,
 };

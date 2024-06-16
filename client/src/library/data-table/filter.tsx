@@ -6,9 +6,10 @@ import type { TFunction } from 'i18next';
 
 import type { ITableGet, ITableItemFilterList } from '@/interfaces';
 import { cleanObjectKeyNull } from '@/utils';
-import { Mask } from '../form/input';
-import { Button } from '../button';
-import { SvgIcon } from '../svg-icon';
+
+import { CIMask } from '../form/input';
+import { CButton } from '../button';
+import { CSvgIcon } from '../svg-icon';
 
 const groupButton = ({
   confirm,
@@ -23,7 +24,7 @@ const groupButton = ({
   t: any;
 }) => (
   <div className='mt-2 grid grid-cols-2 gap-2'>
-    <Button
+    <CButton
       isTiny={true}
       text={t('Reset')}
       onClick={() => {
@@ -32,9 +33,9 @@ const groupButton = ({
       }}
       className=' '
     />
-    <Button
+    <CButton
       isTiny={true}
-      icon={<SvgIcon name='search' size={12} className='fill-primary-content' />}
+      icon={<CSvgIcon name='search' size={12} className='fill-primary-content' />}
       text={t('Search')}
       onClick={() => confirm(value)}
     />
@@ -76,7 +77,7 @@ export const getColumnSearchCheckbox = ({
       <Spin spinning={facade.isLoading === true}>
         <div className='p-1'>
           {!!get?.facade && (
-            <Mask
+            <CIMask
               placeholder={t('Search')}
               onChange={e => {
                 clearTimeout(timeoutSearch.current);
@@ -105,7 +106,7 @@ export const getColumnSearchCheckbox = ({
     );
   },
   filterIcon: (filtered: boolean) => (
-    <SvgIcon
+    <CSvgIcon
       name='check-square'
       size={14}
       className={classNames({ 'fill-primary': filtered, 'fill-base-content': !filtered })}
@@ -139,7 +140,7 @@ export const getColumnSearchRadio = ({
       <Spin spinning={facade.isLoading === true}>
         <div className='p-1'>
           {get?.facade && (
-            <Mask
+            <CIMask
               placeholder={t('Search')}
               onChange={e => {
                 clearTimeout(timeoutSearch.current);
@@ -168,7 +169,7 @@ export const getColumnSearchRadio = ({
     );
   },
   filterIcon: (filtered: boolean) => (
-    <SvgIcon
+    <CSvgIcon
       name='check-circle'
       size={14}
       className={classNames({ 'fill-primary': filtered, 'fill-base-content': !filtered })}
@@ -180,8 +181,8 @@ export const getColumnSearchDate = ({ key, t }: { key: string; t: TFunction<'loc
     <div className={'p-1'}>
       <DatePicker.RangePicker
         renderExtraFooter={() => (
-          <Button
-            icon={<SvgIcon name='check-circle' size={20} className='fill-base-100' />}
+          <CButton
+            icon={<CSvgIcon name='check-circle' size={20} className='fill-base-100' />}
             text={t('Ok')}
             onClick={() => (document.activeElement as HTMLElement).blur()}
             className={'w-full justify-center py-0'}
@@ -202,7 +203,7 @@ export const getColumnSearchDate = ({ key, t }: { key: string; t: TFunction<'loc
     </div>
   ),
   filterIcon: (filtered: boolean) => (
-    <SvgIcon
+    <CSvgIcon
       name='calendar'
       size={14}
       className={classNames({ 'fill-primary': filtered, 'fill-base-content': !filtered })}
@@ -213,7 +214,7 @@ export const getColumnSearchDate = ({ key, t }: { key: string; t: TFunction<'loc
 export const getColumnSearchInput = ({ key, t }: { key: string; t: TFunction<'locale', 'library'> }) => ({
   filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }: any) => (
     <div className='p-1'>
-      <Mask
+      <CIMask
         id={'_input_filter_' + key}
         placeholder={t('Search')}
         value={selectedKeys}
@@ -224,7 +225,7 @@ export const getColumnSearchInput = ({ key, t }: { key: string; t: TFunction<'lo
     </div>
   ),
   filterIcon: (filtered: boolean) => (
-    <SvgIcon
+    <CSvgIcon
       name='search'
       size={14}
       className={classNames({ 'fill-primary': filtered, 'fill-base-content': !filtered })}

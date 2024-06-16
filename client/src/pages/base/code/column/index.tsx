@@ -7,8 +7,8 @@ import { Popconfirm } from 'antd';
 import { EFormRuleType, EFormType, ETableAlign, ETableFilterType } from '@/enums';
 import type { IDataTable, IForm } from '@/interfaces';
 
-import { SvgIcon } from '@/library/svg-icon';
-import { ToolTip } from '@/library/tooltip';
+import { CSvgIcon } from '@/library/svg-icon';
+import { CTooltip } from '@/library/tooltip';
 import { SCode, SGlobal } from '@/services';
 import { keyRole } from '@/utils';
 
@@ -44,9 +44,9 @@ export default {
           filter: { type: ETableFilterType.date },
           sorter: true,
           render: text => (
-            <ToolTip title={dayjs(text).format(sGlobal.formatDate + ' HH:mm:ss')}>
+            <CTooltip title={dayjs(text).format(sGlobal.formatDate + ' HH:mm:ss')}>
               {dayjs(text).format(sGlobal.formatDate)}
-            </ToolTip>
+            </CTooltip>
           ),
         },
       },
@@ -58,7 +58,7 @@ export default {
           render: (_: string, data) => (
             <div className={'action'}>
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_CODE_UPDATE) && (
-                <ToolTip title={t(data.isDisable ? 'Disabled code' : 'Enabled code', { name: data.name })}>
+                <CTooltip title={t(data.isDisable ? 'Disabled code' : 'Enabled code', { name: data.name })}>
                   <Popconfirm
                     destroyTooltipOnHide={true}
                     title={t(!data.isDisable ? 'Are you sure want disable code?' : 'Are you sure want enable code?', {
@@ -68,33 +68,33 @@ export default {
                   >
                     <button title={t(data.isDisable ? 'Disabled code' : 'Enabled code', { name: data.name })}>
                       {data.isDisable ? (
-                        <SvgIcon name='disable' className='warning' />
+                        <CSvgIcon name='disable' className='warning' />
                       ) : (
-                        <SvgIcon name='check' className='success' />
+                        <CSvgIcon name='check' className='success' />
                       )}
                     </button>
                   </Popconfirm>
-                </ToolTip>
+                </CTooltip>
               )}
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_CODE_UPDATE) && (
-                <ToolTip title={t('Edit Code', { name: data.name })}>
+                <CTooltip title={t('Edit Code', { name: data.name })}>
                   <button title={t('Edit Code', { name: data.name })} onClick={() => sCode.getById({ id: data.code })}>
-                    <SvgIcon name='edit' className='primary' />
+                    <CSvgIcon name='edit' className='primary' />
                   </button>
-                </ToolTip>
+                </CTooltip>
               )}
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_CODE_DESTROY) && (
-                <ToolTip title={t('Delete code', { name: data.name })}>
+                <CTooltip title={t('Delete code', { name: data.name })}>
                   <Popconfirm
                     destroyTooltipOnHide={true}
                     title={t('Are you sure want delete code?', { name: data.name })}
                     onConfirm={() => sCode.delete(data.code)}
                   >
                     <button title={t('Delete code', { name: data.name })}>
-                      <SvgIcon name='trash' className='error' />
+                      <CSvgIcon name='trash' className='error' />
                     </button>
                   </Popconfirm>
-                </ToolTip>
+                </CTooltip>
               )}
             </div>
           ),

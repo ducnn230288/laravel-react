@@ -16,12 +16,12 @@ import {
   useSortable,
 } from '@dnd-kit/sortable';
 
-import { SvgIcon } from '../../svg-icon';
 import type { ITableItemFilterList } from '@/interfaces';
 import { reorderArray } from '@/utils';
 
-import { Button } from '../../button';
-import { Mask, Select } from './index';
+import { CIMask, CISelect } from './index';
+import { CButton } from '../../button';
+import { CSvgIcon } from '../../svg-icon';
 
 const Component = ({
   onChange,
@@ -109,14 +109,14 @@ const Component = ({
           ))}
           {inputVisible ? (
             !list ? (
-              <Mask
+              <CIMask
                 ref={inputRef}
                 placeholder={placeholder}
                 onPressEnter={() => handleInputConfirm(inputRef.current?.input.value)}
                 disabled={!!disabled}
               />
             ) : (
-              <Select
+              <CISelect
                 onChange={(value: any) => handleInputConfirm(value)}
                 onBlur={() => setInputVisible(false)}
                 disabled={!!disabled}
@@ -125,8 +125,8 @@ const Component = ({
               />
             )
           ) : (
-            <Button
-              icon={<SvgIcon name='plus' size={32} className='p-2' />}
+            <CButton
+              icon={<CSvgIcon name='plus' size={32} className='p-2' />}
               className='inline-block rounded-full border'
               onClick={showInput}
               disabled={disabled}
@@ -162,8 +162,8 @@ const DraggableTag = ({
       ref={setNodeRef}
       {...listeners}
     >
-      <Button
-        icon={<SvgIcon name='times' size={16} className='p-1' />}
+      <CButton
+        icon={<CSvgIcon name='times' size={16} className='p-1' />}
         className='absolute -right-2 -top-1.5 rounded-full'
         onClick={onClose}
         disabled={disabled}

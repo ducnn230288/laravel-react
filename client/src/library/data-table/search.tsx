@@ -4,8 +4,8 @@ import type { TFunction } from 'i18next';
 
 import type { IPaginationQuery } from '@/interfaces';
 import { uuidv4 } from '@/utils';
-import { Mask } from '../form/input';
-import { SvgIcon } from '../svg-icon';
+import { CIMask } from '../form/input';
+import { CSvgIcon } from '../svg-icon';
 
 export const CSearch = ({
   params,
@@ -30,7 +30,7 @@ export const CSearch = ({
 
   return (
     <div className='search'>
-      <Mask
+      <CIMask
         id={idTable.current + '_input_search'}
         value={params.fullTextSearch}
         placeholder={t('Search')}
@@ -57,7 +57,7 @@ export const CSearch = ({
         }
       />
       {!params.fullTextSearch ? (
-        <SvgIcon
+        <CSvgIcon
           name='search'
           onClick={() => {
             if (params.fullTextSearch) {
@@ -68,7 +68,7 @@ export const CSearch = ({
         />
       ) : (
         !!params.fullTextSearch && (
-          <SvgIcon
+          <CSvgIcon
             name='times'
             onClick={() => {
               if (params.fullTextSearch) {

@@ -4,11 +4,11 @@ import { useTranslation } from 'react-i18next';
 import slug from 'slug';
 import { Popconfirm } from 'antd';
 
-import { SvgIcon } from '@/library/svg-icon';
+import { CSvgIcon } from '@/library/svg-icon';
 import { EFormRuleType, EFormType, ETableAlign, ETableFilterType } from '@/enums';
 import type { IDataTable, IForm } from '@/interfaces';
-import { Avatar } from '@/library/avatar';
-import { ToolTip } from '@/library/tooltip';
+import { CAvatar } from '@/library/avatar';
+import { CTooltip } from '@/library/tooltip';
 import { SGlobal, SPost } from '@/services';
 import { keyRole } from '@/utils';
 
@@ -26,7 +26,7 @@ export default {
           filter: { type: ETableFilterType.search },
           sorter: true,
           render: (_: string, item: any) => (
-            <Avatar
+            <CAvatar
               src={item.image}
               text={
                 item.languages?.length
@@ -57,9 +57,9 @@ export default {
           filter: { type: ETableFilterType.date },
           sorter: true,
           render: text => (
-            <ToolTip title={dayjs(text).format(sGlobal.formatDate + ' HH:mm:ss')}>
+            <CTooltip title={dayjs(text).format(sGlobal.formatDate + ' HH:mm:ss')}>
               {dayjs(text).format(sGlobal.formatDate)}
-            </ToolTip>
+            </CTooltip>
           ),
         },
       },
@@ -71,7 +71,7 @@ export default {
           render: (_: string, data) => (
             <div className={'action'}>
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_POST_UPDATE) && (
-                <ToolTip
+                <CTooltip
                   title={t(data.isDisable ? 'Disabled post' : 'Enabled post', {
                     name: data.languages?.length
                       ? data.languages?.find((item: any) => item?.language === localStorage.getItem('i18nextLng')).name
@@ -97,16 +97,16 @@ export default {
                       })}
                     >
                       {data.isDisable ? (
-                        <SvgIcon name='disable' className='warning' />
+                        <CSvgIcon name='disable' className='warning' />
                       ) : (
-                        <SvgIcon name='check' className='success' />
+                        <CSvgIcon name='check' className='success' />
                       )}
                     </button>
                   </Popconfirm>
-                </ToolTip>
+                </CTooltip>
               )}
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_POST_UPDATE) && (
-                <ToolTip
+                <CTooltip
                   title={t('Edit Post', {
                     name: data.languages?.length
                       ? data.languages?.find((item: any) => item?.language === localStorage.getItem('i18nextLng')).name
@@ -122,12 +122,12 @@ export default {
                     })}
                     onClick={() => sPost.getById({ id: data.id, params: { include: 'languages' } })}
                   >
-                    <SvgIcon name='edit' className='primary' />
+                    <CSvgIcon name='edit' className='primary' />
                   </button>
-                </ToolTip>
+                </CTooltip>
               )}
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_POST_DESTROY) && (
-                <ToolTip
+                <CTooltip
                   title={t('Delete post', {
                     name: data.languages?.length
                       ? data.languages?.find((item: any) => item?.language === localStorage.getItem('i18nextLng')).name
@@ -152,10 +152,10 @@ export default {
                           : '',
                       })}
                     >
-                      <SvgIcon name='trash' className='error' />
+                      <CSvgIcon name='trash' className='error' />
                     </button>
                   </Popconfirm>
-                </ToolTip>
+                </CTooltip>
               )}
             </div>
           ),

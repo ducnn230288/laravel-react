@@ -2,7 +2,7 @@ import React, { type PropsWithChildren, useEffect } from 'react';
 
 import { SGlobal } from '@/services';
 import { APP_NAME } from '@/utils';
-import { SvgIcon } from '@/library/svg-icon';
+import { CSvgIcon } from '@/library/svg-icon';
 
 const Layout = ({ children }: PropsWithChildren) => {
   const sGlobal = SGlobal();
@@ -18,7 +18,7 @@ const Layout = ({ children }: PropsWithChildren) => {
         <div className='content intro-x'>
           <div className='t-head'>
             <div className='block-grap-1'>
-              <SvgIcon name='logo' size={24} className='fill-primary'></SvgIcon>
+              <CSvgIcon name='logo' size={24} className='fill-primary' />
               <h4>{APP_NAME}</h4>
             </div>
           </div>

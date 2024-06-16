@@ -13,7 +13,7 @@ import type { CallbackDataParams, CommonTooltipOption, OptionDataValue } from 'e
 import { ETypeChart } from '@/enums';
 import { uuidv4 } from '@/utils';
 
-export const EChart = forwardRef(({ option, style = { height: '20rem' } }: Type, ref: Ref<any>) => {
+export const CEChart = forwardRef(({ option, style = { height: '20rem' } }: Type, ref: Ref<any>) => {
   useImperativeHandle(ref, () => ({
     // onChartReady, onChartReady: (echarts: any) => void
   }));
@@ -239,7 +239,7 @@ export const EChart = forwardRef(({ option, style = { height: '20rem' } }: Type,
   };
   return <div style={style} id={_id.current} />;
 });
-EChart.displayName = 'EChart';
+CEChart.displayName = 'CEChart';
 interface Type {
   option: any;
   style?: React.CSSProperties;

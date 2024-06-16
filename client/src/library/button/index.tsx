@@ -1,9 +1,9 @@
 import React, { type MouseEventHandler } from 'react';
 import classNames from 'classnames';
 
-import { SvgIcon } from '../svg-icon';
+import { CSvgIcon } from '../svg-icon';
 
-export const Button = ({
+export const CButton = ({
   text = '',
   icon,
   title,
@@ -25,7 +25,7 @@ export const Button = ({
       })}
       {...props}
     >
-      {!isLoading ? icon : <SvgIcon name='spinner' size={12} />}
+      {!isLoading ? icon : <CSvgIcon name='spinner' size={12} />}
       {text}
     </button>
   );

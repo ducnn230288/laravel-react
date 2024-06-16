@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form as AntForm, type FormInstance } from 'antd';
+import { Form, type FormInstance } from 'antd';
 import type { TFunction } from 'i18next';
 
 import { EFormRuleType, EFormType } from '@/enums';
@@ -26,7 +26,8 @@ export const generateForm = ({
   widthLabel?: string;
   formatDate: string;
 }): any => {
-  if (!!item?.formItem?.condition && !item?.formItem?.condition({value: values[item.name], form, index, values})) return;
+  if (!!item?.formItem?.condition && !item?.formItem?.condition({ value: values[item.name], form, index, values }))
+    return;
   if (item?.formItem?.render) return item?.formItem?.render(form, values, generateForm, index);
   if (item.formItem) {
     const rules: any = [];
@@ -280,7 +281,7 @@ export const generateForm = ({
 
     delete otherProps.key;
     return item.formItem.type !== EFormType.addable ? (
-      <AntForm.Item {...otherProps}>
+      <Form.Item {...otherProps}>
         {generateInput({
           item,
           values,
@@ -290,7 +291,7 @@ export const generateForm = ({
           generateForm,
           t,
         })}
-      </AntForm.Item>
+      </Form.Item>
     ) : (
       generateInput({ item, values, name: otherProps.name, formatDate: formatDate, form, generateForm, t })
     );

@@ -3,9 +3,9 @@ import { Modal as AntModal, Spin } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 
-import { Button } from '../button';
+import { CButton } from '../button';
 
-export const Modal = forwardRef(
+export const CModal = forwardRef(
   (
     {
       facade,
@@ -82,15 +82,14 @@ export const Modal = forwardRef(
           !!onOk &&
           ((footerCustom && footerCustom(handleOk, handleCancel)) || (
             <div className='flex justify-end gap-2'>
-              <Button
+              <CButton
                 text={typeof textCancel === 'string' ? t(textCancel) : textCancel}
-                className='!bg-white !text-teal-900'
+                className='bg-base-100 text-primary'
                 onClick={handleCancel}
               />
-              <Button
+              <CButton
                 isLoading={isLoading}
                 text={typeof textCancel === 'string' ? t(textSubmit) : textSubmit}
-                className='!bg-teal-900'
                 disabled={!firstChange}
                 onClick={handleOk}
               />
@@ -103,4 +102,4 @@ export const Modal = forwardRef(
     );
   },
 );
-Modal.displayName = 'HookModal';
+CModal.displayName = 'CModal';

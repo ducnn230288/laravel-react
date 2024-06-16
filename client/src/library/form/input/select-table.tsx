@@ -4,8 +4,8 @@ import { Dropdown } from 'antd';
 import type { ITableGet, ITableRefObject } from '@/interfaces';
 import { arrayUnique } from '@/utils';
 
-import { DataTable } from '../../data-table';
 import Mask from './mask';
+import { CDataTable } from '../../data-table';
 
 const Component = ({ mode, onChange, placeholder, disabled, get, value }: Type) => {
   const onBlur = () => {
@@ -30,7 +30,7 @@ const Component = ({ mode, onChange, placeholder, disabled, get, value }: Type) 
 
   const renderDropdown = () => (
     <div className={'overflow-hidden bg-base-100 rounded-btn drop-shadow-lg'}>
-      <DataTable
+      <CDataTable
         formatData={data => arrayUnique([...temp.data, ...data], 'id')}
         ref={table}
         facade={facade}

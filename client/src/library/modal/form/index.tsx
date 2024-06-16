@@ -4,10 +4,10 @@ import { Form as FormAnt } from 'antd';
 import type { IForm, IFormModalRefObject } from '@/interfaces';
 import { convertFormValue } from '@/utils';
 
-import { Form } from '../../form';
-import { Modal } from '../../modal';
+import { CForm } from '../../form';
+import { CModal } from '../../modal';
 
-export const ModalForm = forwardRef(
+export const CModalForm = forwardRef(
   (
     {
       title,
@@ -33,7 +33,7 @@ export const ModalForm = forwardRef(
       else facade.set({ [keyState]: true, [keyData]: item });
     };
     return (
-      <Modal
+      <CModal
         facade={facade}
         keyState={keyState}
         widthModal={widthModal}
@@ -54,12 +54,12 @@ export const ModalForm = forwardRef(
             .catch(() => false);
         }}
       >
-        <Form values={{ ...facade[keyData] }} formAnt={form} columns={columns} />
-      </Modal>
+        <CForm values={{ ...facade[keyData] }} formAnt={form} columns={columns} />
+      </CModal>
     );
   },
 );
-ModalForm.displayName = 'HookModalForm';
+CModalForm.displayName = 'CModalForm';
 interface Type {
   title: (data: any) => string;
   widthModal?: number;

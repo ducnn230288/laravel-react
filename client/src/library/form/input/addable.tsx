@@ -5,8 +5,8 @@ import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 
 import type { IForm } from '@/interfaces';
-import { SvgIcon } from '../../svg-icon';
-import { Button } from '../../button';
+import { CSvgIcon } from '../../svg-icon';
+import { CButton } from '../../button';
 
 const Component = ({
   name,
@@ -104,7 +104,7 @@ const Component = ({
                   ))}
                   <div className={'table-cell w-8 align-middle sm:w-8'}>
                     {showRemove(form.getFieldValue([[name], n]), n) && (
-                      <SvgIcon
+                      <CSvgIcon
                         name='trash'
                         size={32}
                         className='cursor-pointer fill-error hover:fill-error/50'
@@ -154,7 +154,7 @@ const Component = ({
                 <div className={'table-cell w-8 align-middle'}>
                   {showRemove(form.getFieldValue([[name], n]), n) && (
                     <Trash
-                      className='size-8 cursor-pointer fill-red-600 hover:fill-red-400'
+                      className='size-8 cursor-pointer fill-error hover:fill-error/50'
                       onClick={() => {
                         remove(n);
                         onAdd(form.getFieldValue(name), form);
@@ -165,7 +165,7 @@ const Component = ({
               </div>
             ))}
             <div className={'flex justify-end'}>
-              <Button
+              <CButton
                 icon={<Plus className='size-5' />}
                 text={textAdd}
                 onClick={() => {

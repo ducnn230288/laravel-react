@@ -13,12 +13,12 @@ dayjs.extend(utc);
 import type { IDataTable, IPaginationQuery, ITableRefObject } from '@/interfaces';
 import { cleanObjectKeyNull, getSizePageByHeight, uuidv4 } from '@/utils';
 
-import { Pagination } from '../pagination';
+import CPagination from '../pagination';
 import { CSearch } from './search';
 import { CWrapper } from './wrapper';
 import { formatColumns, formatFilter } from './format';
 
-export const DataTable = forwardRef(
+export const CDataTable = forwardRef(
   (
     {
       columns = [],
@@ -212,7 +212,7 @@ export const DataTable = forwardRef(
             size='small'
           />
           {refPageSizeOptions.current && showPagination && (
-            <Pagination
+            <CPagination
               total={facade.result?.meta?.total}
               page={params.current.page!}
               perPage={params.current.perPage!}
@@ -233,7 +233,7 @@ export const DataTable = forwardRef(
     );
   },
 );
-DataTable.displayName = 'HookTable';
+CDataTable.displayName = 'CDataTable';
 interface Type {
   columns: IDataTable[];
   defaultRequest?: IPaginationQuery;

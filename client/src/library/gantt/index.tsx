@@ -5,11 +5,10 @@ import TweenOne from 'rc-tween-one';
 import { DndContext, useDraggable } from '@dnd-kit/core';
 import { restrictToHorizontalAxis, restrictToVerticalAxis } from '@dnd-kit/modifiers';
 
-import { SvgIcon } from '../svg-icon';
-
 import { uuidv4 } from '@/utils';
+import { CSvgIcon } from '../svg-icon';
 
-export const Gantt = ({
+export const CGantt = ({
   widthColumnDay = 36,
   perRow = 3,
   maxHeight = 500,
@@ -351,7 +350,11 @@ export const Gantt = ({
                                     reverse={!statusCollapse.current[index]}
                                     className={'-ml-4 size-3 rotate-90 cursor-pointer'}
                                   >
-                                    <SvgIcon name='arrow' size={12} onClick={() => handleCollapse(index, item.level)} />
+                                    <CSvgIcon
+                                      name='arrow'
+                                      size={12}
+                                      onClick={() => handleCollapse(index, item.level)}
+                                    />
                                   </TweenOne>
                                 )}
                                 <span className={'truncate'}>{item.name}</span>

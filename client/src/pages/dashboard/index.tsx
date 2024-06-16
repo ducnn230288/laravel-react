@@ -4,20 +4,20 @@ import 'dayjs/locale/vi';
 
 import { ETypeChart } from '@/enums';
 import type { IEditTable } from '@/interfaces';
-import { EChart } from '@/library/echart';
-import { EditTable } from '@/library/edit-table';
-import { Gantt } from '@/library/gantt';
+import { CEChart } from '@/library/echart';
+import { CEditTable } from '@/library/edit-table';
+import { CGantt } from '@/library/gantt';
 import { formatDataChart } from '@/utils';
 
 const Page = () => {
   return (
     <div className='h-full pb-10'>
       <h1 className='mb-14 text-center text-3xl font-bold text-teal-900 '>{'Welcome'}</h1>
-      <Gantt data={task} event={event} />
-      <EditTable table={table2} />
-      <EditTable table={table} />
+      <CGantt data={task} event={event} />
+      <CEditTable table={table2} />
+      <CEditTable table={table} />
       {dataDefault.map((item, index) => (
-        <EChart key={index} option={item}></EChart>
+        <CEChart key={index} option={item}></CEChart>
       ))}
     </div>
   );

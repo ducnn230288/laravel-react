@@ -1,4 +1,4 @@
-export const SvgIcon = ({
+export const CSvgIcon = ({
   name,
   size,
   ...props

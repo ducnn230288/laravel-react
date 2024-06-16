@@ -2,7 +2,7 @@ import React from 'react';
 import { Popover } from 'antd';
 import classNames from 'classnames';
 
-export const Avatar = ({
+export const CAvatar = ({
   text,
   src,
   size = 7,

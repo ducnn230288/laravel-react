@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useCallback, useState } from 'react';
 import classNames from 'classnames';
-import { SvgIcon } from '../svg-icon';
 
-import { Select } from '../form/input';
+import { CISelect } from '../form/input';
+import { CSvgIcon } from '../svg-icon';
 
-export const Pagination: any = ({
+export const Component: any = ({
   total = 4,
   page = 1,
   perPage = 10,
@@ -127,7 +127,7 @@ export const Pagination: any = ({
       <div className={'pagination'}>
         <div className={'left'}>
           {pageSizeOptions.length > 0 && (
-            <Select
+            <CISelect
               allowClear={false}
               showSearch={false}
               value={perPage}
@@ -147,10 +147,10 @@ export const Pagination: any = ({
               onClick={() => onPageIndexChange(item)}
               aria-label={item.type}
             >
-              {item.type === 'prev' && <SvgIcon name='arrow' className={'rotate-180'} />}
-              {item.type === 'next' && <SvgIcon name='arrow' />}
-              {item.type === 'prev_10' && <SvgIcon name='double-arrow' className={'rotate-180'} />}
-              {item.type === 'next_10' && <SvgIcon name='double-arrow' />}
+              {item.type === 'prev' && <CSvgIcon name='arrow' className={'rotate-180'} />}
+              {item.type === 'next' && <CSvgIcon name='arrow' />}
+              {item.type === 'prev_10' && <CSvgIcon name='double-arrow' className={'rotate-180'} />}
+              {item.type === 'next_10' && <CSvgIcon name='double-arrow' />}
               {item.type.indexOf('page') === 0 && item.index}
               {(item.type === 'prev_5' || item.type === 'next_5') && '...'}
             </button>
@@ -169,4 +169,4 @@ interface Type {
   paginationDescription: (from: number, to: number, total: number) => string;
   queryParams: ({ perPage, page }: { perPage: number; page: number }) => void;
 }
-export default Pagination;
+export default Component;

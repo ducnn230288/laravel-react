@@ -2,7 +2,7 @@ import React, { Fragment, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useLocation } from 'react-router';
 
-import { Breadcrumbs } from '@/library/breadcrumbs';
+import { CBreadcrumbs } from '@/library/breadcrumbs';
 import { SParameter } from '@/services';
 
 const Page = () => {
@@ -18,7 +18,7 @@ const Page = () => {
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.parameter' });
   return (
     <Fragment>
-      <Breadcrumbs title={t('Parameter')} list={[t('Setting'), t('Parameter')]} />
+      <CBreadcrumbs title={t('Parameter')} list={[t('Setting'), t('Parameter')]} />
       <div className={'wrapper-grid'}>
         <div className='-intro-x left'>
           <Side />
@@ -34,7 +34,7 @@ export default Page;
 
 import queryString from 'query-string';
 import { Select, Spin, Tree } from 'antd';
-import { SvgIcon } from '@/library/svg-icon';
+import { CSvgIcon } from '@/library/svg-icon';
 const Side = () => {
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.parameter' });
   const sParameter = SParameter();
@@ -55,7 +55,7 @@ const Side = () => {
               showLine
               autoExpandParent
               defaultExpandAll
-              switcherIcon={<SvgIcon name='arrow' size={12} />}
+              switcherIcon={<CSvgIcon name='arrow' size={12} />}
               selectedKeys={[sParameter.data?.code ?? '']}
               treeData={sParameter.result?.data?.map(item => ({
                 title: item?.name,
@@ -89,7 +89,7 @@ const Side = () => {
   );
 };
 
-import { Form } from '@/library/form';
+import { CForm } from '@/library/form';
 import { EFormType } from '@/enums';
 const Main = () => {
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.parameter' });
@@ -102,7 +102,7 @@ const Main = () => {
       </div>
       <div className='desktop has-header'>
         <Spin spinning={sParameter.isLoading}>
-          <Form
+          <CForm
             values={{ ...sParameter.data }}
             className='intro-x'
             columns={[

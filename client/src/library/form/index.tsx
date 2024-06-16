@@ -76,7 +76,7 @@ export const Form = ({
               .map(
                 (column: any, index: number) =>
                   (!column?.formItem?.condition ||
-                    !!column?.formItem?.condition(values[column.name], form, index, values)) && (
+                    !!column?.formItem?.condition({value: values[column.name], form, index, values})) && (
                     <div
                       className={classNames(
                         'col-span-12 type-' +

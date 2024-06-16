@@ -226,7 +226,7 @@ export const formatDataChart = ({
       .filter((i: any) => !level || (i.level === level && !i.isSummary))
       .forEach((e: any) => {
         series.push({ name: e.content, value: [] });
-        listField.forEach((i: any, index: number) => {
+        listField.forEach((_: any, index: number) => {
           const arrayField = listField[index].field.split('|');
           const value: number[] = [];
           arrayField.forEach((i: string) => {

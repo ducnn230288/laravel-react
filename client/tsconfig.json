@@ -1,27 +1,35 @@
 {
   "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "strict": true,
+    "noLib": false,
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "strictFunctionTypes": false,
+    "jsx": "preserve",
+    "baseUrl": ".",
+    "allowJs": true,
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitAny": false,
+    "skipLibCheck": true,
+    "removeComments": true,
+    "useDefineForClassFields": true,
+    "lib": ["esnext", "dom"],
     "paths": {
       "@/*": ["./src/*"]
     },
-    "target": "ES2022",
-    "module": "ES2022",
-    "useDefineForClassFields": true,
-    "lib": ["dom", "DOM.Iterable", "ES2022"],
-    "allowJs": false,
-    "skipLibCheck": true,
-    "esModuleInterop": false,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "Node",
-    "resolveJsonModule": true,
+    "types": ["node", "vite-plugin-svgr/client", "inputmask"],
+
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx",
-    "types": ["node", "vite-plugin-svgr/client", "inputmask"],
     "noImplicitReturns": false,
     "noFallthroughCasesInSwitch": true,
-    "sourceMap": true,
     "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
@@ -29,8 +37,6 @@
     "strictNullChecks": true,
     "outDir": "./dist/out-tsc"
   },
-  "include": ["./src/**/*"],
-  "watchOptions": {
-    "watchFile": "fixedPollingInterval"
-  }
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "vite.config.ts"],
+  "exclude": ["node_modules", "dist", "**/*.js"]
 }

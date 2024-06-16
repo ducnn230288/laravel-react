@@ -26,7 +26,7 @@ export const generateForm = ({
   widthLabel?: string;
   formatDate: string;
 }): any => {
-  if (!!item?.formItem?.condition && !item?.formItem?.condition(values[item.name], form, index, values)) return;
+  if (!!item?.formItem?.condition && !item?.formItem?.condition({value: values[item.name], form, index, values})) return;
   if (item?.formItem?.render) return item?.formItem?.render(form, values, generateForm, index);
   if (item.formItem) {
     const rules: any = [];

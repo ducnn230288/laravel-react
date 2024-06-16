@@ -69,7 +69,7 @@ const Page = () => {
                   {
                     type: EFormRuleType.custom,
                     validator: ({ getFieldValue }) => ({
-                      validator(rule, value: string) {
+                      validator(_, value: string) {
                         const errorMsg = t('Two passwords that you enter is inconsistent!');
                         if (!value || getFieldValue('password') === value) {
                           return Promise.resolve();

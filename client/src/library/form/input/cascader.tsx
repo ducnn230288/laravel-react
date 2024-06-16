@@ -13,7 +13,7 @@ const Component = ({ formItem, placeholder, onChange, value, form, disabled, sho
   const loadData = useCallback(
     async (fullTextSearch: string) => {
       if (formItem.api) {
-        if (!formItem.api.condition || formItem.api.condition(form.getFieldValue)) {
+        if (!formItem.api.condition || formItem.api.condition({value: form.getFieldValue})) {
           const url = formItem.api.link(form.getFieldValue);
           if (url) {
             const params = formItem.api.params

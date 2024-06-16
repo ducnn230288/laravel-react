@@ -10,7 +10,7 @@ import { cleanObjectKeyNull } from '@/utils';
 import { Mask } from '../form/input';
 import { Button } from '../button';
 
-const groupButton = (confirm: any, clearFilters: any, key: any, value: any, t: any) => (
+const groupButton = ({confirm, clearFilters, value, t}: {confirm: any, clearFilters: any, key: any, value: any, t: any}) => (
   <div className='mt-2 grid grid-cols-2 gap-2'>
     <Button
       isTiny={true}
@@ -88,7 +88,7 @@ export const getColumnSearchCheckbox = ({
               <span className={'px-2'}>{t('No Data')}</span>
             )}
           </div>
-          {groupButton(confirm, clearFilters, key, selectedKeys, t)}
+          {groupButton({confirm, clearFilters, key, value: selectedKeys, t})}
         </div>
       </Spin>
     );
@@ -147,7 +147,7 @@ export const getColumnSearchRadio = ({
               <span className={'px-2'}>{t('No Data')}</span>
             )}
           </div>
-          {groupButton(confirm, clearFilters, key, selectedKeys, t)}
+          {groupButton({confirm, clearFilters, key,value: selectedKeys, t})}
         </div>
       </Spin>
     );
@@ -179,7 +179,7 @@ export const getColumnSearchDate = ({ key, t }: { key: string; t: TFunction<'loc
           }
         }}
       />
-      {groupButton(confirm, clearFilters, key, selectedKeys, t)}
+      {groupButton({confirm, clearFilters, key, value: selectedKeys, t})}
     </div>
   ),
   filterIcon: (filtered: boolean) => (
@@ -197,7 +197,7 @@ export const getColumnSearchInput = ({ key, t }: { key: string; t: TFunction<'lo
         onChange={e => setSelectedKeys(e.target.value)}
         onPressEnter={() => confirm()}
       />
-      {groupButton(confirm, clearFilters, key, selectedKeys, t)}
+      {groupButton({confirm, clearFilters, key, value: selectedKeys, t})}
     </div>
   ),
   filterIcon: (filtered: boolean) => (

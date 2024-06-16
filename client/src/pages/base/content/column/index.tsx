@@ -65,7 +65,7 @@ export default {
         tableItem: {
           width: 100,
           align: ETableAlign.center,
-          render: (text: string, data) => (
+          render: (_: string, data) => (
             <div className={'action'}>
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_CONTENT_UPDATE) && (
                 <ToolTip title={t(data.isDisable ? 'Disabled content' : 'Enabled content', { name: data.name })}>

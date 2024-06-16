@@ -244,7 +244,7 @@ export const Avatar = ({
       <div className='flex items-center'>
         {!!text &&
           text
-            .filter((item, index: number) => index < maxCount)
+            .filter((_, index: number) => index < maxCount)
             .map((item, index: number) => {
               return (
                 <Avatar
@@ -260,7 +260,7 @@ export const Avatar = ({
         {!!text && text.length > maxCount && (
           <Popover
             content={text
-              .filter((item, index: number) => index >= maxCount)
+              .filter((_, index: number) => index >= maxCount)
               .map((item, index: number) => (
                 <Avatar showName={true} text={item[keyName]} src={item[keySrc]} size={size} key={index} />
               ))}

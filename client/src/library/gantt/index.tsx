@@ -505,7 +505,7 @@ export const Gantt = ({
                       >
                         {Object.keys(_temp.date.obj).map(year =>
                           Object.keys(_temp.date.obj[year]).map(month =>
-                            _temp.date.obj[year][month].map((day: Dayjs, i: number) => (
+                            _temp.date.obj[year][month].map((_: Dayjs, i: number) => (
                               <td key={i} className={'relative h-6 border-x py-0 font-normal capitalize'} />
                             )),
                           ),

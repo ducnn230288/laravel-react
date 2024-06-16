@@ -88,7 +88,7 @@ export default {
         tableItem: {
           width: 90,
           align: ETableAlign.center,
-          render: (text: string, data) => (
+          render: (_: string, data) => (
             <div className={'action'}>
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_USER_UPDATE) && (
                 <ToolTip title={t(data.isDisable ? 'Disabled user' : 'Enabled user', { name: data.name })}>
@@ -167,7 +167,7 @@ export default {
         name: 'password',
         formItem: {
           type: EFormType.password,
-          condition: (value: string, form, index: number, values: any) => !values?.id,
+          condition: ({values}) => !values?.id,
           rules: [{ type: EFormRuleType.required }],
         },
       },
@@ -176,14 +176,14 @@ export default {
         name: 'passwordConfirmation',
         formItem: {
           type: EFormType.password,
-          condition: (value: string, form, index: number, values) => !values?.id,
+          condition: ({values}) => !values?.id,
           rules: [
             { type: EFormRuleType.required },
             { type: EFormRuleType.min, value: 8 },
             {
               type: EFormRuleType.custom,
               validator: ({ getFieldValue }) => ({
-                validator(rule, value: string) {
+                validator(_, value: string) {
                   if (!value || (getFieldValue('password') === value && value.length >= 8)) {
                     return Promise.resolve();
                   }

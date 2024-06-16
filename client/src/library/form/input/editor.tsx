@@ -40,7 +40,7 @@ const Component = ({
       editor.onChange = onChange;
       editor.onFocus = (_: string, core: any) => onChange && onChange(core.context.element.wysiwyg.innerHTML);
       editor.onBlur = (_: string, core: any) => onChange && onChange(core.context.element.wysiwyg.innerHTML);
-      editor.onImageUploadBefore = (files: any, info: any, core: any, uploadHandler: any) => {
+      editor.onImageUploadBefore = (files: any, _: any, __: any, uploadHandler: any) => {
         const bodyFormData = new FormData();
         bodyFormData.append('file', files[0]);
         API.responsible({

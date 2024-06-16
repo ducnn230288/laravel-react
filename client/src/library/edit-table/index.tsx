@@ -225,7 +225,7 @@ export const EditTable = ({
         <thead>
           {Array(rowSpan + 1)
             .fill(0)
-            .map((j, i) => (
+            .map((_, i) => (
               <tr key={i}>{renderHeader(0, i, table, rowSpan)}</tr>
             ))}
         </thead>

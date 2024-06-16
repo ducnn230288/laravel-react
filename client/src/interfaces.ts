@@ -100,7 +100,7 @@ export interface IForm {
 export interface IFormItem {
   type?: EFormType;
   col?: number;
-  condition?: (value: string, form: FormInstance, index: number, values: any) => boolean;
+  condition?: (props:{value: string, form: FormInstance, index: number, values: any}) => boolean;
   list?: any[];
   rules?: IFormItemRule[];
   mode?: EFormModeSelect;

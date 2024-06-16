@@ -55,7 +55,7 @@ export default {
         tableItem: {
           width: 100,
           align: ETableAlign.center,
-          render: (text: string, data) => (
+          render: (_: string, data) => (
             <div className={'action'}>
               {sGlobal.user?.role?.permissions?.includes(keyRole.P_CODE_UPDATE) && (
                 <ToolTip title={t(data.isDisable ? 'Disabled code' : 'Enabled code', { name: data.name })}>
@@ -117,7 +117,7 @@ export default {
         title: t('Code'),
         name: 'code',
         formItem: {
-          condition: (_: string, form, __: number, values: any) => !values?.id,
+          condition: ({values}) => !values?.id,
           rules: [{ type: EFormRuleType.required }, { type: EFormRuleType.max, value: 100 }],
         },
       },

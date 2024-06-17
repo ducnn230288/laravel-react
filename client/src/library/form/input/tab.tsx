@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, FormInstance, Tabs } from 'antd';
+import { Form, type FormInstance, Tabs } from 'antd';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 

@@ -1,9 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import type { URLSearchParamsInit } from 'react-router-dom';
 
 import { CSvgIcon } from '@/library/svg-icon';
 import { keyRole, language, routerLinks } from '@/utils';
-import { IMenu } from '@/types';
 
 const Layout = ({ lang = language, permissions = [] }: { lang?: string; permissions?: string[] }): IMenu[] => {
   const { t } = useTranslation('locale', { keyPrefix: 'menu' });
@@ -63,6 +63,15 @@ const Layout = ({ lang = language, permissions = [] }: { lang?: string; permissi
   });
 };
 export default Layout;
+
+export interface IMenu {
+  key?: string;
+  label?: string;
+  icon?: React.JSX.Element;
+  permission?: keyRole;
+  queryparams?: URLSearchParamsInit;
+  children?: IMenu[];
+}
 
 export const findMenu = (menus: IMenu[], key: string): IMenu | undefined => {
   let menuCurrent: IMenu | undefined;

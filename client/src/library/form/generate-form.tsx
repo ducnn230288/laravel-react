@@ -3,7 +3,7 @@ import { Form, type FormInstance } from 'antd';
 import type { TFunction } from 'i18next';
 
 import { EFormRuleType, EFormType } from '@/enums';
-import { IForm } from '@/types';
+import type { IForm } from '@/types';
 import { generateInput } from './generate-input';
 
 export const generateForm = ({

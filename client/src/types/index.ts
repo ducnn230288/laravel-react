@@ -1,5 +1,12 @@
-import { CheckboxOptionType, FormInstance } from 'antd';
-import { EFormModeSelect, EFormPickerDate, EFormRuleType, EFormType, ETableAlign, ETableFilterType } from '@/enums';
+import type { CheckboxOptionType, FormInstance } from 'antd';
+import type {
+  EFormModeSelect,
+  EFormPickerDate,
+  EFormRuleType,
+  EFormType,
+  ETableAlign,
+  ETableFilterType,
+} from '@/enums';
 
 export interface IResponses<T> {
   statusCode?: 200 | 201 | 500 | 404;
@@ -161,16 +168,4 @@ export interface IFormApi {
 export interface IFormModalRefObject {
   handleEdit?: (item?: { id?: string }, isGet?: boolean) => Promise<void>;
   form?: FormInstance;
-}
-
-import { keyRole } from '@/utils';
-import { URLSearchParamsInit } from 'react-router-dom';
-
-export interface IMenu {
-  key?: string;
-  label?: string;
-  icon?: React.JSX.Element;
-  permission?: keyRole;
-  queryparams?: URLSearchParamsInit;
-  children?: IMenu[];
 }

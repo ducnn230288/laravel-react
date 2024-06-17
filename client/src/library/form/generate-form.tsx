@@ -3,8 +3,9 @@ import { Form, type FormInstance } from 'antd';
 import type { TFunction } from 'i18next';
 
 import { EFormRuleType, EFormType } from '@/enums';
-import type { IForm } from '@/interfaces';
+import { IForm } from '@/types';
 import { generateInput } from './generate-input';
+
 export const generateForm = ({
   item,
   index,
@@ -82,7 +83,7 @@ export const generateForm = ({
                     ) {
                       return Promise.resolve();
                     }
-                    return Promise.reject(new Error(t(rule.message || 'Please enter a valid email address!')));
+                    return Promise.reject(new Error(t(rule.message ?? 'Please enter a valid email address!')));
                   },
                 }));
                 break;
@@ -106,7 +107,7 @@ export const generateForm = ({
                     validator(_: any, value: any) {
                       if (!value || (/^0$|^-?[1-9]\d*(\.\d+)?$/.test(value) && parseFloat(value) < rule.value)) {
                         return Promise.reject(
-                          new Error(t(rule.message || 'Please enter minimum number!', { min: rule.value })),
+                          new Error(t(rule.message ?? 'Please enter minimum number!', { min: rule.value })),
                         );
                       }
                       return Promise.resolve();
@@ -222,10 +223,8 @@ export const generateForm = ({
               if (value) {
                 let min = 8;
                 rules.forEach((item: any) => item.min && (min = item.min));
-                if (value.trim().length < min) return Promise.reject(t('Please enter at least characters!', { min }));
-                // if (/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?])/.test(value))
-                //   return Promise.resolve();
-                // else return Promise.reject(t('Password needs to have at least 8 characters!'));
+                if (value.trim().length < min)
+                  return Promise.reject(Error(t('Please enter at least characters!', { min })));
               } else return Promise.resolve();
             },
           }));

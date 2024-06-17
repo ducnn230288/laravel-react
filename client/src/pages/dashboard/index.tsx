@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/vi';
 
 import { ETypeChart } from '@/enums';
-import type { IEditTable } from '@/interfaces';
+import type { IEditTable } from '@/types';
 import { CEChart } from '@/library/echart';
 import { CEditTable } from '@/library/edit-table';
 import { CGantt } from '@/library/gantt';

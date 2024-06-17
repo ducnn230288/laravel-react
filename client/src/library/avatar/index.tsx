@@ -10,7 +10,8 @@ export const CAvatar = ({
   keySrc = 'avatarPath',
   keyName = 'fullName',
   maxCount = 4,
-}: Type) => {
+  index = 0,
+}: TypeObject) => {
   const pickTextColorBasedOnBgColorAdvanced = (bgColor: string) => {
     if (bgColor) {
       let color = String(bgColor)
@@ -238,7 +239,7 @@ export const CAvatar = ({
     </div>
   );
   if (typeof text !== 'object') {
-    return <Avatar text={text} src={src} showName={showName} size={size} />;
+    return <Avatar text={text} src={src} showName={showName} size={size} index={index} />;
   } else {
     return (
       <div className='flex items-center'>
@@ -253,7 +254,7 @@ export const CAvatar = ({
                   showName={false}
                   size={size}
                   index={index}
-                  key={index}
+                  key={'avatar' + index}
                 />
               );
             })}
@@ -262,14 +263,13 @@ export const CAvatar = ({
             content={text
               .filter((_, index: number) => index >= maxCount)
               .map((item, index: number) => (
-                <Avatar showName={true} text={item[keyName]} src={item[keySrc]} size={size} key={index} />
+                <Avatar showName={true} text={item[keyName]} src={item[keySrc]} size={size} key={'avatar' + index} />
               ))}
           >
             <div
               className={classNames(
-                'rounded-xl inline-block text-center border border-teal-900 text-teal-900 bg-teal-200 text-xs -ml-2',
-                'w-' + size,
-                'h-' + size,
+                'rounded-xl inline-block text-center border border-primary text-primary bg-primary/30 text-xs -ml-2',
+                'size-' + size,
                 'leading-' + size,
               )}
             >
@@ -286,8 +286,10 @@ interface Type {
   text?: string | { [selector: string]: string }[];
   size?: number;
   showName?: boolean;
+  index?: number;
+}
+interface TypeObject extends Type {
   keySrc?: string;
   keyName?: string;
   maxCount?: number;
-  index?: number;
 }

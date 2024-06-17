@@ -13,14 +13,14 @@ export const Component: any = ({
   queryParams = () => null,
 }: Type) => {
   const listOfPageItem = useRef<{ disabled: boolean; type: string; index: number }[]>([]);
-  const [_temp, set_temp] = useState<{ ranges: [number, number] }>({
+  const [temp, setTemp] = useState<{ ranges: [number, number] }>({
     ranges: [(page - 1) * perPage + 1, Math.min(page * perPage, total)],
   });
   const lastNumber = useRef(0);
   const buildIndexes = useCallback(() => {
     const lastIndex = getLastIndex(total, perPage);
     listOfPageItem.current = getListOfPageItem(page, lastIndex);
-    set_temp(pre => ({ ...pre, ranges: [(page - 1) * perPage + 1, Math.min(page * perPage, total)] }));
+    setTemp(pre => ({ ...pre, ranges: [(page - 1) * perPage + 1, Math.min(page * perPage, total)] }));
   }, [page, perPage, total]);
 
   useEffect(() => {
@@ -135,7 +135,7 @@ export const Component: any = ({
               list={pageSizeOptions.map((item: number) => ({ value: item, label: item + ' / page' }))}
             />
           )}
-          {!!paginationDescription && <label>{paginationDescription(_temp.ranges[0], _temp.ranges[1], total)}</label>}
+          {!!paginationDescription && <label>{paginationDescription(temp.ranges[0], temp.ranges[1], total)}</label>}
         </div>
         <div className='right'>
           {listOfPageItem.current.map((item: any) => (

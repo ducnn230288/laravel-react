@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { type FormInstance, Select } from 'antd';
 
-import type { ITableGet, ITableItemFilterList } from '@/interfaces';
+import type { ITableGet, ITableItemFilterList } from '@/types';
 import { arrayUnique, cleanObjectKeyNull } from '@/utils';
 
 const Component = ({
@@ -20,13 +20,13 @@ const Component = ({
   className = '',
   allowClear = true,
 }: Type) => {
-  const [_temp, set_temp] = useState({ current: [], list: list || [] });
+  const [temp, setTemp] = useState<{ current: any[]; list: any[] }>({ current: [], list: list || [] });
   const facade = get?.facade() || {};
-  let __list = !get
-    ? _temp.list
-    : (get?.key ? facade[get?.key] : facade.result?.data)
-        ?.map((e: any) => (get.format ? get.format(e) : e))
-        .filter((item: any) => !!item.value);
+  const data = (get?.key ? facade[get?.key] : facade.result?.data)
+    ?.map((e: any) => (get?.format ? get.format(e) : e))
+    .filter((item: any) => !!item.value);
+  let __list = data ?? temp.list;
+
   const loadData = async (fullTextSearch: string) => {
     if (get) {
       const { time, queryParams } = facade;
@@ -38,9 +38,9 @@ const Component = ({
         new Date().getTime() > time ||
         JSON.stringify(params) != queryParams
       )
-        facade[get.method || 'get'](params);
+        facade[get.method ?? 'get'](params);
     } else if (list) {
-      set_temp(pre => ({
+      setTemp(pre => ({
         ...pre,
         list: list.filter(
           (item: any) =>
@@ -51,7 +51,7 @@ const Component = ({
   };
   useEffect(() => {
     if (firstLoad) {
-      facade[get?.method || 'get'](firstLoad(value));
+      facade[get?.method ?? 'get'](firstLoad(value));
     }
   }, []);
 
@@ -60,12 +60,11 @@ const Component = ({
       let data = get.data();
       if (get?.format && data) {
         data = mode === 'multiple' ? data.map(get.format) : [get.format(data)];
-        if (JSON.stringify(data) !== JSON.stringify(_temp.current)) set_temp(pre => ({ ...pre, current: data }));
+        if (JSON.stringify(data) !== JSON.stringify(temp.current)) setTemp(pre => ({ ...pre, current: data }));
       }
     }
   }, [get?.data]);
-  if (_temp.current.length)
-    __list = __list?.length ? arrayUnique([..._temp.current, ...__list], 'value') : _temp.current;
+  if (temp.current.length) __list = __list?.length ? arrayUnique([...temp.current, ...__list], 'value') : temp.current;
 
   return (
     <Select

@@ -22,7 +22,8 @@
     "useDefineForClassFields": true,
     "lib": ["esnext", "dom"],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "#/*": ["types/*"]
     },
     "types": ["vite/client", "vite-plugin-svg-icons/client", "inputmask"],
     "noEmit": true

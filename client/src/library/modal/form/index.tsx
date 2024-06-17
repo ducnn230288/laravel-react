@@ -1,9 +1,8 @@
 import React, { forwardRef, type Ref, useImperativeHandle } from 'react';
 import { Form as FormAnt } from 'antd';
 
-import type { IForm, IFormModalRefObject } from '@/interfaces';
+import type { IForm, IFormModalRefObject } from '@/types';
 import { convertFormValue } from '@/utils';
-
 import { CForm } from '../../form';
 import { CModal } from '../../modal';
 

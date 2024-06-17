@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import { ICommonEntity, IPaginationQuery, IResponses } from '@/interfaces';
+import { ICommonEntity, IPaginationQuery, IResponses } from '@/types';
 import { useAppDispatch, useTypedSelector, Action, Slice, State, IUser } from '@/services';
 import { API, routerLinks } from '@/utils';
 
@@ -8,14 +8,14 @@ const name = 'UserRole';
 const action = {
   ...new Action<IUserRole>(name),
   getPermission: createAsyncThunk(name + '/permission', async () =>
-    API.get<IResponses<string[]>>({url: `${routerLinks(name, 'api')}/permission`}),
+    API.get<IResponses<string[]>>({ url: `${routerLinks(name, 'api')}/permission` }),
   ),
 };
 export const userRoleSlice = createSlice(new Slice<IUserRole>(action, { keepUnusedDataFor: 9999 }));
 export const SUserRole = () => {
   const dispatch = useAppDispatch();
   return {
-    ...useTypedSelector((state) => state[action.name] as State<IUserRole>),
+    ...useTypedSelector(state => state[action.name] as State<IUserRole>),
     set: (values: State<IUserRole>) => dispatch(action.set(values)),
     get: (params: IPaginationQuery<IUserRole>) => dispatch(action.get(params)),
     getById: ({

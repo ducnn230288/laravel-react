@@ -2,7 +2,7 @@ import React, { forwardRef, Fragment, type Ref, useEffect, useImperativeHandle, 
 import classNames from 'classnames';
 import type { FormInstance } from 'antd';
 
-import type { ITableItemFilterList } from '@/interfaces';
+import type { ITableItemFilterList } from '@/types';
 import { CButton } from '../../button';
 
 const Component = forwardRef(

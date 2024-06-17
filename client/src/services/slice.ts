@@ -1,7 +1,7 @@
 import { ActionReducerMapBuilder, Draft } from '@reduxjs/toolkit';
 
 import { EStatusState } from '@/enums';
-import { ICommonEntity, IResponses } from '@/interfaces';
+import { ICommonEntity, IResponses } from '@/types';
 import { Action } from '@/services/index';
 
 export class Slice<T extends ICommonEntity, S = EStatusState> {
@@ -40,7 +40,7 @@ export class Slice<T extends ICommonEntity, S = EStatusState> {
   }
   set(action: Action<T, S>, builder: ActionReducerMapBuilder<State<T, S>>) {
     builder.addCase(action.set.fulfilled, (state, action) => {
-      Object.keys(action.payload).forEach((key) => {
+      Object.keys(action.payload).forEach(key => {
         state[key] = action.payload[key as keyof State<T, S>];
       });
       state.status = EStatusState.idle;
@@ -65,7 +65,7 @@ export class Slice<T extends ICommonEntity, S = EStatusState> {
         state.queryParams = this.defaultState.queryParams;
         state.isLoading = false;
       })
-      .addCase(action.get.rejected, (state) => {
+      .addCase(action.get.rejected, state => {
         state.status = EStatusState.getRejected;
         state.time = this.defaultState.time;
         state.queryParams = this.defaultState.queryParams;
@@ -74,7 +74,7 @@ export class Slice<T extends ICommonEntity, S = EStatusState> {
   }
   getById(action: Action<T, S>, builder: ActionReducerMapBuilder<State<T, S>>) {
     builder
-      .addCase(action.getById.pending, (state) => {
+      .addCase(action.getById.pending, state => {
         state.isLoading = true;
         state.status = EStatusState.getByIdPending;
       })
@@ -87,7 +87,7 @@ export class Slice<T extends ICommonEntity, S = EStatusState> {
         } else state.status = EStatusState.idle;
         state.isLoading = false;
       })
-      .addCase(action.getById.rejected, (state) => {
+      .addCase(action.getById.rejected, state => {
         state.status = EStatusState.getByIdRejected;
         state.isLoading = false;
       });
@@ -107,7 +107,7 @@ export class Slice<T extends ICommonEntity, S = EStatusState> {
         } else state.status = EStatusState.idle;
         state.isLoading = false;
       })
-      .addCase(action.post.rejected, (state) => {
+      .addCase(action.post.rejected, state => {
         state.status = EStatusState.postRejected;
         state.isLoading = false;
       });
@@ -127,22 +127,22 @@ export class Slice<T extends ICommonEntity, S = EStatusState> {
         } else state.status = EStatusState.idle;
         state.isLoading = false;
       })
-      .addCase(action.put.rejected, (state) => {
+      .addCase(action.put.rejected, state => {
         state.status = EStatusState.putRejected;
         state.isLoading = false;
       });
   }
   delete(action: Action<T, S>, builder: ActionReducerMapBuilder<State<T, S>>) {
     builder
-      .addCase(action.delete.pending, (state) => {
+      .addCase(action.delete.pending, state => {
         state.isLoading = true;
         state.status = EStatusState.deletePending;
       })
-      .addCase(action.delete.fulfilled, (state) => {
+      .addCase(action.delete.fulfilled, state => {
         state.status = EStatusState.deleteFulfilled;
         state.isLoading = false;
       })
-      .addCase(action.delete.rejected, (state) => {
+      .addCase(action.delete.rejected, state => {
         state.status = EStatusState.deleteRejected;
         state.isLoading = false;
       });

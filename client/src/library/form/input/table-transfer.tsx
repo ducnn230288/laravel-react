@@ -13,13 +13,13 @@ const Component = ({
   onChange?: (e: any) => any;
   value?: any;
 }) => {
-  const [_temp, set_temp] = useState<{ dataSource: any[]; targetKeys: any[] }>({ dataSource: [], targetKeys: [] });
+  const [temp, setTemp] = useState<{ dataSource: any[]; targetKeys: any[] }>({ dataSource: [], targetKeys: [] });
 
   const initFunction = useCallback(async () => {
     const dataSource = await formItem.transfer.dataSource(value, form);
     const targetKeys = formItem.transfer.targetKeys(dataSource, form, value);
-    set_temp({ dataSource, targetKeys });
-    onChange && onChange(targetKeys);
+    setTemp({ dataSource, targetKeys });
+    onChange?.(targetKeys);
   }, [form, formItem, onChange, value]);
 
   useEffect(() => {
@@ -31,17 +31,12 @@ const Component = ({
       {...restProps}
       showSearch
       showSelectAll={false}
-      dataSource={_temp.dataSource}
-      targetKeys={_temp.targetKeys}
+      dataSource={temp.dataSource}
+      targetKeys={temp.targetKeys}
       onChange={targetKeys => {
-        set_temp(pre => ({ ...pre, targetKeys }));
-        onChange && onChange(targetKeys);
+        setTemp(pre => ({ ...pre, targetKeys }));
+        onChange?.(targetKeys);
       }}
-      // filterOption={(inputValue, item) =>
-      //   formItem.transfer.filter
-      //     ? formItem.transfer.filter(inputValue, item)
-      //     : item.fullName.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-      // }
     >
       {({
         direction,

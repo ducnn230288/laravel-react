@@ -5,7 +5,7 @@ import slug from 'slug';
 import { Popconfirm } from 'antd';
 
 import { EFormRuleType, EFormType, ETableAlign, ETableFilterType } from '@/enums';
-import type { IDataTable, IForm } from '@/interfaces';
+import type { IDataTable, IForm } from '@/types';
 
 import { CSvgIcon } from '@/library/svg-icon';
 import { CTooltip } from '@/library/tooltip';

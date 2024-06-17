@@ -1,10 +1,9 @@
-// @ts-nocheck
 import React, { Fragment, useState } from 'react';
 import { Form, Checkbox, type FormInstance } from 'antd';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 
-import type { IForm } from '@/interfaces';
+import type { IForm } from '@/types';
 import { CSvgIcon } from '../../svg-icon';
 import { CButton } from '../../button';
 
@@ -19,13 +18,17 @@ const Component = ({
   showRemove = () => true,
   idCheck,
 }: Type) => {
-  const [_temp, set_temp] = useState({ indeterminate: false, checkAll: false, checkedList: [] });
+  const [temp, setTemp] = useState<{ indeterminate: boolean; checkAll: boolean; checkedList: any[] }>({
+    indeterminate: false,
+    checkAll: false,
+    checkedList: [],
+  });
   const onCheckAllChange = (e: any) => {
     const array = form.getFieldValue(name).map((item: any) => {
       item[idCheck + 'Checked'] = e.target.checked;
       return item;
     });
-    set_temp({
+    setTemp({
       indeterminate: false,
       checkAll: e.target.checked,
       checkedList: e.target.checked ? array.map((item: any) => item[idCheck]) : [],
@@ -33,17 +36,17 @@ const Component = ({
 
     form.setFieldValue(name, array);
   };
-  const onCheckChange = (e: any, array: [], index: number) => {
+  const onCheckChange = (e: any, array: any[], index: number) => {
     if (e.target.checked) {
-      _temp.checkedList.push(array[index][idCheck]);
-      set_temp({
-        indeterminate: array.length !== _temp.checkedList.length,
-        checkAll: array.length === _temp.checkedList.length,
-        checkedList: _temp.checkedList,
+      temp.checkedList.push(array[index][idCheck]);
+      setTemp({
+        indeterminate: array.length !== temp.checkedList.length,
+        checkAll: array.length === temp.checkedList.length,
+        checkedList: temp.checkedList,
       });
     } else {
-      _temp.checkedList.splice(_temp.checkedList.indexOf(array[index][idCheck]), 1);
-      set_temp({ indeterminate: _temp.checkedList.length !== 0, checkAll: false, checkedList: _temp.checkedList });
+      temp.checkedList.splice(temp.checkedList.indexOf(array[index][idCheck]), 1);
+      setTemp({ indeterminate: temp.checkedList.length !== 0, checkAll: false, checkedList: temp.checkedList });
     }
     array[index][idCheck + 'Checked'] = e.target.checked;
     if (form.setFieldValue) {
@@ -53,7 +56,7 @@ const Component = ({
   const { t } = useTranslation('locale', { keyPrefix: 'library' });
 
   return (
-    <Form.List name={name}>
+    <Form.List name={name!}>
       {(fields, { add, remove }) =>
         isTable ? (
           <Fragment>
@@ -61,11 +64,7 @@ const Component = ({
               <div className='table-row'>
                 {!!idCheck && (
                   <div className={'table-cell w-10 p-1 text-center font-bold'}>
-                    <Checkbox
-                      indeterminate={_temp.indeterminate}
-                      onChange={onCheckAllChange}
-                      checked={_temp.checkAll}
-                    />
+                    <Checkbox indeterminate={temp.indeterminate} onChange={onCheckAllChange} checked={temp.checkAll} />
                   </div>
                 )}
                 <div className={'table-cell w-10 border bg-gray-300 p-1 text-center font-bold'}>STT</div>
@@ -92,7 +91,7 @@ const Component = ({
                     <div className={'table-cell text-center'}>
                       <Checkbox
                         onChange={e => onCheckChange(e, form.getFieldValue(name), n)}
-                        checked={_temp.checkedList.indexOf(form.getFieldValue(name)[n][idCheck]) > -1}
+                        checked={temp.checkedList.indexOf(form.getFieldValue(name)[n][idCheck] ?? '') > -1}
                       />
                     </div>
                   )}
@@ -119,12 +118,12 @@ const Component = ({
               ))}
             </div>
             <div className={'flex justify-end'}>
-              <Button
+              <CButton
                 onClick={() => {
                   add();
                   onAdd(form.getFieldValue(name), form);
                 }}
-                icon={<Plus className='size-5' />}
+                icon={<CSvgIcon name='plus' size={20} />}
                 text={textAdd}
               />
             </div>
@@ -139,22 +138,20 @@ const Component = ({
                       col?.formItem?.classItem,
                       'col-span-12' +
                         (' sm:col-span-' +
-                          (col?.formItem?.colTablet
-                            ? col?.formItem?.colTablet
-                            : col?.formItem?.col
-                              ? col?.formItem?.col
-                              : 12)) +
+                          (col?.formItem?.colTablet ? col?.formItem?.colTablet : col?.formItem?.col ?? 12)) +
                         (' lg:col-span-' + (col?.formItem?.col ? col?.formItem?.col : 12)),
                     )}
-                    key={index}
+                    key={'addable' + index}
                   >
                     {generateForm({ item: col, index: index + '_' + i, name: [n, col.name], t })}
                   </div>
                 ))}
                 <div className={'table-cell w-8 align-middle'}>
                   {showRemove(form.getFieldValue([[name], n]), n) && (
-                    <Trash
-                      className='size-8 cursor-pointer fill-error hover:fill-error/50'
+                    <CSvgIcon
+                      name='trash'
+                      size={32}
+                      className='cursor-pointer fill-error hover:fill-error/50'
                       onClick={() => {
                         remove(n);
                         onAdd(form.getFieldValue(name), form);
@@ -166,7 +163,7 @@ const Component = ({
             ))}
             <div className={'flex justify-end'}>
               <CButton
-                icon={<Plus className='size-5' />}
+                icon={<CSvgIcon name='plus' size={20} />}
                 text={textAdd}
                 onClick={() => {
                   add();

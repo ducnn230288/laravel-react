@@ -4,13 +4,14 @@ import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router';
 import { createSearchParams } from 'react-router-dom';
 import classNames from 'classnames';
+import type { ItemType } from 'antd/es/menu/interface';
 
 import { CAvatar } from '@/library/avatar';
 import { CSvgIcon } from '@/library/svg-icon';
 import { SGlobal } from '@/services';
 import { routerLinks, lang, APP_NAME } from '@/utils';
+
 import menus, { findMenu } from './menus';
-import type { ItemType } from 'antd/es/menu/interface';
 
 const Layout = ({ children }: PropsWithChildren) => {
   const { t } = useTranslation('locale', { keyPrefix: 'layouts' });

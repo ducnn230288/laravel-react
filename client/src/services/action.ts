@@ -1,7 +1,7 @@
 import { AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
 
 import { EStatusState } from '@/enums';
-import { ICommonEntity, IPaginationQuery, IResponses } from '@/interfaces';
+import { ICommonEntity, IPaginationQuery, IResponses } from '@/types';
 import { State } from '@/services/index';
 import { API, routerLinks } from '@/utils';
 

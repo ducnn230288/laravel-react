@@ -14,7 +14,7 @@ import dayjs from 'dayjs';
 import type { TFunction } from 'i18next';
 
 import { EFormType } from '@/enums';
-import type { IForm } from '@/interfaces';
+import type { IForm } from '@/types';
 import {
   CIAddable,
   CICascader,

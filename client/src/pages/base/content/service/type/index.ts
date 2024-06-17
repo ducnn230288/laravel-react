@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { ICommonEntity, IPaginationQuery } from '@/interfaces';
+import { ICommonEntity, IPaginationQuery } from '@/types';
 import { useAppDispatch, useTypedSelector, Action, Slice, State } from '@/services';
 
 import { IContent } from '../index';
@@ -10,7 +10,7 @@ export const contentTypeSlice = createSlice(new Slice<IContentType>(action, { ke
 export const SContentType = () => {
   const dispatch = useAppDispatch();
   return {
-    ...useTypedSelector((state) => state[action.name] as State<IContentType>),
+    ...useTypedSelector(state => state[action.name] as State<IContentType>),
     set: (values: State<IContentType>) => dispatch(action.set(values)),
     get: (params: IPaginationQuery<IContentType>) => dispatch(action.get(params)),
     getById: ({

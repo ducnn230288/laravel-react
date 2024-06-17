@@ -7,7 +7,7 @@ import { CButton } from '../../button';
 import { CSvgIcon } from '../../svg-icon';
 
 const Component = ({ tag, onChange, form, value, disabled, maxTagCount, placeholder, ...prop }: Type) => {
-  const [_options, set_options] = useState([]);
+  const [options, setOptions] = useState([]);
   const loadData = useCallback(
     async (fullTextSearch = '', value?: any) => {
       if (tag) {
@@ -15,7 +15,7 @@ const Component = ({ tag, onChange, form, value, disabled, maxTagCount, placehol
           ? tag.params(form.getFieldValue, fullTextSearch, value && value.filter((item: any) => !!item))
           : { fullTextSearch };
         const { data } = await API.get<any>({ url: tag.api, params });
-        set_options(
+        setOptions(
           data?.data?.map((item: any, index: number) => ({
             label: tag.avatar ? (
               <CAvatar key={index} size={5} src={item[tag.avatar]} text={item[tag.label]} />
@@ -65,7 +65,7 @@ const Component = ({ tag, onChange, form, value, disabled, maxTagCount, placehol
         loadData('', value);
       }}
       style={{ width: '100%' }}
-      options={_options}
+      options={options}
     />
   );
 };

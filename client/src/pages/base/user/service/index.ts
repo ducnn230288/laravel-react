@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { IPaginationQuery } from '@/interfaces';
+import { IPaginationQuery } from '@/types';
 import { useAppDispatch, useTypedSelector, Action, Slice, State, IUser } from '@/services';
 
 const name = 'User';
@@ -12,7 +12,7 @@ export const userSlice = createSlice(new Slice<IUser>(action));
 export const SUser = () => {
   const dispatch = useAppDispatch();
   return {
-    ...(useTypedSelector((state) => state[action.name]) as State<IUser>),
+    ...(useTypedSelector(state => state[action.name]) as State<IUser>),
     set: (values: State<IUser>) => dispatch(action.set(values)),
     get: (params: IPaginationQuery<IUser>) => dispatch(action.get(params)),
     getById: ({

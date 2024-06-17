@@ -1,7 +1,7 @@
 import React, { Fragment, type PropsWithChildren } from 'react';
 import classNames from 'classnames';
 
-import type { IEditTable } from '@/interfaces';
+import type { IEditTable } from '@/types';
 import { cssInObject } from '@/utils';
 import { CIMask } from '../form/input';
 

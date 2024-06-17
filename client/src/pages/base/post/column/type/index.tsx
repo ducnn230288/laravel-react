@@ -1,7 +1,7 @@
 import slug from 'slug';
 
 import { EFormRuleType, EFormType } from '@/enums';
-import type { IForm } from '@/interfaces';
+import type { IForm } from '@/types';
 import { loopMapSelect } from '@/utils';
 import { useTranslation } from 'react-i18next';
 

@@ -41,7 +41,7 @@ export const CGantt = ({
     const addEndDate = end.date() + 1;
     if (addEndDate * (widthColumnDay / perRow) < widthMonthYear)
       end = end.add(Math.ceil(widthMonthYear / widthColumnDay) * perRow - addEndDate, 'days');
-    set_temp(pre => ({ ...pre, dateStart: date }));
+    setTemp(pre => ({ ...pre, dateStart: date }));
     const endMonth = end.month() - date.month() + 1 + (end.year() - date.year()) * 12;
     const objDate: any = {};
     let totalDay = date.date();
@@ -63,7 +63,7 @@ export const CGantt = ({
     }
     return { obj: objDate, total: lengthDay };
   };
-  const [_temp, set_temp] = useState<{ date: any; dateStart: Dayjs; task: any[] }>({
+  const [temp, setTemp] = useState<{ date: any; dateStart: Dayjs; task: any[] }>({
     date: { obj: {}, total: 0 },
     dateStart: dayjs(),
     task: data,
@@ -81,7 +81,7 @@ export const CGantt = ({
   useEffect(() => {
     let start = dayjs();
     let end = dayjs().add(1, 'months');
-    if (data.length && _temp.date.total === 0) {
+    if (data.length && temp.date.total === 0) {
       start = data[0].startDate;
       end = data[0].endDate || data[0].startDate.add(1, 'months');
       data.forEach(item => {
@@ -89,11 +89,11 @@ export const CGantt = ({
         if (item.endDate && item.endDate > end) end = item.endDate;
       });
     }
-    set_temp(pre => ({ ...pre, date: remainingMonths(start, end) }));
+    setTemp(pre => ({ ...pre, date: remainingMonths(start, end) }));
   }, [data]);
 
   useEffect(() => {
-    if (_temp.date.total > 0) {
+    if (temp.date.total > 0) {
       (document.querySelector(`#${id.current} .left .head`) as any)!.style.width =
         document.querySelector(`#${id.current} .left .body`)!.clientWidth + getScrollBarWidth() + 'px';
       document.querySelectorAll(`#${id.current} .left tbody > tr:nth-of-type(1) > td`).forEach((e: any, index, arr) => {
@@ -105,7 +105,7 @@ export const CGantt = ({
         .querySelectorAll(`#${id.current} .overflow-scroll`)
         .forEach((e: any) => (e.style.height = maxHeight + 'px'));
     }
-  }, [_temp]);
+  }, [temp]);
 
   const loopGetDataset = (e: HTMLElement, key: string): HTMLElement => {
     if (e.parentElement && Object.prototype.hasOwnProperty.call(e.parentElement.dataset, key)) return e.parentElement;
@@ -129,9 +129,9 @@ export const CGantt = ({
 
     let isCheck = true;
     let currentLevel: number | undefined;
-    set_temp(pre => ({
+    setTemp(pre => ({
       ...pre,
-      task: _temp.task.map((item, trIndex) => {
+      task: temp.task.map((item, trIndex) => {
         if (isCheck && trIndex > index) {
           if (item.level > level) {
             if (currentLevel !== undefined && currentLevel === item.level && !statusCollapse.current[trIndex])
@@ -153,7 +153,7 @@ export const CGantt = ({
     if (e.target.dataset.scrollX)
       document.querySelector(`#${id.current} ${e.target.dataset.scrollX}`)!.scrollTo({ left: e.target.scrollLeft });
   };
-  const NameColumn = ({ name }: { name: string; isDrag?: boolean }) => (
+  const NameColumn = ({ name }: { name: string }) => (
     <th align={'left'} className='relative h-12 truncate border px-4 text-xs capitalize'>
       {name}
     </th>
@@ -162,14 +162,14 @@ export const CGantt = ({
     if (item.success) {
       const endDate = item.endDate || item.startDate.add(i === 0 ? 0 : 1, 'day');
       const startTop = i * 24 + 4 + 8;
-      const startLeft = (endDate.diff(_temp.dateStart, 'day') + perRow / 10) * (widthColumnDay / perRow);
+      const startLeft = (endDate.diff(temp.dateStart, 'day') + perRow / 10) * (widthColumnDay / perRow);
       return item.success.split(',').map((id, index) => {
-        const listData = _temp.task.filter(item => !item.hidden && item.id === id);
+        const listData = temp.task.filter(item => !item.hidden && item.id === id);
         if (listData.length) {
           const data = listData[0];
-          const endTop = _temp.task.filter(item => !item.hidden).indexOf(data) * 24 + (data.endDate ? 4 : 7);
+          const endTop = temp.task.filter(item => !item.hidden).indexOf(data) * 24 + (data.endDate ? 4 : 7);
           const endLeft =
-            (data.startDate.diff(_temp.dateStart, 'day') + (data.endDate ? 0 : 1) + perRow / 8) *
+            (data.startDate.diff(temp.dateStart, 'day') + (data.endDate ? 0 : 1) + perRow / 8) *
               (widthColumnDay / perRow) +
             (data.endDate ? 3 : data.startDate.diff(endDate) > 0 ? -9 : 3);
           return (
@@ -205,7 +205,7 @@ export const CGantt = ({
     if (item.hidden) return;
     indexTask.current += 1;
     const startTop = indexTask.current * 24 + 4;
-    const startLeft = item.startDate.diff(_temp.dateStart, 'day') * (widthColumnDay / perRow);
+    const startLeft = item.startDate.diff(temp.dateStart, 'day') * (widthColumnDay / perRow);
     if (item.endDate && item.percent) {
       return (
         <div
@@ -218,29 +218,21 @@ export const CGantt = ({
         >
           <div
             className={classNames('z-10 overflow-hidden', {
-              'bg-gray-400': !!_temp.task[index + 1] && _temp.task[index + 1].level > item.level,
-              'rounded-md bg-blue-400': !_temp.task[index + 1] || _temp.task[index + 1].level <= item.level,
+              'bg-base-200': !!temp.task[index + 1] && temp.task[index + 1].level > item.level,
+              'rounded-md bg-primary': !temp.task[index + 1] || temp.task[index + 1].level <= item.level,
             })}
             style={{
               width: (item.endDate.diff(item.startDate, 'day') + 1) * (widthColumnDay / perRow) + 'px',
             }}
           >
             <div
-              className={classNames('text-center text-white text-xs h-4', {
-                'bg-gray-600': !!_temp.task[index + 1] && _temp.task[index + 1].level > item.level,
-                'bg-blue-600': !_temp.task[index + 1] || _temp.task[index + 1].level <= item.level,
+              className={classNames('text-center text-base-content text-xs h-4', {
+                'bg-base-300': !!temp.task[index + 1] && temp.task[index + 1].level > item.level,
+                'bg-primary': !temp.task[index + 1] || temp.task[index + 1].level <= item.level,
               })}
               style={{ width: item.percent + '%' }}
             ></div>
           </div>
-          {/*<div*/}
-          {/*  className={'absolute top-0 text-xs text-gray-400'}*/}
-          {/*  style={{*/}
-          {/*    left: 5 + (item.endDate.diff(item.startDate, 'day') + 1) * (widthColumnDay / perRow) + 'px',*/}
-          {/*  }}*/}
-          {/*>*/}
-          {/*  {item.percent}%*/}
-          {/*</div>*/}
         </div>
       );
     }
@@ -264,21 +256,17 @@ export const CGantt = ({
       .year(parseInt(year))
       .month(parseInt(month))
       .endOf('month')
-      .diff(_temp.date.obj[year][month][_temp.date.obj[year][month].length - 1], 'days') < perRow
-      ? dayjs()
-          .year(parseInt(year))
-          .month(parseInt(month))
-          .endOf('month')
-          .diff(_temp.date.obj[year][month][0], 'days') >
-        _temp.date.obj[year][month][0].daysInMonth() - (widthMonthYear / widthColumnDay) * perRow
-        ? _temp.date.obj[year][month][0].daysInMonth()
+      .diff(temp.date.obj[year][month][temp.date.obj[year][month].length - 1], 'days') < perRow
+      ? dayjs().year(parseInt(year)).month(parseInt(month)).endOf('month').diff(temp.date.obj[year][month][0], 'days') >
+        temp.date.obj[year][month][0].daysInMonth() - (widthMonthYear / widthColumnDay) * perRow
+        ? temp.date.obj[year][month][0].daysInMonth()
         : dayjs()
             .year(parseInt(year))
             .month(parseInt(month))
             .endOf('month')
-            .diff(_temp.date.obj[year][month][0], 'days') + 1
-      : _temp.date.obj[year][month][_temp.date.obj[year][month].length - 1].diff(
-          _temp.date.obj[year][month][0].startOf('month'),
+            .diff(temp.date.obj[year][month][0], 'days') + 1
+      : temp.date.obj[year][month][temp.date.obj[year][month].length - 1].diff(
+          temp.date.obj[year][month][0].startOf('month'),
           'days',
         ) + perRow) *
       (widthColumnDay / perRow) +
@@ -319,7 +307,7 @@ export const CGantt = ({
                       <NameColumn name={'Status'}></NameColumn>
                       <NameColumn name={'Priority'}></NameColumn>
                       <NameColumn name={'Planned'}></NameColumn>
-                      <NameColumn name={'Work Log'} isDrag={false}></NameColumn>
+                      <NameColumn name={'Work Log'}></NameColumn>
                     </tr>
                   </thead>
                 </table>
@@ -328,7 +316,7 @@ export const CGantt = ({
               <div className='overflow-scroll' data-scroll-x={'.left-scroll'} onScroll={handleScroll}>
                 <table className={'body min-w-[600px] border-b'}>
                   <tbody>
-                    {_temp.task.map(
+                    {temp.task.map(
                       (item, index) =>
                         !item.hidden && (
                           <tr
@@ -343,7 +331,7 @@ export const CGantt = ({
                                 className={'flex items-center gap-1'}
                                 style={{ paddingLeft: item.level * (widthColumnDay / perRow) + 'px' }}
                               >
-                                {!!_temp.task[index + 1] && _temp.task[index + 1].level > item.level && (
+                                {!!temp.task[index + 1] && temp.task[index + 1].level > item.level && (
                                   <TweenOne
                                     animation={{ rotate: 0, duration: 200 }} // @ts-ignore
                                     moment={!statusCollapse.current[index] ? null : 1}
@@ -397,19 +385,19 @@ export const CGantt = ({
               <div className={'right-scroll overflow-x-hidden'} style={{ paddingRight: getScrollBarWidth() + 'px' }}>
                 <table
                   className={'w-full min-w-[600px] border-b'}
-                  style={{ width: _temp.date.total * widthColumnDay + 'px' }}
+                  style={{ width: temp.date.total * widthColumnDay + 'px' }}
                 >
                   <thead>
                     <tr>
-                      {Object.keys(_temp.date.obj).map(year =>
-                        Object.keys(_temp.date.obj[year]).map((month, index) => (
+                      {Object.keys(temp.date.obj).map(year =>
+                        Object.keys(temp.date.obj[year]).map((month, index) => (
                           <th
                             key={index}
                             align={'left'}
                             className={'h-6 border-x border-t px-4 text-xs capitalize'}
                             style={{ width: widthGantt(year, month) }}
                           >
-                            {_temp.date.obj[year][month][0].format('MMMM')} {year}
+                            {temp.date.obj[year][month][0].format('MMMM')} {year}
                           </th>
                         )),
                       )}
@@ -418,13 +406,13 @@ export const CGantt = ({
                 </table>
                 <table
                   className={'w-full min-w-[600px] border-b'}
-                  style={{ width: _temp.date.total * widthColumnDay + 'px' }}
+                  style={{ width: temp.date.total * widthColumnDay + 'px' }}
                 >
                   <thead>
                     <tr>
-                      {Object.keys(_temp.date.obj).map(year =>
-                        Object.keys(_temp.date.obj[year]).map(month =>
-                          _temp.date.obj[year][month].map((day: Dayjs, index: number) => (
+                      {Object.keys(temp.date.obj).map(year =>
+                        Object.keys(temp.date.obj[year]).map(month =>
+                          temp.date.obj[year][month].map((day: Dayjs, index: number) => (
                             <th
                               key={index}
                               className={'h-6 border-x text-xs font-normal capitalize'}
@@ -442,17 +430,17 @@ export const CGantt = ({
               <div className='relative overflow-scroll' data-scroll-x={'.right-scroll'} onScroll={handleScroll}>
                 <div
                   className='event absolute left-0 top-0 z-10 flex h-full'
-                  style={{ width: _temp.date.total * widthColumnDay + 'px' }}
+                  style={{ width: temp.date.total * widthColumnDay + 'px' }}
                 >
                   {event.map((item, index) => {
                     if (item.endDate)
                       return (
                         <div
                           key={index}
-                          className={'absolute flex h-full items-center justify-center bg-gray-200 text-gray-400'}
+                          className={'absolute flex h-full items-center justify-center bg-base-300 text-base-content'}
                           style={{
                             width: (item.endDate.diff(item.startDate, 'day') + 1) * (widthColumnDay / perRow) + 'px',
-                            left: item.startDate.diff(_temp.dateStart, 'day') * (widthColumnDay / perRow) + 'px',
+                            left: item.startDate.diff(temp.dateStart, 'day') * (widthColumnDay / perRow) + 'px',
                           }}
                         >
                           <div
@@ -468,13 +456,13 @@ export const CGantt = ({
                         <div
                           key={index}
                           className={
-                            'absolute flex h-full items-center justify-center border-l border-dashed border-red-600'
+                            'absolute flex h-full items-center justify-center border-l border-dashed border-error'
                           }
                           style={{
-                            left: item.startDate.diff(_temp.dateStart, 'day') * (widthColumnDay / perRow) + 'px',
+                            left: item.startDate.diff(temp.dateStart, 'day') * (widthColumnDay / perRow) + 'px',
                           }}
                         >
-                          <div className='rounded-r-xl bg-red-500 px-2 py-1 text-white'>{item.name}</div>
+                          <div className='rounded-r-xl bg-error px-2 py-1 text-base-content'>{item.name}</div>
                         </div>
                       );
                   })}
@@ -482,24 +470,24 @@ export const CGantt = ({
                 <svg
                   className={'absolute left-0 top-0 z-10'}
                   style={{
-                    width: _temp.date.total * widthColumnDay + 'px',
-                    height: _temp.task.filter(item => !item.hidden).length * 24 + 'px',
+                    width: temp.date.total * widthColumnDay + 'px',
+                    height: temp.task.filter(item => !item.hidden).length * 24 + 'px',
                   }}
                 >
-                  {_temp.task.filter(item => !item.hidden).map((item, i) => renderSvg(item, i))}
+                  {temp.task.filter(item => !item.hidden).map((item, i) => renderSvg(item, i))}
                 </svg>
                 <div
                   className='task absolute left-0 top-0 z-10 flex'
-                  style={{ width: _temp.date.total * widthColumnDay + 'px' }}
+                  style={{ width: temp.date.total * widthColumnDay + 'px' }}
                 >
-                  {_temp.task.map((item, index) => renderProgress(item, index))}
+                  {temp.task.map((item, index) => renderProgress(item, index))}
                 </div>
                 <table
                   className={'-z-10 min-w-[600px] border-b'}
-                  style={{ width: _temp.date.total * widthColumnDay + 'px' }}
+                  style={{ width: temp.date.total * widthColumnDay + 'px' }}
                 >
                   <tbody>
-                    {_temp.task.map((item, index) => (
+                    {temp.task.map((item, index) => (
                       <tr
                         key={index}
                         onMouseOver={handleHover}
@@ -507,9 +495,9 @@ export const CGantt = ({
                         data-index={index}
                         data-level={item.level}
                       >
-                        {Object.keys(_temp.date.obj).map(year =>
-                          Object.keys(_temp.date.obj[year]).map(month =>
-                            _temp.date.obj[year][month].map((_: Dayjs, i: number) => (
+                        {Object.keys(temp.date.obj).map(year =>
+                          Object.keys(temp.date.obj[year]).map(month =>
+                            temp.date.obj[year][month].map((_: Dayjs, i: number) => (
                               <td key={i} className={'relative h-6 border-x py-0 font-normal capitalize'} />
                             )),
                           ),
@@ -545,13 +533,13 @@ export const CGantt = ({
 const DraggableSide = () => {
   const { attributes, listeners, setNodeRef } = useDraggable({ id: 'side' });
   return (
-    <div className={'h-auto w-1 cursor-ew-resize hover:bg-red-500'} ref={setNodeRef} {...listeners} {...attributes} />
+    <div className={'h-auto w-1 cursor-ew-resize hover:bg-error'} ref={setNodeRef} {...listeners} {...attributes} />
   );
 };
 const DraggableVertical = () => {
   const { attributes, listeners, setNodeRef } = useDraggable({ id: 'vertical' });
   return (
-    <div className={'h-1 w-full cursor-ns-resize hover:bg-red-500'} ref={setNodeRef} {...listeners} {...attributes} />
+    <div className={'h-1 w-full cursor-ns-resize hover:bg-error'} ref={setNodeRef} {...listeners} {...attributes} />
   );
 };
 type TTask = {

@@ -1,7 +1,7 @@
 import viVN from 'antd/lib/locale/vi_VN';
 import enUS from 'antd/lib/locale/en_US';
 
-import { ICommonEntity } from '@/interfaces';
+import { ICommonEntity } from '@/types';
 import { ICode } from '@/pages/base/code/service';
 import { IUserRole } from '@/pages/base/user/service/role';
 

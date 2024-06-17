@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import dayjs, { type Dayjs } from 'dayjs';
 import type { TFunction } from 'i18next';
 
-import type { ITableGet, ITableItemFilterList } from '@/interfaces';
+import type { ITableGet, ITableItemFilterList } from '@/types';
 import { cleanObjectKeyNull } from '@/utils';
 
 import { CIMask } from '../form/input';

@@ -1,11 +1,10 @@
 import React, { forwardRef, type Ref, useImperativeHandle } from 'react';
-import { Drawer, Form as FormAnt } from 'antd';
+import { Drawer, Form } from 'antd';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 
-import type { IForm, IFormModalRefObject } from '@/interfaces';
+import type { IForm, IFormModalRefObject } from '@/types';
 import { convertFormValue } from '@/utils';
-
 import { CForm } from '../form';
 import { CButton } from '../button';
 
@@ -27,7 +26,7 @@ export const CDrawerForm = forwardRef(
   ) => {
     useImperativeHandle(ref, () => ({ form }));
     const { t } = useTranslation('locale', { keyPrefix: 'library' });
-    const [form] = FormAnt.useForm();
+    const [form] = Form.useForm();
 
     return (
       <Drawer

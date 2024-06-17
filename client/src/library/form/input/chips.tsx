@@ -16,9 +16,8 @@ import {
   useSortable,
 } from '@dnd-kit/sortable';
 
-import type { ITableItemFilterList } from '@/interfaces';
+import type { ITableItemFilterList } from '@/types';
 import { reorderArray } from '@/utils';
-
 import { CIMask, CISelect } from './index';
 import { CButton } from '../../button';
 import { CSvgIcon } from '../../svg-icon';

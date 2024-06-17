@@ -2,13 +2,13 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
 import { EFormModeSelect, EFormType } from '@/enums';
-import { IForm } from '@/interfaces';
+import { IForm } from '@/types';
 dayjs.extend(utc);
 
 export const convertFormValue = (columns: IForm[], values: { [selector: string]: any }, exportData = true) => {
   columns
-    .filter((item) => !!item && !!item.formItem)
-    .map((item) => {
+    .filter(item => !!item && !!item.formItem)
+    .map(item => {
       if (item.formItem && item.formItem.convert) {
         values[item.name] = item.formItem.convert(values[item.name]);
       } else {
@@ -64,8 +64,8 @@ export const convertFormValue = (columns: IForm[], values: { [selector: string]:
                     : subItem.value,
                 };
                 item!
-                  .formItem!.column!.filter((col) => !!col.formItem)
-                  .forEach((col) => {
+                  .formItem!.column!.filter(col => !!col.formItem)
+                  .forEach(col => {
                     switch (col!.formItem!.type) {
                       case 'upload':
                         result[col.name] =

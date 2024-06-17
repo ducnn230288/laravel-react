@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import type { SorterResult } from 'antd/lib/table/interface';
 import type { TFunction } from 'i18next';
 
-import type { IPaginationQuery } from '@/interfaces';
+import type { IPaginationQuery } from '@/types';
 import { uuidv4 } from '@/utils';
 import { CIMask } from '../form/input';
 import { CSvgIcon } from '../svg-icon';

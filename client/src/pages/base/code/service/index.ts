@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { useAppDispatch, useTypedSelector, Action, Slice, State, IUser } from '@/services';
-import { ICommonEntity, IPaginationQuery } from '@/interfaces';
+import { ICommonEntity, IPaginationQuery } from '@/types';
 import { ICodeType } from './type';
 
 const name = 'Code';
@@ -10,7 +10,7 @@ export const codeSlice = createSlice(new Slice<ICode>(action));
 export const SCode = () => {
   const dispatch = useAppDispatch();
   return {
-    ...useTypedSelector((state) => state[action.name] as State<ICode>),
+    ...useTypedSelector(state => state[action.name] as State<ICode>),
     set: (values: State<ICode>) => dispatch(action.set(values)),
     get: (params: IPaginationQuery<ICode>) => dispatch(action.get(params)),
     getById: ({

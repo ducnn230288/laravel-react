@@ -6,7 +6,7 @@ import { Popconfirm } from 'antd';
 
 import { CSvgIcon } from '@/library/svg-icon';
 import { EFormRuleType, EFormType, ETableAlign, ETableFilterType } from '@/enums';
-import type { IDataTable, IForm } from '@/interfaces';
+import type { IDataTable, IForm } from '@/types';
 import { CAvatar } from '@/library/avatar';
 import { CTooltip } from '@/library/tooltip';
 import { SGlobal, SPost } from '@/services';

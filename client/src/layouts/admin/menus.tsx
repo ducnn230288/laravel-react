@@ -1,18 +1,9 @@
 import React from 'react';
-import type { URLSearchParamsInit } from 'react-router-dom/dist/dom';
 import { useTranslation } from 'react-i18next';
 
 import { CSvgIcon } from '@/library/svg-icon';
 import { keyRole, language, routerLinks } from '@/utils';
-
-interface IMenu {
-  key?: string;
-  label?: string;
-  icon?: React.JSX.Element;
-  permission?: keyRole;
-  queryparams?: URLSearchParamsInit;
-  children?: IMenu[];
-}
+import { IMenu } from '@/types';
 
 const Layout = ({ lang = language, permissions = [] }: { lang?: string; permissions?: string[] }): IMenu[] => {
   const { t } = useTranslation('locale', { keyPrefix: 'menu' });

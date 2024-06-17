@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { useAppDispatch, useTypedSelector, Action, Slice, State } from '@/services';
-import { ICommonEntity, IPaginationQuery } from '@/interfaces';
+import { ICommonEntity, IPaginationQuery } from '@/types';
 import { IPost } from '../index';
 
 const name = 'PostType';
@@ -10,7 +10,7 @@ export const postTypeSlice = createSlice(new Slice<IPostType>(action, { keepUnus
 export const SPostType = () => {
   const dispatch = useAppDispatch();
   return {
-    ...useTypedSelector((state) => state[action.name] as State<IPostType>),
+    ...useTypedSelector(state => state[action.name] as State<IPostType>),
     set: (values: State<IPostType>) => dispatch(action.set(values)),
     get: (params: IPaginationQueryPostType) => dispatch(action.get(params)),
     getById: ({

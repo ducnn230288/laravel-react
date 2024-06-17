@@ -1,4 +1,4 @@
-import React, { forwardRef, useImperativeHandle, type PropsWithChildren, type Ref, useEffect } from 'react';
+import React, { forwardRef, useImperativeHandle, type Ref, useEffect, ReactNode } from 'react';
 import { Modal as AntModal, Spin } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
@@ -20,20 +20,7 @@ export const CModal = forwardRef(
       footerCustom,
       children,
       name = 'create',
-    }: PropsWithChildren<{
-      facade: any;
-      keyState?: string;
-      title?: (data: any) => string;
-      widthModal?: number;
-      onOk?: () => any;
-      onCancel?: () => void;
-      firstChange?: boolean;
-      textSubmit?: string;
-      textCancel?: string;
-      className?: string;
-      footerCustom?: (handleOk: () => Promise<void>, handleCancel: () => void) => JSX.Element[] | JSX.Element;
-      name?: string;
-    }>,
+    }: Type,
     ref: Ref<{ handleCancel: () => void }>,
   ) => {
     useImperativeHandle(ref, () => ({ handleCancel }));
@@ -79,8 +66,9 @@ export const CModal = forwardRef(
         onCancel={handleCancel}
         wrapClassName={className}
         footer={
-          !!onOk &&
-          ((footerCustom && footerCustom(handleOk, handleCancel)) || (
+          footerCustom ? (
+            footerCustom(handleOk, handleCancel)
+          ) : (
             <div className='flex justify-end gap-2'>
               <CButton
                 text={typeof textCancel === 'string' ? t(textCancel) : textCancel}
@@ -94,7 +82,7 @@ export const CModal = forwardRef(
                 onClick={handleOk}
               />
             </div>
-          ))
+          )
         }
       >
         <Spin spinning={isLoading}>{children}</Spin>
@@ -103,3 +91,18 @@ export const CModal = forwardRef(
   },
 );
 CModal.displayName = 'CModal';
+interface Type {
+  facade: any;
+  keyState?: string;
+  title?: (data: any) => string;
+  widthModal?: number;
+  onOk?: () => any;
+  onCancel?: () => void;
+  firstChange?: boolean;
+  textSubmit?: string;
+  textCancel?: string;
+  className?: string;
+  footerCustom?: (handleOk: () => Promise<void>, handleCancel: () => void) => JSX.Element[] | JSX.Element;
+  name?: string;
+  children?: ReactNode;
+}

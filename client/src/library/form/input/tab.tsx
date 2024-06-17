@@ -1,10 +1,9 @@
-// @ts-nocheck
 import React from 'react';
-import { Form, Tabs } from 'antd';
+import { Form, FormInstance, Tabs } from 'antd';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 
-import type { IForm } from '@/interfaces';
+import type { IForm } from '@/types';
 
 const Component = ({
   name,
@@ -13,7 +12,7 @@ const Component = ({
   list,
   form,
 }: {
-  name?: string;
+  name: string;
   column?: IForm[];
   generateForm: any;
   list: any;
@@ -23,7 +22,7 @@ const Component = ({
 
   return (
     <Form.List name={name}>
-      {fields => (
+      {(fields: any) => (
         <Tabs
           destroyInactiveTabPane={true}
           items={fields.map(({ name: n }, i) => ({
@@ -37,14 +36,10 @@ const Component = ({
                       col?.formItem?.classItem,
                       'col-span-12' +
                         (' sm:col-span-' +
-                          (col?.formItem?.colTablet
-                            ? col?.formItem?.colTablet
-                            : col?.formItem?.col
-                              ? col?.formItem?.col
-                              : 12)) +
+                          (col?.formItem?.colTablet ? col?.formItem?.colTablet : col?.formItem?.col ?? 12)) +
                         (' lg:col-span-' + (col?.formItem?.col ? col?.formItem?.col : 12)),
                     )}
-                    key={index}
+                    key={'tabs' + index}
                   >
                     {generateForm({ item: col, index: index + '_' + i, name: [n, col.name], t, form })}
                   </div>

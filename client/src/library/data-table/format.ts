@@ -1,9 +1,10 @@
 import { TFunction } from 'i18next';
+import { FilterValue } from 'antd/lib/table/interface';
 
 import { ETableFilterType } from '@/enums';
-import { IDataTable, IPaginationQuery } from '@/interfaces';
+import { IDataTable, IPaginationQuery } from '@/types';
+
 import { getColumnSearchCheckbox, getColumnSearchDate, getColumnSearchInput, getColumnSearchRadio } from './filter';
-import { FilterValue } from 'antd/lib/table/interface';
 
 export const formatColumns = ({
   columns,
@@ -23,8 +24,8 @@ export const formatColumns = ({
   facade: any;
 }) => {
   return columns
-    .filter((col) => !!col && !!col.tableItem)
-    .map((col) => {
+    .filter(col => !!col && !!col.tableItem)
+    .map(col => {
       let item = col.tableItem;
       if (item?.filter) {
         const like = params?.like as any;
@@ -74,7 +75,7 @@ export const formatColumns = ({
         item.defaultSortOrder = sort[col.name] === 'asc' ? 'ascend' : 'descend';
       }
       if (item && !item?.onCell) {
-        item.onCell = (record) => ({
+        item.onCell = record => ({
           className: record?.id && record?.id === facade?.data?.id ? '!bg-teal-100' : '',
         });
       }

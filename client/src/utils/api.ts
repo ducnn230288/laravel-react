@@ -2,7 +2,7 @@ import queryString from 'query-string';
 
 import { message } from '@/index';
 import { keyRefreshToken, keyToken, linkApi, routerLinks } from '@/utils';
-import { IResponses } from '@/interfaces';
+import { IResponses } from '@/types';
 
 export const API = {
   init: () =>

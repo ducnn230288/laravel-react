@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 
 import { EFormType } from '@/enums';
-import type { IForm } from '@/interfaces';
+import type { IForm } from '@/types';
 import { SGlobal } from '@/services';
 import { convertFormValue } from '@/utils';
 

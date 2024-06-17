@@ -100,7 +100,7 @@ export interface IForm {
 export interface IFormItem {
   type?: EFormType;
   col?: number;
-  condition?: (props:{value: string, form: FormInstance, index: number, values: any}) => boolean;
+  condition?: (props: { value: string; form: FormInstance; index: number; values: any }) => boolean;
   list?: any[];
   rules?: IFormItemRule[];
   mode?: EFormModeSelect;
@@ -161,4 +161,16 @@ export interface IFormApi {
 export interface IFormModalRefObject {
   handleEdit?: (item?: { id?: string }, isGet?: boolean) => Promise<void>;
   form?: FormInstance;
+}
+
+import { keyRole } from '@/utils';
+import { URLSearchParamsInit } from 'react-router-dom';
+
+export interface IMenu {
+  key?: string;
+  label?: string;
+  icon?: React.JSX.Element;
+  permission?: keyRole;
+  queryparams?: URLSearchParamsInit;
+  children?: IMenu[];
 }

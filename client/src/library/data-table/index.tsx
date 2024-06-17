@@ -10,10 +10,10 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 
-import type { IDataTable, IPaginationQuery, ITableRefObject } from '@/interfaces';
+import type { IDataTable, IPaginationQuery, ITableRefObject } from '@/types';
 import { cleanObjectKeyNull, getSizePageByHeight, uuidv4 } from '@/utils';
-
 import CPagination from '../pagination';
+
 import { CSearch } from './search';
 import { CWrapper } from './wrapper';
 import { formatColumns, formatFilter } from './format';

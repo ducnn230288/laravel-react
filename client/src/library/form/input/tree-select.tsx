@@ -6,7 +6,7 @@ import { CButton } from '../../button';
 import { CSvgIcon } from '../../svg-icon';
 
 const Component = ({ formItem, placeholder, onChange, value, form, disabled, showSearch = true }: Type) => {
-  const [_temp, set_temp] = useState({ list: formItem.list || [], checkAll: false });
+  const [temp, setTemp] = useState({ list: formItem.list || [], checkAll: false });
   const allValue = useRef<any>([]);
 
   const loadData = useCallback(
@@ -22,12 +22,12 @@ const Component = ({ formItem, placeholder, onChange, value, form, disabled, sho
             const list = data.data.map(formItem.api.format);
             if (formItem.mode === 'multiple' && value?.length) {
               const array = formItem.api.convertData ? formItem.api.convertData(list) : list;
-              set_temp({ list, checkAll: array.length === value.length });
-            } else set_temp(pre => ({ ...pre, list }));
+              setTemp({ list, checkAll: array.length === value.length });
+            } else setTemp(pre => ({ ...pre, list }));
           }
         }
       } else if (formItem.renderList) {
-        set_temp(pre => ({ ...pre, list: formItem.renderList(form.getFieldValue) }));
+        setTemp(pre => ({ ...pre, list: formItem.renderList(form.getFieldValue) }));
       }
     },
     [form, formItem, value],
@@ -39,11 +39,11 @@ const Component = ({ formItem, placeholder, onChange, value, form, disabled, sho
       value.length > 0 &&
       !value?.filter((item: any) => typeof item === 'object')?.length
     ) {
-      onChange && onChange(value.map((item: any) => ({ value: item, label: item })));
+      onChange?.(value.map((item: any) => ({ value: item, label: item })));
     }
-    if ((_temp.list.length === 0 && formItem.api) || formItem.renderList) await loadData('');
-    set_temp(pre => ({ ...pre, checkAll: value?.length > 0 && value?.length === allValue.current.length }));
-  }, [formItem, loadData, _temp.list, allValue, value, onChange]);
+    if ((temp.list.length === 0 && formItem.api) || formItem.renderList) await loadData('');
+    setTemp(pre => ({ ...pre, checkAll: value?.length > 0 && value?.length === allValue.current.length }));
+  }, [formItem, loadData, temp.list, allValue, value, onChange]);
 
   useEffect(() => {
     initFunction();
@@ -51,8 +51,8 @@ const Component = ({ formItem, placeholder, onChange, value, form, disabled, sho
 
   const loadDataTree = async (treeNode: any) => {
     if (formItem.api.loadData) {
-      const data = await formItem.api.loadData(treeNode, _temp.list);
-      set_temp(pre => ({ ...pre, list: data }));
+      const data = await formItem.api.loadData(treeNode, temp.list);
+      setTemp(pre => ({ ...pre, list: data }));
     }
   };
 
@@ -65,8 +65,8 @@ const Component = ({ formItem, placeholder, onChange, value, form, disabled, sho
   }, []);
 
   useEffect(() => {
-    _temp.list.map(handleGetAllValue);
-  }, [_temp.list, handleGetAllValue]);
+    temp.list.map(handleGetAllValue);
+  }, [temp.list, handleGetAllValue]);
 
   const handleGetData = (array: any, valueTag: any) => {
     return array.filter((item: any) => handleFindId(item, valueTag));
@@ -112,35 +112,29 @@ const Component = ({ formItem, placeholder, onChange, value, form, disabled, sho
       onChange={(data: any) => {
         if (formItem.api?.loadData) {
           if (formItem.mode !== 'multiple') {
-            const _data = _temp.list.filter((_item: any) => _item.id === data.value)[0];
-            onChange && onChange({ ..._data, label: _data.fullTitle });
+            const _data = temp.list.filter((_item: any) => _item.id === data.value)[0];
+            onChange?.({ ..._data, label: _data.fullTitle });
           } else {
-            onChange &&
-              onChange(
-                data.map((__item: any) => {
-                  const _data = _temp.list.filter((_item: any) => _item.id === __item.value)[0];
-                  if (_data) {
-                    return { ..._data, label: _data.fullTitle };
-                  }
-                  return __item;
-                }),
-              );
+            onChange?.(
+              data.map((__item: any) => {
+                const _data = temp.list.filter((_item: any) => _item.id === __item.value)[0];
+                if (_data) {
+                  return { ..._data, label: _data.fullTitle };
+                }
+                return __item;
+              }),
+            );
           }
         } else {
-          onChange && onChange(data);
+          onChange?.(data);
         }
       }}
       dropdownRender={originNode => (
         <Fragment>
           {formItem.mode === 'multiple' && (
-            <Fragment>
-              <Checkbox
-                checked={_temp.checkAll}
-                onChange={() => onChange && onChange(!_temp.checkAll ? allValue.current : [])}
-              >
-                Select all
-              </Checkbox>
-            </Fragment>
+            <Checkbox checked={temp.checkAll} onChange={() => onChange?.(!temp.checkAll ? allValue.current : [])}>
+              Select all
+            </Checkbox>
           )}
           {originNode}
         </Fragment>
@@ -152,9 +146,9 @@ const Component = ({ formItem, placeholder, onChange, value, form, disabled, sho
       placeholder={placeholder}
       treeCheckable={formItem.mode === 'multiple'}
       loadData={loadDataTree}
-      treeData={_temp.list}
+      treeData={temp.list}
       tagRender={props => {
-        const item = handleGetData(_temp.list, props.value);
+        const item = handleGetData(temp.list, props.value);
         const arrayValue = value.map((item: any) => item.value);
         if (
           arrayValue.indexOf(props.value) > -1 &&
@@ -167,7 +161,7 @@ const Component = ({ formItem, placeholder, onChange, value, form, disabled, sho
           if (!!arraySlice.length && arrayValue.indexOf(item[0]?.value) === -1) {
             arraySlice.map((valueSlide: any) => {
               if (checkShow) {
-                const itemSlice = handleGetData(_temp.list, valueSlide);
+                const itemSlice = handleGetData(temp.list, valueSlide);
                 if (!!itemSlice.length && item[0].value === itemSlice[0].value) {
                   checkShow = false;
                 }
@@ -181,7 +175,7 @@ const Component = ({ formItem, placeholder, onChange, value, form, disabled, sho
                 <CButton
                   icon={<CSvgIcon name='times' size={20} className='fill-error' />}
                   className='absolute -right-2 -top-1 z-10 rounded-full !bg-error/20 leading-none !text-error'
-                  onClick={() => onChange && onChange(clearTag(item[0], value))}
+                  onClick={() => onChange?.(clearTag(item[0], value))}
                   disabled={disabled}
                 />
                 {item[0].title} ({totalChildren(item[0], 0, arrayValue)})

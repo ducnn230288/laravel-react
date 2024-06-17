@@ -1,9 +1,8 @@
 import React, { useRef, useState } from 'react';
 import { Dropdown } from 'antd';
 
-import type { ITableGet, ITableRefObject } from '@/interfaces';
+import type { ITableGet, ITableRefObject } from '@/types';
 import { arrayUnique } from '@/utils';
-
 import Mask from './mask';
 import { CDataTable } from '../../data-table';
 

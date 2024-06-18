@@ -1,0 +1,44 @@
+[data-theme='light'] {
+  --p: from #481fff l a b;
+  --pc: from #d4dbff l a b;
+  --s: from #ff41c7 l a b;
+  --sc: from #fff9fc l a b;
+  --a: from #00cfbd l a b;
+  --ac: from #00100d l a b;
+  --n: from #2b3440 l a b;
+  --nc: from #d7dde4 l a b;
+  --b1: from #ffffff l a b;
+  --b2: from #e5e6e6 l a b;
+  --b3: from #e6e0e1 l a b;
+  --bc: from #1f2937 l a b;
+  --in: from #00b3f0 l a b;
+  --inc: from #000000 l a b;
+  --su: from #00ca92 l a b;
+  --suc: from #000000 l a b;
+  --wa: from #ffc22d l a b;
+  --wac: from #000000 l a b;
+  --er: from #ff6f70 l a b;
+  --erc: from #000000 l a b;
+}
+[data-theme='dark'] {
+  --p: from #7582ff l a b;
+  --pc: from #050617 l a b;
+  --s: from #ff71cf l a b;
+  --sc: from #190211 l a b;
+  --a: from #00c7b5 l a b;
+  --ac: from #000e0c l a b;
+  --n: from #2a323c l a b;
+  --nc: from #a6adbb l a b;
+  --b1: from #1d232a l a b;
+  --b2: from #191e24 l a b;
+  --b3: from #15191e l a b;
+  --bc: from #a6adbb l a b;
+  --in: from #00b3f0 l a b;
+  --inc: from #000000 l a b;
+  --su: from #00ca92 l a b;
+  --suc: from #000000 l a b;
+  --wa: from #ffc22d l a b;
+  --wac: from #000000 l a b;
+  --er: from #ff6f70 l a b;
+  --erc: from #000000 l a b;
+}

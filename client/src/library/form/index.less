@@ -1,5 +1,5 @@
 .ant-input {
-  @apply flex items-center border rounded-btn text-base-content;
+  @apply flex items-center border rounded-lg text-base-content;
   &:focus {
     @apply shadow shadow-primary/20 outline-0 bg-base-100;
   }
@@ -9,10 +9,10 @@
       @apply focus:shadow-none text-base-300;
     }
     &.before {
-      @apply rounded-r-btn pl-10;
+      @apply rounded-r-lg pl-10;
     }
     &.after {
-      @apply rounded-l-btn pr-10;
+      @apply rounded-l-lg pr-10;
     }
   }
   textarea& {
@@ -26,7 +26,7 @@
   }
   div:has(> &) {
     span {
-      @apply text-base-content bg-base-100 size-10 flex items-center justify-center rounded-r-btn absolute top-0 border border-l-0 border-base-content/20;
+      @apply text-base-content bg-base-100 size-10 flex items-center justify-center rounded-r-lg absolute top-0 border border-l-0 border-base-content/20;
 
       &.before {
         @apply left-0;
@@ -65,7 +65,7 @@
     @apply text-base-content;
   }
   &:not(.ant-select-customize-input) .ant-select-selector {
-    @apply rounded-btn px-4 border-base-content/20 bg-base-100 text-base-content;
+    @apply rounded-lg px-4 border-base-content/20 bg-base-100 text-base-content;
   }
   &-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector {
     @apply border-base-content/20;
@@ -182,7 +182,7 @@
 
 .ant-picker {
   &.ant-picker-outlined {
-    @apply rounded-btn border px-4 border-solid border-base-content/20 h-10 items-center w-full bg-base-100 text-base-content;
+    @apply rounded-lg border px-4 border-solid border-base-content/20 h-10 items-center w-full bg-base-100 text-base-content;
 
     &:hover,
     .ant-picker-input > input,
@@ -250,7 +250,7 @@
 .ant-radio {
   &-inner,
   &-checked:after {
-    @apply size-4 rounded-btn border-2;
+    @apply size-4 rounded-lg border-2;
   }
 
   &-wrapper {

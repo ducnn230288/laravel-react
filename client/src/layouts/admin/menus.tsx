@@ -16,7 +16,7 @@ const Layout = ({ lang = language, permissions = [] }: { lang?: string; permissi
     },
     {
       key: `/${lang}${routerLinks('User')}`,
-      icon: <CSvgIcon name='user' size={24} />,
+      icon: <CSvgIcon name='user-circle' size={24} />,
       label: t('User'),
       permission: keyRole.P_USER_INDEX,
       queryparams: { roleCode: 'SUPER-ADMIN' },

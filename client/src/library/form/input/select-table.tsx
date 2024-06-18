@@ -1,12 +1,12 @@
 import React, { useRef, useState } from 'react';
-import { Dropdown } from 'antd';
+import { Dropdown, FormInstance } from 'antd';
 
 import type { ITableGet, ITableRefObject } from '@/types';
-import { arrayUnique } from '@/utils';
+import { arrayUnique, cleanObjectKeyNull } from '@/utils';
 import Mask from './mask';
 import { CDataTable } from '../../data-table';
 
-const Component = ({ mode, onChange, placeholder, disabled, get, value }: Type) => {
+const Component = ({ form, mode, onChange, placeholder, disabled, get, value }: Type) => {
   const onBlur = () => {
     setTimeout(() => setTemp(previousState => ({ ...previousState, open: false })), 200);
   };
@@ -28,7 +28,7 @@ const Component = ({ mode, onChange, placeholder, disabled, get, value }: Type) 
     .filter((item: any) => !value || item.value === value);
 
   const renderDropdown = () => (
-    <div className={'overflow-hidden bg-base-100 rounded-btn drop-shadow-lg'}>
+    <div className={'overflow-hidden bg-base-100 rounded-lg drop-shadow-lg'}>
       <CDataTable
         formatData={data => arrayUnique([...temp.data, ...data], 'id')}
         ref={table}
@@ -86,7 +86,13 @@ const Component = ({ mode, onChange, placeholder, disabled, get, value }: Type) 
           placeholder={placeholder}
           onBlur={onBlur}
           onFocus={onFocus}
-          onChange={e => table.current?.onChange({ fullTextSearch: e.target.value, page: 1, perPage: 10 })}
+          onChange={e =>
+            table.current?.onChange(
+              cleanObjectKeyNull(
+                get?.params ? get.params(e.target.value, form?.getFieldValue) : { fullTextSearch: e.target.value },
+              ),
+            )
+          }
           addonAfter={renderIcon}
         />
       </div>
@@ -94,6 +100,7 @@ const Component = ({ mode, onChange, placeholder, disabled, get, value }: Type) 
   );
 };
 interface Type {
+  form?: FormInstance;
   mode?: 'multiple' | 'tags';
   onChange: (e: any) => any;
   value?: any;

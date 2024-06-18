@@ -19,9 +19,8 @@ export const CButton = ({
       disabled={disabled}
       title={title ?? text ?? ''}
       className={classNames('btn', className, {
-        'btn-md': !isTiny,
-        'btn-xs': isTiny,
-        'btn-primary': !className,
+        'h-10 px-3': !isTiny,
+        'h-6 px-2': isTiny,
       })}
       {...props}
     >

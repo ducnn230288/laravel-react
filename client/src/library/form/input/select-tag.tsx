@@ -18,7 +18,7 @@ const Component = ({ tag, onChange, form, value, disabled, maxTagCount, placehol
         setOptions(
           data?.data?.map((item: any, index: number) => ({
             label: tag.avatar ? (
-              <CAvatar key={index} size={5} src={item[tag.avatar]} text={item[tag.label]} />
+              <CAvatar key={'avatar' + index} size={5} src={item[tag.avatar]} text={item[tag.label]} />
             ) : (
               item[tag.label]
             ),

@@ -51,10 +51,10 @@
         &:nth-of-type(odd) > td {
           @apply border-b bg-base-200/50;
           &:first-child {
-            @apply rounded-bl-btn rounded-tl-btn;
+            @apply rounded-bl-lg rounded-tl-lg;
           }
           &:last-child {
-            @apply rounded-br-btn rounded-tr-btn;
+            @apply rounded-br-lg rounded-tr-lg;
           }
         }
         > .ant-table-cell-row-hover {
@@ -63,17 +63,17 @@
         > td {
           @apply border-none bg-base-100;
           &:first-child {
-            @apply rounded-bl-btn rounded-tl-btn;
+            @apply rounded-bl-lg rounded-tl-lg;
           }
           &:last-child {
-            @apply rounded-br-btn rounded-tr-btn;
+            @apply rounded-br-lg rounded-tr-lg;
           }
         }
       }
     }
   }
   &-filter-dropdown {
-    @apply !bg-base-100 !rounded-btn;
+    @apply !bg-base-100 !rounded-lg;
 
     .ant-checkbox-group {
       @apply inline-block;

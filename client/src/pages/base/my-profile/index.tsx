@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router';
 import { Form, type FormInstance, Tabs } from 'antd';
 import { useSearchParams } from 'react-router-dom';
 
-import { EFormRuleType, EFormType, ETableFilterType } from '@/enums';
+import { EFormRuleType, EFormType } from '@/enums';
 import { CBreadcrumbs } from '@/library/breadcrumbs';
 import { SCode, EStatusGlobal, SGlobal } from '@/services';
 import { lang, routerLinks } from '@/utils';
@@ -166,9 +166,10 @@ const FormProfile = ({ form }: { form: FormInstance }) => {
             rules: [{ type: EFormRuleType.required }],
             get: {
               facade: SCode,
-              params: (fullTextSearch: string) => ({
+              params: (fullTextSearch: string, value) => ({
                 fullTextSearch,
                 typeCode: 'position',
+                extend: [`typeCode,${value('positionCode')}`],
               }),
               format: item => ({
                 label: item?.name,
@@ -181,17 +182,12 @@ const FormProfile = ({ form }: { form: FormInstance }) => {
                   name: 'code',
                   tableItem: {
                     width: 100,
-                    filter: { type: ETableFilterType.search },
-                    sorter: true,
                   },
                 },
                 {
                   title: t('Name Code'),
                   name: 'name',
-                  tableItem: {
-                    filter: { type: ETableFilterType.search },
-                    sorter: true,
-                  },
+                  tableItem: {},
                 },
               ],
             },

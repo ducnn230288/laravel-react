@@ -265,6 +265,7 @@ export const generateInput = ({
       case EFormType.selectTable:
         return (
           <CISelectTable
+            form={form}
             onChange={(value: any) => formItem.onChange?.(value, form)}
             placeholder={t(formItem.placeholder ?? 'Choose', { title: item.title.toLowerCase() })}
             disabled={formItem.disabled?.(values, form)}

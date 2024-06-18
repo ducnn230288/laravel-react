@@ -142,9 +142,9 @@ const CHeader = () => {
                 label: (
                   <button onClick={() => sGlobal.setLanguage(sGlobal.language === 'vn' ? 'en' : 'vn')}>
                     {sGlobal.language === 'en' ? (
-                      <CSvgIcon name='vn' size={20} className='rounded-btn' />
+                      <CSvgIcon name='vn' size={20} className='rounded-lg' />
                     ) : (
-                      <CSvgIcon name='us' size={20} className='rounded-btn' />
+                      <CSvgIcon name='us' size={20} className='rounded-lg' />
                     )}
                     {t(sGlobal.language === 'vn' ? 'en' : 'vn')}
                   </button>
@@ -155,14 +155,14 @@ const CHeader = () => {
         >
           <button>
             {sGlobal.language === 'en' ? (
-              <CSvgIcon name='en' size={24} className='rounded-btn' />
+              <CSvgIcon name='en' size={24} className='rounded-lg' />
             ) : (
-              <CSvgIcon name='vn' size={24} className='rounded-btn' />
+              <CSvgIcon name='vn' size={24} className='rounded-lg' />
             )}
           </button>
         </Dropdown>
         <button onClick={changeTheme}>
-          <CSvgIcon name='out' size={24} />
+          <CSvgIcon name='day-night' size={24} />
         </button>
         <Dropdown trigger={['click']} menu={{ items: listDropdown }} placement='bottomRight'>
           <div className='flex cursor-pointer gap-1.5'>

@@ -42,6 +42,7 @@ abstract class Controller
     $this->filterByQueryStringContains($for);
     $this->filterByQueryArrayContains($for);
     $this->filterByQueryBetween($for);
+    $this->extendByQueryString($for);
     $this->sortByQuery($for);
     $this->loadRelationships($for, $relations);
     return $for;
@@ -86,7 +87,7 @@ abstract class Controller
 
   protected function filterByQueryString(Model|QueryBuilder|EloquentBuilder $for) : Model|QueryBuilder|EloquentBuilder
   {
-    $filters = ['select', 'like', 'in', 'between', 'sort', 'include','page','perPage','fullTextSearch'];
+    $filters = ['select', 'like', 'in', 'between', 'sort', 'include','page','perPage','fullTextSearch', 'extend'];
     $queries = \request()->query();
     if ($queries) {
       $array = [];
@@ -119,6 +120,26 @@ abstract class Controller
           });
         } else {
           $for->where(Str::snake($like[0]), 'like', "%$like[1]%");
+        }
+      }
+    }
+    return $for;
+  }
+
+  protected function extendByQueryString(Model|QueryBuilder|EloquentBuilder $for) : Model|QueryBuilder|EloquentBuilder
+  {
+    $extends = \request()->query('extend');
+    if ($extends) {
+      foreach ($extends as $extend) {
+        $extend = array_map('trim', explode(',', $extend));
+        $keys = array_map('trim', explode('.', $extend[0]));
+        if (count($keys) > 1) {
+          $for->whereHas(Str::snake($keys[0]), function ($q) use ($extend, $keys){
+            $q->where(Str::snake($keys[1]), $extend[1]);
+          });
+        } else {
+          dd(Str::snake($extend[0]), $extend[1]);
+          $for->where(Str::snake($extend[0]), $extend[1]);
         }
       }
     }

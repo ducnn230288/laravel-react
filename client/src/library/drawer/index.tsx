@@ -36,14 +36,14 @@ export const CDrawerForm = forwardRef(
           <div className={classNames('gap-3 flex mt-2 items-center sm:flex-row justify-end')}>
             <CButton
               text={typeof textCancel === 'string' ? t(textCancel) : textCancel}
-              className={'w-full sm:w-auto sm:min-w-36'}
+              className={'w-full sm:w-auto sm:min-w-36 !bg-base-200 !text-base-content hover:!bg-base-200/60'}
               onClick={() => facade.set({ [keyData]: undefined, [keyState]: false })}
             />
             <CButton
               text={typeof textCancel === 'string' ? t(textSubmit) : textSubmit}
               onClick={async () => onSubmit(convertFormValue(columns, await form.validateFields()))}
               disabled={facade[keyIsLoading]}
-              className={'w-full sm:w-auto sm:min-w-48 btn-primary'}
+              className={'w-full sm:w-auto sm:min-w-48'}
             />
           </div>
         }

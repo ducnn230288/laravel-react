@@ -15,7 +15,7 @@ h4 {
   .loop-intro-x(9);
 }
 .loop-intro-x(@counter) when (@counter > 0) {
-  .loop-intro-x((@counter - 1)); // next iteration
+  .loop-intro-x((@counter - 1));
   .intro-x:nth-child(@{counter}) {
     @apply translate-x-12;
   }
@@ -31,10 +31,14 @@ h4 {
 }
 
 .ant-btn {
-  @apply border border-current text-sm rounded-lg mr-2 px-2;
+  @apply border border-current text-sm rounded-lg px-2 leading-4;
 
   &.ant-btn-primary {
-    @apply btn-primary;
+    @apply bg-primary text-primary-content;
+
+    &:hover {
+      @apply bg-primary/90;
+    }
   }
 }
 
@@ -170,7 +174,7 @@ h4 {
   .ant-menu-sub .ant-menu-item:not(.ant-menu-submenu-selected) {
     &::before {
       content: '';
-      @apply mr-2 rounded-btn ~"-ml-2.5 w-1.5 h-0.5 bg-neutral/30";
+      @apply mr-2 rounded-lg ~"-ml-2.5 w-1.5 h-0.5 bg-neutral/30";
     }
   }
   .ant-menu-sub {
@@ -225,7 +229,7 @@ h4 {
     }
   }
   & &-node-content-wrapper {
-    @apply !btn-sm !mr-3;
+    @apply h-8 px-3 text-sm mr-3 flex items-center;
   }
 
   & &-node-content-wrapper:hover,
@@ -255,18 +259,19 @@ h4 {
       @apply text-base-content;
     }
     .ant-btn {
-      @apply btn btn-xs;
+      @apply h-6 px-2;
       &.ant-btn-primary {
-        @apply btn-primary;
+        @apply text-primary-content bg-primary;
+        &:hover {
+          @apply bg-primary/90;
+        }
       }
     }
   }
 }
-.btn-md {
-  height: 2.5rem;
-  min-height: 2.5rem;
+.btn {
+  @apply rounded-lg flex items-center justify-center ~'gap-1.5' text-primary-content bg-primary hover:bg-primary/90;
 }
-
 svg {
   fill: currentColor;
 }

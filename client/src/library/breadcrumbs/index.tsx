@@ -10,7 +10,10 @@ export const CBreadcrumbs = ({ title, list }: { title: string; list: string[] })
           <CSvgIcon name='home' />
         </li>
         {list.map(item => (
-          <li key={item}>{item}</li>
+          <li key={item}>
+            <CSvgIcon name='arrow' size={8} />
+            {item}
+          </li>
         ))}
       </ul>
     </div>

@@ -16,6 +16,36 @@ module.exports = {
       '2xl': '1280px',
     },
     extend: {
+      colors: {
+        primary: 'oklab(var(--p)/<alpha-value>)',
+        'primary-content': 'oklab(var(--pc)/<alpha-value>)',
+
+        secondary: 'oklab(var(--s)/<alpha-value>)',
+        'secondary-content': 'oklab(var(--sc)/<alpha-value>)',
+
+        accent: 'oklab(var(--a)/<alpha-value>)',
+        'accent-content': 'oklab(var(--ac)/<alpha-value>)',
+
+        neutral: 'oklab(var(--n)/<alpha-value>)',
+        'neutral-content': 'oklab(var(--nc)/<alpha-value>)',
+
+        'base-100': 'oklab(var(--b1)/<alpha-value>)',
+        'base-200': 'oklab(var(--b2)/<alpha-value>)',
+        'base-300': 'oklab(var(--b3)/<alpha-value>)',
+        'base-content': 'oklab(var(--bc)/<alpha-value>)',
+
+        info: 'oklab(var(--in)/<alpha-value>)',
+        'info-content': 'oklab(var(--inc)/<alpha-value>)',
+
+        success: 'oklab(var(--su)/<alpha-value>)',
+        'success-content': 'oklab(var(--suc)/<alpha-value>)',
+
+        warning: 'oklab(var(--wa)/<alpha-value>)',
+        'warning-content': 'oklab(var(--wac)/<alpha-value>)',
+
+        error: 'oklab(var(--er)/<alpha-value>)',
+        'error-content': 'oklab(var(--erc)/<alpha-value>)',
+      },
       fontSize: {
         xs: ['.6875rem', '.9375rem'],
         sm: ['.8125rem', '1.1875rem'],
@@ -45,55 +75,4 @@ module.exports = {
       },
     },
   },
-  daisyui: {
-    themes: [
-      {
-        light: {
-          primary: '#491eff',
-          'primary-content': '#d4dbff',
-          secondary: '#ff41c7',
-          'secondary-content': '#fff9fc',
-          accent: '#00cfbd',
-          'accent-content': '#00100d',
-          neutral: '#2b3440',
-          'neutral-content': '#d7dde4',
-          'base-100': '#fff',
-          'base-200': '#e5e6e6',
-          'base-300': '#e5e6e6',
-          'base-content': '#1f2937',
-          info: '#00b3f0',
-          'info-content': '#000',
-          success: '#00ca92',
-          'success-content': '#000',
-          warning: '#ffc22d',
-          'warning-content': '#000',
-          error: '#ff6f70',
-          'error-content': '#000',
-        },
-        dark: {
-          primary: '#7582ff',
-          'primary-content': '#050617',
-          secondary: '#ff71cf',
-          'secondary-content': '#190211',
-          accent: '#00c7b5',
-          'accent-content': '#00100d',
-          neutral: '#2a323c',
-          'neutral-content': '#a6adbb',
-          'base-100': '#1d232a',
-          'base-200': '#191e24',
-          'base-300': '#15191e',
-          'base-content': '#a6adbb',
-          info: '#00b3f0',
-          'info-content': '#000',
-          success: '#00ca92',
-          'success-content': '#000',
-          warning: '#ffc22d',
-          'warning-content': '#000',
-          error: '#ff6f70',
-          'error-content': '#000',
-        },
-      },
-    ],
-  },
-  plugins: [require('daisyui')],
 };

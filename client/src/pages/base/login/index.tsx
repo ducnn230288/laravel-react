@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { Spin } from 'antd';
@@ -22,7 +22,7 @@ const Page = () => {
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.login' });
 
   return (
-    <Fragment>
+    <div className='intro-x'>
       <h1>{t('Sign In')}</h1>
       <h5>{t('Enter your details to login to your account')}</h5>
       <Spin spinning={sGlobal.isLoading}>
@@ -62,7 +62,7 @@ const Page = () => {
           disableSubmit={sGlobal.isLoading}
         />
       </Spin>
-    </Fragment>
+    </div>
   );
 };
 

@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from 'react-router';
 import { createSearchParams } from 'react-router-dom';
 import classNames from 'classnames';
 import type { ItemType } from 'antd/es/menu/interface';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 
 import { CAvatar } from '@/library/avatar';
 import { CSvgIcon } from '@/library/svg-icon';
@@ -21,23 +22,24 @@ const Layout = ({ children }: PropsWithChildren) => {
       <CSide />
       <section>
         <CHeader />
-        <main>{children}</main>
+        <PerfectScrollbar options={{ wheelSpeed: 1 }}>
+          <main>{children}</main>
+        </PerfectScrollbar>
         <footer>{t('Footer', { year: new Date().getFullYear() })}</footer>
       </section>
     </div>
   );
 };
-
 const CSide = () => {
   const sGlobal = SGlobal();
 
   useEffect(() => {
-    checkReponsive();
-    window.addEventListener('resize', checkReponsive, { passive: true });
+    checkResponsive();
+    window.addEventListener('resize', checkResponsive, { passive: true });
   }, []);
 
-  const checkReponsive = () => {
-    if (innerWidth < 1024 && !sGlobal.isCollapseMenu) {
+  const checkResponsive = () => {
+    if (innerWidth < 1280 && !sGlobal.isCollapseMenu) {
       sGlobal.set({ isCollapseMenu: true });
     }
   };
@@ -54,22 +56,24 @@ const CSide = () => {
           <CSvgIcon name='logo' />
           <h1 className={classNames({ active: sGlobal.isCollapseMenu })}>{APP_NAME}</h1>
         </a>
-        <Menu
-          defaultSelectedKeys={[location.pathname]}
-          defaultOpenKeys={['/' + location.pathname.substring(1).split('/').slice(0, 2).join('/')]}
-          mode='inline'
-          inlineCollapsed={sGlobal.isCollapseMenu}
-          items={listMenu as any}
-          onSelect={({ key }) => {
-            const menu = findMenu(listMenu, key);
-            if (location.pathname !== key && menu) {
-              navigate({
-                pathname: menu.key,
-                search: `?${createSearchParams(menu.queryparams)}`,
-              });
-            }
-          }}
-        />
+        <PerfectScrollbar options={{ wheelSpeed: 1 }}>
+          <Menu
+            defaultSelectedKeys={[location.pathname]}
+            defaultOpenKeys={['/' + location.pathname.substring(1).split('/').slice(0, 2).join('/')]}
+            mode='inline'
+            inlineCollapsed={sGlobal.isCollapseMenu}
+            items={listMenu as any}
+            onSelect={({ key }) => {
+              const menu = findMenu(listMenu, key);
+              if (location.pathname !== key && menu) {
+                navigate({
+                  pathname: menu.key,
+                  search: `?${createSearchParams(menu.queryparams)}`,
+                });
+              }
+            }}
+          />
+        </PerfectScrollbar>
       </aside>
     </Fragment>
   );

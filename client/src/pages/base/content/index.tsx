@@ -72,6 +72,7 @@ const Form = () => {
 import { useLocation, useNavigate } from 'react-router';
 import queryString from 'query-string';
 import { Select, Spin, Tree } from 'antd';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 import { CSvgIcon } from '@/library/svg-icon';
 const Side = () => {
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.content' });
@@ -89,28 +90,30 @@ const Side = () => {
       </div>
       <Spin spinning={sContentType.isLoading}>
         <div className='desktop'>
-          {sContentType.result?.data && (
-            <Tree
-              blockNode
-              showLine
-              autoExpandParent
-              defaultExpandAll
-              switcherIcon={<CSvgIcon name='arrow' size={12} />}
-              defaultSelectedKeys={[request.typeCode]}
-              treeData={sContentType.result?.data?.map((item: any) => ({
-                title: item?.name,
-                key: item?.code,
-                isLeaf: true,
-                expanded: true,
-                children: [],
-              }))}
-              onSelect={selectedKeys => {
-                request.typeCode = selectedKeys[0];
-                sContent.get(request);
-                navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
-              }}
-            />
-          )}
+          <PerfectScrollbar options={{ wheelSpeed: 1 }}>
+            {sContentType.result?.data && (
+              <Tree
+                blockNode
+                showLine
+                autoExpandParent
+                defaultExpandAll
+                switcherIcon={<CSvgIcon name='arrow' size={12} />}
+                defaultSelectedKeys={[request.typeCode]}
+                treeData={sContentType.result?.data?.map((item: any) => ({
+                  title: item?.name,
+                  key: item?.code,
+                  isLeaf: true,
+                  expanded: true,
+                  children: [],
+                }))}
+                onSelect={selectedKeys => {
+                  request.typeCode = selectedKeys[0];
+                  sContent.get(request);
+                  navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
+                }}
+              />
+            )}
+          </PerfectScrollbar>
         </div>
         <div className='mobile'>
           <Select

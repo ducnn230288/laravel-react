@@ -2,6 +2,7 @@ import React, { forwardRef, type Ref, useImperativeHandle } from 'react';
 import { Drawer, Form } from 'antd';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 
 import type { IForm, IFormModalRefObject } from '@/types';
 import { convertFormValue } from '@/utils';
@@ -51,14 +52,17 @@ export const CDrawerForm = forwardRef(
         open={facade[keyState]}
         onClose={() => facade.set({ [keyData]: undefined, [keyState]: false })}
         closeIcon={null}
+        destroyOnClose={true}
       >
-        <CForm
-          className='intro-x'
-          values={{ ...facade[keyData] }}
-          formAnt={form}
-          columns={columns}
-          spinning={facade[keyIsLoading]}
-        />
+        <PerfectScrollbar options={{ wheelSpeed: 1 }}>
+          <CForm
+            className='intro-x'
+            values={{ ...facade[keyData] }}
+            formAnt={form}
+            columns={columns}
+            spinning={facade[keyIsLoading]}
+          />
+        </PerfectScrollbar>
       </Drawer>
     );
   },

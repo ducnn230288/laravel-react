@@ -34,6 +34,8 @@ export default Page;
 
 import queryString from 'query-string';
 import { Select, Spin, Tree } from 'antd';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+
 import { CSvgIcon } from '@/library/svg-icon';
 const Side = () => {
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.parameter' });
@@ -49,28 +51,30 @@ const Side = () => {
       </div>
       <Spin spinning={sParameter.isLoading}>
         <div className='desktop'>
-          {sParameter.result?.data && (
-            <Tree
-              blockNode
-              showLine
-              autoExpandParent
-              defaultExpandAll
-              switcherIcon={<CSvgIcon name='arrow' size={12} />}
-              selectedKeys={[sParameter.data?.code ?? '']}
-              treeData={sParameter.result?.data?.map(item => ({
-                title: item?.name,
-                key: item?.code,
-                isLeaf: true,
-                expanded: true,
-                children: [],
-              }))}
-              onSelect={selectedKeys => {
-                request.code = selectedKeys[0];
-                sParameter.getById({ id: request.code });
-                navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
-              }}
-            />
-          )}
+          <PerfectScrollbar options={{ wheelSpeed: 1 }}>
+            {sParameter.result?.data && (
+              <Tree
+                blockNode
+                showLine
+                autoExpandParent
+                defaultExpandAll
+                switcherIcon={<CSvgIcon name='arrow' size={12} />}
+                selectedKeys={[sParameter.data?.code ?? '']}
+                treeData={sParameter.result?.data?.map(item => ({
+                  title: item?.name,
+                  key: item?.code,
+                  isLeaf: true,
+                  expanded: true,
+                  children: [],
+                }))}
+                onSelect={selectedKeys => {
+                  request.code = selectedKeys[0];
+                  sParameter.getById({ id: request.code });
+                  navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
+                }}
+              />
+            )}
+          </PerfectScrollbar>
         </div>
         <div className='mobile'>
           <Select

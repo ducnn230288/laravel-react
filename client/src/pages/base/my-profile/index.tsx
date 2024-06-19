@@ -97,7 +97,7 @@ const Side = ({ form }: { form: FormInstance }) => {
                     <h2 className='text-center'>{values.name}</h2>
                     <div className='line'></div>
                     <div className='wrapper-flex'>
-                      <CSvgIcon name='user' size={20} />
+                      <CSvgIcon name='user-circle' size={20} />
                       <h3>{sGlobal.user?.role?.name}</h3>
                     </div>
                   </Fragment>

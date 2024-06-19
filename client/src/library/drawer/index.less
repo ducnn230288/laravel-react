@@ -5,6 +5,13 @@
   }
   .ant-drawer-content {
     @apply bg-base-100;
+    .scrollbar-container {
+      .ps__rail-x,
+      .ps__thumb-x,
+      .ps__rail-y {
+        left: calc(100% - 15px) !important;
+      }
+    }
   }
   .ant-drawer-title {
     @apply text-base-content;

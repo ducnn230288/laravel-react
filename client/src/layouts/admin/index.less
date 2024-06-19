@@ -21,7 +21,7 @@
       }
 
       svg {
-        @apply h-8 text-primary;
+        @apply size-8 text-primary;
       }
 
       h1 {
@@ -58,9 +58,11 @@
       }
     }
 
-    main {
-      @apply overflow-auto md:pl-0 pl-12;
+    > .scrollbar-container {
       height: calc(100vh - 6rem);
+    }
+    main {
+      @apply overflow-auto md:pl-0 pl-12 mx-auto;
       width: calc(100vw - 14rem);
 
       h2 {
@@ -88,11 +90,11 @@
         @apply container mx-auto grid grid-cols-12 gap-3 ~'px-2.5';
 
         .left {
-          @apply col-span-12 sm:col-span-4 lg:col-span-3;
+          @apply col-span-12 lg:col-span-4 xl:col-span-3;
         }
 
         .right {
-          @apply col-span-12 sm:col-span-8 lg:col-span-9;
+          @apply col-span-12 lg:col-span-8 xl:col-span-9;
         }
 
         .card {
@@ -102,17 +104,17 @@
             @apply flex h-14 items-center justify-between border-b border-base-300/60 px-4 py-2;
           }
           .desktop {
-            @apply relative hidden overflow-y-auto sm:block;
+            @apply relative hidden overflow-y-auto lg:block;
             height: calc(100vh - 14rem);
             &.has-header {
               @apply block p-3;
             }
           }
           .mobile {
-            @apply block p-2 sm:hidden sm:p-0;
+            @apply block p-2 lg:hidden lg:p-0;
           }
           .body {
-            @apply overflow-y-auto p-3 ~'sm:min-h-[calc(100vh-10.5rem)]';
+            @apply overflow-y-auto p-3 ~'lg:min-h-[calc(100vh-10.5rem)]';
           }
         }
       }

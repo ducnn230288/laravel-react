@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { Spin } from 'antd';
@@ -25,7 +25,7 @@ const Page = () => {
     keyPrefix: 'pages.base.login.forget-password.verify-forgot-password.reset-password',
   });
   return (
-    <Fragment>
+    <div className='intro-x'>
       <h1>{t('Reset Password')}</h1>
       <h5>
         {t(
@@ -87,7 +87,7 @@ const Page = () => {
           disableSubmit={sGlobal.isLoading}
         />
       </Spin>
-    </Fragment>
+    </div>
   );
 };
 

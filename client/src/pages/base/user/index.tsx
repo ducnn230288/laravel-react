@@ -72,6 +72,8 @@ const Form = () => {
 import { useLocation, useNavigate } from 'react-router';
 import queryString from 'query-string';
 import { Select, Spin, Tree } from 'antd';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+
 import { CSvgIcon } from '@/library/svg-icon';
 const Side = () => {
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.user' });
@@ -89,28 +91,30 @@ const Side = () => {
       </div>
       <Spin spinning={sUserRole.isLoading}>
         <div className='desktop'>
-          {sUserRole.result?.data && (
-            <Tree
-              blockNode
-              showLine
-              autoExpandParent
-              defaultExpandAll
-              switcherIcon={<CSvgIcon name='arrow' size={12} />}
-              defaultSelectedKeys={[request.roleCode]}
-              treeData={sUserRole.result?.data?.map((item: any) => ({
-                title: item?.name,
-                key: item?.code,
-                isLeaf: true,
-                expanded: true,
-                children: [],
-              }))}
-              onSelect={selectedKeys => {
-                request.roleCode = selectedKeys[0];
-                sUser.get(request);
-                navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
-              }}
-            />
-          )}
+          <PerfectScrollbar options={{ wheelSpeed: 1 }}>
+            {sUserRole.result?.data && (
+              <Tree
+                blockNode
+                showLine
+                autoExpandParent
+                defaultExpandAll
+                switcherIcon={<CSvgIcon name='arrow' size={12} />}
+                defaultSelectedKeys={[request.roleCode]}
+                treeData={sUserRole.result?.data?.map((item: any) => ({
+                  title: item?.name,
+                  key: item?.code,
+                  isLeaf: true,
+                  expanded: true,
+                  children: [],
+                }))}
+                onSelect={selectedKeys => {
+                  request.roleCode = selectedKeys[0];
+                  sUser.get(request);
+                  navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
+                }}
+              />
+            )}
+          </PerfectScrollbar>
         </div>
         <div className='mobile'>
           <Select

@@ -103,6 +103,7 @@ const FormPostType = () => {
 
 import { useLocation, useNavigate } from 'react-router';
 import queryString from 'query-string';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 const Side = () => {
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.post' });
   const sPostType = SPostType();
@@ -124,60 +125,62 @@ const Side = () => {
       </div>
       <Spin spinning={sPostType.isLoading}>
         <div className='desktop'>
-          {sPostType.result?.data && (
-            <Tree
-              blockNode
-              showLine
-              autoExpandParent
-              defaultExpandAll
-              switcherIcon={<CSvgIcon name='arrow' size={12} />}
-              defaultSelectedKeys={[request.typeCode]}
-              treeData={sPostType.result?.data?.map((item: any) => ({
-                title: item?.name,
-                key: item?.code,
-                isLeaf: true,
-                expanded: true,
-                children: [],
-              }))}
-              onSelect={selectedKeys => {
-                if (selectedKeys[0]) {
-                  request.typeCode = selectedKeys[0];
-                  sPost.get(request);
-                  navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
-                }
-              }}
-              titleRender={(data: any) => (
-                <span className={classNames('item')}>
-                  {data.title}
-                  <div className='action'>
-                    {sGlobal.user?.role?.permissions?.includes(keyRole.P_POST_TYPE_UPDATE) && (
-                      <CTooltip title={t('Edit Type Post', { name: data.title })}>
-                        <button
-                          title={t('Edit Type Post', { name: data.title })}
-                          onClick={() => sPostType.getById({ id: data.code })}
-                        >
-                          <CSvgIcon name='edit' className='primary' />
-                        </button>
-                      </CTooltip>
-                    )}
-                    {sGlobal.user?.role?.permissions?.includes(keyRole.P_POST_TYPE_DESTROY) && (
-                      <CTooltip title={t('Delete type post', { name: data.title })}>
-                        <Popconfirm
-                          destroyTooltipOnHide={true}
-                          title={t('Are you sure want delete type post?', { name: data.title })}
-                          onConfirm={() => sPostType.delete(data.code)}
-                        >
-                          <button title={t('Delete type post', { name: data.title })}>
-                            <CSvgIcon name='trash' className='error' />
+          <PerfectScrollbar options={{ wheelSpeed: 1 }}>
+            {sPostType.result?.data && (
+              <Tree
+                blockNode
+                showLine
+                autoExpandParent
+                defaultExpandAll
+                switcherIcon={<CSvgIcon name='arrow' size={12} />}
+                defaultSelectedKeys={[request.typeCode]}
+                treeData={sPostType.result?.data?.map((item: any) => ({
+                  title: item?.name,
+                  key: item?.code,
+                  isLeaf: true,
+                  expanded: true,
+                  children: [],
+                }))}
+                onSelect={selectedKeys => {
+                  if (selectedKeys[0]) {
+                    request.typeCode = selectedKeys[0];
+                    sPost.get(request);
+                    navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
+                  }
+                }}
+                titleRender={(data: any) => (
+                  <span className={classNames('item')}>
+                    {data.title}
+                    <div className='action'>
+                      {sGlobal.user?.role?.permissions?.includes(keyRole.P_POST_TYPE_UPDATE) && (
+                        <CTooltip title={t('Edit Type Post', { name: data.title })}>
+                          <button
+                            title={t('Edit Type Post', { name: data.title })}
+                            onClick={() => sPostType.getById({ id: data.code })}
+                          >
+                            <CSvgIcon name='edit' className='primary' />
                           </button>
-                        </Popconfirm>
-                      </CTooltip>
-                    )}
-                  </div>
-                </span>
-              )}
-            />
-          )}
+                        </CTooltip>
+                      )}
+                      {sGlobal.user?.role?.permissions?.includes(keyRole.P_POST_TYPE_DESTROY) && (
+                        <CTooltip title={t('Delete type post', { name: data.title })}>
+                          <Popconfirm
+                            destroyTooltipOnHide={true}
+                            title={t('Are you sure want delete type post?', { name: data.title })}
+                            onConfirm={() => sPostType.delete(data.code)}
+                          >
+                            <button title={t('Delete type post', { name: data.title })}>
+                              <CSvgIcon name='trash' className='error' />
+                            </button>
+                          </Popconfirm>
+                        </CTooltip>
+                      )}
+                    </div>
+                  </span>
+                )}
+              />
+            )}
+          </PerfectScrollbar>
         </div>
         <div className='mobile'>
           <TreeSelect

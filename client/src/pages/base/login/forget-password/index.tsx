@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { Spin } from 'antd';
@@ -20,7 +20,7 @@ const Page = () => {
 
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.login.forget-password' });
   return (
-    <Fragment>
+    <div className='intro-x'>
       <h1>{t('Forgot Password')}</h1>
       <h5>{t('Please enter your email. An OTP verification code will be sent to you.')}</h5>
       <Spin spinning={sGlobal.isLoading}>
@@ -43,7 +43,7 @@ const Page = () => {
       <div className='mt-3 text-center'>
         <button onClick={() => navigate(`/${lang}${routerLinks('Login')}`)}>{t('Go back to login')}</button>
       </div>
-    </Fragment>
+    </div>
   );
 };
 

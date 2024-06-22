@@ -39,7 +39,7 @@ export const CUpload = ({
   const [listFiles, setListFiles] = useState<any>([]);
   useEffect(() => {
     let tempData: any = typeof value === 'string' ? [value] : [];
-    if (typeof value === 'object') {
+    if (value && typeof value === 'object') {
       tempData = value.map((_item: any) => {
         if (_item.status) return _item;
         return {
@@ -216,18 +216,15 @@ export const CUpload = ({
                   onChange?.(listFiles.filter((_item: any) => _item.id !== file.id));
                 }}
               >
-                <div
-                  className={classNames(
-                    'hover:!bg-error absolute right-1 bg-base-200 size-5 cursor-pointer rounded-full text-base-content transition-all duration-300',
-                    {
-                      'top-16 ': listFiles.length > 1 && index > 0 && index < listFiles.length - 1,
-                      'top-8': listFiles.length > 1 && (index === 0 || index === listFiles.length - 1),
-                      'top-1': listFiles.length === 1,
-                    },
-                  )}
+                <button
+                  className={classNames('btn-delete', {
+                    'top-16 ': listFiles.length > 1 && index > 0 && index < listFiles.length - 1,
+                    'top-8': listFiles.length > 1 && (index === 0 || index === listFiles.length - 1),
+                    'top-1': listFiles.length === 1,
+                  })}
                 >
                   <CSvgIcon name='times' size={12} className={'m-1 fill-error hover:fill-base-content'} />
-                </div>
+                </button>
               </Popconfirm>
             )}
           </div>

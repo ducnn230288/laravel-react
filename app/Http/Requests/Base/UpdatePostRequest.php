@@ -24,6 +24,7 @@ class UpdatePostRequest extends FormRequest
       $rule = 'nullable|string';
       $validation_rules = [
         'type_code' => 'required_if:disabled_at,|string|max:255',
+        'created_at' => '',
         'image' => $rule,
         'languages' => 'required_if:disabled_at,|array',
         'is_disable' => 'boolean',

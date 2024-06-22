@@ -458,7 +458,7 @@ PL_38_2 Verify the UI of the editing post page in "Projects" list (VIETNAM tab)
   When Click on the "Xóa bài đăng ${name}" button in the "${name}" table line
 
 PL_39 Verity that change the post's information by entering the valid data in "Created At" field
-  [Tags]                                                                                                EditInfo    Test1                        Projects                      Valid
+  [Tags]                                                                                                EditInfo                        Projects                      Valid
   ${yesterday}=                                                                                         Get Current Date                local                         -1 day                                     result_format=%d-%m-%Y
   ${name}=    Create a test post in "Projects" list
   When Click on the "Chỉnh sửa bài đăng ${name}" button in the "${name}" table line
@@ -471,7 +471,7 @@ PL_39 Verity that change the post's information by entering the valid data in "C
   When Click on the "Xóa bài đăng ${name}" button in the "${name}" table line
 
 PL_40 Verity that change the post's information by entering the valid data in "Thumbnail Url" field
-  [Tags]                                                                                                EditInfo                        Projects                      Valid
+  [Tags]                                                                                                EditInfo    Test1                        Projects                      Valid
   ${name}=    Create a test post in "Projects" list
   When Click on the "Chỉnh sửa bài đăng ${name}" button in the "${name}" table line
   ${before}=                     Get the image's information in "Hình ảnh" field

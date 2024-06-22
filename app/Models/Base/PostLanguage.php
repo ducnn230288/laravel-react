@@ -21,8 +21,8 @@ class PostLanguage extends Model
   {
     $this->fileService = new FileService();
     return Attribute::make(
-      get: fn (?string $value) => $this->fileService->convertSrcImage(value: $value, isGetAbsolutePath: true),
-      set: fn (?string $value) => $this->fileService->convertSrcImage(value: $value)
+      get: fn (?string $value) => $value ? $this->fileService->convertSrcImage(value: $value, isGetAbsolutePath: true) : null,
+      set: fn (?string $value) => $value ? $this->fileService->convertSrcImage(value: $value) : null
     );
   }
   public function post(): BelongsTo

@@ -8,7 +8,7 @@ Library                 DateTime
 ${BROWSER}              chromium
 ${HEADLESS}             ${False}
 ${BROWSER_TIMEOUT}      20 seconds
-${SHOULD_TIMEOUT}       0.1 seconds
+${SHOULD_TIMEOUT}       0.3 seconds
 
 ${URL_DEFAULT}          %{HOST_ADDRESS=http://localhost:4000}
 ${STATE}                Evaluate  json.loads("""{}""")  json
@@ -433,7 +433,7 @@ Click on cross icon in select "${name}"
 
 
 Click on cross icon inside image in "${name}"
-  ${element}=               Get Element Form Item By Name     ${name}                       //button[contains(@class,"items-center")]//*[contains(@id,"Layer_1")]
+  ${element}=               Get Element Form Item By Name     ${name}                       //button[contains(@class,"btn-delete")]
   Click                     ${element}
   Click Confirm To Action
 

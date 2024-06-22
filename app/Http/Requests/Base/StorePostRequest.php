@@ -24,6 +24,7 @@ class StorePostRequest extends FormRequest
       $rule = 'nullable|string';
         return [
           'type_code' => 'required|string|max:255',
+          'created_at' => '',
           'image' => $rule,
           'languages' => 'required|array',
           'languages.*.language' => 'required|string',

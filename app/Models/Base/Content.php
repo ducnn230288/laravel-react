@@ -22,8 +22,8 @@ class Content extends Model
   {
     $this->fileService = new FileService();
     return Attribute::make(
-      get: fn (?string $value) => $this->fileService->getAbsolutePath($value),
-      set: fn (?string $value) => $this->fileService->getRelativePath($value),
+      get: fn (?string $value) => $value ? $this->fileService->getAbsolutePath($value) : null,
+      set: fn (?string $value) => $value ? $this->fileService->getRelativePath($value) : null,
     );
   }
   public function type(): BelongsTo

@@ -9,6 +9,7 @@ use App\Http\Requests\Base\StoreContentRequest;
 use App\Http\Requests\Base\UpdateContentRequest;
 use App\Http\Resources\Base\ContentResource;
 use App\Models\Base\Content;
+use App\Models\Base\ContentLanguage;
 use App\Services\Base\ContentService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -82,7 +83,13 @@ class ContentController extends Controller implements HasMiddleware
   public function destroy(Content $content): JsonResponse
   {
     Gate::authorize(EPermissions::P_CONTENT_DESTROY->name);
-    $content->delete();
+    DB::transaction(function () use ($content) {
+      $languages = ContentLanguage::where('content_id', $content->id)->get();
+      foreach ($languages as $language) {
+        $language->delete();
+      }
+      $content->delete();
+    });
     return response()->json(['message' => __('messages.Delete Success')]);
   }
 }

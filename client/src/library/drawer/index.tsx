@@ -48,7 +48,7 @@ export const CDrawerForm = forwardRef(
             />
           </div>
         }
-        title={title}
+        title={<h3>{title}</h3>}
         open={facade[keyState]}
         onClose={() => facade.set({ [keyData]: undefined, [keyState]: false })}
         closeIcon={null}

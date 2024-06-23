@@ -172,7 +172,7 @@ export default {
         formItem: {
           col: 6,
           type: EFormType.date,
-          rules: id ? [{ type: EFormRuleType.required }] : [],
+          rules: [{ type: EFormRuleType.required }],
         },
       },
       {
@@ -202,7 +202,6 @@ export default {
                 col: 6,
                 rules: [{ type: EFormRuleType.required }],
                 onBlur: (value, form, name) => {
-                  console.log(form, name);
                   if (value && !form.getFieldValue(['languages', name[0], 'slug'])) {
                     form.setFieldValue(['languages', name[0], 'slug'], slug(value));
                   }

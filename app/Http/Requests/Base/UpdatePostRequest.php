@@ -35,7 +35,7 @@ class UpdatePostRequest extends FormRequest
           $validation_rules += [
             "languages.$i.id" => 'required_if:disabled_at,|string',
             "languages.$i.language" => 'required_if:disabled_at,|string',
-            "languages.$i.name" => 'required_if:disabled_at,|string|max:255',
+            "languages.$i.name" => 'required_if:disabled_at,|string|max:255|unique:post_languages,name,'. $request['languages'][$i]['id'],
             "languages.$i.slug" => 'required_if:disabled_at,|string|max:255|unique:post_languages,slug,'. $request['languages'][$i]['id'],
             "languages.$i.description" => $rule,
             "languages.$i.content" => $rule,

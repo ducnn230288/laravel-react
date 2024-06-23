@@ -80,7 +80,6 @@ abstract class Controller
           });
         }
       });
-
     }
     return $for;
   }
@@ -138,7 +137,6 @@ abstract class Controller
             $q->where(Str::snake($keys[1]), $extend[1]);
           });
         } else {
-          dd(Str::snake($extend[0]), $extend[1]);
           $for->where(Str::snake($extend[0]), $extend[1]);
         }
       }
@@ -199,7 +197,7 @@ abstract class Controller
         $for->orderBy(Str::snake($sort[0]), $sort[1]);
       }
     } else {
-      $for->orderBy('created_at', 'desc');
+      $for->orderBy('updated_at', 'desc');
     }
     return $for;
   }

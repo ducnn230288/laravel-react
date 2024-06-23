@@ -9,6 +9,7 @@ use App\Http\Requests\Base\StorePostRequest;
 use App\Http\Requests\Base\UpdatePostRequest;
 use App\Http\Resources\Base\PostResource;
 use App\Models\Base\Post;
+use App\Models\Base\PostLanguage;
 use App\Services\Base\PostService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -83,8 +84,10 @@ class PostController extends Controller implements HasMiddleware
   public function destroy(Post $post): JsonResponse
   {
     Gate::authorize(EPermissions::P_POST_DESTROY->name);
+
     DB::transaction(function () use ($post) {
-      foreach ($post->with('languages')->first()->languages as $language) {
+      $languages = PostLanguage::where('post_id', $post->id)->get();
+      foreach ($languages as $language) {
         $language->delete();
       }
       $post->delete();

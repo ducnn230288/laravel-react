@@ -63,7 +63,7 @@ const FormPost = () => {
       facade={sPost}
       columns={_column.useForm()}
       title={t(sPost.data?.id ? 'Edit Post' : 'Add new Post', {
-        name: sPostType.result?.data?.find(item => item.code === request.typeCode)?.name,
+        name: sPostType.result?.data?.find(item => item.code === request.typeCode)?.name.toLowerCase(),
       })}
       onSubmit={values => {
         if (sPost.data?.id) sPost.put({ ...values, id: sPost.data.id, typeCode: request.typeCode });
@@ -232,7 +232,7 @@ const Main = () => {
               <CButton
                 icon={<CSvgIcon name='plus' size={12} />}
                 text={t('Add new Post', {
-                  name: sPostType.result?.data?.find(item => item.code === request.typeCode)?.name,
+                  name: sPostType.result?.data?.find(item => item.code === request.typeCode)?.name.toLowerCase(),
                 })}
                 onClick={() => sPost.set({ data: undefined, isVisible: true })}
               />

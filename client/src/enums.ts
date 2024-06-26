@@ -62,6 +62,7 @@ export enum EFormRuleType {
   onlyText = 'only_text',
   onlyTextSpace = 'only_text_space',
   textarea = 'textarea',
+  api = 'api',
 }
 export enum EStatusState {
   idle = 'idle',

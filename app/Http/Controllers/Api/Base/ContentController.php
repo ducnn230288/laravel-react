@@ -46,6 +46,22 @@ class ContentController extends Controller implements HasMiddleware
   }
 
   /**
+   * Validation in database.
+   */
+  public function valid(): JsonResponse
+  {
+    Gate::authorize(EPermissions::P_CONTENT_INDEX->name);
+    $name = \request()->query('name');
+    $value = \request()->query('value');
+    $id = \request()->query('id');
+
+    if (!isset($name) || !isset($value)  || (!isset($id) && ContentLanguage::where($name, $value)->exists()) || (isset($id) && ContentLanguage::where($name, $value)->where('content_id', '!=', $id)->exists())) {
+      return response()->json(['data' => true]);
+    }
+    return response()->json(['data' => false]);
+  }
+
+  /**
    * Store a newly created resource in storage.
    */
   public function store(StoreContentRequest $request): ContentResource

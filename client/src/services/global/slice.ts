@@ -1,4 +1,5 @@
-import { ActionReducerMapBuilder, createSlice } from '@reduxjs/toolkit';
+import type { ActionReducerMapBuilder } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import viVN from 'antd/lib/locale/vi_VN';
 import enUS from 'antd/lib/locale/en_US';
 import dayjs from 'dayjs';
@@ -7,7 +8,7 @@ import i18n from 'i18next';
 import { keyRefreshToken, keyToken, keyUser, lang } from '@/utils';
 import Action from './action';
 import { EStatusGlobal } from './enum';
-import State from './interface';
+import type State from './interface';
 
 const checkLanguage = (language: string) => {
   const formatDate = language === 'vn' ? 'DD-MM-YYYY' : 'MM-DD-YYYY';
@@ -44,7 +45,7 @@ export const globalSlice = createSlice({
       }
     },
   },
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     set(Action, builder);
     logout(Action, builder);
     profile(Action, builder);
@@ -69,7 +70,7 @@ const logout = (action: typeof Action, builder: ActionReducerMapBuilder<State>) 
     //   state.isLoading = true;
     //   state.status = EStatusGlobal.logoutFulfilled
     // })
-    .addCase(action.logout.fulfilled, (state) => {
+    .addCase(action.logout.fulfilled, state => {
       state.user = {};
       state.data = {};
       localStorage.removeItem(keyUser);
@@ -90,7 +91,7 @@ const profile = (action: typeof Action, builder: ActionReducerMapBuilder<State>)
       } else state.status = EStatusGlobal.idle;
       state.isLoading = false;
     })
-    .addCase(action.profile.rejected, (state) => {
+    .addCase(action.profile.rejected, state => {
       state.status = EStatusGlobal.profileRejected;
       state.isLoading = false;
     });
@@ -110,7 +111,7 @@ const putProfile = (action: typeof Action, builder: ActionReducerMapBuilder<Stat
       } else state.status = EStatusGlobal.idle;
       state.isLoading = false;
     })
-    .addCase(action.putProfile.rejected, (state) => {
+    .addCase(action.putProfile.rejected, state => {
       state.status = EStatusGlobal.putProfileRejected;
       state.isLoading = false;
     });
@@ -131,7 +132,7 @@ const login = (action: typeof Action, builder: ActionReducerMapBuilder<State>) =
       } else state.status = EStatusGlobal.idle;
       state.isLoading = false;
     })
-    .addCase(action.login.rejected, (state) => {
+    .addCase(action.login.rejected, state => {
       state.status = EStatusGlobal.loginRejected;
       state.isLoading = false;
     });
@@ -149,7 +150,7 @@ const forgottenPassword = (action: typeof Action, builder: ActionReducerMapBuild
       } else state.status = EStatusGlobal.idle;
       state.isLoading = false;
     })
-    .addCase(action.forgottenPassword.rejected, (state) => {
+    .addCase(action.forgottenPassword.rejected, state => {
       state.status = EStatusGlobal.forgottenPasswordRejected;
       state.isLoading = false;
     });
@@ -168,7 +169,7 @@ const otpConfirmation = (action: typeof Action, builder: ActionReducerMapBuilder
       } else state.status = EStatusGlobal.idle;
       state.isLoading = false;
     })
-    .addCase(action.otpConfirmation.rejected, (state) => {
+    .addCase(action.otpConfirmation.rejected, state => {
       state.status = EStatusGlobal.otpConfirmationRejected;
       state.isLoading = false;
     });
@@ -188,7 +189,7 @@ const resetPassword = (action: typeof Action, builder: ActionReducerMapBuilder<S
       } else state.status = EStatusGlobal.idle;
       state.isLoading = false;
     })
-    .addCase(action.resetPassword.rejected, (state) => {
+    .addCase(action.resetPassword.rejected, state => {
       state.status = EStatusGlobal.resetPasswordRejected;
       state.isLoading = false;
     });

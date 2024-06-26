@@ -21,9 +21,11 @@ Route::apiResource('codes/types', \App\Http\Controllers\Api\Base\CodeTypeControl
 Route::apiResource('codes', \App\Http\Controllers\Api\Base\CodeController::class);
 
 Route::apiResource('contents/types', \App\Http\Controllers\Api\Base\ContentTypeController::class);
+Route::get('contents/valid', [\App\Http\Controllers\Api\Base\ContentTypeController::class, 'valid']);
 Route::apiResource('contents', \App\Http\Controllers\Api\Base\ContentController::class);
 
 Route::apiResource('posts/types', \App\Http\Controllers\Api\Base\PostTypeController::class);
+Route::get('posts/valid', [\App\Http\Controllers\Api\Base\PostController::class, 'valid']);
 Route::apiResource('posts', \App\Http\Controllers\Api\Base\PostController::class);
 
 Route::apiResource('addresses/provinces', \App\Http\Controllers\Api\Base\AddressProvinceController::class);

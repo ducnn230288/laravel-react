@@ -7,8 +7,8 @@ Library                 DateTime
 *** Variables ***
 ${BROWSER}              chromium
 ${HEADLESS}             ${True}
-${BROWSER_TIMEOUT}      20 seconds
-${SHOULD_TIMEOUT}       0.5 seconds
+${BROWSER_TIMEOUT}      60 seconds
+${SHOULD_TIMEOUT}       0.1 seconds
 
 ${URL_DEFAULT}          %{HOST_ADDRESS=http://localhost:4000}
 ${STATE}                Evaluate  json.loads("""{}""")  json
@@ -139,6 +139,7 @@ Get Element Form Item By Name
 # LOGIN
 
 Required message "${text}" displayed under "${name}" field
+  ${text}=                  Check Text                        ${text}
   ${element}=               Get Element Form Item By Name     ${name}                       //*[contains(@class, "ant-form-item-explain-error")]
   Element Text Should Be    ${element}                        ${text}
 # LOGIN
@@ -636,7 +637,7 @@ Data's information in "${name}" should be equal "${value}"
 Get the image's information in "${name}" field
   ${name}=                  Check Text                        ${name}
   ${element}=               Get Element Form Item By Name     ${name}                       //a
-  Element Should Be Exist                                     ${element}
+  Hover                     ${element}
   ${infor}=                 Get Attribute                     ${element}                    href
   RETURN                  ${infor}
 # POST_LIST

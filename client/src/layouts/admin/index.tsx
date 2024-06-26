@@ -159,7 +159,7 @@ const CHeader = () => {
         >
           <button>
             {sGlobal.language === 'en' ? (
-              <CSvgIcon name='en' size={24} className='rounded-lg' />
+              <CSvgIcon name='us' size={24} className='rounded-lg' />
             ) : (
               <CSvgIcon name='vn' size={24} className='rounded-lg' />
             )}

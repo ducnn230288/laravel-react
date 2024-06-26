@@ -159,6 +159,12 @@ export interface IFormItemRule {
   validator?: ({ getFieldValue }: any) => { validator(rule: any, value: string): Promise<void> };
   min?: number;
   max?: number;
+  api?: {
+    url: string;
+    name: string;
+    label: string;
+    id?: string;
+  };
 }
 export interface IFormApi {
   link?: () => string;

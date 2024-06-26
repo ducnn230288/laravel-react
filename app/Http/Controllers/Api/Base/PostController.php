@@ -47,6 +47,22 @@ class PostController extends Controller implements HasMiddleware
   }
 
   /**
+   * Validation in database.
+   */
+  public function valid(): JsonResponse
+  {
+    Gate::authorize(EPermissions::P_POST_INDEX->name);
+    $name = \request()->query('name');
+    $value = \request()->query('value');
+    $id = \request()->query('id');
+
+    if (!isset($name) || !isset($value)  || (!isset($id) && PostLanguage::where($name, $value)->exists()) || (isset($id) && PostLanguage::where($name, $value)->where('post_id', '!=', $id)->exists())) {
+      return response()->json(['data' => true]);
+    }
+    return response()->json(['data' => false]);
+  }
+
+  /**
    * Store a newly created resource in storage.
    */
   public function store(StorePostRequest $request): PostResource

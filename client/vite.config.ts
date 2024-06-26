@@ -1,4 +1,4 @@
-import { ConfigEnv, UserConfig, loadEnv } from 'vite';
+import { loadEnv, type ConfigEnv, type UserConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
@@ -33,7 +33,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
     build: {
       target: 'es2015',
       cssTarget: 'chrome86',
-      minify: 'terser',
+      // minify: 'terser',
       terserOptions: {
         compress: {
           keep_infinity: true,

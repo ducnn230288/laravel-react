@@ -10,7 +10,7 @@ import type { IDataTable, IForm } from '@/types';
 import { CAvatar } from '@/library/avatar';
 import { CTooltip } from '@/library/tooltip';
 import { SGlobal, SPost } from '@/services';
-import { keyRole } from '@/utils';
+import { keyRole, routerLinks } from '@/utils';
 
 export default {
   useTable: (): IDataTable[] => {
@@ -163,8 +163,10 @@ export default {
       },
     ];
   },
-  useForm: (id?: string): IForm[] => {
+  useForm: (): IForm[] => {
     const { t } = useTranslation('locale', { keyPrefix: 'pages.base.post' });
+    const sPost = SPost();
+
     return [
       {
         title: t('Created At'),
@@ -200,7 +202,18 @@ export default {
               name: 'name',
               formItem: {
                 col: 6,
-                rules: [{ type: EFormRuleType.required }],
+                rules: [
+                  { type: EFormRuleType.required },
+                  {
+                    type: EFormRuleType.api,
+                    api: {
+                      url: `${routerLinks('Post', 'api')}/valid`,
+                      name: 'name',
+                      label: t('Name Post'),
+                      id: sPost.data?.id,
+                    },
+                  },
+                ],
                 onBlur: (value, form, name) => {
                   if (value && !form.getFieldValue(['languages', name[0], 'slug'])) {
                     form.setFieldValue(['languages', name[0], 'slug'], slug(value));
@@ -213,7 +226,19 @@ export default {
               name: 'slug',
               formItem: {
                 col: 6,
-                rules: [{ type: EFormRuleType.required }, { type: EFormRuleType.max, value: 100 }],
+                rules: [
+                  { type: EFormRuleType.required },
+                  { type: EFormRuleType.max, value: 100 },
+                  {
+                    type: EFormRuleType.api,
+                    api: {
+                      url: `${routerLinks('Post', 'api')}/valid`,
+                      name: 'slug',
+                      label: 'Slug',
+                      id: sPost.data?.id,
+                    },
+                  },
+                ],
               },
             },
             {

@@ -9,7 +9,7 @@ import type { IDataTable, IForm } from '@/types';
 import { CAvatar } from '@/library/avatar';
 import { CTooltip } from '@/library/tooltip';
 import { SContent, SGlobal } from '@/services';
-import { keyRole } from '@/utils';
+import { keyRole, routerLinks } from '@/utils';
 
 export default {
   useTable: (): IDataTable[] => {
@@ -118,6 +118,7 @@ export default {
   },
   useForm: (type?: string): IForm[] => {
     const { t } = useTranslation('locale', { keyPrefix: 'pages.base.content' });
+    const sContent = SContent();
 
     return [
       {
@@ -161,7 +162,18 @@ export default {
                     name: 'name',
                     formItem: {
                       col: type === 'member' ? 6 : 12,
-                      rules: [{ type: EFormRuleType.required }],
+                      rules: [
+                        { type: EFormRuleType.required },
+                        {
+                          type: EFormRuleType.api,
+                          api: {
+                            url: `${routerLinks('Content', 'api')}/valid`,
+                            name: 'name',
+                            label: t('Name'),
+                            id: sContent.data?.id,
+                          },
+                        },
+                      ],
                     },
                   },
 

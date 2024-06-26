@@ -1,7 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { API, keyRefreshToken, keyToken, routerLinks } from '@/utils';
 
-import State, { IUser, ResetPassword } from './interface';
+import type State from './interface';
+import type { IUser, ResetPassword } from './interface';
 
 const name = 'Auth';
 export default {

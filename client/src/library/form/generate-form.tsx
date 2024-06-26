@@ -5,6 +5,7 @@ import type { TFunction } from 'i18next';
 import { EFormRuleType, EFormType } from '@/enums';
 import type { IForm } from '@/types';
 import { generateInput } from './generate-input';
+import { API } from '@/utils';
 
 export const generateForm = ({
   item,
@@ -184,6 +185,22 @@ export const generateForm = ({
                       return Promise.reject(
                         new Error(t(rule.message ?? 'Please enter maximum characters!', { max: 500 })),
                       );
+                    }
+                    return Promise.resolve();
+                  },
+                }));
+                break;
+              case EFormRuleType.api:
+                rules.push(() => ({
+                  async validator(_: any, value: any) {
+                    if (value && rule.api) {
+                      const res = await API.get({
+                        url: rule.api.url,
+                        params: { name: rule.api.name, value, id: rule.api.id },
+                      });
+                      if (res.data) {
+                        return Promise.reject(new Error(t('is already taken', { label: rule.api.label, value })));
+                      }
                     }
                     return Promise.resolve();
                   },

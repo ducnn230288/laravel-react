@@ -17,7 +17,7 @@ L0_01 Verify the User Interface displays correctly with design
   Then Webpage should contain "Quên mật khẩu?" button
 
 LO_02 Check the showing password when click on eye icon in "Mật khẩu" field
-  [Tags]                                                                                                MainPage                       UI
+  [Tags]                                                                                                MainPage    Test1                       UI
   When Enter "password" in "Mật khẩu" with "_RANDOM_"
   When Click on eye icon in "Mật khẩu" field
   Then The hidden password in "Mật khẩu" field should be visibled as "_@Mật khẩu@_"
@@ -67,7 +67,7 @@ LO_08 Verify that login with leaving the blank field in "Mật khẩu"
 
 ### Verify the reset Password function when click on "Quên mật khẩu" ###
 LO_09 Verify the User Interface of the "Quên mật khẩu" page
-  [Tags]                                                                                                ForgotPassword                 UI                     Smoketest
+  [Tags]                                                                                                ForgotPassword    Test1                 UI                     Smoketest
   When Click "Quên mật khẩu?" button
   Then Heading should contain "Quên mật khẩu?" inner text
   Then Heading should contain "Vui lòng nhập e-mail của bạn. Mã xác minh OTP sẽ được gửi cho bạn" inner text
@@ -76,7 +76,7 @@ LO_09 Verify the User Interface of the "Quên mật khẩu" page
   Then Webpage should contain "Quay trở lại đăng nhập" button
 
 LO_10 Verify the User Interface of the "Xác nhận OTP" page
-  [Tags]                                                                                                ForgotPassword                 UI                     Smoketest
+  [Tags]                                                                                                ForgotPassword    Test1                 UI                     Smoketest
   When Click "Quên mật khẩu?" button
   When Enter "email" in "Email khôi phục" with "${EMAIL_ADMIN}"
   When Click "Lấy Mã OTP" button
@@ -88,14 +88,14 @@ LO_10 Verify the User Interface of the "Xác nhận OTP" page
   Then Webpage should contain "Quay trở lại đăng nhập" button
 
 LO_13 Check to reset password with entering the non-existence email
-  [Tags]                                                                                                ForgotPassword
+  [Tags]                                                                                                ForgotPassword    Test1
   When Click "Quên mật khẩu?" button
   When Enter "email" in "Email khôi phục" with "_RANDOM_"
   When Click "Lấy Mã OTP" button
   Then User look message "Những thông tin xác thực này không khớp với bản ghi của chúng tôi." popup
 
 LO_16 Verify the go back button when click on "Quay trở lại đăng nhập" button in nhập email đăng nhập page
-  [Tags]                                                                                                ForgotPassword                 GoBack
+  [Tags]                                                                                                ForgotPassword    Test1                 GoBack
   When Click "Quên mật khẩu?" button
   When Click "Quay trở lại đăng nhập" button
   Then Webpage should contain "Tên đăng nhập" input field
@@ -103,7 +103,7 @@ LO_16 Verify the go back button when click on "Quay trở lại đăng nhập" b
   Then Webpage should contain "Quên mật khẩu?" button
 
 LO_17 Verify the go back button when click on "Quay trở lại đăng nhập" button in confirming OTP page
-  [Tags]                                                                                                ForgotPassword                 GoBack
+  [Tags]                                                                                                ForgotPassword    Test1                 GoBack
   When Click "Quên mật khẩu?" button
   When Enter "email" in "Email khôi phục" with "${EMAIL_ADMIN}"
   When Click "Lấy Mã OTP" button

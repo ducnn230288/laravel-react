@@ -1,7 +1,7 @@
 import React, { Fragment, type PropsWithChildren, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
-import { Popconfirm } from 'antd';
+import { Popconfirm, Spin } from 'antd';
 
 import { API, arrayMove, handleGetBase64, keyToken, uuidv4 } from '@/utils';
 import { message } from '@/index';
@@ -163,7 +163,7 @@ export const CUpload = ({
   };
 
   return (
-    <Fragment>
+    <Spin spinning={isLoading.current}>
       <input type='file' className={'hidden'} accept={accept} multiple={multiple} ref={ref} onChange={onUpload} />
       <div
         className={classNames('upload', {
@@ -233,7 +233,6 @@ export const CUpload = ({
       <div className={'mt-2 flex gap-2'}>
         <CButton
           isTiny={true}
-          isLoading={isLoading.current}
           onClick={() => ref.current.click()}
           icon={<CSvgIcon name='upload' size={16} />}
           text={'Upload'}
@@ -254,6 +253,6 @@ export const CUpload = ({
           }}
         ></CButton>
       </div>
-    </Fragment>
+    </Spin>
   );
 };

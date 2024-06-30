@@ -7,7 +7,7 @@ Library                 DateTime
 *** Variables ***
 ${BROWSER}              chromium
 ${HEADLESS}             ${True}
-${BROWSER_TIMEOUT}      60 seconds
+${BROWSER_TIMEOUT}      %{BROWSER_TIMEOUT=40} seconds
 ${SHOULD_TIMEOUT}       0.1 seconds
 
 ${URL_DEFAULT}          %{HOST_ADDRESS=http://localhost:4000}
@@ -43,7 +43,6 @@ Tear Down
 Wait Until Element Is Existent
   [Arguments]               ${locator}  ${message}=${EMPTY}   ${timeout}=${BROWSER_TIMEOUT}
   Wait For Elements State   ${locator}  attached              ${timeout}                    ${message}
-# Login
 
 Wait Until Element Is Visible
   [Arguments]               ${locator}  ${message}=${EMPTY}   ${timeout}=${BROWSER_TIMEOUT}
@@ -52,7 +51,6 @@ Wait Until Element Is Visible
 Wait Until Page Does Not Contain Element
   [Arguments]               ${locator}  ${message}=${EMPTY}   ${timeout}=${BROWSER_TIMEOUT}
   Wait For Elements State   ${locator}  detached              ${timeout}                    ${message}
-# Login
 
 Element Should Be Exist
   [Arguments]               ${locator}  ${message}=${EMPTY}   ${timeout}=${SHOULD_TIMEOUT}
@@ -61,12 +59,10 @@ Element Should Be Exist
 Element Should Be Visible
   [Arguments]               ${locator}  ${message}=${EMPTY}   ${timeout}=${SHOULD_TIMEOUT}
   Wait For Elements State   ${locator}  visible               ${timeout}                    ${message}
-# Login
 
 Element Text Should Be
   [Arguments]               ${locator}  ${expected}           ${message}=${EMPTY}           ${ignore_case}=${EMPTY}
   Get Text                  ${locator}  equal                 ${expected}                   ${message}
-# Login
 
 Element Should Not Be Visible
   [Arguments]               ${locator}  ${message}=${EMPTY}   ${timeout}=${SHOULD_TIMEOUT}
@@ -80,7 +76,6 @@ Check Text
     ${text}=                Replace String                    ${text}         _@${containsS[0]}@_     ${STATE["${containsS[0]}"]}
   END
   RETURN    ${text}
-# Login
 
 ###  -----  Form  -----  ###
 Get Random Text
@@ -131,18 +126,15 @@ Get Random Text
     ${text}=                Replace String                    ${text}                       ${symbol}                   ${new_text}
   END
   RETURN    ${text}
-# LOGIN
 
 Get Element Form Item By Name
   [Arguments]               ${name}                           ${xpath}=${EMPTY}
   RETURN                  xpath=//*[contains(@class, "ant-form-item-label")]/label[text()="${name}"]/../../*[contains(@class, "ant-form-item")]${xpath}
-# LOGIN
 
 Required message "${text}" displayed under "${name}" field
   ${text}=                  Check Text                        ${text}
   ${element}=               Get Element Form Item By Name     ${name}                       //*[contains(@class, "ant-form-item-explain-error")]
   Element Text Should Be    ${element}                        ${text}
-# LOGIN
 
 Enter "${type}" in "${name}" with "${text}"
   Wait Until Element Spin
@@ -158,7 +150,6 @@ Enter "${type}" in "${name}" with "${text}"
   IF  ${cnt} > 0
     Set Global Variable     \${STATE["${name}"]}              ${text}
   END
-# LOGIN
 
 Enter "${type}" in editor "${name}" with "${text}"
   Wait Until Element Spin
@@ -169,7 +160,7 @@ Enter "${type}" in editor "${name}" with "${text}"
   Fill Text                 ${element}                        ${text}                       True
   ${elementS}=              Get Element Form Item By Name     ${name}                       //*[contains(@class,"sun-editor-editable")]/*[contains(text(),"${text}")]
   Wait Until Element Is Existent                              ${elementS}
-  Sleep                     ${SHOULD_TIMEOUT}
+  Wait For Load State       domcontentloaded                  timeout=${BROWSER_TIMEOUT}
   Fill Text               ${element}                        ${text}
   ${condition}=           Get Text                          ${element}
   Scroll To Element         ${element}
@@ -177,9 +168,7 @@ Enter "${type}" in editor "${name}" with "${text}"
   IF  ${cnt} > 0
     Set Global Variable     \${STATE["${name}"]}              ${text}
   END
-  Sleep                     0.3
-# POST_LIST
-
+  Wait For Load State       domcontentloaded                  timeout=${BROWSER_TIMEOUT}
 
 Enter "${type}" in textarea "${name}" with "${text}"
   Wait Until Element Spin
@@ -194,224 +183,80 @@ Enter "${type}" in textarea "${name}" with "${text}"
   IF  ${cnt} > 0
   Set Global Variable       \${STATE["${name}"]}              ${text}
   END
-# POST_LIST
-
-# Enter date in "${name}" with "${text}"
-#   Wait Until Element Spin
-#   ${text}=                  Get Random Text                   date                          ${text}
-#   ${element}=               Get Element Form Item By Name     ${name}                       //*[contains(@class, "ant-picker-input")]/input
-#   Click                     ${element}
-#   Clear Text                ${element}
-#   Fill Text                 ${element}                        ${text}
-#   Fill Text               ${element}                        ${text}
-#   ${condition}=           Get Text                          ${element}
-#   Press Keys                ${element}                        Tab
-#   Press Keys                ${element}                        Tab
-#   ${cnt}=                   Get Length                        ${text}
-#   IF  ${cnt} > 0
-#       Set Global Variable   ${STATE["${name}"]}               ${text}
-#   END
-
-# Enter "${type}" in placeholder "${placeholder}" with "${text}"
-#   Wait Until Element Spin
-#   IF    "${text}" == "today"
-#     ${text}=                Get Current Date                  local                         result_format=%d-%m-%Y
-#   ELSE
-#     ${text}=                   Get Random Text                   ${type}                       ${text}
-#   END
-#   ${element}=                Get Element                       (//input[contains(@placeholder, "${placeholder}")])[last()]
-#   Clear Text                 ${element}
-#   Fill Text                  ${element}                        ${text}
-#   Keyboard Key               press                             Enter
-#   ${cnt}=                    Get Length                        ${text}
-#   IF  ${cnt} > 0
-#     Set Global Variable      \${STATE["${placeholder}"]}       ${text}
-#   END
-
-# Enter date in placeholder "${name}" with "${date}"
-#   Wait Until Element Spin
-#   ${date}=                    Get Random Text                   date                        ${date}
-#   ${element}=                 Get Element                      //input[contains(@placeholder, "${name}")]
-#   Click                       ${element}
-#   Clear Text                  ${element}
-#   Fill Text                   ${element}                       ${date}                      True
-#   Keyboard Key                Press                            Enter
-#   ${cnt}=                     Get Length                       ${date}
-#   IF  ${cnt} > 0
-#     Set Global Variable       \${STATE["${name}"]}             ${name}
-#   END
-
-# Click select "${name}" with "${text}"
-#   ${text}=                  Get Random Text                   Text                          ${text}
-#   ${element}=               Get Element Form Item By Name     ${name}                       //*[contains(@class, "ant-select-show-arrow")]
-#   Click                     ${element}
-#   ${element}=               Get Element Form Item By Name     ${name}                       //*[contains(@class, "ant-select-selection-search-input")]
-#   Fill Text                                                   ${element}                    ${text}
-#   Click                     xpath=//*[contains(@class, "ant-select-item-option") and @title="${text}"]
-#   ${cnt}=                   Get Length                        ${text}
-#   IF  ${cnt} > 0
-#     Set Global Variable     \${STATE["${name}"]}              ${text}
-#   END
 
 Select file in "${name}" with "${text}"
   ${element}=               Get Element Form Item By Name     ${name}                       //input[@type = "file"]
   Upload File By Selector   ${element}                        test/upload/${text}
-  Wait Until Image Is Uploaded
-# POST_LIST
-
-# Click radio "${name}" in line "${text}"
-#   ${element}=               Get Element Form Item By Name     ${name}                       //*[contains(@class, "ant-radio-button-wrapper")]/span[contains(text(), "${text}")]
-#   Click                     ${element}
-
-# Click switch "${name}" to be activated
-#   ${element}=               Get Element Form Item By Name     ${name}                       //button[contains(@class, "ant-switch")]
-#   Click                     ${element}
-
-# Click tree select "${name}" with "${text}"
-#   ${text}=                  Get Random Text                   Text                          ${text}
-#   ${element}=               Get Element Form Item By Name     ${name}                       //*[contains(@class, "ant-tree-select")]
-#   Click                     ${element}
-#   Fill Text                 ${element}//input                 ${text}
-#   Click                     xpath=//*[contains(@class, "ant-select-tree-node-content-wrapper") and @title="${text}"]
-
-# Click assign list "${list}"
-#   ${words}=                 Split String                      ${list}                       ,${SPACE}
-#   FOR    ${word}    IN    @{words}
-#     Click                   xpath=//*[contains(@class, "ant-checkbox-wrapper")]/*[text()="${word}"]
-#   END
-#   Click                     xpath=//*[contains(@class, "ant-transfer-operation")]/button[2]
-
-
-###  -----  Table  -----  ###
-# Get Element Item By Name
-#   [Arguments]               ${name}                           ${xpath}=${EMPTY}
-#   RETURN                  xpath=//*[contains(@class, "item-text") and contains(text(), "${name}")]/ancestor::*[contains(@class, "item")]${xpath}
-
-# Click on the "${text}" button in the "${name}" item line
-#   Wait Until Element Spin
-#   ${element}=               Get Element Item By Name          ${STATE["${name}"]}           //button[@title = "${text}"]
-#   Click                     ${element}
-#   Click Confirm To Action
+  Wait Until Element Spin
 
 Get Element Table Item By Name
   [Arguments]               ${name}                           ${xpath}
   RETURN                  xpath=//*[contains(@class, "ant-table-row")]//*[(text()="${name}")]/ancestor::tr${xpath}
 
 Click on the "${text}" button in the "${name}" table line
-  Sleep                     ${SHOULD_TIMEOUT}
+  Wait For Load State       domcontentloaded                  timeout=${BROWSER_TIMEOUT}
   ${name}=                  Check Text                        ${name}
   ${text}=                  Check Text                        ${text}
   ${element}=               Get Element Table Item By Name    ${name}                       //button[@title = "${text}"]
   Click                     ${element}
   Click Confirm To Action
-# POST_LIST
-
-# The status button in the "${name}" table line change to "${status}"
-#   ${name}=                  Check Text                        ${name}
-#   ${element}=               Set Variable                      //tbody//tr[contains(@class,"ant-table-row")]//*[contains(text(),"${name}")]//ancestor::tr//button[@title = "${status}"]
-#   Wait Until Element Is Existent                              ${element}
 
 ###  -----  Tree  -----  ###
 Get Element Tree By Name
   [Arguments]               ${name}                           ${xpath}=${EMPTY}
   RETURN                    xpath=//*[contains(@class, "ant-tree-node-content-wrapper") and @title = "${name}"]//*[contains(@class, "group")]${xpath}
 
-# Click on "${name}" tree
-#   Wait Until Element Spin
-#   ${element}=               Get Element Tree By Name          ${name}
-#   Click                     ${element}
-
-# Click on the "${name}" tree to delete
-#   Wait Until Element Spin
-#   ${element}=               Get Element Tree By Name          ${STATE["${name}"]}
-#   Scroll To Element         ${element}
-#   Mouse Move Relative To    ${element}                        0
-#   Click                     ${element}//*[contains(@class, "la-trash")]
-#   Click Confirm To Action
-
-# Click on the "${name}" tree to edit
-#   Wait Until Element Spin
-#   ${element}=               Get Element Tree By Name          ${STATE["${name}"]}
-#   Click                     ${element}
-
-
 ###  -----  Element  -----  ###
 Click "${text}" button
-  Sleep                       ${SHOULD_TIMEOUT}
+  Wait Until Element Spin
   Click                     xpath=//button[@title = "${text}"]
   Scroll By                 ${None}
-# LOGIN
-
-# Click "${text}" tab button
-#   Click                       //*[contains(@class, "ant-tabs-tab-btn") and contains(text(), "${text}")]
-
-# Select on the "${text}" item line
-#   Wait Until Element Spin
-#   ${element}=               Get Element Item By Name          ${text}
-#   Click                     ${element}
+  Wait For Load State       domcontentloaded                  timeout=${BROWSER_TIMEOUT}
 
 Select on the "${text}" item line
   Wait Until Element Spin
   ${element}=               Set Variable                      //*[@class="item" and contains(.,"${text}")]
   Click                     ${element}
-# POST_LIST
 
 Click "${name}" menu
   Click                     xpath=//aside//ul[contains(@class, "ant-menu")]//span[@class="ant-menu-title-content" and contains(text(), "${name}")]
-# POST_LIST
 
 Click "${name}" sub menu to "${url}"
+  Wait For Load State       domcontentloaded                  timeout=${BROWSER_TIMEOUT}
   Click                     xpath=//aside//ul[contains(@class, "ant-menu")]//span[@class="ant-menu-title-content" and contains(text(), "${name}")]
   ${curent_url}=            Get Url
   Should Contain            ${curent_url}                     ${URL_DEFAULT}${url}
-# POST_LIST
 
 User look message "${message}" popup
+  Wait For Load State       domcontentloaded                  timeout=${BROWSER_TIMEOUT}
   ${contains}=              Get Regexp Matches                ${message}                    _@(.+)@_                    1
   ${cnt}=                   Get length                        ${contains}
   IF  ${cnt} > 0
     ${message}=             Replace String                    ${message}                    _@${contains[0]}@_          ${STATE["${contains[0]}"]}
   END
   Element Text Should Be    xpath=//div[contains(@class, "ant-message-custom-content")]/span[text()="${message}"]           ${message}
-# LOGIN
 
 Click Confirm To Action
-  # ${element}                Set Variable                      //*[contains(@class, "ant-popover ant-popconfirm")]//*[contains(@class, "ant-btn-primary")]
   ${element}                Set Variable                      //*[contains(@class, "ant-popover")]//*[contains(@class, "ant-btn-primary")]
   ${count}=                 Get Element Count                 ${element}
   IF    ${count} > 0
-    Click                   ${element}
-    Sleep                   ${SHOULD_TIMEOUT}
-  END
-  ${element}=               Set Variable                      //*[contains(@class, "swal2-close")]
-  ${passed}                 Run Keyword And Return Status
-                            ...   Element Should Be Visible   ${element}
-  IF    "${passed}" == "True"
-        Click               ${element}
-  END
-
-Wait Until Image Is Uploaded
-  ${element}                Set Variable                      //*[contains(@class,"animate-spin")]
-  ${cnt}=                   Get Element Count                 ${element}
-  IF    ${cnt} > 0
-    Wait Until Page Does Not Contain Element                  ${element}
+    Click                   (${element})[1]
+    Wait For Load State       domcontentloaded                  timeout=${BROWSER_TIMEOUT}
   END
 
 Wait Until Element Spin
-  Sleep                     ${SHOULD_TIMEOUT}
+  Wait For Load State       domcontentloaded                  timeout=${BROWSER_TIMEOUT}
   ${element}                Set Variable                      xpath=//*[contains(@class, "ant-spin-spinning")]
   ${count}=                 Get Element Count                 ${element}
   IF    ${count} > 0
     Wait Until Page Does Not Contain Element                  ${element}
   END
-# LOGIN
 
 ### ----- NEW ----- ###
 Click on eye icon in "${name}" field
   Wait Until Element Spin
   ${element}=                Get Element                       //label[@title="${name}"]//ancestor::div[contains(@class,"ant-row")]//div[contains(@class,"relative")]//*[@id="Layer_1"]
   Click                      ${element}
-# LOGIN
 
 Click on cross icon in input search box
   Click                      //input[contains(@id,"input_search")]//following-sibling::*[contains(@id,"Layer_1")]
@@ -421,45 +266,28 @@ The hidden password in "${name}" field should be visibled as "${text}"
   ${element}=               Get Element                        //*[contains(@class, "ant-form-item-label")]/label[text()="${name}"]/../../*[contains(@class, "ant-form-item")]//input
   Get Property              ${element}                         type                       ==                             text
   Get Text                  ${element}                         equal                      ${text}
-# LOGIN
 
 Click on "${name}" tab
   ${element}=               Set Variable                       //*[contains(@class,"ant-tabs")]//*[@role="tab" and text()="${name}"]
   Click                     ${element}
-# POST_LIST
-
-# Click "${name}" line in the avatar's account
-#   Wait Until Element Spin
-#   Click                     //section[contains(@id,"dropdown-profile")]//img
-#   Wait Until Element Spin
-#   ${element}=               Get Element                       //ul[contains(@class,"ant-dropdown-menu")]
-#   Click                     ${element}//div[text()="${name}"]
-#   Wait Until Element Spin
 
 Click on cross icon in select "${name}"
   Wait Until Element Spin
   ${element}=               Get Element                       //*[contains(@class, "ant-form-item-label")]/label[text()="${name}"]//ancestor::div[contains(@class, "ant-row")][1]//span[contains(@class, "anticon-close-circle")]/*[1]
   Click                     ${element}
-# POST_LIST
 
 Click on cross icon inside image in "${name}"
   ${element}=               Get Element Form Item By Name     ${name}                       //button[contains(@class,"btn-delete")]
   Click                     ${element}
   Click Confirm To Action
-# POST_LIST
 
 Click Cancel Action
   ${element}                Set Variable                       xpath=//*[contains(@class, "ant-popover")]//button[1]
   ${count}=                 Get Element Count                  ${element}
   IF    ${count} > 0
     Click                   ${element}
-    Sleep                   ${SHOULD_TIMEOUT}
+    Wait For Load State     domcontentloaded                  timeout=${BROWSER_TIMEOUT}
   END
-
-# Click "${text}" button with cancel action
-#   Click                     xpath=//button[@title = "${text}"]
-#   Click Cancel Action
-#   Scroll By                 ${None}
 
 Click on the "${text}" button in the "${name}" table line with cancel
   Wait Until Element Spin
@@ -468,7 +296,6 @@ Click on the "${text}" button in the "${name}" table line with cancel
   ${element}=               Get Element Table Item By Name    ${name}                       //button[@title = "${text}"]
   Click                     ${element}
   Click Cancel Action
-# POST_LIST
 
 Click "${type}" in "${name}" with "${text}"
   IF    "${text}" == "today"
@@ -490,7 +317,6 @@ Click "${type}" in "${name}" with "${text}"
   IF  ${cnt} > 0
   Set Global Variable       ${STATE["${name}"]}               ${text}
   END
-# POST_LIST
 
 Data's information in "${name}" should be equal "${value}"
   Wait Until Element Spin
@@ -518,166 +344,44 @@ Data's information in "${name}" should be equal "${value}"
       END
     END
   END
-# POST_LIST
-
-# Data's information should contain "${name}" field
-#   ${name_field}=            Check Text                         ${name}
-#   ${cnt}=                   Get Element Count                  //label[contains(@title,"${name}")]
-#   Should Be True            ${cnt} >= 1
-
-# Data's information in "${name}" should not be equal "${value}"
-#   Wait Until Element Spin
-#   ${value}=                 Check Text                         ${value}
-#   ${cnt}=                   Get Element Count                  //label[contains(@title,"${name}")]
-#   IF    ${cnt} > 0
-#     ${element}=             Set Variable                       //label[contains(@title,"${name}")]//ancestor::div[contains(@class,"ant-row")][1]//*[contains(@class,"ant-input")]
-#     ${cntS}=                Get Element Count                  ${element}
-#     IF    ${cntS} > 0
-#       Get Text              ${element}                         inequal                     ${value}
-#     ELSE
-#       ${element}=           Set Variable                       //label[contains(@title,"${name}")]//ancestor::div[contains(@class,"ant-row")][1]//*[contains(@class,"ant-select-selection-item")]
-#       Get Text              ${element}                         inequal                     ${value}
-#     END
-#   END
-
-# "${name}" table line should be highlighted
-#   ${name}=                  Check Text                         ${name}
-#   ${element}=               Set Variable                       //*[contains(text(),"${name}")]//ancestor::*[contains(@class,"!bg-teal-100")]
-#   Wait Until Element Is Existent                               ${element}
-
-
-# Enter "${type}" in input search placeholder "${placeholder}" with "${text}"
-#   Wait Until Element Spin
-#   ${text}=                   Get Random Text                   ${type}                    ${text}
-#   ${element}=                Get Element                       //input[contains(@placeholder, "${placeholder}")]
-#   Clear Text                 ${element}
-#   Fill Text                  ${element}                        ${text}
-#   ${cnt}=                    Get Length                        ${text}
-#   IF  ${cnt} > 0
-#     Set Global Variable      \${STATE["${placeholder}"]}       ${text}
-#   END
-
-# Enter "${type}" in search box placeholder "${placeholder}" with "${text}"
-#   Wait Until Element Spin
-#   ${text}=                   Get Random Text                   ${type}                       ${text}
-#   ${element}=                Get Element                       //div[contains(@class,"ant-table-filter-dropdown")]//input[contains(@placeholder, "${placeholder}")]
-#   Clear Text                 ${element}
-#   Fill Text                  ${element}                        ${text}
-#   ${cnt}=                    Get Length                        ${text}
-#   IF  ${cnt} > 0
-#     Set Global Variable      \${STATE["${placeholder}"]}       ${text}
-#   END
 
 "${name}" should be visible in the table line
   Wait Until Element Spin
   ${name}=                  Check Text                         ${name}
   ${element}=               Set Variable                       //tbody//tr[contains(@class,"ant-table-row")]//*[contains(text(),"${name}")]
   Wait Until Element Is Existent                               ${element}
-# POST_LIST
 
 "${name}" should not be visible in the table line
   ${name}=                  Check Text                         ${name}
   ${element}=               Set Variable                       //tbody//tr[contains(@class,"ant-table-row")]//*[contains(text(),"${name}")]
   Wait Until Page Does Not Contain Element                     ${element}
-# POST_LIST
-
-# "${name}" should be visible in the first table line
-#   Wait Until Element Spin
-#   ${name}=                  Check Text                         ${name}
-#   Get Text                  (//tbody/tr[2]/td[1]//span)[last()]         equal                         ${name}
-
-# "${name}" should not be visible in the first table line
-#   Wait Until Element Spin
-#   ${name}=                  Check Text                         ${name}
-#   Get Text                  (//tbody/tr[2]/td[1]//span)[last()]          inequal                       ${name}
-
-# Table line should show empty
-#   ${element}=               Set Variable                       //*[contains(@class, "ant-table-empty")]
-#   Wait Until Element Is Existent                               ${element}
-#   ${cnt}=                   Get Element Count                  ${element}//*[text() = "Trống"]
-#   Should Be True            ${cnt} > 0
-
-# Click on magnifier icon in "${name}" table cell
-#   ${cnt}=                   Get Element Count                  //th[@aria-label = "${name}"]//span[contains(@class,"ant-dropdown-open")]
-#   IF    ${cnt} == 0
-#     Click                     //th[@aria-label = "${name}"]//*[contains(@id,"Layer_1")]
-#     Wait Until Element Spin
-#   ELSE
-#     Click                     //th[@aria-label = "${name}"]//*[contains(@id,"Layer_1")]
-#     Wait Until Element Spin
-#     Click                     //th[@aria-label = "${name}"]//*[contains(@id,"Layer_1")]
-#     Wait Until Element Spin
-#   END
-
-# Click on calendar icon in "${name}" table cell
-#   Click                     //th[@aria-label = "${name}"]//*[contains(@id,"Layer_1")]
-#   Wait Until Element Spin
-
-# Click on sort icon in "${name}" table cell
-#   #Click                     //th[@aria-label = "${name}"]//div[@class="ant-table-column-sorters"]
-#   Click                      //span[text()="${name}"]//ancestor::div[contains(@class,"ant-table-column-sorters")]
-#   Wait Until Element Spin
-
-# The list of radio is empty
-#   ${element}=               Set Variable                      //div[@class = "p-1"]//span[contains(@class,"px-2")]
-#   Wait Until Element Is Existent                              ${element}
-#   Get Text                  ${element}                        equal                     Trống
-
-# Click radio "${name}" in search box
-#   Wait Until Element Spin
-#   Click                     //span[contains(text(),"${name}")]//ancestor::label[contains(@class,"ant-checkbox-wrapper")]//span[contains(@class,"ant-wave-target")]
-
-# All radio selection in "${name}" should be uncheck
-#   Click                     //th[@aria-label = "${name}"]//*[contains(@id,"Layer_1")]
-#   Wait Until Element Spin
-#   ${count}=                 Get Element Count                  //label[contains(@class,"ant-checkbox-wrapper-checked")]
-#   Should Be True            ${count} < 1
-#   Click                     //th[@aria-label = "${name}"]//*[contains(@id,"Layer_1")]
 
 Get the image's information in "${name}" field
+  Wait Until Element Spin
   ${name}=                  Check Text                        ${name}
   ${element}=               Get Element Form Item By Name     ${name}                       //a
-  Hover                     ${element}
   ${infor}=                 Get Attribute                     ${element}                    href
   RETURN                  ${infor}
-# POST_LIST
 
 ### --- Check UI --- ###
 Heading should contain "${text}" inner text
   ${text}=                  Check Text                        ${text}
   ${element}=               Set Variable                      //*[self::h1 or self::h2 or self::h3 or self::h4 or self::h5 or self::h6][text()="${text}"]
   Wait Until Element Is Existent                              ${element}
-# LOGIN
-
-# Heading of separated group should contain "${text}" inner text
-#   ${text}=                  Check Text                        ${text}
-#   Wait Until Element Is Existent                              //div[@class="ant-drawer-title" and text()="${text}"]
 
 Webpage should contain "${name}" input field
   ${element}=               Get Element                       (//label[@title="${name}"]//ancestor::div[contains(@class,"ant-row")][1]//div[@class="ant-form-item-control-input"])[1]
   ${count}=                 Get Element Count                 ${element}
   Should Be True            ${count} >= 1
-# LOGIN
 
 Webpage should contain "${name}" button
   ${element}=               Set Variable                      //button[(text()="${name}")]
   ${cnt}=                   Get Element Count                 ${element}
   Should Be True            ${cnt} > 0
-# LOGIN
-
-# Webpage should contain "${name}" select field
-#   ${element}=               Set Variable                      //label[contains(@title,"${name}")]//ancestor::div[contains(@class,"ant-row")][1]//div[contains(@class,"ant-select-selector")]
-#   Wait Until Element Is Existent                              ${element}
-
-# Webpage should contain the profile information group with name and role
-#   ${element}=               Get Element                       //form[contains(@class,"ant-form-vertical")]/div[contains(@class,"group-input-profile")]//div[contains(@class,"relative")]/a
-#   ${count}=                 Get Element Count                 ${element}
-#   Should Be True            ${count} >= 1
 
 Webpage should contain "${name}" tab
   ${element}=               Set Variable                       //*[contains(@class,"ant-tabs")]//*[@role="tab" and text()="${name}"]
   Wait Until Element Is Existent                               ${element}
-# POST_LIST
 
 Webpage should contain "${name}" column with sort and search function
   Element Should Be Exist                   //th[@aria-label = "${name}"]
@@ -685,13 +389,6 @@ Webpage should contain "${name}" column with sort and search function
   Should Be True            ${count2} > 0
   ${count3}=                Get Element Count                   //th[@aria-label = "${name}"]//span[contains(@class,"ant-table-filter-trigger")]
   Should Be True            ${count3} > 0
-# POST_LIST
-
-# Webpage should contain "${name}" column with sort function
-#   ${count1}=                Get Element Count                   //th[@aria-label = "${name}"]
-#   Should Be True            ${count1} > 0
-#   ${count2}=                Get Element Count                   //th[@aria-label = "${name}"]//span[contains(@class,"ant-table-column-sorter")]
-#   Should Be True            ${count2} > 0
 
 Webpage should contain "${name}" image upload field
   Element Should Be Exist                                       //label[@title="${name}"]
@@ -700,31 +397,18 @@ Webpage should contain "${name}" image upload field
     ${cntS}=                Get Element Count                   //label[@title="${name}"]//ancestor::div[contains(@class,"ant-form-item")]//input[@type="file"]
     Should Be True          ${cntS} > 0
   END
-# POST_LIST
-
-# Webpage should contain "${name}" column
-#   ${count1}=                Get Element Count                   //th[@aria-label = "${name}"]
-#   ${passed}=                Run Keyword And Return Status
-#   ...                       Should Be True    ${count1} > 0
-#   IF    "${passed}" == "False"
-#     ${count2}=              Get Element Count                   //th[text() = "${name}"]
-#     Should Be True          ${count2} > 0
-#   END
 
 Webpage should contain "${name}" group
   ${element}=               Set Variable                        //h3[text() = "${name}"]//ancestor::div[contains(@class,"left")]
   Element Should Be Exist                                       ${element}
-# POST_LIST
 
 Webpage should contain the list data from database
   ${count}=                 Get Element Count                   //div[contains(@class,"container")]
   Should Be True            ${count} >= 1
-# POST_LIST
 
 Webpage should contain the search function
   ${element}=               Set Variable                        //*[contains(@id,"input_search")]
   Element Should Be Exist                                       ${element}
-# POST_LIST
 
 The status button in the "${name}" table line should change to "${text}"
   Wait Until Element Spin
@@ -732,7 +416,6 @@ The status button in the "${name}" table line should change to "${text}"
   ${text}=                  Check Text                         ${text}
   ${element}=               Get Element                        //tbody//*[contains(text(),"${name}")]//ancestor::tr//button[1]
   ${content}=               Get Property                       ${element}                           title                   equal                ${text}
-# POST_LIST
 
 Confirm locating exactly in "${name}" page of "${menu}" menu
   Wait Until Element Spin
@@ -740,228 +423,3 @@ Confirm locating exactly in "${name}" page of "${menu}" menu
   Element Should Be Exist                                      ${element}
   ${cnt}=                   Get Element Count                  //main//*[text()="${name}"]
   Should Be True            ${cnt} == 2
-# POST_LIST
-
-### Relate to number of list page ###
-# Count the number account in list
-#   Wait Until Element Spin
-#   ${element}=                Set Variable                      xpath=//tbody//tr[contains(@class, "ant-table-row")]
-#   ${count}=                  Get Element Count                 ${element}
-#   IF    ${count} <= 0
-#     Wait Until Element Spin
-#     ${count}=                Get Element Count                 ${element}
-#     ${count}=                Convert To Integer                ${count}
-#   ELSE
-#     ${count}=                Convert To Integer                ${count}
-#   END
-#   RETURN                   ${count}
-
-# Get number account list in last page
-#   ${element}=                Get Element                       //span[contains(@class, "ml-3")]
-#   ${text}=                   Get Text                          ${element}
-#   ${pageNum}=                Count the number account in list
-#     ${condition}=            Get Text                          //header//h1
-#   IF    "${condition}" == "Danh sách Người dùng"
-#     ${total}=                 Get Regexp Matches                ${text}                     số (.+) người                1
-#   ELSE
-#     ${total}=                 Get Regexp Matches                ${text}                     số (.+) danh                 1
-#   END
-#   ${total}=                  Convert To Integer                ${total[0]}
-#   ${NumberAcc}=              Evaluate                          ${total} % ${pageNum}
-#   IF    ${NumberAcc} == 0
-#     ${NumberAccount}=        Set Variable                      ${pageNum}
-#   ELSE
-#     ${NumberAccount}=        Set Variable                      ${NumberAcc}
-#   END
-#   RETURN                   ${NumberAccount}
-
-# Get the number of total account
-#   ${element}=                Get Element                       //span[contains(@class, "ml-3")]
-#   ${text}=                   Get Text                          ${element}
-#   ${total}=                  Get Regexp Matches                ${text}                     /Tổng số${SPACE}(\\d+)${SPACE}                   1
-#   ${total}=                  Convert To Integer                ${total[0]}
-#   ${cnt}=                    Get Length                        ${text}
-#   IF  ${cnt} > 0
-#     ${TotalAccount}=         Set Variable                      ${total}
-#   END
-#   RETURN                   ${TotalAccount}
-
-# Get the last page number
-#   ${element}=                Get Element                       //span[contains(@class, "ml-3")]
-#   ${text}=                   Get Text                          ${element}
-#   ${pageNum}=                Count the number account in list
-#   ${condition}=              Get Text                          //header//h1
-#   IF    "${condition}" == "Danh sách Người dùng"
-#     ${totalP}=                 Get Regexp Matches                ${text}                     số (.+) người                1
-#   ELSE
-#     ${totalP}=                 Get Regexp Matches                ${text}                     số (.+) danh                 1
-#   END
-#   ${totalP}=                 Convert To Integer                ${totalP[0]}
-#   ${con}=                    Evaluate                          ${totalP} % ${pageNum}
-#   IF    ${con} == 0
-#     ${lastPN}=               Evaluate                          ${totalP}//${pageNum}
-#   ELSE
-#     ${lastPN}=               Evaluate                          (${totalP}//${pageNum})+1
-#   END
-#   ${cnt}=                    Get Length                        ${text}
-#   IF  ${cnt} > 0
-#     ${lastPageNumber}=       Set Variable                      ${lastPN}
-#     ${lastPageNumber}=       Convert To String                 ${lastPageNumber}
-#   END
-#   RETURN                   ${lastPageNumber}
-
-# Number account of page
-#   ${element}=                Get Element                       //span[contains(@class, "ml-3")]
-#   ${text}=                   Get Text                          ${element}
-#   ${pageNum}=                Get Regexp Matches                ${text}                     -(.+) của                   1
-#   ${pageNum}=                Set Variable                      ${pageNum[0]}
-#   ${cnt}=                    Get Length                        ${text}
-#   IF  ${cnt} > 0
-#     ${pageNumber}=           Set Variable                      ${pageNum}
-#   END
-#   RETURN                   ${pageNumber}
-
-# Check the amount of page list
-#   Wait Until Element Spin
-#   ${element_E}=              Set Variable                      //*[contains(@class, "ant-table-empty")]
-#   ${cnt_E}=                  Get Element Count                 ${element_E}
-#   IF    ${cnt_E} > 0
-#     Pass Execution           "This list do not contains data"
-#   END
-#   ${countA}=                 Count the number account in list
-#   ${totalA}=                 Get the number of total account
-#   IF    ${countA} == ${totalA}
-#     ${amountPage}=           Set Variable                      1
-#     Pass Execution           "This list contains only one page"
-#   ELSE IF    ${countA} < ${totalA}
-#     ${amountPage}=           Evaluate                          (${totalA}//${countA})+1
-#     ${amountPage}=           Set Variable                      ${amountPage}
-#   END
-#   RETURN                   ${amountPage}
-
-### --- List of account navigation --- ###
-# Move to the "${target}" page
-#   ${count}=                   Get Length                       ${target}
-#   IF    "${target}" == "previous"
-#       Click                   xpath=//button[@aria-label = "prev"]/*[contains(@id, "Layer_1")]
-#   ELSE IF    "${target}" == "next"
-#       Click                   xpath=//button[@aria-label = "next"]/*[contains(@id, "Layer_1")]
-#   ELSE
-#       ${number}=              Convert To Integer               ${target}
-#       Click                   xpath=//button[@aria-label = "page_${number}"]
-#   END
-#   Wait Until Element Spin
-
-# Move to the last page and check
-#   ${countS}=                  Get number account list in last page
-#   ${number}=                  Get the last page number
-#   Move to the "${number}" page
-#   Wait Until Element Spin
-#   ${elementS}=                Set Variable                     xpath=//tbody//tr[contains(@class, "ant-table-row")]
-#   ${count}=                   Get Element Count                ${elementS}
-#   ${count}=                   Convert To Integer               ${count}
-#   Should Be Equal             ${count}                         ${countS}
-
-# Click on "${ordinal}" selection to change the number of data show in list and check
-#   Wait Until Element Spin
-#   ${cnt}=                       Get Length                      ${ordinal}
-#   IF        ${cnt} > 3 and "${ordinal}" == "first"
-#     ${select}=                  Set Variable                    1
-#   ELSE IF   ${cnt} > 3 and "${ordinal}" == "second"
-#     ${select}=                  Set Variable                    2
-#   ELSE IF   ${cnt} > 3 and "${ordinal}" == "third"
-#     ${select}=                  Set Variable                    3
-#   ELSE IF   ${cnt} > 3 and "${ordinal}" == "fourth"
-#     ${select}=                  Set Variable                    4
-#   ELSE IF   ${cnt} > 3 and "${ordinal}" == "fifth"
-#     ${select}=                  Set Variable                    5
-#   ELSE
-#     ${select}=                  Convert To Integer              ${ordinal}
-#   END
-#   ${amountPage}=                Check the amount of page list
-#   ${text_current}=              Get Text                        //div[contains(@class,"overflow-auto")]//*[contains(@class, "ant-select-selection-item")]
-#   ${current_number}             Convert To Integer              ${text_current}
-#   Click                         //div[contains(@class,"overflow-auto")]//*[contains(@class, "ant-select-selection-item")]
-#   Wait Until Element Spin
-#   ${text_default}=              Get Text                        //div[@aria-selected = "true"]/div[contains(@class,"ant-select-item-option-content")]
-#   ${default_number}=            Convert To Integer              ${text_default}
-#   ${text_select}=               Get Text                        //div[@class = "rc-virtual-list-holder-inner"]/div[${select}]/div
-#   ${select_number}=             Convert To Integer              ${text_select}
-#   IF                            ${amountPage} >= 2
-#     IF                          ${current_number} < ${select_number}
-#       Move to the "next" page
-#       ${name}=                  Get data in the first row
-#       Move to the "previous" page
-#       ${ordinal_before}=        Evaluate                        ${current_number} + 2
-#       Click                     //div[contains(@class,"overflow-auto")]//*[contains(@class, "ant-select-selection-item")]
-#       Wait Until Element Spin
-#       Click                     //div[@class = "rc-virtual-list-holder-inner"]/div[${select}]/div
-#       Wait Until Element Spin
-#       Get Text                  //tbody//tr[${ordinal_before}]//span                            equal                       ${name}
-#     ELSE IF                     ${current_number} > ${select_number}
-#       ${ordinal_before}=        Evaluate                        ${select_number} + 2
-#       ${name}=                  Get Text                        //tbody//tr[${ordinal_before}]//span
-#       Click                     //div[contains(@class,"overflow-auto")]//*[contains(@class, "ant-select-selection-item")]
-#       Wait Until Element Spin
-#       Click                     //div[@class = "rc-virtual-list-holder-inner"]/div[${select}]/div
-#       Wait Until Element Spin
-#       Move to the "next" page
-#       ${nameS}=                 Get data in the first row
-#       Move to the "previous" page
-#       Should Be Equal           ${nameS}                         ${name}
-#       # Move to the "previous" page
-#     ELSE IF                     ${current_number} = ${select_number}
-#       Click                     //div[contains(@class,"overflow-auto")]//*[contains(@class, "ant-select-selection-item")]
-#       Wait Until Element Spin
-#       Click                     //div[@class = "rc-virtual-list-holder-inner"]/div[${select}]/div
-#       Wait Until Element Spin
-#     END
-#   ELSE IF                       ${amountPage} < 2
-#     IF                          ${current_number} <= ${select_number}
-#       Click                     //div[contains(@class,"overflow-auto")]//*[contains(@class, "ant-select-selection-item")]
-#       Wait Until Element Spin
-#       Click                     //div[@class = "rc-virtual-list-holder-inner"]/div[${select}]/div
-#       Wait Until Element Spin
-#     ELSE IF                     ${current_number} > ${select_number}
-#       ${account_number}=        Count the number account in list
-#       IF       ${account_number} > ${select_number}
-#         ${ordinal_before}=      Evaluate                         ${select_number} + 2
-#         ${name}=                Get Text                         //tbody//tr[${ordinal_before}]//span
-#         Click                   //div[contains(@class,"overflow-auto")]//*[contains(@class, "ant-select-selection-item")]
-#         Wait Until Element Spin
-#         Click                   //div[@class = "rc-virtual-list-holder-inner"]/div[${select}]/div
-#         Wait Until Element Spin
-#         Move to the "next" page
-#         ${nameS}=               Get data in the first row
-#         Move to the "previous" page
-#         Should Be Equal         ${nameS}                         ${name}
-#         # Move to the "previous" page
-#       ELSE IF    ${account_number} <= ${select_number}
-#         Click                   //div[contains(@class,"overflow-auto")]//*[contains(@class, "ant-select-selection-item")]
-#         Wait Until Element Spin
-#         Click                   //div[@class = "rc-virtual-list-holder-inner"]/div[${select}]/div
-#         Wait Until Element Spin
-#       END
-#     END
-#   END
-
-### --- Get the account name --- ###
-# Get data in the last row
-#   ${pageN}=                   Count the number account in list
-#   ${number}=                  Evaluate                         ${pageN}+1
-#   ${element}=                 Get Element                      //tbody//tr[${number}]//span
-#   ${LAname}=                  Get Text                         ${element}
-#   ${cnt}=                     Get Length                       ${LAname}
-#   IF   ${cnt} > 0
-#     Set Global Variable       \${LAname}                        ${LAname}
-#   END
-#   RETURN                    ${LAname}
-
-# Get data in the first row
-#   ${element}=                 Get Element                      //tbody//tr[2]//span
-#   ${Fname}=                   Get Text                         ${element}
-#   ${cnt}=                     Get Length                       ${Fname}
-#   IF   ${cnt} > 0
-#     ${Fname}=                 Set Variable                     ${Fname}
-#   END
-#   RETURN                    ${Fname}

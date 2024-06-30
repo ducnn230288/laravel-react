@@ -85,7 +85,7 @@ PL_39 Verity that change the post's information by entering the valid data in "N
   When Click on the "Xóa Bài đăng _@Tên Bài đăng@_" button in the "_@Tên Bài đăng@_" table line
 
 PL_40 Verity that change the post's information by entering the valid data in "Hình ảnh" field
-  [Tags]                                                                                                EditInfo    Test1                        Projects                      Valid
+  [Tags]                                                                                                EditInfo                        Projects                      Valid
   Create a test post in "Projects" list
   When Click on the "Chỉnh sửa Bài đăng _@Tên Bài đăng@_" button in the "_@Tên Bài đăng@_" table line
   ${before}=                     Get the image's information in "Hình ảnh" field
@@ -356,7 +356,7 @@ PL_65 Verity that change the post's information by entering the valid data in "N
   When Click on the "Xóa Bài đăng _@Tên Bài đăng@_" button in the "_@Tên Bài đăng@_" table line
 
 PL_66 Verity that change the post's information by entering the valid data in "Hình ảnh" field
-  [Tags]                                                                                                EditInfo    Test1                        News                      Valid
+  [Tags]                                                                                                EditInfo                        News                      Valid
   Create a test post in "News" list
   When Click on the "Chỉnh sửa Bài đăng _@Tên Bài đăng@_" button in the "_@Tên Bài đăng@_" table line
   ${before}=                     Get the image's information in "Hình ảnh" field

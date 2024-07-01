@@ -1,0 +1,31 @@
+---
+name: Checks
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches:
+      - 'master'
+jobs:
+  test-lint:
+    name: Test and Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Run actions/checkout@v2
+        uses: actions/checkout@v2
+      - name: Build the docker-compose stack
+        run: docker-compose -f docker/docker-test.yml up -d
+      - name: Run Test Backend
+        run: docker-compose -f docker/docker-test.yml run --rm server sh -c "./vendor/bin/phpunit"
+      - name: Run Migration && Seed Database
+        run: docker-compose -f docker/docker-test.yml run --rm server sh -c "php artisan migrate:refresh --seed"
+      - name: Run Test Frontend
+        run: docker-compose -f docker/docker-test.yml exec -T server robot -d robot/result robot/testcases/Post_List.robot
+#       docker-compose -f docker/docker-build.yml up -d --build
+#       docker-compose -f docker/docker-build.yml run --rm server sh -c "npm run migration && npm run seed"

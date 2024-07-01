@@ -10,7 +10,7 @@ PL_01 Verify the User Interface of "Bài đăng" page
   [Tags]                                                                                                MainPage                   UI                     Smoketest
   Login to admin
   When Click "Thiết lập" menu
-  When Click "Bài đăng" sub menu to "/#/vn/setting/post"
+  When Click "Bài đăng" sub menu to "#/vn/setting/post"
   Then Heading should contain "Bài đăng" inner text
   Then Confirm locating exactly in "Bài đăng" page of "Thiết lập" menu
   Then Webpage should contain the list data from database
@@ -954,7 +954,7 @@ PL_121 Verify the cancel action button when delete post
 Go to "Bài đăng" page with "${category}" list
   Login to admin
   Click "Thiết lập" menu
-  Click "Bài đăng" sub menu to "/#/vn/setting/post"
+  Click "Bài đăng" sub menu to "#/vn/setting/post"
   Select on the "${category}" item line
 
 ### Post ###

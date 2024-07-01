@@ -1,0 +1,27 @@
+name: "laravel-react"
+services:
+  db:
+    image: mariadb:10.8.3
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_DATABASE: laravel-react
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - 3366:3306
+
+  server:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    image: 7dd8cd932c8a5560e074ebbf9f156c1c9e6cc5f36c19c28916dfc31c77d03400
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/app
+      - /app/vendor
+    depends_on:
+      - db
+    command: php artisan serve --host 0.0.0.0 --port=3000

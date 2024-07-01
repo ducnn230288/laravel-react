@@ -22,3 +22,10 @@ client/build
 client/node_modules
 client/package-lock.json
 composer.lock
+/public/logo192.png
+/public/logo512.png
+/public/manifest.webmanifest
+/public/maskable_icon_x512.png
+/public/assets/
+/public/locales/
+/public/firebase-messaging-sw.js

@@ -10,7 +10,7 @@ ${HEADLESS}             ${True}
 ${BROWSER_TIMEOUT}      %{BROWSER_TIMEOUT=40} seconds
 ${SHOULD_TIMEOUT}       0.1 seconds
 
-${URL_DEFAULT}          %{HOST_ADDRESS=http://localhost:4000}
+${URL_DEFAULT}          %{HOST_ADDRESS=http://localhost:4000/}
 ${STATE}                Evaluate  json.loads("""{}""")  json
 
 # Admin's default information #
@@ -237,11 +237,12 @@ User look message "${message}" popup
   Element Text Should Be    xpath=//div[contains(@class, "ant-message-custom-content")]/span[text()="${message}"]           ${message}
 
 Click Confirm To Action
+  Wait Until Element Spin
   ${element}                Set Variable                      //*[contains(@class, "ant-popover")]//*[contains(@class, "ant-btn-primary")]
   ${count}=                 Get Element Count                 ${element}
   IF    ${count} > 0
-    Click                   (${element})[1]
-    Wait For Load State       domcontentloaded                  timeout=${BROWSER_TIMEOUT}
+    Click                   ${element}
+    Wait Until Element Spin
   END
 
 Wait Until Element Spin

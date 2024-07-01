@@ -2,4 +2,6 @@
 /.vscode
 /vendor
 /node_modules
-/client
+/client/node_modules
+/client/test/result
+/client/test/test

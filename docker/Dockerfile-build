@@ -7,7 +7,7 @@ npm run build:prod
 FROM ubuntu:latest
 
 RUN  apt-get update -y
-RUN  apt-get install php php-curl curl php-mysql libapache2-mod-php php-mbstring php-xmlrpc php-soap php-gd php-xml php-cli php-zip php-bcmath php-tokenizer php-json php-pear -y
+RUN  apt-get install php php-curl curl php-mysql php-sqlite3 libapache2-mod-php php-mbstring php-xmlrpc php-soap php-gd php-xml php-cli php-zip php-bcmath php-tokenizer php-json php-pear -y
 RUN curl -sS https://getcomposer.org/installer | php -- \
     --install-dir=/usr/local/bin --filename=composer
 

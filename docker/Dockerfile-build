@@ -23,6 +23,7 @@ RUN composer install
 ARG PROD=false
 COPY --chown=root:root ../client/test ./robot
 RUN  if [ "$PROD" = "false" ] ; then apt-get install -y python3 python3-pip nodejs npm; fi
+RUN  if [ "$PROD" = "false" ] ; then npx playwright install-deps; fi
 RUN  if [ "$PROD" = "false" ] ; then pip3 install --no-cache --break-system-packages -r ./robot/requirements.txt; fi
 RUN  if [ "$PROD" = "false" ] ; then rfbrowser init; fi
 

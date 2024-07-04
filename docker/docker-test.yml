@@ -11,8 +11,6 @@ services:
       MYSQL_ROOT_PASSWORD: root
     ports:
       - 3366:3306
-    networks:
-      - sail
 
   server:
     build:
@@ -29,6 +27,4 @@ services:
       - 3000:3000
     depends_on:
       - db
-    networks:
-      - sail
     command: php artisan serve --host 0.0.0.0 --port=3000

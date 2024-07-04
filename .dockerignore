@@ -3,5 +3,5 @@
 /vendor
 /node_modules
 /client/node_modules
-/client/test/result
-/client/test/test
+/client/e2e/result
+/client/e2e/test

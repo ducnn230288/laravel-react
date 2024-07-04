@@ -186,7 +186,7 @@ Enter "${type}" in textarea "${name}" with "${text}"
 
 Select file in "${name}" with "${text}"
   ${element}=               Get Element Form Item By Name     ${name}                       //input[@type = "file"]
-  Upload File By Selector   ${element}                        test/upload/${text}
+  Upload File By Selector   ${element}                        e2e/upload/${text}
   Wait Until Element Spin
 
 Get Element Table Item By Name

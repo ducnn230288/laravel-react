@@ -1,6 +1,6 @@
-FROM bitnami/node:20 as build-client
+FROM node:20 as build-client
 WORKDIR /app
-COPY --chown=root:root ../client .
+COPY --chown=root:root ./client .
 RUN npm install -f && \
 npm run build:prod
 
@@ -12,19 +12,19 @@ RUN curl -sS https://getcomposer.org/installer | php -- \
     --install-dir=/usr/local/bin --filename=composer
 
 WORKDIR /app
-COPY .. .
+COPY . .
 RUN rm -rf /app/client
 COPY --from=build-client /app/build/. ./public/.
 RUN rm -rf /app/public/index.html
 COPY --from=build-client /app/build/index.html ./resources/views/administrator.blade.php
-COPY --chown=root:root ../.env.example ./.env
+COPY --chown=root:root ./.env.example ./.env
 RUN composer install
 
 ARG PROD=false
-COPY --chown=root:root ../client/e2e ./robot
+COPY --chown=root:root client/e2e ./robot
 RUN  if [ "$PROD" = "false" ] ; then apt-get install -y python3 python3-pip nodejs npm; fi
 RUN  if [ "$PROD" = "false" ] ; then npx playwright install-deps; fi
-RUN  if [ "$PROD" = "false" ] ; then pip3 install --no-cache --break-system-packages -r ./e2e/requirements.txt; fi
+RUN  if [ "$PROD" = "false" ] ; then pip3 install --no-cache --break-system-packages -r ./robot/requirements.txt; fi
 RUN  if [ "$PROD" = "false" ] ; then rfbrowser init; fi
 
 CMD php artisan key:generate && php artisan storage:link

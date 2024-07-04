@@ -16,11 +16,11 @@ services:
     build:
       context: ..
       dockerfile: Dockerfile
-    image: 7dd8cd932c8a5560e074ebbf9f156c1c9e6cc5f36c19c28916dfc31c77d03400
+    image: f08bc222baa618ff8eaaf6f9c84575aa083a1bb5e04fc4879921cc1fe2c0c697
     ports:
       - 3000:3000
     volumes:
-      - .:/app
+      - ..:/app
       - /app/vendor
     depends_on:
       - db

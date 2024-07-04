@@ -22,7 +22,7 @@ PL_01 Verify the User Interface of "Bài đăng" page
   Then Webpage should contain "Thêm mới Bài đăng Projects" button
 
 PL_08 Verify that switch off post when click on "Đã kích hoạt" button
-  [Tags]                                                                                                Activate                     Projects
+  [Tags]                                                                                                Activate  Test1                     Projects
   Create a test post in "Projects" list
   When Click on the "Đã kích hoạt Bài đăng _@Tên Bài đăng@_" button in the "_@Tên Bài đăng@_" table line
   Then User look message "Cập nhật thành công" popup
@@ -30,7 +30,7 @@ PL_08 Verify that switch off post when click on "Đã kích hoạt" button
   When Click on the "Xóa Bài đăng _@Tên Bài đăng@_" button in the "_@Tên Bài đăng@_" table line
 
 PL_10 Verify that switch off post when click on "Đã kích hoạt" button
-  [Tags]                                                                                                Activate                     News
+  [Tags]                                                                                                Activate  Test1                     News
   Create a test post in "News" list
   When Click on the "Đã kích hoạt Bài đăng _@Tên Bài đăng@_" button in the "_@Tên Bài đăng@_" table line
   Then User look message "Cập nhật thành công" popup
@@ -72,7 +72,7 @@ PL_38_2 Verify the UI of the editing post page in "Projects" list (VIETNAM tab)
   When Click on the "Xóa Bài đăng _@Tên Bài đăng@_" button in the "_@Tên Bài đăng@_" table line
 
 PL_39 Verity that change the post's information by entering the valid data in "Ngày tạo" field
-  [Tags]                                                                                                EditInfo                        Projects                      Valid
+  [Tags]                                                                                                EditInfo  Test1                        Projects                      Valid
   ${yesterday}=                                                                                         Get Current Date                local                         -1 day                                     result_format=%d-%m-%Y
   Create a test post in "Projects" list
   When Click on the "Chỉnh sửa Bài đăng _@Tên Bài đăng@_" button in the "_@Tên Bài đăng@_" table line

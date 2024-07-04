@@ -6,7 +6,7 @@ Library                 DateTime
 
 *** Variables ***
 ${BROWSER}              chromium
-${HEADLESS}             ${True}
+${HEADLESS}             %{HEADLESS=False}
 ${BROWSER_TIMEOUT}      %{BROWSER_TIMEOUT=40} seconds
 ${SHOULD_TIMEOUT}       0.1 seconds
 
@@ -195,6 +195,7 @@ Get Element Table Item By Name
 
 Click on the "${text}" button in the "${name}" table line
   Wait For Load State       domcontentloaded                  timeout=${BROWSER_TIMEOUT}
+  Sleep                     0.1
   ${name}=                  Check Text                        ${name}
   ${text}=                  Check Text                        ${text}
   ${element}=               Get Element Table Item By Name    ${name}                       //button[@title = "${text}"]

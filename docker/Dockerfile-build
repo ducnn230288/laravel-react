@@ -21,7 +21,7 @@ COPY --chown=root:root ../.env.example ./.env
 RUN composer install
 
 ARG PROD=false
-COPY --chown=root:root ../client/e2e ./robot
+COPY --chown=root:root ../client/e2e ./e2e
 RUN  if [ "$PROD" = "false" ] ; then apt-get install -y python3 python3-pip nodejs npm; fi
 RUN  if [ "$PROD" = "false" ] ; then npx playwright install-deps; fi
 RUN  if [ "$PROD" = "false" ] ; then pip3 install --no-cache --break-system-packages -r ./e2e/requirements.txt; fi

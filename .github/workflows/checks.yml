@@ -3,10 +3,10 @@ name: Checks
 
 on:
   push:
-    branches: [ "master" ]
+    branches: ["master"]
   pull_request:
     branches:
-      - 'master'
+      - "master"
 jobs:
   test-lint:
     name: Test and Lint
@@ -23,10 +23,10 @@ jobs:
         run: docker-compose -f docker/docker-test.yml up -d
       - name: Run Test Backend
         run: docker-compose -f docker/docker-test.yml exec -T server ./vendor/bin/phpunit
+      - name: Run Clear config
+        run: docker-compose -f docker/docker-test.yml exec -T server php artisan config:clear
       - name: Run Migration && Seed Database
         run: docker-compose -f docker/docker-test.yml exec -T server php artisan migrate:refresh --seed
-      - name: Run Clear config  
-        run: docker-compose -f docker/docker-test.yml exec -T server php artisan config:clear
       - name: Generate key
         run: docker-compose -f docker/docker-test.yml exec -T server php artisan key:generate
       - name: Run Test Frontend

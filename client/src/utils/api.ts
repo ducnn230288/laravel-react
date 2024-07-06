@@ -1,8 +1,8 @@
 import queryString from 'query-string';
 
 import { message } from '@/index';
-import { keyRefreshToken, keyToken, linkApi, routerLinks } from '@/utils';
 import { IResponses } from '@/types';
+import { keyRefreshToken, keyToken, linkApi, routerLinks } from '@/utils';
 
 export const API = {
   init: () =>

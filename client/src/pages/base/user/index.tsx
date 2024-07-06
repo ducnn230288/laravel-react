@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react';
+import { Fragment, useEffect } from 'react';
 
 import { EStatusState } from '@/enums';
 import { CBreadcrumbs } from '@/library/breadcrumbs';
@@ -35,8 +35,8 @@ const Page = () => {
 };
 export default Page;
 
-import { useTranslation } from 'react-i18next';
 import { CDrawerForm } from '@/library/drawer';
+import { useTranslation } from 'react-i18next';
 import _column from './column';
 const Form = () => {
   const sUser = SUser();
@@ -69,10 +69,10 @@ const Form = () => {
   );
 };
 
-import { useLocation, useNavigate } from 'react-router';
-import queryString from 'query-string';
 import { Select, Spin, Tree } from 'antd';
+import queryString from 'query-string';
 import PerfectScrollbar from 'react-perfect-scrollbar';
+import { useLocation, useNavigate } from 'react-router';
 
 import { CSvgIcon } from '@/library/svg-icon';
 const Side = () => {

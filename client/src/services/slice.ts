@@ -1,8 +1,8 @@
-import { ActionReducerMapBuilder, Draft } from '@reduxjs/toolkit';
+import type { ActionReducerMapBuilder, Draft } from '@reduxjs/toolkit';
 
 import { EStatusState } from '@/enums';
-import { ICommonEntity, IResponses } from '@/types';
-import { Action } from '@/services/index';
+import type { Action } from '@/services/index';
+import type { ICommonEntity, IResponses } from '@/types';
 
 export class Slice<T extends ICommonEntity, S = EStatusState> {
   name: string;
@@ -53,7 +53,7 @@ export class Slice<T extends ICommonEntity, S = EStatusState> {
           state.isLoading = true;
           state.status = EStatusState.getPending;
         }
-        this.defaultState.time = new Date().getTime() + (state.keepUnusedDataFor || 60) * 1000;
+        this.defaultState.time = new Date().getTime() + (state.keepUnusedDataFor ?? 60) * 1000;
         this.defaultState.queryParams = JSON.stringify(action.meta.arg);
       })
       .addCase(action.get.fulfilled, (state, action) => {

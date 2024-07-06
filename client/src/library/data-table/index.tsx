@@ -1,22 +1,22 @@
-import React, { type Ref, forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
+import { useDraggable } from '@dnd-kit/core';
 import { Table } from 'antd';
 import type { SorterResult } from 'antd/lib/table/interface';
-import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router';
-import { useDraggable } from '@dnd-kit/core';
-import queryString from 'query-string';
-import { useLocation } from 'react-router-dom';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
+import queryString from 'query-string';
+import React, { forwardRef, useEffect, useImperativeHandle, useRef, type Ref } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router';
+import { useLocation } from 'react-router-dom';
 dayjs.extend(utc);
 
 import type { IDataTable, IPaginationQuery, ITableRefObject } from '@/types';
 import { cleanObjectKeyNull, getSizePageByHeight, uuidv4 } from '@/utils';
 import CPagination from '../pagination';
 
+import { formatColumns, formatFilter } from './format';
 import { CSearch } from './search';
 import { CWrapper } from './wrapper';
-import { formatColumns, formatFilter } from './format';
 
 export const CDataTable = forwardRef(
   (
@@ -32,6 +32,7 @@ export const CDataTable = forwardRef(
       showPagination = true,
       showSearch = true,
       onRow,
+      isLoading,
     }: Type,
     ref: Ref<ITableRefObject>,
   ) => {
@@ -108,15 +109,7 @@ export const CDataTable = forwardRef(
     const typeKeys = useRef<Record<string, string>>({});
     const timeoutSearch = useRef<ReturnType<typeof setTimeout>>();
     const cols = useRef<IDataTable[]>(
-      formatColumns({
-        columns: columns,
-        params: params.current,
-        typeKeys: typeKeys,
-        valueFilter: valueFilter,
-        timeoutSearch: timeoutSearch,
-        t: t,
-        facade: facade,
-      }),
+      formatColumns({ columns, params: params.current, typeKeys, valueFilter, timeoutSearch, t, facade }),
     );
 
     const navigate = useNavigate();
@@ -201,7 +194,7 @@ export const CDataTable = forwardRef(
             locale={{
               emptyText: <div className='no-data'>{t('No Data')}</div>,
             }}
-            loading={facade.isLoading}
+            loading={isLoading ?? facade.isLoading}
             columns={cols.current}
             pagination={false}
             dataSource={loopData(data)}
@@ -246,6 +239,7 @@ interface Type {
   showPagination?: boolean;
   showSearch?: boolean;
   onRow?: (data: any) => { onDoubleClick?: () => void; onClick?: () => void };
+  isLoading?: boolean;
 }
 const Draggable = (props: any) => {
   const { attributes, listeners, setNodeRef } = useDraggable({ id: props.id });

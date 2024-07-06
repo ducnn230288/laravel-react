@@ -1,8 +1,8 @@
-import { TFunction } from 'i18next';
-import { FilterValue } from 'antd/lib/table/interface';
+import type { FilterValue } from 'antd/lib/table/interface';
+import type { TFunction } from 'i18next';
 
 import { ETableFilterType } from '@/enums';
-import { IDataTable, IPaginationQuery } from '@/types';
+import type { IDataTable, IPaginationQuery } from '@/types';
 
 import { getColumnSearchCheckbox, getColumnSearchDate, getColumnSearchInput, getColumnSearchRadio } from './filter';
 

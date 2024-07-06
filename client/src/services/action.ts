@@ -1,8 +1,8 @@
-import { AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk, type AsyncThunk } from '@reduxjs/toolkit';
 
-import { EStatusState } from '@/enums';
-import { ICommonEntity, IPaginationQuery, IResponses } from '@/types';
-import { State } from '@/services/index';
+import type { EStatusState } from '@/enums';
+import type { State } from '@/services/index';
+import type { ICommonEntity, IPaginationQuery, IResponses } from '@/types';
 import { API, routerLinks } from '@/utils';
 
 export class Action<T extends ICommonEntity, Y = EStatusState> {

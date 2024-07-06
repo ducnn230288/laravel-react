@@ -1,14 +1,14 @@
-import React, { forwardRef, type Ref, useEffect, useImperativeHandle, useRef } from 'react';
+import type { EChartsType, SeriesOption } from 'echarts';
 import type {
+  GridOption,
   LegendComponentOption,
   TitleOption,
   TooltipOption,
   XAXisOption,
   YAXisOption,
-  GridOption,
 } from 'echarts/types/dist/shared';
-import type { EChartsType, SeriesOption } from 'echarts';
 import type { CallbackDataParams, CommonTooltipOption, OptionDataValue } from 'echarts/types/src/util/types';
+import React, { forwardRef, useEffect, useImperativeHandle, useRef, type Ref } from 'react';
 
 import { ETypeChart } from '@/enums';
 import { uuidv4 } from '@/utils';
@@ -182,7 +182,6 @@ export const CEChart = forwardRef(({ option, style = { height: '20rem' } }: Type
             type: 'scatter',
             symbolSize: 10,
           }));
-          console.log();
           grid.bottom =
             30 * Math.ceil(option.series.length / (document.getElementById(_id.current)!.clientWidth / 73)) + 'px';
           break;

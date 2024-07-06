@@ -1,4 +1,3 @@
-import type { CheckboxOptionType, FormInstance } from 'antd';
 import type {
   EFormModeSelect,
   EFormPickerDate,
@@ -7,6 +6,7 @@ import type {
   ETableAlign,
   ETableFilterType,
 } from '@/enums';
+import type { CheckboxOptionType, FormInstance } from 'antd';
 
 export interface IResponses<T> {
   statusCode?: 200 | 201 | 500 | 404;
@@ -59,13 +59,13 @@ export interface ITableItemFilter {
   get?: ITableGet;
 }
 export interface ITableGet {
-  facade?: any;
-  key?: string;
+  keyApi?: string;
   method?: string;
   format?: (item: any) => CheckboxOptionType;
   params?: (fullTextSearch: string, value?: any) => any;
   data?: any;
   column?: IDataTable[];
+  keepUnusedDataFor?: number;
 }
 export interface ITableItemFilterList {
   label?: string;
@@ -148,7 +148,6 @@ export interface IFormItem {
   isTable?: boolean;
   showRemove?: any;
   idCheck?: any;
-  firstLoad?: (data: any) => any;
   notDefaultValid?: boolean;
   render?: (form: FormInstance, values: any, generateForm: any, index: number) => JSX.Element;
 }

@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { useAppDispatch, useTypedSelector, Action, Slice, State, IUser } from '@/services';
-import { ICommonEntity, IPaginationQuery } from '@/types';
-import { ICodeType } from './type';
+import { Action, Slice, useAppDispatch, useTypedSelector, type IUser, type State } from '@/services';
+import type { ICommonEntity, IPaginationQuery } from '@/types';
+import type { ICodeType } from './type';
 
 const name = 'Code';
 const action = new Action<ICode>(name);

@@ -1,12 +1,12 @@
-import React, { Fragment, useEffect, useRef } from 'react';
+import { Form, Tabs, type FormInstance } from 'antd';
+import { Fragment, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
-import { Form, type FormInstance, Tabs } from 'antd';
 import { useSearchParams } from 'react-router-dom';
 
 import { EFormRuleType, EFormType } from '@/enums';
 import { CBreadcrumbs } from '@/library/breadcrumbs';
-import { SCode, EStatusGlobal, SGlobal } from '@/services';
+import { EStatusGlobal, SGlobal } from '@/services';
 import { lang, routerLinks } from '@/utils';
 import './index.less';
 
@@ -165,7 +165,7 @@ const FormProfile = ({ form }: { form: FormInstance }) => {
             type: EFormType.selectTable,
             rules: [{ type: EFormRuleType.required }],
             get: {
-              facade: SCode,
+              keyApi: 'Code',
               params: (fullTextSearch: string, value) => ({
                 fullTextSearch,
                 typeCode: 'position',

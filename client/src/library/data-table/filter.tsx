@@ -1,14 +1,14 @@
-import React from 'react';
-import { Checkbox, type CheckboxOptionType, DatePicker, Radio, Spin } from 'antd';
+import { Checkbox, DatePicker, Radio, Spin, type CheckboxOptionType } from 'antd';
 import classNames from 'classnames';
 import dayjs, { type Dayjs } from 'dayjs';
 import type { TFunction } from 'i18next';
+import React, { useState } from 'react';
 
 import type { ITableGet, ITableItemFilterList } from '@/types';
-import { cleanObjectKeyNull } from '@/utils';
+import { API, KEY_TEMP, cleanObjectKeyNull, routerLinks } from '@/utils';
 
-import { CIMask } from '../form/input';
 import { CButton } from '../button';
+import { CIMask } from '../form/input';
 import { CSvgIcon } from '../svg-icon';
 
 const groupButton = ({
@@ -41,12 +41,40 @@ const groupButton = ({
     />
   </div>
 );
-const columnSearch = (get: ITableGet, fullTextSearch = '', value?: any, facade: any = {}) => {
-  if (get?.facade) {
-    const params = get.params ? get.params(fullTextSearch, value) : { fullTextSearch };
-    if (new Date().getTime() > facade.time || JSON.stringify(cleanObjectKeyNull(params)) != facade.queryParams) {
-      facade.get(cleanObjectKeyNull(params));
-    }
+
+const loadData = async ({
+  get,
+  fullTextSearch = '',
+  value,
+  setTemp,
+}: {
+  get: ITableGet;
+  fullTextSearch?: string;
+  value?: any;
+  setTemp: any;
+}) => {
+  if (get?.keyApi) {
+    const params = cleanObjectKeyNull(get.params ? get.params(fullTextSearch, value) : { fullTextSearch });
+    const _local = localStorage.getItem(KEY_TEMP);
+    const _temp = _local ? JSON.parse(_local) : {};
+    const obj = _temp['table-filter-' + get.keyApi];
+    if (!obj || (obj && (new Date().getTime() > obj.time || JSON.stringify(params) != obj.queryParams)))
+      try {
+        setTemp(pre => ({ ...pre, isLoading: true }));
+        _temp['table-filter-' + get.keyApi] = {
+          time: new Date().getTime() + (get.keepUnusedDataFor ?? 60) * 1000,
+          queryParams: JSON.stringify(params),
+          data: [],
+        };
+        const data: any = await API.get({ url: `${routerLinks(get.keyApi, 'api')}`, params });
+        setTemp(pre => ({
+          ...pre,
+          list: data.data.map((e: any) => (get?.format ? get.format(e) : e)).filter((item: any) => !!item.value),
+          isLoading: false,
+        }));
+        _temp['table-filter-' + get.keyApi].data = data.data;
+        localStorage.setItem(KEY_TEMP, JSON.stringify(_temp));
+      } catch (e) {}
   }
 };
 
@@ -67,38 +95,52 @@ export const getColumnSearchCheckbox = ({
 }) => ({
   onFilterDropdownOpenChange: async (visible: boolean) => (valueFilter.current[key] = visible),
   filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }: any) => {
-    const facade = get?.facade ? get?.facade() : {};
-    if (get && !facade?.result?.data && valueFilter.current[key]) {
-      columnSearch(get, '', undefined, facade);
+    const _local = localStorage.getItem(KEY_TEMP);
+    const _temp = _local ? JSON.parse(_local) : {};
+    const [temp, setTemp] = useState<{ list: any[]; isLoading: boolean }>({
+      list:
+        !get?.keyApi || !_temp['table-filter-' + get.keyApi]
+          ? list
+          : _temp['table-filter-' + get.keyApi].data
+              .map((e: any) => (get?.format ? get.format(e) : e))
+              .filter((item: any) => !!item.value),
+      isLoading: false,
+    });
+
+    if (get && valueFilter.current[key]) {
+      loadData({ get, fullTextSearch: '', setTemp });
       valueFilter.current[key] = false;
     }
 
     return (
-      <Spin spinning={facade.isLoading === true}>
+      <Spin spinning={temp.isLoading}>
         <div className='p-1'>
-          {!!get?.facade && (
+          {!!get?.keyApi && (
             <CIMask
               placeholder={t('Search')}
               onChange={e => {
                 clearTimeout(timeoutSearch.current);
-                timeoutSearch.current = setTimeout(() => columnSearch(get, e.target.value, selectedKeys, facade), 500);
+                timeoutSearch.current = setTimeout(
+                  () =>
+                    loadData({
+                      get,
+                      fullTextSearch: e.target.value,
+                      value: selectedKeys.length > 0 ? selectedKeys : undefined,
+                      setTemp,
+                    }),
+                  500,
+                );
               }}
-              onPressEnter={e => columnSearch(get, e.currentTarget.value, undefined, facade)}
+              onPressEnter={e => loadData({ get, fullTextSearch: e.target.value, setTemp })}
             />
           )}
           <div className='mt-1'>
             <Checkbox.Group
-              options={
-                (list as CheckboxOptionType[]) ||
-                facade?.result?.data?.map(get.format).filter((item: any) => !!item.value) ||
-                []
-              }
+              options={(temp.list as CheckboxOptionType[]) ?? []}
               defaultValue={selectedKeys}
               onChange={e => setSelectedKeys(e)}
             />
-            {(list?.length === 0 || facade?.result?.data?.length === 0) && (
-              <span className={'px-2'}>{t('No Data')}</span>
-            )}
+            {temp.list?.length === 0 && <span className={'px-2'}>{t('No Data')}</span>}
           </div>
           {groupButton({ confirm, clearFilters, key, value: selectedKeys, t })}
         </div>
@@ -131,37 +173,52 @@ export const getColumnSearchRadio = ({
 }) => ({
   onFilterDropdownOpenChange: async (visible: boolean) => (valueFilter.current[key] = visible),
   filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }: any) => {
-    const facade = get?.facade ? get?.facade() : {};
-    if (get && !facade?.result?.data && valueFilter.current[key]) {
-      columnSearch(get, '', undefined, facade);
+    const _local = localStorage.getItem(KEY_TEMP);
+    const _temp = _local ? JSON.parse(_local) : {};
+    const [temp, setTemp] = useState<{ list: any[]; isLoading: boolean }>({
+      list:
+        !get?.keyApi || !_temp['table-filter-' + get.keyApi]
+          ? list
+          : _temp['table-filter-' + get.keyApi].data
+              .map((e: any) => (get?.format ? get.format(e) : e))
+              .filter((item: any) => !!item.value),
+      isLoading: false,
+    });
+
+    if (get && valueFilter.current[key]) {
+      loadData({ get, fullTextSearch: '', setTemp });
       valueFilter.current[key] = false;
     }
+
     return (
-      <Spin spinning={facade.isLoading === true}>
+      <Spin spinning={temp.isLoading}>
         <div className='p-1'>
-          {get?.facade && (
+          {get?.keyApi && (
             <CIMask
               placeholder={t('Search')}
               onChange={e => {
                 clearTimeout(timeoutSearch.current);
-                timeoutSearch.current = setTimeout(() => columnSearch(get, e.target.value, selectedKeys), 500);
+                timeoutSearch.current = setTimeout(
+                  () =>
+                    loadData({
+                      get,
+                      fullTextSearch: e.target.value,
+                      value: selectedKeys.length > 0 ? selectedKeys : undefined,
+                      setTemp,
+                    }),
+                  500,
+                );
               }}
-              onPressEnter={e => columnSearch(get, e.currentTarget.value, undefined, facade)}
+              onPressEnter={e => loadData({ get, fullTextSearch: e.target.value, setTemp })}
             />
           )}
           <div className='mt-1'>
             <Radio.Group
-              options={
-                (list as CheckboxOptionType[]) ||
-                facade?.result?.data?.map(get.format).filter((item: any) => !!item.value) ||
-                []
-              }
+              options={(temp.list as CheckboxOptionType[]) ?? []}
               value={selectedKeys}
               onChange={e => setSelectedKeys(e.target.value + '')}
             />
-            {(list?.length === 0 || facade?.result?.data?.length === 0) && (
-              <span className={'px-2'}>{t('No Data')}</span>
-            )}
+            {temp.list?.length === 0 && <span className={'px-2'}>{t('No Data')}</span>}
           </div>
           {groupButton({ confirm, clearFilters, key, value: selectedKeys, t })}
         </div>

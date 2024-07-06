@@ -1,15 +1,15 @@
-import React from 'react';
-import { useTranslation } from 'react-i18next';
-import dayjs from 'dayjs';
 import { Popconfirm } from 'antd';
+import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
 
-import { CSvgIcon } from '@/library/svg-icon';
 import { EFormRuleType, EFormType, ETableAlign, ETableFilterType } from '@/enums';
-import type { IDataTable, IForm } from '@/types';
 import { CAvatar } from '@/library/avatar';
+import { CSvgIcon } from '@/library/svg-icon';
 import { CTooltip } from '@/library/tooltip';
-import { SCode, SGlobal, SUser } from '@/services';
+import { SGlobal, SUser } from '@/services';
+import type { IDataTable, IForm } from '@/types';
 import { keyRole } from '@/utils';
+import queryString from 'query-string';
 
 export default {
   useTable: (): IDataTable[] => {
@@ -37,7 +37,7 @@ export default {
           filter: {
             type: ETableFilterType.checkbox,
             get: {
-              facade: SCode,
+              keyApi: 'Code',
               format: (item: any) => ({
                 label: item.name,
                 value: item.code,
@@ -45,7 +45,7 @@ export default {
               params: (fullTextSearch: string, value) => ({
                 fullTextSearch,
                 typeCode: 'POSITION',
-                extend: { code: value },
+                extend: value ? queryString.stringify({ code: value }) : undefined,
               }),
             },
           },
@@ -220,7 +220,7 @@ export default {
           type: EFormType.select,
           rules: [{ type: EFormRuleType.required }],
           get: {
-            facade: SCode,
+            keyApi: 'Code',
             params: (fullTextSearch: string) => ({
               fullTextSearch,
               typeCode: 'position',

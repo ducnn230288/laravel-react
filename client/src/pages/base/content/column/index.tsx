@@ -1,15 +1,14 @@
-import React from 'react';
+import { Popconfirm } from 'antd';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
-import { Popconfirm } from 'antd';
 
-import { CSvgIcon } from '@/library/svg-icon';
 import { EFormRuleType, EFormType, ETableAlign, ETableFilterType } from '@/enums';
-import type { IDataTable, IForm } from '@/types';
 import { CAvatar } from '@/library/avatar';
+import { CSvgIcon } from '@/library/svg-icon';
 import { CTooltip } from '@/library/tooltip';
 import { SContent, SGlobal } from '@/services';
-import { keyRole, routerLinks } from '@/utils';
+import type { IDataTable, IForm } from '@/types';
+import { KEY_ROLE, routerLinks } from '@/utils';
 
 export default {
   useTable: (): IDataTable[] => {
@@ -67,7 +66,7 @@ export default {
           align: ETableAlign.center,
           render: (_: string, data) => (
             <div className={'action'}>
-              {sGlobal.user?.role?.permissions?.includes(keyRole.P_CONTENT_UPDATE) && (
+              {sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_CONTENT_UPDATE) && (
                 <CTooltip title={t(data.isDisable ? 'Disabled content' : 'Enabled content', { name: data.name })}>
                   <Popconfirm
                     destroyTooltipOnHide={true}
@@ -87,7 +86,7 @@ export default {
                   </Popconfirm>
                 </CTooltip>
               )}
-              {sGlobal.user?.role?.permissions?.includes(keyRole.P_CONTENT_UPDATE) && (
+              {sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_CONTENT_UPDATE) && (
                 <CTooltip title={t('Edit Content', { name: data.name })}>
                   <button
                     title={t('Edit Content', { name: data.name })}
@@ -97,7 +96,7 @@ export default {
                   </button>
                 </CTooltip>
               )}
-              {sGlobal.user?.role?.permissions?.includes(keyRole.P_CONTENT_DESTROY) && (
+              {sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_CONTENT_DESTROY) && (
                 <CTooltip title={t('Delete content', { name: data.name })}>
                   <Popconfirm
                     destroyTooltipOnHide={true}

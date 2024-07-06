@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, type PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { message } from '@/index';
-import { API, arrayMove, handleGetBase64, keyToken, uuidv4 } from '@/utils';
+import { API, arrayMove, handleGetBase64, KEY_TOKEN, uuidv4 } from '@/utils';
 import { CButton } from '../button';
 import { CSvgIcon } from '../svg-icon';
 
@@ -106,7 +106,7 @@ export const CUpload = ({
             method,
             body: bodyFormData,
             headers: {
-              authorization: 'Bearer ' + (localStorage.getItem(keyToken) ?? ''),
+              authorization: 'Bearer ' + (localStorage.getItem(KEY_TOKEN) ?? ''),
               'Accept-Language': localStorage.getItem('i18nextLng') ?? '',
             },
           },

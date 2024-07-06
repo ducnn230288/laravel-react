@@ -1,8 +1,7 @@
-import React from 'react';
+import { Popconfirm } from 'antd';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 import slug from 'slug';
-import { Popconfirm } from 'antd';
 
 import { EFormRuleType, EFormType, ETableAlign, ETableFilterType } from '@/enums';
 import type { IDataTable, IForm } from '@/types';
@@ -10,7 +9,7 @@ import type { IDataTable, IForm } from '@/types';
 import { CSvgIcon } from '@/library/svg-icon';
 import { CTooltip } from '@/library/tooltip';
 import { SCode, SGlobal } from '@/services';
-import { keyRole } from '@/utils';
+import { KEY_ROLE } from '@/utils';
 
 export default {
   useTable: (): IDataTable[] => {
@@ -57,7 +56,7 @@ export default {
           align: ETableAlign.center,
           render: (_: string, data) => (
             <div className={'action'}>
-              {sGlobal.user?.role?.permissions?.includes(keyRole.P_CODE_UPDATE) && (
+              {sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_CODE_UPDATE) && (
                 <CTooltip title={t(data.isDisable ? 'Disabled code' : 'Enabled code', { name: data.name })}>
                   <Popconfirm
                     destroyTooltipOnHide={true}
@@ -76,14 +75,14 @@ export default {
                   </Popconfirm>
                 </CTooltip>
               )}
-              {sGlobal.user?.role?.permissions?.includes(keyRole.P_CODE_UPDATE) && (
+              {sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_CODE_UPDATE) && (
                 <CTooltip title={t('Edit Code', { name: data.name })}>
                   <button title={t('Edit Code', { name: data.name })} onClick={() => sCode.getById({ id: data.code })}>
                     <CSvgIcon name='edit' className='primary' />
                   </button>
                 </CTooltip>
               )}
-              {sGlobal.user?.role?.permissions?.includes(keyRole.P_CODE_DESTROY) && (
+              {sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_CODE_DESTROY) && (
                 <CTooltip title={t('Delete code', { name: data.name })}>
                   <Popconfirm
                     destroyTooltipOnHide={true}

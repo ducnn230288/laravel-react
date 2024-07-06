@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import { ICommonEntity, IPaginationQuery, IResponses } from '@/types';
-import { useAppDispatch, useTypedSelector, Action, Slice, State, IUser } from '@/services';
+import { Action, Slice, useAppDispatch, useTypedSelector, type IUser, type State } from '@/services';
+import type { ICommonEntity, IPaginationQuery, IResponses } from '@/types';
 import { API, routerLinks } from '@/utils';
 
 const name = 'UserRole';

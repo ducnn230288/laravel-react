@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from 'react';
-import { API, keyToken, uuidv4 } from '@/utils';
+import { API, KEY_TOKEN, uuidv4 } from '@/utils';
+import { useEffect, useRef } from 'react';
 
 const Component = ({
   onChange,
@@ -50,7 +50,7 @@ const Component = ({
             method: 'post',
             body: bodyFormData,
             headers: {
-              authorization: 'Bearer ' + (localStorage.getItem(keyToken) ?? ''),
+              authorization: 'Bearer ' + (localStorage.getItem(KEY_TOKEN) ?? ''),
               'Accept-Language': localStorage.getItem('i18nextLng') ?? '',
             },
           },

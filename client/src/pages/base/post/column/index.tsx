@@ -1,16 +1,15 @@
-import React from 'react';
+import { Popconfirm } from 'antd';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 import slug from 'slug';
-import { Popconfirm } from 'antd';
 
-import { CSvgIcon } from '@/library/svg-icon';
 import { EFormRuleType, EFormType, ETableAlign, ETableFilterType } from '@/enums';
-import type { IDataTable, IForm } from '@/types';
 import { CAvatar } from '@/library/avatar';
+import { CSvgIcon } from '@/library/svg-icon';
 import { CTooltip } from '@/library/tooltip';
 import { SGlobal, SPost } from '@/services';
-import { keyRole, routerLinks } from '@/utils';
+import type { IDataTable, IForm } from '@/types';
+import { KEY_ROLE, routerLinks } from '@/utils';
 
 export default {
   useTable: (): IDataTable[] => {
@@ -70,7 +69,7 @@ export default {
           align: ETableAlign.center,
           render: (_: string, data) => (
             <div className={'action'}>
-              {sGlobal.user?.role?.permissions?.includes(keyRole.P_POST_UPDATE) && (
+              {sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_POST_UPDATE) && (
                 <CTooltip
                   title={t(data.isDisable ? 'Disabled post' : 'Enabled post', {
                     name: data.languages?.length
@@ -105,7 +104,7 @@ export default {
                   </Popconfirm>
                 </CTooltip>
               )}
-              {sGlobal.user?.role?.permissions?.includes(keyRole.P_POST_UPDATE) && (
+              {sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_POST_UPDATE) && (
                 <CTooltip
                   title={t('Edit Post', {
                     name: data.languages?.length
@@ -126,7 +125,7 @@ export default {
                   </button>
                 </CTooltip>
               )}
-              {sGlobal.user?.role?.permissions?.includes(keyRole.P_POST_DESTROY) && (
+              {sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_POST_DESTROY) && (
                 <CTooltip
                   title={t('Delete post', {
                     name: data.languages?.length

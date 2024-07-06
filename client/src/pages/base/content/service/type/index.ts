@@ -1,8 +1,7 @@
+import { Action, Slice, useAppDispatch, useTypedSelector, type State } from '@/services';
+import type { ICommonEntity, IPaginationQuery } from '@/types';
 import { createSlice } from '@reduxjs/toolkit';
-import { ICommonEntity, IPaginationQuery } from '@/types';
-import { useAppDispatch, useTypedSelector, Action, Slice, State } from '@/services';
-
-import { IContent } from '../index';
+import type { IContent } from '../index';
 
 const name = 'ContentType';
 const action = new Action<IContentType>(name);

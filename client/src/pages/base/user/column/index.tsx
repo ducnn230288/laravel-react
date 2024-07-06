@@ -8,8 +8,7 @@ import { CSvgIcon } from '@/library/svg-icon';
 import { CTooltip } from '@/library/tooltip';
 import { SGlobal, SUser } from '@/services';
 import type { IDataTable, IForm } from '@/types';
-import { keyRole } from '@/utils';
-import queryString from 'query-string';
+import { KEY_ROLE } from '@/utils';
 
 export default {
   useTable: (): IDataTable[] => {
@@ -45,7 +44,7 @@ export default {
               params: (fullTextSearch: string, value) => ({
                 fullTextSearch,
                 typeCode: 'POSITION',
-                extend: value ? queryString.stringify({ code: value }) : undefined,
+                extend: value && [value.map(item => ['code', item])],
               }),
             },
           },
@@ -90,7 +89,7 @@ export default {
           align: ETableAlign.center,
           render: (_: string, data) => (
             <div className={'action'}>
-              {sGlobal.user?.role?.permissions?.includes(keyRole.P_USER_UPDATE) && (
+              {sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_USER_UPDATE) && (
                 <CTooltip title={t(data.isDisable ? 'Disabled user' : 'Enabled user', { name: data.name })}>
                   <Popconfirm
                     destroyTooltipOnHide={true}
@@ -113,7 +112,7 @@ export default {
                   </Popconfirm>
                 </CTooltip>
               )}
-              {sGlobal.user?.role?.permissions?.includes(keyRole.P_USER_UPDATE) && (
+              {sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_USER_UPDATE) && (
                 <CTooltip title={t('Edit User', { name: data.name })}>
                   <button
                     title={t('Edit User', { name: data.name })}
@@ -124,7 +123,7 @@ export default {
                 </CTooltip>
               )}
 
-              {sGlobal.user?.role?.permissions?.includes(keyRole.P_USER_DESTROY) && (
+              {sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_USER_DESTROY) && (
                 <CTooltip title={t('Delete user', { name: data.name })}>
                   <Popconfirm
                     destroyTooltipOnHide={true}
@@ -221,9 +220,10 @@ export default {
           rules: [{ type: EFormRuleType.required }],
           get: {
             keyApi: 'Code',
-            params: (fullTextSearch: string) => ({
+            params: (fullTextSearch: string, value) => ({
               fullTextSearch,
               typeCode: 'position',
+              extend: value('positionCode') && [['code', value('positionCode')]],
             }),
             format: item => ({
               label: item.name,

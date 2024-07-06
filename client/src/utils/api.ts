@@ -1,8 +1,8 @@
 import queryString from 'query-string';
 
 import { message } from '@/index';
-import { IResponses } from '@/types';
-import { keyRefreshToken, keyToken, linkApi, routerLinks } from '@/utils';
+import type { IResponses } from '@/types';
+import { KEY_REFRESH_TOKEN, KEY_TOKEN, LINK_API, routerLinks } from '@/utils';
 
 export const API = {
   init: () =>
@@ -13,7 +13,7 @@ export const API = {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        authorization: localStorage.getItem(keyToken) ? 'Bearer ' + localStorage.getItem(keyToken) : '',
+        authorization: localStorage.getItem(KEY_TOKEN) ? 'Bearer ' + localStorage.getItem(KEY_TOKEN) : '',
         'Accept-Language': localStorage.getItem('i18nextLng') ?? '',
       },
       redirect: 'follow',
@@ -36,9 +36,13 @@ export const API = {
   }) => {
     config.headers = { ...config.headers, ...headers };
 
+    if (params.extend) {
+      // params.extend = params.extend.map(item => queryString.stringify(item));
+      console.log(params.extend);
+    }
     const linkParam = queryString.stringify(params, { arrayFormat: 'index' });
     const response = await fetch(
-      (url.includes('https://') || url.includes('http://') ? '' : linkApi) + url + (linkParam && '?' + linkParam),
+      (url.includes('https://') || url.includes('http://') ? '' : LINK_API) + url + (linkParam && '?' + linkParam),
       config,
     );
     const res: IResponses<T> = await response.json();
@@ -55,7 +59,7 @@ export const API = {
       const token = await API.refresh();
       if (token) {
         config.headers = { ...config.headers, authorization: token };
-        const response = await fetch(linkApi + url + (linkParam && '?' + linkParam), config);
+        const response = await fetch(LINK_API + url + (linkParam && '?' + linkParam), config);
         return (await response.json()) as IResponses<T>;
       }
     } else if (res.message) {
@@ -64,7 +68,7 @@ export const API = {
     }
 
     if (response.status === 401 && url !== `${routerLinks('Auth', 'api')}/login`) {
-      localStorage.removeItem(keyToken);
+      localStorage.removeItem(KEY_TOKEN);
       location.reload();
     }
     throw new Error('Error');
@@ -145,10 +149,10 @@ export const API = {
   refresh: async () => {
     const res = await API.get<{ token: string; refreshToken: null }>({
       url: `${routerLinks('Auth', 'api')}/refresh-token`,
-      headers: { authorization: 'Bearer ' + localStorage.getItem(keyRefreshToken) },
+      headers: { authorization: 'Bearer ' + localStorage.getItem(KEY_REFRESH_TOKEN) },
     });
     if (res) {
-      localStorage.setItem(keyToken, res.data!.token);
+      localStorage.setItem(KEY_TOKEN, res.data!.token);
       return 'Bearer ' + res.data!.token;
     }
   },

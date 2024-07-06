@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { useAppDispatch, useTypedSelector, Action, Slice, State } from '@/services';
-import { ICommonEntity, IPaginationQuery } from '@/types';
-import { IPost } from '../index';
+import { Action, Slice, useAppDispatch, useTypedSelector, type State } from '@/services';
+import type { ICommonEntity, IPaginationQuery } from '@/types';
+import type { IPost } from '../index';
 
 const name = 'PostType';
 const action = new Action<IPostType>(name);

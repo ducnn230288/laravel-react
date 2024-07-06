@@ -1,16 +1,16 @@
-import viVN from 'antd/lib/locale/vi_VN';
-import enUS from 'antd/lib/locale/en_US';
+import type enUS from 'antd/lib/locale/en_US';
+import type viVN from 'antd/lib/locale/vi_VN';
 
-import { ICommonEntity } from '@/types';
-import { ICode } from '@/pages/base/code/service';
-import { IUserRole } from '@/pages/base/user/service/role';
+import type { ICode } from '@/pages/base/code/service';
+import type { IUserRole } from '@/pages/base/user/service/role';
+import type { ICommonEntity } from '@/types';
 
-import { EStatusGlobal } from './enum';
+import type { EStatusGlobal } from './enum';
 
 interface State {
   [selector: string]: any;
   user?: IUser;
-  data?: ResetPassword & IUser;
+  data?: IResetPassword & IUser;
   routeLanguage?: Record<string, string>;
   isLoading?: boolean;
   isVisible?: boolean;
@@ -42,7 +42,7 @@ export interface IUser extends ICommonEntity {
   isDisable?: boolean;
 }
 
-export interface ResetPassword {
+export interface IResetPassword {
   password?: string;
   retypedPassword?: string;
   passwordOld?: string;

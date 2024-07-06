@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { useAppDispatch, useTypedSelector, Action, Slice, State } from '@/services';
-import { ICommonEntity, IPaginationQuery } from '@/types';
+import { Action, Slice, useAppDispatch, useTypedSelector, type State } from '@/services';
+import type { ICommonEntity, IPaginationQuery } from '@/types';
 
 const name = 'Parameter';
 const action = new Action<IParameter>(name);

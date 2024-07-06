@@ -1,10 +1,10 @@
-import React, { Fragment, useEffect } from 'react';
 import { Popconfirm, Spin, Tree, TreeSelect } from 'antd';
 import classNames from 'classnames';
+import { Fragment, useEffect } from 'react';
 
 import { EStatusState } from '@/enums';
-import { CTooltip } from '@/library/tooltip';
 import { CBreadcrumbs } from '@/library/breadcrumbs';
+import { CTooltip } from '@/library/tooltip';
 import { SGlobal, SPost, SPostType } from '@/services';
 
 const Page = () => {
@@ -37,10 +37,10 @@ const Page = () => {
   );
 };
 
-import { useTranslation } from 'react-i18next';
 import { CDrawerForm } from '@/library/drawer';
-import _column from './column';
 import { CSvgIcon } from '@/library/svg-icon';
+import { useTranslation } from 'react-i18next';
+import _column from './column';
 const FormPost = () => {
   const sPost = SPost();
   const request = JSON.parse(sPost?.queryParams ?? '{}');
@@ -101,9 +101,10 @@ const FormPostType = () => {
   );
 };
 
-import { useLocation, useNavigate } from 'react-router';
+import { KEY_ROLE } from '@/utils';
 import queryString from 'query-string';
 import PerfectScrollbar from 'react-perfect-scrollbar';
+import { useLocation, useNavigate } from 'react-router';
 const Side = () => {
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.post' });
   const sPostType = SPostType();
@@ -152,7 +153,7 @@ const Side = () => {
                   <span className={classNames('item')}>
                     {data.title}
                     <div className='action'>
-                      {sGlobal.user?.role?.permissions?.includes(keyRole.P_POST_TYPE_UPDATE) && (
+                      {sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_POST_TYPE_UPDATE) && (
                         <CTooltip title={t('Edit Type Post', { name: data.title })}>
                           <button
                             title={t('Edit Type Post', { name: data.title })}
@@ -162,7 +163,7 @@ const Side = () => {
                           </button>
                         </CTooltip>
                       )}
-                      {sGlobal.user?.role?.permissions?.includes(keyRole.P_POST_TYPE_DESTROY) && (
+                      {sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_POST_TYPE_DESTROY) && (
                         <CTooltip title={t('Delete type post', { name: data.title })}>
                           <Popconfirm
                             destroyTooltipOnHide={true}
@@ -211,7 +212,6 @@ const Side = () => {
 
 import { CButton } from '@/library/button';
 import { CDataTable } from '@/library/data-table';
-import { keyRole } from '@/utils';
 const Main = () => {
   const sPost = SPost();
   const sGlobal = SGlobal();
@@ -228,7 +228,7 @@ const Main = () => {
           paginationDescription={(from: number, to: number, total: number) => t('Pagination post', { from, to, total })}
           columns={_column.useTable()}
           rightHeader={
-            sGlobal.user?.role?.permissions?.includes(keyRole.P_POST_STORE) && (
+            sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_POST_STORE) && (
               <CButton
                 icon={<CSvgIcon name='plus' size={12} />}
                 text={t('Add new Post', {

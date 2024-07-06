@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import type { URLSearchParamsInit } from 'react-router-dom';
 
 import { CSvgIcon } from '@/library/svg-icon';
-import { keyRole, language, routerLinks } from '@/utils';
+import { KEY_ROLE, LANGUAGE, routerLinks } from '@/utils';
 
-const Layout = ({ lang = language, permissions = [] }: { lang?: string; permissions?: string[] }): IMenu[] => {
+const Layout = ({ lang = LANGUAGE, permissions = [] }: { lang?: string; permissions?: string[] }): IMenu[] => {
   const { t } = useTranslation('locale', { keyPrefix: 'menu' });
 
   const list: IMenu[] = [
@@ -18,7 +18,7 @@ const Layout = ({ lang = language, permissions = [] }: { lang?: string; permissi
       key: `/${lang}${routerLinks('User')}`,
       icon: <CSvgIcon name='user-circle' size={24} />,
       label: t('User'),
-      permission: keyRole.P_USER_INDEX,
+      permission: KEY_ROLE.P_USER_INDEX,
       queryparams: { roleCode: 'SUPER-ADMIN' },
     },
     {
@@ -29,25 +29,25 @@ const Layout = ({ lang = language, permissions = [] }: { lang?: string; permissi
         {
           key: `/${lang}${routerLinks('Code')}`,
           label: t('Code'),
-          permission: keyRole.P_CODE_INDEX,
+          permission: KEY_ROLE.P_CODE_INDEX,
           queryparams: { typeCode: 'POSITION' },
         },
         {
           key: `/${lang}${routerLinks('Content')}`,
           label: t('Content'),
-          permission: keyRole.P_CONTENT_INDEX,
+          permission: KEY_ROLE.P_CONTENT_INDEX,
           queryparams: { typeCode: 'MEMBERS' },
         },
         {
           key: `/${lang}${routerLinks('Post')}`,
           label: t('Post'),
-          permission: keyRole.P_POST_INDEX,
+          permission: KEY_ROLE.P_POST_INDEX,
           queryparams: { typeCode: 'PROJECTS' },
         },
         {
           key: `/${lang}${routerLinks('Parameter')}`,
           label: t('Parameter'),
-          permission: keyRole.P_PARAMETER_INDEX,
+          permission: KEY_ROLE.P_PARAMETER_INDEX,
           queryparams: { code: 'ADDRESS' },
         },
       ],
@@ -68,7 +68,7 @@ export interface IMenu {
   key?: string;
   label?: string;
   icon?: React.JSX.Element;
-  permission?: keyRole;
+  permission?: KEY_ROLE;
   queryparams?: URLSearchParamsInit;
   children?: IMenu[];
 }

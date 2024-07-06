@@ -1,8 +1,8 @@
+import { Spin } from 'antd';
 import React, { Suspense } from 'react';
 import { HashRouter, Navigate, Outlet, Route, Routes } from 'react-router-dom';
-import { Spin } from 'antd';
 
-import { routerLinks, lang, keyToken } from '@/utils';
+import { KEY_TOKEN, lang, routerLinks } from '@/utils';
 
 const pages = [
   {
@@ -74,7 +74,7 @@ const Layout = ({
   layout: React.LazyExoticComponent<({ children }: { children?: React.ReactNode }) => JSX.Element>;
   isPublic: boolean;
 }) => {
-  if (isPublic || !!localStorage.getItem(keyToken))
+  if (isPublic || !!localStorage.getItem(KEY_TOKEN))
     return (
       <Layout>
         <Outlet />

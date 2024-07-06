@@ -169,7 +169,7 @@ const FormProfile = ({ form }: { form: FormInstance }) => {
               params: (fullTextSearch: string, value) => ({
                 fullTextSearch,
                 typeCode: 'position',
-                extend: [`typeCode,${value('positionCode')}`],
+                extend: value('positionCode') && [['code', value('positionCode')]],
               }),
               format: item => ({
                 label: item?.name,

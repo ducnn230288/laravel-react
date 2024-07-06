@@ -1,14 +1,14 @@
-import { CheckboxOptionType } from 'antd';
-import { io } from 'socket.io-client';
 import { ETypeChart } from '@/enums';
+import type { CheckboxOptionType } from 'antd';
+import { io } from 'socket.io-client';
 
-import { keyToken, language, languages, linkApi } from './variable';
+import { KEY_TOKEN, LANGUAGE, LINK_API, LIST_LANGUAGE } from './variable';
 
-export * from './reportWebVitals';
-export * from './api';
-export * from './variable';
 export * from '../router-links';
+export * from './api';
 export * from './convertFormValue';
+export * from './reportWebVitals';
+export * from './variable';
 
 export const socket = io(import.meta.env.VITE_URL_SOCKET, { autoConnect: false });
 export const cleanObjectKeyNull = (obj: { [selector: string]: any }) => {
@@ -49,7 +49,7 @@ export const getFilter = (queryParams = '{}', key = 'id') =>
 
 export const loopMapSelect = (array?: any[], label = 'name', value = 'id'): CheckboxOptionType[] =>
   array?.length
-    ? array.map((item) => ({
+    ? array.map(item => ({
         label: item[label],
         value: item[value],
         isLeaf: !item.children?.length,
@@ -57,7 +57,7 @@ export const loopMapSelect = (array?: any[], label = 'name', value = 'id'): Chec
       }))
     : [];
 
-export const lang = languages.indexOf(location.hash.split('/')[1]) > -1 ? location.hash.split('/')[1] : language;
+export const lang = LIST_LANGUAGE.indexOf(location.hash.split('/')[1]) > -1 ? location.hash.split('/')[1] : LANGUAGE;
 
 export const arrayUnique = (array: any, key?: string) => {
   const a = array.concat();
@@ -72,12 +72,12 @@ export const arrayUnique = (array: any, key?: string) => {
 };
 
 export const handleDownloadCSV = async (url: string, name: string = 'file-csv') => {
-  const res = await fetch(linkApi + url, {
+  const res = await fetch(LINK_API + url, {
     mode: 'cors',
     cache: 'no-cache',
     credentials: 'same-origin',
     headers: {
-      authorization: 'Bearer ' + (localStorage.getItem(keyToken) ?? ''),
+      authorization: 'Bearer ' + (localStorage.getItem(KEY_TOKEN) ?? ''),
       'Accept-Language': localStorage.getItem('i18nextLng') ?? '',
     },
     redirect: 'follow',
@@ -93,7 +93,7 @@ export const handleDownloadCSV = async (url: string, name: string = 'file-csv') 
 };
 
 export const handleGetBase64 = async (file: File) =>
-  await new Promise((resolve) => {
+  await new Promise(resolve => {
     const fileReader = new FileReader();
     fileReader.onload = () => resolve(fileReader.result);
     fileReader.readAsDataURL(file);
@@ -106,7 +106,7 @@ export const arrayMove = (arr: any[], old_index: number, new_index: number) => {
     }
   }
   arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
-  return arr.filter((item) => !!item);
+  return arr.filter(item => !!item);
 };
 export const uuidv4 = () => {
   let d = new Date().getTime(); //Timestamp
@@ -168,16 +168,16 @@ export const cssInObject = (styles: string) =>
     ? styles
         .trim()
         .split(';')
-        .map((cur) =>
+        .map(cur =>
           cur
             .trim()
             .split(':')
-            .map((i) => i.trim()),
+            .map(i => i.trim()),
         )
-        .filter((i) => i.length === 2)
+        .filter(i => i.length === 2)
         .reduce((acc: any, val) => {
           const [key, value] = val;
-          const newKey = key.replace(/-./g, (css) => css.toUpperCase()[1]);
+          const newKey = key.replace(/-./g, css => css.toUpperCase()[1]);
           acc[newKey] = value;
           return acc;
         }, {})

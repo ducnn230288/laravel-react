@@ -1,15 +1,15 @@
+import { API, KEY_REFRESH_TOKEN, KEY_TOKEN, routerLinks } from '@/utils';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { API, keyRefreshToken, keyToken, routerLinks } from '@/utils';
 
 import type State from './interface';
-import type { IUser, ResetPassword } from './interface';
+import type { IResetPassword, IUser } from './interface';
 
 const name = 'Auth';
 export default {
   name,
   set: createAsyncThunk(name + '/set', async (values: State) => values),
   logout: createAsyncThunk(name + '/logout', async () => {
-    // if (localStorage.getItem(keyRefreshToken)) {
+    // if (localStorage.getItem(KEY_TOKEN)) {
     //   return await API.get(`${routerLinks(name, 'api')}/logout`);
     // }
     return true;
@@ -24,8 +24,8 @@ export default {
       values,
     });
     if (data) {
-      localStorage.setItem(keyToken, data?.token);
-      localStorage.setItem(keyRefreshToken, data?.refreshToken);
+      localStorage.setItem(KEY_TOKEN, data?.token);
+      localStorage.setItem(KEY_REFRESH_TOKEN, data?.refreshToken);
     }
     return data!.user;
   }),
@@ -36,8 +36,8 @@ export default {
       params: { include: 'role' },
     });
     if (data) {
-      localStorage.setItem(keyToken, data?.token);
-      localStorage.setItem(keyRefreshToken, data?.refreshToken);
+      localStorage.setItem(KEY_TOKEN, data?.token);
+      localStorage.setItem(KEY_REFRESH_TOKEN, data?.refreshToken);
     }
     return data!.user;
   }),
@@ -49,7 +49,7 @@ export default {
     await API.post({ url: `${routerLinks(name, 'api')}/otp-confirmation`, values });
     return true;
   }),
-  resetPassword: createAsyncThunk(name + '/reset-password', async (values: ResetPassword) => {
+  resetPassword: createAsyncThunk(name + '/reset-password', async (values: IResetPassword) => {
     await API.post({ url: `${routerLinks(name, 'api')}/reset-password`, values });
     return true;
   }),

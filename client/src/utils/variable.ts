@@ -1,17 +1,13 @@
-export const keyUser = 'm8nvn*&hKwcgb^D-D#Hz^5CXfKySpY';
-export const keyToken = 'b7a2bdf4-ac40-4012-9635-ff4b7e55eae0';
-export const keyRefreshToken = '15c665b7-592f-4b60-b31f-a252579a3bd0';
+export const KEY_USER = 'm8nvn*&hKwcgb^D-D#Hz^5CXfKySpY';
+export const KEY_TOKEN = 'b7a2bdf4-ac40-4012-9635-ff4b7e55eae0';
+export const KEY_REFRESH_TOKEN = '15c665b7-592f-4b60-b31f-a252579a3bd0';
 export const KEY_TEMP = 'fbb36f54-abcb-4674-9635-b4b57ccf2e49';
 export const APP_NAME = import.meta.env.VITE_APP_NAME;
-export const linkApi = import.meta.env.VITE_URL_API;
-export const languages = import.meta.env.VITE_URL_LANGUAGES.split(',');
-export const language = import.meta.env.VITE_URL_LANGUAGE;
-export const listType = [
-  { value: 'type1', label: 'Type 1' },
-  { value: 'type2', label: 'Type 2' },
-  { value: 'type3', label: 'Type 3' },
-];
-export enum keyRole {
+export const LINK_API = import.meta.env.VITE_URL_API;
+export const LIST_LANGUAGE = import.meta.env.VITE_URL_LANGUAGES.split(',');
+export const LANGUAGE = import.meta.env.VITE_URL_LANGUAGE;
+
+export enum KEY_ROLE {
   P_ADDRESS_PROVINCE_INDEX = '92cf77b7-aac5-43b1-8385-a6fdbb5690aa',
   P_ADDRESS_PROVINCE_STORE = 'fa1f6c69-f2ec-4af8-b580-c6a960a38c8d',
   P_ADDRESS_PROVINCE_SHOW = '542553cd-3912-487c-a612-e98fc5c6e0c2',

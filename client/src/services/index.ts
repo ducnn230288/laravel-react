@@ -1,8 +1,20 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
+import { type TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
+import {
+  codeSlice,
+  codeTypeSlice,
+  contentSlice,
+  contentTypeSlice,
+  globalSlice,
+  parameterSlice,
+  postSlice,
+  postTypeSlice,
+  userRoleSlice,
+  userSlice,
+} from './';
 import { Action } from './action';
-import { Slice, State } from './slice';
+import { Slice, type State } from './slice';
 const setupStore = () => {
   return configureStore({
     reducer: rootReducer,
@@ -10,12 +22,9 @@ const setupStore = () => {
 };
 const useAppDispatch = () => useDispatch<ReturnType<typeof setupStore>['dispatch']>();
 const useTypedSelector: TypedUseSelectorHook<ReturnType<typeof rootReducer>> = useSelector;
-export { setupStore, useAppDispatch, useTypedSelector, Action, Slice };
+export { Action, setupStore, Slice, useAppDispatch, useTypedSelector };
 export type { State };
 
-export * from './global';
-export * from '@/pages/base/user/service';
-export * from '@/pages/base/user/service/role';
 export * from '@/pages/base/code/service';
 export * from '@/pages/base/code/service/type';
 export * from '@/pages/base/content/service';
@@ -23,18 +32,9 @@ export * from '@/pages/base/content/service/type';
 export * from '@/pages/base/parameter/service';
 export * from '@/pages/base/post/service';
 export * from '@/pages/base/post/service/type';
-import {
-  globalSlice,
-  userSlice,
-  userRoleSlice,
-  codeSlice,
-  codeTypeSlice,
-  contentSlice,
-  contentTypeSlice,
-  postSlice,
-  postTypeSlice,
-  parameterSlice,
-} from './';
+export * from '@/pages/base/user/service';
+export * from '@/pages/base/user/service/role';
+export * from './global';
 const rootReducer = combineReducers({
   [globalSlice.name]: globalSlice.reducer,
   [userSlice.name]: userSlice.reducer,

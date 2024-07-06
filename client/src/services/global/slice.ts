@@ -1,11 +1,11 @@
 import type { ActionReducerMapBuilder } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
-import viVN from 'antd/lib/locale/vi_VN';
 import enUS from 'antd/lib/locale/en_US';
+import viVN from 'antd/lib/locale/vi_VN';
 import dayjs from 'dayjs';
 import i18n from 'i18next';
 
-import { keyRefreshToken, keyToken, keyUser, lang } from '@/utils';
+import { KEY_REFRESH_TOKEN, KEY_TOKEN, KEY_USER, lang } from '@/utils';
 import Action from './action';
 import { EStatusGlobal } from './enum';
 import type State from './interface';
@@ -20,8 +20,8 @@ const checkLanguage = (language: string) => {
 };
 
 const initialState: State = {
-  data: JSON.parse(localStorage.getItem(keyUser) ?? '{}'),
-  user: JSON.parse(localStorage.getItem(keyUser) ?? '{}'),
+  data: JSON.parse(localStorage.getItem(KEY_USER) ?? '{}'),
+  user: JSON.parse(localStorage.getItem(KEY_USER) ?? '{}'),
   isLoading: false,
   isVisible: false,
   status: EStatusGlobal.idle,
@@ -73,9 +73,9 @@ const logout = (action: typeof Action, builder: ActionReducerMapBuilder<State>) 
     .addCase(action.logout.fulfilled, state => {
       state.user = {};
       state.data = {};
-      localStorage.removeItem(keyUser);
-      localStorage.removeItem(keyToken);
-      localStorage.removeItem(keyRefreshToken);
+      localStorage.removeItem(KEY_USER);
+      localStorage.removeItem(KEY_TOKEN);
+      localStorage.removeItem(KEY_REFRESH_TOKEN);
       state.isLoading = false;
       state.status = EStatusGlobal.logoutFulfilled;
     });
@@ -86,7 +86,7 @@ const profile = (action: typeof Action, builder: ActionReducerMapBuilder<State>)
       if (action.payload) {
         state.user = action.payload;
         state.data = action.payload;
-        localStorage.setItem(keyUser, JSON.stringify(action.payload));
+        localStorage.setItem(KEY_USER, JSON.stringify(action.payload));
         state.status = EStatusGlobal.profileFulfilled;
       } else state.status = EStatusGlobal.idle;
       state.isLoading = false;
@@ -105,7 +105,7 @@ const putProfile = (action: typeof Action, builder: ActionReducerMapBuilder<Stat
     })
     .addCase(action.putProfile.fulfilled, (state, action) => {
       if (action.payload) {
-        localStorage.setItem(keyUser, JSON.stringify(action.payload));
+        localStorage.setItem(KEY_USER, JSON.stringify(action.payload));
         state.user = action.payload;
         state.status = EStatusGlobal.putProfileFulfilled;
       } else state.status = EStatusGlobal.idle;
@@ -125,7 +125,7 @@ const login = (action: typeof Action, builder: ActionReducerMapBuilder<State>) =
     })
     .addCase(action.login.fulfilled, (state, action) => {
       if (action.payload) {
-        localStorage.setItem(keyUser, JSON.stringify(action.payload));
+        localStorage.setItem(KEY_USER, JSON.stringify(action.payload));
         state.user = action.payload;
         state.data = {};
         state.status = EStatusGlobal.loginFulfilled;

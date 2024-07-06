@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react';
+import { Fragment, useEffect } from 'react';
 
 import { EStatusState } from '@/enums';
 import { CBreadcrumbs } from '@/library/breadcrumbs';
@@ -35,8 +35,8 @@ const Page = () => {
 };
 export default Page;
 
-import { useTranslation } from 'react-i18next';
 import { CDrawerForm } from '@/library/drawer';
+import { useTranslation } from 'react-i18next';
 import _column from './column';
 const Form = () => {
   const sCode = SCode();
@@ -69,11 +69,11 @@ const Form = () => {
   );
 };
 
-import { useLocation, useNavigate } from 'react-router';
-import queryString from 'query-string';
-import { Select, Spin, Tree } from 'antd';
-import PerfectScrollbar from 'react-perfect-scrollbar';
 import { CSvgIcon } from '@/library/svg-icon';
+import { Select, Spin, Tree } from 'antd';
+import queryString from 'query-string';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import { useLocation, useNavigate } from 'react-router';
 const Side = () => {
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.code' });
   const sCodeType = SCodeType();
@@ -134,7 +134,7 @@ const Side = () => {
 
 import { CButton } from '@/library/button';
 import { CDataTable } from '@/library/data-table';
-import { keyRole } from '@/utils';
+import { KEY_ROLE } from '@/utils';
 const Main = () => {
   const sCode = SCode();
   const sGlobal = SGlobal();
@@ -150,7 +150,7 @@ const Main = () => {
           paginationDescription={(from: number, to: number, total: number) => t('Pagination code', { from, to, total })}
           columns={_column.useTable()}
           rightHeader={
-            sGlobal.user?.role?.permissions?.includes(keyRole.P_CODE_STORE) && (
+            sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_CODE_STORE) && (
               <CButton
                 icon={<CSvgIcon name='plus' size={12} />}
                 text={t('Add new Code', {

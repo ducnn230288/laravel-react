@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { IPaginationQuery } from '@/types';
-import { useAppDispatch, useTypedSelector, Action, Slice, State, IUser } from '@/services';
+import { Action, Slice, useAppDispatch, useTypedSelector, type IUser, type State } from '@/services';
+import type { IPaginationQuery } from '@/types';
 
 const name = 'User';
 export const action = {

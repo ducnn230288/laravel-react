@@ -135,7 +135,7 @@ const Side = () => {
 
 import { CButton } from '@/library/button';
 import { CDataTable } from '@/library/data-table';
-import { keyRole } from '@/utils';
+import { KEY_ROLE } from '@/utils';
 const Main = () => {
   const sUser = SUser();
   const sGlobal = SGlobal();
@@ -152,7 +152,7 @@ const Main = () => {
           paginationDescription={(from: number, to: number, total: number) => t('Pagination user', { from, to, total })}
           columns={_column.useTable()}
           rightHeader={
-            sGlobal.user?.role?.permissions?.includes(keyRole.P_USER_STORE) && (
+            sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_USER_STORE) && (
               <CButton
                 icon={<CSvgIcon name='plus' size={12} />}
                 text={t('Add new User', {

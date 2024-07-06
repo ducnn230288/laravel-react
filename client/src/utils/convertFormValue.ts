@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
 import { EFormModeSelect, EFormType } from '@/enums';
-import { IForm } from '@/types';
+import type { IForm } from '@/types';
 dayjs.extend(utc);
 
 export const convertFormValue = (columns: IForm[], values: { [selector: string]: any }, exportData = true) => {

@@ -45,6 +45,7 @@ abstract class Controller
     $this->extendByQueryString($for);
     $this->sortByQuery($for);
     $this->loadRelationships($for, $relations);
+//    $for->ddRawSql();
     return $for;
   }
 
@@ -134,10 +135,10 @@ abstract class Controller
         $keys = array_map('trim', explode('.', $extend[0]));
         if (count($keys) > 1) {
           $for->whereHas(Str::snake($keys[0]), function ($q) use ($extend, $keys){
-            $q->where(Str::snake($keys[1]), $extend[1]);
+            $q->orWhere(Str::snake($keys[1]), $extend[1]);
           });
         } else {
-          $for->where(Str::snake($extend[0]), $extend[1]);
+          $for->orWhere(Str::snake($extend[0]), $extend[1]);
         }
       }
     }

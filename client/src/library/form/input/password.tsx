@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { CSvgIcon } from '../../svg-icon';
 
 const Component = ({
@@ -17,6 +17,7 @@ const Component = ({
   return (
     <div className='relative'>
       <input
+        autoComplete='on'
         value={value}
         placeholder={placeholder}
         disabled={disabled}

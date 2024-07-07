@@ -7,6 +7,7 @@ import type { IMCode, IMCodeType } from '@/types/model';
 
 const Page = () => {
   const sCrud = new SCrud<IMCode, IMCodeType>('Code', 'CodeType');
+
   useEffect(() => {
     return () => {
       sCrud.reset();
@@ -88,8 +89,8 @@ const Side = () => {
       </div>
       <Spin spinning={sCrud.typeIsLoading}>
         <div className='desktop'>
-          <PerfectScrollbar options={{ wheelSpeed: 1 }}>
-            {sCrud.typeResult?.data && (
+          {sCrud.typeResult?.data && (
+            <PerfectScrollbar options={{ wheelSpeed: 1 }}>
               <Tree
                 blockNode
                 showLine
@@ -110,8 +111,8 @@ const Side = () => {
                   navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
                 }}
               />
-            )}
-          </PerfectScrollbar>
+            </PerfectScrollbar>
+          )}
         </div>
         <div className='mobile'>
           <Select

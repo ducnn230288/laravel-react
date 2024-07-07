@@ -1,11 +1,11 @@
-import React, { useEffect, useRef } from 'react';
 import { Form, type FormInstance, Spin } from 'antd';
-import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
+import { useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { EFormType } from '@/enums';
-import type { IForm } from '@/types';
 import { SGlobal } from '@/services';
+import type { IForm } from '@/types';
 import { convertFormValue } from '@/utils';
 
 import { CButton } from '../button';
@@ -23,7 +23,6 @@ export const CForm = ({
   checkHidden = false,
   extendForm,
   extendButton,
-  idSubmit = 'idSubmit',
   disableSubmit = false,
   spinning = false,
   formAnt,
@@ -123,7 +122,6 @@ export const CForm = ({
           {handSubmit && (
             <CButton
               text={textSubmit ?? t('Save')}
-              id={idSubmit}
               onClick={() => form?.submit()}
               disabled={disableSubmit || spinning}
               className={'text-primary-content bg-primary hover:bg-primary/90 leading-4 w-full rounded-lg !h-12'}
@@ -148,7 +146,6 @@ interface Type {
   checkHidden?: boolean;
   extendForm?: (values: any) => JSX.Element;
   extendButton?: (values: any) => JSX.Element;
-  idSubmit?: string;
   disableSubmit?: boolean;
   spinning?: boolean;
 }

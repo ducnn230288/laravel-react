@@ -1,12 +1,11 @@
-import React from 'react';
 import dayjs from 'dayjs';
 import 'dayjs/locale/vi';
 
 import { ETypeChart } from '@/enums';
-import type { IEditTable } from '@/types';
 import { CEChart } from '@/library/echart';
 import { CEditTable } from '@/library/edit-table';
 import { CGantt } from '@/library/gantt';
+import type { IEditTable } from '@/types';
 import { formatDataChart } from '@/utils';
 
 const Page = () => {

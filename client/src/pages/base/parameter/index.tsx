@@ -55,8 +55,8 @@ const Side = () => {
       </div>
       <Spin spinning={sCrud.isLoading}>
         <div className='desktop'>
-          <PerfectScrollbar options={{ wheelSpeed: 1 }}>
-            {sCrud.result?.data && (
+          {sCrud.result?.data && (
+            <PerfectScrollbar options={{ wheelSpeed: 1 }}>
               <Tree
                 blockNode
                 showLine
@@ -77,8 +77,8 @@ const Side = () => {
                   navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
                 }}
               />
-            )}
-          </PerfectScrollbar>
+            </PerfectScrollbar>
+          )}
         </div>
         <div className='mobile'>
           <Select

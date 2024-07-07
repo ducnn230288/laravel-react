@@ -1,18 +1,18 @@
-import React, { Suspense, useEffect } from 'react';
-import { createRoot } from 'react-dom/client';
-import i18next from 'i18next';
-import i18nextHttpBackend from 'i18next-http-backend';
-import { initReactI18next } from 'react-i18next';
-import { Provider } from 'react-redux';
 import { ConfigProvider, message as noti, Spin } from 'antd';
 import type { MessageInstance } from 'antd/lib/message/interface';
+import i18next from 'i18next';
+import i18nextHttpBackend from 'i18next-http-backend';
+import { Suspense, useEffect } from 'react';
+import { createRoot } from 'react-dom/client';
+import { initReactI18next } from 'react-i18next';
+import { Provider } from 'react-redux';
 import 'virtual:svg-icons-register';
 
-import { SGlobal, setupStore } from '@/services';
-import { reportWebVitals, lang } from '@/utils';
+import { setupStore, SGlobal } from '@/services';
+import { lang, reportWebVitals } from '@/utils';
 
-import Router from './router';
 import './assets/styles/index.less';
+import Router from './router';
 
 const fallbackLng = localStorage.getItem('i18nextLng');
 

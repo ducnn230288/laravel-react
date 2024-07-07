@@ -91,7 +91,7 @@ const action = {
 const initialState = {
   result: undefined,
   data: undefined,
-  isLoading: true,
+  isLoading: false,
   isVisible: false,
   status: EStatusState.idle,
   queryParams: undefined,
@@ -100,7 +100,7 @@ const initialState = {
 
   typeResult: undefined,
   typeData: undefined,
-  typeIsLoading: true,
+  typeIsLoading: false,
   typeIsVisible: false,
   typeStatus: EStatusState.idle,
   typeQueryParams: undefined,
@@ -120,10 +120,8 @@ export const crudSlice = createSlice({
   extraReducers: (builder: ActionReducerMapBuilder<State>) => {
     builder
       .addCase(action.get.pending, (state, action) => {
-        if (!state.isLoading) {
-          state.isLoading = true;
-          state.status = EStatusState.getPending;
-        }
+        state.isLoading = true;
+        state.status = EStatusState.getPending;
         state.time = new Date().getTime() + (state.keepUnusedDataFor ?? 60) * 1000;
         const queryParams = JSON.parse(JSON.stringify(action.meta.arg));
         delete queryParams.keyApi;
@@ -213,10 +211,8 @@ export const crudSlice = createSlice({
 
     builder
       .addCase(action.getType.pending, (state, action) => {
-        if (!state.isLoading) {
-          state.typeIsLoading = true;
-          state.typeStatus = EStatusState.getPending;
-        }
+        state.typeIsLoading = true;
+        state.typeStatus = EStatusState.getPending;
         state.typeTime = new Date().getTime() + (state.keepUnusedDataFor ?? 60) * 1000;
         const queryParams = JSON.parse(JSON.stringify(action.meta.arg));
         delete queryParams.keyApiType;

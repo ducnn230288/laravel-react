@@ -129,8 +129,8 @@ const Side = () => {
       </div>
       <Spin spinning={sCrud.typeIsLoading}>
         <div className='desktop'>
-          <PerfectScrollbar options={{ wheelSpeed: 1 }}>
-            {sCrud.typeResult?.data && (
+          {sCrud.typeResult?.data && (
+            <PerfectScrollbar options={{ wheelSpeed: 1 }}>
               <Tree
                 blockNode
                 showLine
@@ -183,8 +183,8 @@ const Side = () => {
                   </span>
                 )}
               />
-            )}
-          </PerfectScrollbar>
+            </PerfectScrollbar>
+          )}
         </div>
         <div className='mobile'>
           <TreeSelect

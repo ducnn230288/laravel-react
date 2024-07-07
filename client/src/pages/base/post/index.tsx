@@ -5,21 +5,22 @@ import { Fragment, useEffect } from 'react';
 import { EStatusState } from '@/enums';
 import { CBreadcrumbs } from '@/library/breadcrumbs';
 import { CTooltip } from '@/library/tooltip';
-import { SGlobal, SPost, SPostType } from '@/services';
+import { SCrud, SGlobal } from '@/services';
+import type { IMPost, IMPostType } from '@/types/model';
 
 const Page = () => {
-  const sPostType = SPostType();
+  const sCrud = new SCrud<IMPost, IMPostType>('Post', 'PostType');
   useEffect(() => {
-    if (!sPostType.result?.data) sPostType.get({ include: 'children', postTypeId: '' });
     return () => {
-      sPost.set({ isLoading: true, status: EStatusState.idle });
+      sCrud.reset();
     };
   }, []);
 
-  const sPost = SPost();
+  useEffect(() => {
+    if (sCrud.result && !sCrud.typeResult) sCrud.getType({ include: 'children', postTypeId: '' });
+  }, [sCrud.result]);
 
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.post' });
-
   return (
     <Fragment>
       <CBreadcrumbs title={t('Post')} list={[t('Setting'), t('Post')]} />
@@ -42,32 +43,31 @@ import { CSvgIcon } from '@/library/svg-icon';
 import { useTranslation } from 'react-i18next';
 import _column from './column';
 const FormPost = () => {
-  const sPost = SPost();
-  const request = JSON.parse(sPost?.queryParams ?? '{}');
+  const sCrud = new SCrud<IMPost, IMPostType>('Post', 'PostType');
+  const request = JSON.parse(sCrud?.queryParams ?? '{}');
 
   useEffect(() => {
-    switch (sPost.status) {
+    switch (sCrud.status) {
       case EStatusState.postFulfilled:
       case EStatusState.putFulfilled:
       case EStatusState.deleteFulfilled:
-        sPost.get(request);
+        sCrud.get(request);
         break;
     }
-  }, [sPost.status]);
+  }, [sCrud.status]);
 
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.post' });
-  const sPostType = SPostType();
   return (
     <CDrawerForm
       size={'large'}
-      facade={sPost}
+      facade={sCrud}
       columns={_column.useForm()}
-      title={t(sPost.data?.id ? 'Edit Post' : 'Add new Post', {
-        name: sPostType.result?.data?.find(item => item.code === request.typeCode)?.name,
+      title={t(sCrud.data?.id ? 'Edit Post' : 'Add new Post', {
+        name: sCrud.typeResult?.data?.find(item => item.code === request.typeCode)?.name,
       })}
       onSubmit={values => {
-        if (sPost.data?.id) sPost.put({ ...values, id: sPost.data.id, typeCode: request.typeCode });
-        else sPost.post({ ...values, typeCode: request.typeCode });
+        if (sCrud.data?.id) sCrud.put({ ...values, id: sCrud.data.id, typeCode: request.typeCode });
+        else sCrud.post({ ...values, typeCode: request.typeCode });
       }}
     />
   );
@@ -75,27 +75,31 @@ const FormPost = () => {
 
 import _columnType from './column/type';
 const FormPostType = () => {
-  const sPostType = SPostType();
-  const request = JSON.parse(sPostType?.queryParams ?? '{}');
+  const sCrud = new SCrud<IMPost, IMPostType>('Post', 'PostType');
+
+  const request = JSON.parse(sCrud?.typeQueryParams ?? '{}');
   useEffect(() => {
-    switch (sPostType.status) {
+    switch (sCrud.typeStatus) {
       case EStatusState.postFulfilled:
       case EStatusState.putFulfilled:
       case EStatusState.deleteFulfilled:
-        sPostType.get(request);
+        sCrud.getType(request);
         break;
     }
-  }, [sPostType.status]);
+  }, [sCrud.typeStatus]);
 
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.post' });
   return (
     <CDrawerForm
-      facade={sPostType}
-      columns={_columnType.useForm(sPostType.data?.id, sPostType.result?.data)}
-      title={t(sPostType.data?.id ? 'Edit Type Post' : 'Add new Type Post')}
+      facade={sCrud}
+      keyData='typeData'
+      keyIsLoading='typeIsLoading'
+      keyState='typeIsVisible'
+      columns={_columnType.useForm()}
+      title={t(sCrud.typeData?.id ? 'Edit Type Post' : 'Add new Type Post')}
       onSubmit={values => {
-        if (sPostType.data?.id) sPostType.put({ ...values, id: sPostType.data.id });
-        else sPostType.post({ ...values });
+        if (sCrud.typeData?.id) sCrud.putType({ ...values, id: sCrud.typeData.id });
+        else sCrud.postType({ ...values });
       }}
     />
   );
@@ -107,10 +111,9 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import { useLocation, useNavigate } from 'react-router';
 const Side = () => {
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.post' });
-  const sPostType = SPostType();
 
-  const sPost = SPost();
-  const request = JSON.parse(sPost?.queryParams ?? '{}');
+  const sCrud = new SCrud<IMPost, IMPostType>('Post', 'PostType');
+  const request = JSON.parse(sCrud?.queryParams ?? '{}');
   const navigate = useNavigate();
   const location = useLocation();
   const sGlobal = SGlobal();
@@ -121,13 +124,13 @@ const Side = () => {
         <h3>{t('Type Post')}</h3>
         <CButton
           icon={<CSvgIcon name='plus' size={12} />}
-          onClick={() => sPostType.set({ data: undefined, isVisible: true })}
+          onClick={() => sCrud.set({ typeData: undefined, typeIsVisible: true })}
         />
       </div>
-      <Spin spinning={sPostType.isLoading}>
+      <Spin spinning={sCrud.typeIsLoading}>
         <div className='desktop'>
           <PerfectScrollbar options={{ wheelSpeed: 1 }}>
-            {sPostType.result?.data && (
+            {sCrud.typeResult?.data && (
               <Tree
                 blockNode
                 showLine
@@ -135,7 +138,7 @@ const Side = () => {
                 defaultExpandAll
                 switcherIcon={<CSvgIcon name='arrow' size={12} />}
                 defaultSelectedKeys={[request.typeCode]}
-                treeData={sPostType.result?.data?.map((item: any) => ({
+                treeData={sCrud.typeResult?.data?.map((item: any) => ({
                   title: item?.name,
                   key: item?.code,
                   isLeaf: true,
@@ -145,7 +148,7 @@ const Side = () => {
                 onSelect={selectedKeys => {
                   if (selectedKeys[0]) {
                     request.typeCode = selectedKeys[0];
-                    sPost.get(request);
+                    sCrud.get(request);
                     navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
                   }
                 }}
@@ -157,7 +160,7 @@ const Side = () => {
                         <CTooltip title={t('Edit Type Post', { name: data.title })}>
                           <button
                             title={t('Edit Type Post', { name: data.title })}
-                            onClick={() => sPostType.getById({ id: data.code })}
+                            onClick={() => sCrud.getByIdType({ id: data.code })}
                           >
                             <CSvgIcon name='edit' className='primary' />
                           </button>
@@ -168,7 +171,7 @@ const Side = () => {
                           <Popconfirm
                             destroyTooltipOnHide={true}
                             title={t('Are you sure want delete type post?', { name: data.title })}
-                            onConfirm={() => sPostType.delete(data.code)}
+                            onConfirm={() => sCrud.deleteType(data.code)}
                           >
                             <button title={t('Delete type post', { name: data.title })}>
                               <CSvgIcon name='trash' className='error' />
@@ -189,7 +192,7 @@ const Side = () => {
             switcherIcon={<CSvgIcon name='arrow' size={12} />}
             value={request.typeCode}
             className={'w-full'}
-            treeData={sPostType.result?.data?.map((item: any) => ({
+            treeData={sCrud.typeResult?.data?.map((item: any) => ({
               title: item?.name,
               value: item?.code,
               isLeaf: true,
@@ -199,7 +202,7 @@ const Side = () => {
             onChange={e => {
               if (e) {
                 request.typeCode = e;
-                sPost.get(request);
+                sCrud.get(request);
                 navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
               }
             }}
@@ -213,18 +216,17 @@ const Side = () => {
 import { CButton } from '@/library/button';
 import { CDataTable } from '@/library/data-table';
 const Main = () => {
-  const sPost = SPost();
+  const sCrud = new SCrud<IMPost, IMPostType>('Post', 'PostType');
   const sGlobal = SGlobal();
-  const sPostType = SPostType();
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.post' });
-  const request = JSON.parse(sPost?.queryParams ?? '{}');
+  const request = JSON.parse(sCrud?.queryParams ?? '{}');
 
   return (
     <div className='card'>
       <div className='body'>
         <CDataTable
           defaultRequest={{ include: 'languages' }}
-          facade={sPost}
+          facade={sCrud}
           paginationDescription={(from: number, to: number, total: number) => t('Pagination post', { from, to, total })}
           columns={_column.useTable()}
           rightHeader={
@@ -232,9 +234,9 @@ const Main = () => {
               <CButton
                 icon={<CSvgIcon name='plus' size={12} />}
                 text={t('Add new Post', {
-                  name: sPostType.result?.data?.find(item => item.code === request.typeCode)?.name,
+                  name: sCrud.typeResult?.data?.find(item => item.code === request.typeCode)?.name,
                 })}
-                onClick={() => sPost.set({ data: undefined, isVisible: true })}
+                onClick={() => sCrud.set({ data: undefined, isVisible: true })}
               />
             )
           }

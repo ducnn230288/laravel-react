@@ -2,20 +2,20 @@ import { Fragment, useEffect } from 'react';
 
 import { EStatusState } from '@/enums';
 import { CBreadcrumbs } from '@/library/breadcrumbs';
-import { SContent, SContentType, SGlobal } from '@/services';
+import { SCrud, SGlobal } from '@/services';
+import type { IContentType, IMContent } from '@/types/model';
 
 const Page = () => {
-  const sContent = SContent();
+  const sCrud = new SCrud<IMContent, IContentType>('Content', 'ContentType');
   useEffect(() => {
     return () => {
-      sContent.set({ isLoading: true, status: EStatusState.idle });
+      sCrud.reset();
     };
   }, []);
 
-  const sContentType = SContentType();
   useEffect(() => {
-    if (sContent.result && !sContentType?.result) sContentType.get({});
-  }, [sContent.result]);
+    if (sCrud.result && !sCrud?.typeResult) sCrud.getType({});
+  }, [sCrud.result]);
 
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.content' });
   return (
@@ -39,31 +39,30 @@ import { CDrawerForm } from '@/library/drawer';
 import { useTranslation } from 'react-i18next';
 import _column from './column';
 const Form = () => {
-  const sContent = SContent();
-  const request = JSON.parse(sContent?.queryParams ?? '{}');
+  const sCrud = new SCrud<IMContent, IContentType>('Content', 'ContentType');
+  const request = JSON.parse(sCrud?.queryParams ?? '{}');
 
   useEffect(() => {
-    switch (sContent.status) {
+    switch (sCrud.status) {
       case EStatusState.postFulfilled:
       case EStatusState.putFulfilled:
       case EStatusState.deleteFulfilled:
-        sContent.get(request);
+        sCrud.get(request);
         break;
     }
-  }, [sContent.status]);
+  }, [sCrud.status]);
 
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.content' });
-  const sContentType = SContentType();
   return (
     <CDrawerForm
-      facade={sContent}
+      facade={sCrud}
       columns={_column.useForm()}
-      title={t(sContent.data?.id ? 'Edit Content' : 'Add new Content', {
-        name: sContentType.result?.data?.find(item => item.code === request.typeCode)?.name,
+      title={t(sCrud.data?.id ? 'Edit Content' : 'Add new Content', {
+        name: sCrud.typeResult?.data?.find(item => item.code === request.typeCode)?.name,
       })}
       onSubmit={values => {
-        if (sContent.data?.id) sContent.put({ ...values, id: sContent.data.id, typeCode: request.typeCode });
-        else sContent.post({ ...values, typeCode: request.typeCode });
+        if (sCrud.data?.id) sCrud.put({ ...values, id: sCrud.data.id, typeCode: request.typeCode });
+        else sCrud.post({ ...values, typeCode: request.typeCode });
       }}
     />
   );
@@ -76,10 +75,9 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import { useLocation, useNavigate } from 'react-router';
 const Side = () => {
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.content' });
-  const sContentType = SContentType();
 
-  const sContent = SContent();
-  const request = JSON.parse(sContent?.queryParams ?? '{}');
+  const sCrud = new SCrud<IMContent, IContentType>('Content', 'ContentType');
+  const request = JSON.parse(sCrud?.queryParams ?? '{}');
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -88,10 +86,10 @@ const Side = () => {
       <div className='header'>
         <h3>{t('Type content')}</h3>
       </div>
-      <Spin spinning={sContentType.isLoading}>
+      <Spin spinning={sCrud.typeIsLoading}>
         <div className='desktop'>
           <PerfectScrollbar options={{ wheelSpeed: 1 }}>
-            {sContentType.result?.data && (
+            {sCrud.typeResult?.data && (
               <Tree
                 blockNode
                 showLine
@@ -99,7 +97,7 @@ const Side = () => {
                 defaultExpandAll
                 switcherIcon={<CSvgIcon name='arrow' size={12} />}
                 defaultSelectedKeys={[request.typeCode]}
-                treeData={sContentType.result?.data?.map((item: any) => ({
+                treeData={sCrud.typeResult?.data?.map((item: any) => ({
                   title: item?.name,
                   key: item?.code,
                   isLeaf: true,
@@ -108,7 +106,7 @@ const Side = () => {
                 }))}
                 onSelect={selectedKeys => {
                   request.typeCode = selectedKeys[0];
-                  sContent.get(request);
+                  sCrud.get(request);
                   navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
                 }}
               />
@@ -119,10 +117,10 @@ const Side = () => {
           <Select
             value={request.typeCode}
             className={'w-full'}
-            options={sContentType?.result?.data?.map(data => ({ label: data.name, value: data.code }))}
+            options={sCrud.typeResult?.data?.map(data => ({ label: data.name, value: data.code }))}
             onChange={e => {
               request.typeCode = e;
-              sContent.get(request);
+              sCrud.get(request);
               navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
             }}
           />
@@ -136,18 +134,17 @@ import { CButton } from '@/library/button';
 import { CDataTable } from '@/library/data-table';
 import { KEY_ROLE } from '@/utils';
 const Main = () => {
-  const sContent = SContent();
+  const sCrud = new SCrud<IMContent, IContentType>('Content', 'ContentType');
   const sGlobal = SGlobal();
-  const sContentType = SContentType();
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.content' });
-  const request = JSON.parse(sContent?.queryParams ?? '{}');
+  const request = JSON.parse(sCrud?.queryParams ?? '{}');
 
   return (
     <div className='card'>
       <div className='body'>
         <CDataTable
           defaultRequest={{ include: 'languages' }}
-          facade={sContent}
+          facade={sCrud}
           paginationDescription={(from: number, to: number, total: number) =>
             t('Pagination content', { from, to, total })
           }
@@ -157,9 +154,9 @@ const Main = () => {
               <CButton
                 icon={<CSvgIcon name='plus' size={12} />}
                 text={t('Add new Content', {
-                  name: sContentType.result?.data?.find(item => item.code === request.typeCode)?.name,
+                  name: sCrud.typeResult?.data?.find(item => item.code === request.typeCode)?.name,
                 })}
-                onClick={() => sContent.set({ data: undefined, isVisible: true })}
+                onClick={() => sCrud.set({ data: undefined, isVisible: true })}
               />
             )
           }

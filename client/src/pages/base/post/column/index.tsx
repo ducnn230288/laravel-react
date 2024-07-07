@@ -7,15 +7,16 @@ import { EFormRuleType, EFormType, ETableAlign, ETableFilterType } from '@/enums
 import { CAvatar } from '@/library/avatar';
 import { CSvgIcon } from '@/library/svg-icon';
 import { CTooltip } from '@/library/tooltip';
-import { SGlobal, SPost } from '@/services';
+import { SCrud, SGlobal } from '@/services';
 import type { IDataTable, IForm } from '@/types';
+import type { IMPost, IMPostType } from '@/types/model';
 import { KEY_ROLE, routerLinks } from '@/utils';
 
 export default {
   useTable: (): IDataTable[] => {
     const sGlobal = SGlobal();
     const { t } = useTranslation('locale', { keyPrefix: 'pages.base.post' });
-    const sPost = SPost();
+    const sCrud = new SCrud<IMPost, IMPostType>('Post', 'PostType');
 
     return [
       {
@@ -85,7 +86,7 @@ export default {
                             .name
                         : '',
                     })}
-                    onConfirm={() => sPost.put({ id: data.id, isDisable: !data.isDisable })}
+                    onConfirm={() => sCrud.put({ id: data.id, isDisable: !data.isDisable })}
                   >
                     <button
                       title={t(data.isDisable ? 'Disabled post' : 'Enabled post', {
@@ -119,7 +120,7 @@ export default {
                             .name
                         : '',
                     })}
-                    onClick={() => sPost.getById({ id: data.id, params: { include: 'languages' } })}
+                    onClick={() => sCrud.getById({ id: data.id, params: { include: 'languages' } })}
                   >
                     <CSvgIcon name='edit' className='primary' />
                   </button>
@@ -141,7 +142,7 @@ export default {
                             .name
                         : '',
                     })}
-                    onConfirm={() => sPost.delete(data.id)}
+                    onConfirm={() => sCrud.delete(data.id)}
                   >
                     <button
                       title={t('Delete post', {
@@ -164,7 +165,7 @@ export default {
   },
   useForm: (): IForm[] => {
     const { t } = useTranslation('locale', { keyPrefix: 'pages.base.post' });
-    const sPost = SPost();
+    const sCrud = new SCrud<IMPost, IMPostType>('Post', 'PostType');
 
     return [
       {
@@ -209,7 +210,7 @@ export default {
                       url: `${routerLinks('Post', 'api')}/valid`,
                       name: 'name',
                       label: t('Name Post'),
-                      id: sPost.data?.id,
+                      id: sCrud.data?.id,
                     },
                   },
                 ],
@@ -234,7 +235,7 @@ export default {
                       url: `${routerLinks('Post', 'api')}/valid`,
                       name: 'slug',
                       label: 'Slug',
-                      id: sPost.data?.id,
+                      id: sCrud.data?.id,
                     },
                   },
                 ],

@@ -1,18 +1,22 @@
-import React, { Fragment, useEffect } from 'react';
+import { Fragment, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useLocation } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 
 import { CBreadcrumbs } from '@/library/breadcrumbs';
-import { SParameter } from '@/services';
+import { SCrud } from '@/services';
+import type { IMParameter } from '@/types/model';
 
 const Page = () => {
-  const sParameter = SParameter();
+  const sCrud = new SCrud<IMParameter>('Parameter');
   const location = useLocation();
   useEffect(() => {
-    if (!sParameter.result?.data) sParameter.get({});
-    sParameter.getById({
+    sCrud.get({});
+    sCrud.getById({
       id: queryString.parse(location.search, { arrayFormat: 'index' })?.code?.toString() ?? 'ADDRESS',
     });
+    return () => {
+      sCrud.reset();
+    };
   }, []);
 
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.parameter' });
@@ -32,15 +36,15 @@ const Page = () => {
 };
 export default Page;
 
-import queryString from 'query-string';
 import { Select, Spin, Tree } from 'antd';
+import queryString from 'query-string';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
 import { CSvgIcon } from '@/library/svg-icon';
 const Side = () => {
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.parameter' });
-  const sParameter = SParameter();
-  const request = JSON.parse(sParameter?.queryParams ?? '{}');
+  const sCrud = new SCrud<IMParameter>('Parameter');
+  const request = JSON.parse(sCrud?.queryParams ?? '{}');
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -49,18 +53,18 @@ const Side = () => {
       <div className='header'>
         <h3>{t('Parameter')}</h3>
       </div>
-      <Spin spinning={sParameter.isLoading}>
+      <Spin spinning={sCrud.isLoading}>
         <div className='desktop'>
           <PerfectScrollbar options={{ wheelSpeed: 1 }}>
-            {sParameter.result?.data && (
+            {sCrud.result?.data && (
               <Tree
                 blockNode
                 showLine
                 autoExpandParent
                 defaultExpandAll
                 switcherIcon={<CSvgIcon name='arrow' size={12} />}
-                selectedKeys={[sParameter.data?.code ?? '']}
-                treeData={sParameter.result?.data?.map(item => ({
+                selectedKeys={[sCrud.data?.code ?? '']}
+                treeData={sCrud.result?.data?.map(item => ({
                   title: item?.name,
                   key: item?.code,
                   isLeaf: true,
@@ -69,7 +73,7 @@ const Side = () => {
                 }))}
                 onSelect={selectedKeys => {
                   request.code = selectedKeys[0];
-                  sParameter.getById({ id: request.code });
+                  sCrud.getById({ id: request.code });
                   navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
                 }}
               />
@@ -78,12 +82,12 @@ const Side = () => {
         </div>
         <div className='mobile'>
           <Select
-            value={sParameter.data?.code}
+            value={sCrud.data?.code}
             className={'w-full'}
-            options={sParameter?.result?.data?.map(data => ({ label: data.name, value: data.code }))}
+            options={sCrud?.result?.data?.map(data => ({ label: data.name, value: data.code }))}
             onChange={e => {
               request.code = e;
-              sParameter.getById({ id: e });
+              sCrud.getById({ id: e });
               navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
             }}
           />
@@ -93,21 +97,21 @@ const Side = () => {
   );
 };
 
-import { CForm } from '@/library/form';
 import { EFormType } from '@/enums';
+import { CForm } from '@/library/form';
 const Main = () => {
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.parameter' });
-  const sParameter = SParameter();
+  const sCrud = new SCrud<IMParameter>('Parameter');
 
   return (
     <div className='card'>
       <div className='header'>
-        <h3>{t('Edit Parameter', { code: sParameter.data?.name })}</h3>
+        <h3>{t('Edit Parameter', { code: sCrud.data?.name })}</h3>
       </div>
       <div className='desktop has-header'>
-        <Spin spinning={sParameter.isLoading}>
+        <Spin spinning={sCrud.isLoading}>
           <CForm
-            values={{ ...sParameter.data }}
+            values={{ ...sCrud.data }}
             className='intro-x'
             columns={[
               {
@@ -127,8 +131,8 @@ const Main = () => {
                 },
               },
             ]}
-            handSubmit={values => sParameter.put({ ...values, id: sParameter.data!.code })}
-            disableSubmit={sParameter.isLoading}
+            handSubmit={values => sCrud.put({ ...values, id: sCrud.data!.code })}
+            disableSubmit={sCrud.isLoading}
           />
         </Spin>
       </div>

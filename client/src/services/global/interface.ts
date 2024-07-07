@@ -1,10 +1,9 @@
 import type enUS from 'antd/lib/locale/en_US';
 import type viVN from 'antd/lib/locale/vi_VN';
 
-import type { ICode } from '@/pages/base/code/service';
-import type { IUserRole } from '@/pages/base/user/service/role';
 import type { ICommonEntity } from '@/types';
 
+import type { IMContent, IMUserRole } from '@/types/model';
 import type { EStatusGlobal } from './enum';
 
 interface State {
@@ -33,10 +32,10 @@ export interface IUser extends ICommonEntity {
   dob?: string;
   description?: string;
   positionCode?: string;
-  position?: ICode;
+  position?: IMContent;
   retypedPassword?: string;
   roleCode?: string;
-  role?: IUserRole;
+  role?: IMUserRole;
   createdAt?: string;
   updatedAt?: string;
   isDisable?: boolean;

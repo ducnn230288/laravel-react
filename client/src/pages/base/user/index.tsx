@@ -2,20 +2,20 @@ import { Fragment, useEffect } from 'react';
 
 import { EStatusState } from '@/enums';
 import { CBreadcrumbs } from '@/library/breadcrumbs';
-import { SGlobal, SUser, SUserRole } from '@/services';
+import { SCrud, SGlobal } from '@/services';
+import type { IMUser, IMUserRole } from '@/types/model';
 
 const Page = () => {
-  const sUser = SUser();
+  const sCrud = new SCrud<IMUser, IMUserRole>('User', 'UserRole');
   useEffect(() => {
     return () => {
-      sUser.set({ isLoading: true, status: EStatusState.idle });
+      sCrud.reset();
     };
   }, []);
 
-  const sUserRole = SUserRole();
   useEffect(() => {
-    if (sUser.result && !sUserRole?.result) sUserRole.get({});
-  }, [sUser.result]);
+    if (sCrud.result && !sCrud?.typeResult) sCrud.getType({});
+  }, [sCrud.result]);
 
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.user' });
   return (
@@ -39,31 +39,30 @@ import { CDrawerForm } from '@/library/drawer';
 import { useTranslation } from 'react-i18next';
 import _column from './column';
 const Form = () => {
-  const sUser = SUser();
-  const request = JSON.parse(sUser?.queryParams ?? '{}');
+  const sCrud = new SCrud<IMUser, IMUserRole>('User', 'UserRole');
+  const request = JSON.parse(sCrud?.queryParams ?? '{}');
 
   useEffect(() => {
-    switch (sUser.status) {
+    switch (sCrud.status) {
       case EStatusState.postFulfilled:
       case EStatusState.putFulfilled:
       case EStatusState.deleteFulfilled:
-        sUser.get(request);
+        sCrud.get(request);
         break;
     }
-  }, [sUser.status]);
+  }, [sCrud.status]);
 
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.user' });
-  const sUserRole = SUserRole();
   return (
     <CDrawerForm
-      facade={sUser}
+      facade={sCrud}
       columns={_column.useForm()}
-      title={t(sUser.data?.id ? 'Edit User' : 'Add new User', {
-        name: sUserRole.result?.data?.find(item => item.code === request.roleCode)?.name,
+      title={t(sCrud.data?.id ? 'Edit User' : 'Add new User', {
+        name: sCrud.typeResult?.data?.find(item => item.code === request.roleCode)?.name,
       })}
       onSubmit={values => {
-        if (sUser.data?.id) sUser.put({ ...values, id: sUser.data.id, roleCode: request.roleCode });
-        else sUser.post({ ...values, roleCode: request.roleCode });
+        if (sCrud.data?.id) sCrud.put({ ...values, id: sCrud.data.id, roleCode: request.roleCode });
+        else sCrud.post({ ...values, roleCode: request.roleCode });
       }}
     />
   );
@@ -77,10 +76,9 @@ import { useLocation, useNavigate } from 'react-router';
 import { CSvgIcon } from '@/library/svg-icon';
 const Side = () => {
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.user' });
-  const sUserRole = SUserRole();
 
-  const sUser = SUser();
-  const request = JSON.parse(sUser?.queryParams ?? '{}');
+  const sCrud = new SCrud<IMUser, IMUserRole>('User', 'UserRole');
+  const request = JSON.parse(sCrud?.queryParams ?? '{}');
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -89,10 +87,10 @@ const Side = () => {
       <div className='header'>
         <h3>{t('Role')}</h3>
       </div>
-      <Spin spinning={sUserRole.isLoading}>
+      <Spin spinning={sCrud.typeIsLoading}>
         <div className='desktop'>
           <PerfectScrollbar options={{ wheelSpeed: 1 }}>
-            {sUserRole.result?.data && (
+            {sCrud.typeResult?.data && (
               <Tree
                 blockNode
                 showLine
@@ -100,7 +98,7 @@ const Side = () => {
                 defaultExpandAll
                 switcherIcon={<CSvgIcon name='arrow' size={12} />}
                 defaultSelectedKeys={[request.roleCode]}
-                treeData={sUserRole.result?.data?.map((item: any) => ({
+                treeData={sCrud.typeResult?.data?.map((item: any) => ({
                   title: item?.name,
                   key: item?.code,
                   isLeaf: true,
@@ -109,7 +107,7 @@ const Side = () => {
                 }))}
                 onSelect={selectedKeys => {
                   request.roleCode = selectedKeys[0];
-                  sUser.get(request);
+                  sCrud.get(request);
                   navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
                 }}
               />
@@ -120,10 +118,10 @@ const Side = () => {
           <Select
             value={request.roleCode}
             className={'w-full'}
-            options={sUserRole?.result?.data?.map(data => ({ label: data.name, value: data.code }))}
+            options={sCrud.typeResult?.data?.map(data => ({ label: data.name, value: data.code }))}
             onChange={e => {
               request.roleCode = e;
-              sUser.get(request);
+              sCrud.get(request);
               navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
             }}
           />
@@ -137,18 +135,17 @@ import { CButton } from '@/library/button';
 import { CDataTable } from '@/library/data-table';
 import { KEY_ROLE } from '@/utils';
 const Main = () => {
-  const sUser = SUser();
+  const sCrud = new SCrud<IMUser, IMUserRole>('User', 'UserRole');
   const sGlobal = SGlobal();
-  const sUserRole = SUserRole();
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.user' });
-  const request = JSON.parse(sUser?.queryParams ?? '{}');
+  const request = JSON.parse(sCrud?.queryParams ?? '{}');
 
   return (
     <div className='card'>
       <div className='body'>
         <CDataTable
           defaultRequest={{ include: 'position' }}
-          facade={sUser}
+          facade={sCrud}
           paginationDescription={(from: number, to: number, total: number) => t('Pagination user', { from, to, total })}
           columns={_column.useTable()}
           rightHeader={
@@ -156,9 +153,9 @@ const Main = () => {
               <CButton
                 icon={<CSvgIcon name='plus' size={12} />}
                 text={t('Add new User', {
-                  name: sUserRole.result?.data?.find(item => item.code === request.roleCode)?.name,
+                  name: sCrud.typeResult?.data?.find(item => item.code === request.roleCode)?.name,
                 })}
-                onClick={() => sUser.set({ data: undefined, isVisible: true })}
+                onClick={() => sCrud.set({ data: undefined, isVisible: true })}
               />
             )
           }

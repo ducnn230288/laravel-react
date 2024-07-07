@@ -35,11 +35,6 @@ export const API = {
     showMessage?: boolean;
   }) => {
     config.headers = { ...config.headers, ...headers };
-
-    if (params.extend) {
-      // params.extend = params.extend.map(item => queryString.stringify(item));
-      console.log(params.extend);
-    }
     const linkParam = queryString.stringify(params, { arrayFormat: 'index' });
     const response = await fetch(
       (url.includes('https://') || url.includes('http://') ? '' : LINK_API) + url + (linkParam && '?' + linkParam),

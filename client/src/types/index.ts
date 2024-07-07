@@ -27,6 +27,7 @@ export interface ICommonEntity {
   isDisable?: boolean;
 }
 export interface IPaginationQuery<T = object> {
+  [selector: string]: any;
   perPage?: number;
   page?: number;
   like?: string | T;

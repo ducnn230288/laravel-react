@@ -6,15 +6,16 @@ import { EFormRuleType, EFormType, ETableAlign, ETableFilterType } from '@/enums
 import { CAvatar } from '@/library/avatar';
 import { CSvgIcon } from '@/library/svg-icon';
 import { CTooltip } from '@/library/tooltip';
-import { SContent, SGlobal } from '@/services';
+import { SCrud, SGlobal } from '@/services';
 import type { IDataTable, IForm } from '@/types';
+import type { IContentType, IMContent } from '@/types/model';
 import { KEY_ROLE, routerLinks } from '@/utils';
 
 export default {
   useTable: (): IDataTable[] => {
     const sGlobal = SGlobal();
     const { t } = useTranslation('locale', { keyPrefix: 'pages.base.content' });
-    const sContent = SContent();
+    const sCrud = new SCrud<IMContent, IContentType>('Content', 'ContentType');
 
     return [
       {
@@ -74,7 +75,7 @@ export default {
                       !data.isDisable ? 'Are you sure want disable content?' : 'Are you sure want enable content?',
                       { name: data.name },
                     )}
-                    onConfirm={() => sContent.put({ id: data.id, isDisable: !data.isDisable })}
+                    onConfirm={() => sCrud.put({ id: data.id, isDisable: !data.isDisable })}
                   >
                     <button title={t(data.isDisable ? 'Disabled content' : 'Enabled content', { name: data.name })}>
                       {data.isDisable ? (
@@ -90,7 +91,7 @@ export default {
                 <CTooltip title={t('Edit Content', { name: data.name })}>
                   <button
                     title={t('Edit Content', { name: data.name })}
-                    onClick={() => sContent.getById({ id: data.id, params: { include: 'languages' } })}
+                    onClick={() => sCrud.getById({ id: data.id, params: { include: 'languages' } })}
                   >
                     <CSvgIcon name='edit' className='primary' />
                   </button>
@@ -101,7 +102,7 @@ export default {
                   <Popconfirm
                     destroyTooltipOnHide={true}
                     title={t('Are you sure want delete content?', { name: data.name })}
-                    onConfirm={() => sContent.delete(data.id)}
+                    onConfirm={() => sCrud.delete(data.id)}
                   >
                     <button title={t('Delete content', { name: data.name })}>
                       <CSvgIcon name='trash' className='error' />
@@ -117,7 +118,7 @@ export default {
   },
   useForm: (type?: string): IForm[] => {
     const { t } = useTranslation('locale', { keyPrefix: 'pages.base.content' });
-    const sContent = SContent();
+    const sCrud = new SCrud<IMContent, IContentType>('Content', 'ContentType');
 
     return [
       {
@@ -169,7 +170,7 @@ export default {
                             url: `${routerLinks('Content', 'api')}/valid`,
                             name: 'name',
                             label: t('Name'),
-                            id: sContent.data?.id,
+                            id: sCrud.data?.id,
                           },
                         },
                       ],

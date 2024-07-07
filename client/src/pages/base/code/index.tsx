@@ -2,20 +2,20 @@ import { Fragment, useEffect } from 'react';
 
 import { EStatusState } from '@/enums';
 import { CBreadcrumbs } from '@/library/breadcrumbs';
-import { SCode, SCodeType, SGlobal } from '@/services';
+import { SCrud, SGlobal } from '@/services';
+import type { IMCode, IMCodeType } from '@/types/model';
 
 const Page = () => {
-  const sCode = SCode();
+  const sCrud = new SCrud<IMCode, IMCodeType>('Code', 'CodeType');
   useEffect(() => {
     return () => {
-      sCode.set({ isLoading: true, status: EStatusState.idle });
+      sCrud.reset();
     };
   }, []);
 
-  const sCodeType = SCodeType();
   useEffect(() => {
-    if (sCode.result && !sCodeType?.result) sCodeType.get({});
-  }, [sCode.result]);
+    if (sCrud.result && !sCrud?.typeResult) sCrud.getType({});
+  }, [sCrud.result]);
 
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.code' });
   return (
@@ -39,31 +39,30 @@ import { CDrawerForm } from '@/library/drawer';
 import { useTranslation } from 'react-i18next';
 import _column from './column';
 const Form = () => {
-  const sCode = SCode();
-  const request = JSON.parse(sCode?.queryParams ?? '{}');
+  const sCrud = new SCrud<IMCode, IMCodeType>('Code', 'CodeType');
+  const request = JSON.parse(sCrud?.queryParams ?? '{}');
 
   useEffect(() => {
-    switch (sCode.status) {
+    switch (sCrud.status) {
       case EStatusState.postFulfilled:
       case EStatusState.putFulfilled:
       case EStatusState.deleteFulfilled:
-        sCode.get(request);
+        sCrud.get(request);
         break;
     }
-  }, [sCode.status]);
+  }, [sCrud.status]);
 
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.code' });
-  const sCodeType = SCodeType();
   return (
     <CDrawerForm
-      facade={sCode}
+      facade={sCrud}
       columns={_column.useForm()}
-      title={t(sCode.data?.id ? 'Edit Code' : 'Add new Code', {
-        name: sCodeType.result?.data?.find(item => item.code === request.typeCode)?.name,
+      title={t(sCrud.data?.id ? 'Edit Code' : 'Add new Code', {
+        name: sCrud.typeResult?.data?.find(item => item.code === request.typeCode)?.name,
       })}
       onSubmit={values => {
-        if (sCode.data?.id) sCode.put({ ...values, id: sCode.data.id, typeCode: request.typeCode });
-        else sCode.post({ ...values, typeCode: request.typeCode });
+        if (sCrud.data?.id) sCrud.put({ ...values, id: sCrud.data.id, typeCode: request.typeCode });
+        else sCrud.post({ ...values, typeCode: request.typeCode });
       }}
     />
   );
@@ -76,10 +75,9 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import { useLocation, useNavigate } from 'react-router';
 const Side = () => {
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.code' });
-  const sCodeType = SCodeType();
 
-  const sCode = SCode();
-  const request = JSON.parse(sCode?.queryParams ?? '{}');
+  const sCrud = new SCrud<IMCode, IMCodeType>('Code', 'CodeType');
+  const request = JSON.parse(sCrud?.queryParams ?? '{}');
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -88,10 +86,10 @@ const Side = () => {
       <div className='header'>
         <h3>{t('Type code')}</h3>
       </div>
-      <Spin spinning={sCodeType.isLoading}>
+      <Spin spinning={sCrud.typeIsLoading}>
         <div className='desktop'>
           <PerfectScrollbar options={{ wheelSpeed: 1 }}>
-            {sCodeType.result?.data && (
+            {sCrud.typeResult?.data && (
               <Tree
                 blockNode
                 showLine
@@ -99,7 +97,7 @@ const Side = () => {
                 defaultExpandAll
                 switcherIcon={<CSvgIcon name='arrow' size={12} />}
                 defaultSelectedKeys={[request.typeCode]}
-                treeData={sCodeType.result?.data?.map((item: any) => ({
+                treeData={sCrud.typeResult?.data?.map((item: any) => ({
                   title: item?.name,
                   key: item?.code,
                   isLeaf: true,
@@ -108,7 +106,7 @@ const Side = () => {
                 }))}
                 onSelect={selectedKeys => {
                   request.typeCode = selectedKeys[0];
-                  sCode.get(request);
+                  sCrud.get(request);
                   navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
                 }}
               />
@@ -119,10 +117,10 @@ const Side = () => {
           <Select
             value={request.typeCode}
             className={'w-full'}
-            options={sCodeType?.result?.data?.map(data => ({ label: data.name, value: data.code }))}
+            options={sCrud.typeResult?.data?.map(data => ({ label: data.name, value: data.code }))}
             onChange={e => {
               request.typeCode = e;
-              sCode.get(request);
+              sCrud.get(request);
               navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
             }}
           />
@@ -136,17 +134,16 @@ import { CButton } from '@/library/button';
 import { CDataTable } from '@/library/data-table';
 import { KEY_ROLE } from '@/utils';
 const Main = () => {
-  const sCode = SCode();
+  const sCrud = new SCrud<IMCode, IMCodeType>('Code', 'CodeType');
   const sGlobal = SGlobal();
-  const sCodeType = SCodeType();
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.code' });
-  const request = JSON.parse(sCode?.queryParams ?? '{}');
+  const request = JSON.parse(sCrud?.queryParams ?? '{}');
 
   return (
     <div className='card'>
       <div className='body'>
         <CDataTable
-          facade={sCode}
+          facade={sCrud}
           paginationDescription={(from: number, to: number, total: number) => t('Pagination code', { from, to, total })}
           columns={_column.useTable()}
           rightHeader={
@@ -154,9 +151,9 @@ const Main = () => {
               <CButton
                 icon={<CSvgIcon name='plus' size={12} />}
                 text={t('Add new Code', {
-                  name: sCodeType.result?.data?.find(item => item.code === request.typeCode)?.name,
+                  name: sCrud.typeResult?.data?.find(item => item.code === request.typeCode)?.name,
                 })}
-                onClick={() => sCode.set({ data: undefined, isVisible: true })}
+                onClick={() => sCrud.set({ data: undefined, isVisible: true })}
               />
             )
           }

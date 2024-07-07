@@ -6,15 +6,16 @@ import { EFormRuleType, EFormType, ETableAlign, ETableFilterType } from '@/enums
 import { CAvatar } from '@/library/avatar';
 import { CSvgIcon } from '@/library/svg-icon';
 import { CTooltip } from '@/library/tooltip';
-import { SGlobal, SUser } from '@/services';
+import { SCrud, SGlobal } from '@/services';
 import type { IDataTable, IForm } from '@/types';
+import type { IMUser, IMUserRole } from '@/types/model';
 import { KEY_ROLE } from '@/utils';
 
 export default {
   useTable: (): IDataTable[] => {
     const sGlobal = SGlobal();
     const { t } = useTranslation('locale', { keyPrefix: 'pages.base.user' });
-    const sUser = SUser();
+    const sCrud = new SCrud<IMUser, IMUserRole>('User', 'UserRole');
 
     return [
       {
@@ -96,7 +97,7 @@ export default {
                     title={t(!data.isDisable ? 'Are you sure want disable user?' : 'Are you sure want enable user?', {
                       name: data.name,
                     })}
-                    onConfirm={() => sUser.put({ id: data.id, isDisable: !data.isDisable })}
+                    onConfirm={() => sCrud.put({ id: data.id, isDisable: !data.isDisable })}
                   >
                     <button
                       title={t(data.isDisable ? 'Disabled user' : 'Enabled user', {
@@ -116,7 +117,7 @@ export default {
                 <CTooltip title={t('Edit User', { name: data.name })}>
                   <button
                     title={t('Edit User', { name: data.name })}
-                    onClick={() => sUser.getById({ id: data.id, params: { include: 'position' } })}
+                    onClick={() => sCrud.getById({ id: data.id, params: { include: 'position' } })}
                   >
                     <CSvgIcon name='edit' className='primary' />
                   </button>
@@ -128,7 +129,7 @@ export default {
                   <Popconfirm
                     destroyTooltipOnHide={true}
                     title={t('Are you sure want delete user?', { name: data.name })}
-                    onConfirm={() => sUser.delete(data.id)}
+                    onConfirm={() => sCrud.delete(data.id)}
                   >
                     <button title={t('Delete user', { name: data.name })}>
                       <CSvgIcon name='trash' className='error' />
@@ -144,7 +145,7 @@ export default {
   },
   useForm: (): IForm[] => {
     const { t } = useTranslation('locale', { keyPrefix: 'pages.base.user' });
-    const sUser = SUser();
+    const sCrud = new SCrud<IMUser, IMUserRole>('User', 'UserRole');
 
     return [
       {
@@ -229,7 +230,7 @@ export default {
               label: item.name,
               value: item.code,
             }),
-            data: () => sUser.data?.position,
+            data: () => sCrud.data?.position,
           },
         },
       },

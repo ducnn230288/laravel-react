@@ -8,14 +8,15 @@ import type { IDataTable, IForm } from '@/types';
 
 import { CSvgIcon } from '@/library/svg-icon';
 import { CTooltip } from '@/library/tooltip';
-import { SCode, SGlobal } from '@/services';
+import { SCrud, SGlobal } from '@/services';
+import type { IMCode, IMCodeType } from '@/types/model';
 import { KEY_ROLE } from '@/utils';
 
 export default {
   useTable: (): IDataTable[] => {
     const sGlobal = SGlobal();
     const { t } = useTranslation('locale', { keyPrefix: 'pages.base.code' });
-    const sCode = SCode();
+    const sCrud = new SCrud<IMCode, IMCodeType>('Code', 'CodeType');
 
     return [
       {
@@ -63,7 +64,7 @@ export default {
                     title={t(!data.isDisable ? 'Are you sure want disable code?' : 'Are you sure want enable code?', {
                       name: data.name,
                     })}
-                    onConfirm={() => sCode.put({ id: data.code, isDisable: !data.isDisable })}
+                    onConfirm={() => sCrud.put({ id: data.code, isDisable: !data.isDisable })}
                   >
                     <button title={t(data.isDisable ? 'Disabled code' : 'Enabled code', { name: data.name })}>
                       {data.isDisable ? (
@@ -77,7 +78,7 @@ export default {
               )}
               {sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_CODE_UPDATE) && (
                 <CTooltip title={t('Edit Code', { name: data.name })}>
-                  <button title={t('Edit Code', { name: data.name })} onClick={() => sCode.getById({ id: data.code })}>
+                  <button title={t('Edit Code', { name: data.name })} onClick={() => sCrud.getById({ id: data.code })}>
                     <CSvgIcon name='edit' className='primary' />
                   </button>
                 </CTooltip>
@@ -87,7 +88,7 @@ export default {
                   <Popconfirm
                     destroyTooltipOnHide={true}
                     title={t('Are you sure want delete code?', { name: data.name })}
-                    onConfirm={() => sCode.delete(data.code)}
+                    onConfirm={() => sCrud.delete(data.code)}
                   >
                     <button title={t('Delete code', { name: data.name })}>
                       <CSvgIcon name='trash' className='error' />

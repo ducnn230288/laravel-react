@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
-import dayjs, { type Dayjs } from 'dayjs';
-import classNames from 'classnames';
-import TweenOne from 'rc-tween-one';
 import { DndContext, useDraggable } from '@dnd-kit/core';
 import { restrictToHorizontalAxis, restrictToVerticalAxis } from '@dnd-kit/modifiers';
+import classNames from 'classnames';
+import dayjs, { type Dayjs } from 'dayjs';
+import TweenOne from 'rc-tween-one';
+import { useEffect, useRef, useState } from 'react';
 
 import { uuidv4 } from '@/utils';
 import { CSvgIcon } from '../svg-icon';
@@ -321,8 +321,8 @@ export const CGantt = ({
                         !item.hidden && (
                           <tr
                             key={index}
-                            onMouseOver={handleHover}
-                            onMouseOut={handleHover}
+                            onFocus={handleHover}
+                            onBlur={handleHover}
                             data-index={index}
                             data-level={item.level}
                           >
@@ -490,8 +490,8 @@ export const CGantt = ({
                     {temp.task.map((item, index) => (
                       <tr
                         key={index}
-                        onMouseOver={handleHover}
-                        onMouseOut={handleHover}
+                        onFocus={handleHover}
+                        onBlur={handleHover}
                         data-index={index}
                         data-level={item.level}
                       >

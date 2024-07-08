@@ -1,12 +1,13 @@
 // Configuration document: https://eslint.org/
-import { defineFlatConfig } from 'eslint-define-config'
-import configPrettier from 'eslint-config-prettier'
-import pluginPrettier from 'eslint-plugin-prettier'
-import pluginSonarjs from 'eslint-plugin-sonarjs'
-import pluginCasePolice from 'eslint-plugin-case-police'
-import * as parserTypeScript from '@typescript-eslint/parser'
-import pluginTypeScript from '@typescript-eslint/eslint-plugin'
-import js from '@eslint/js'
+import js from '@eslint/js';
+import pluginTypeScript from '@typescript-eslint/eslint-plugin';
+import * as parserTypeScript from '@typescript-eslint/parser';
+import configPrettier from 'eslint-config-prettier';
+import { defineFlatConfig } from 'eslint-define-config';
+import pluginCasePolice from 'eslint-plugin-case-police';
+import pluginJsxA11y from 'eslint-plugin-jsx-a11y';
+import pluginPrettier from 'eslint-plugin-prettier';
+import pluginSonarjs from 'eslint-plugin-sonarjs';
 
 /** @type {import('eslint-define-config').FlatESLintConfig} */
 export default defineFlatConfig([
@@ -16,12 +17,14 @@ export default defineFlatConfig([
     plugins: {
       prettier: pluginPrettier,
       sonarjs: pluginSonarjs,
-      'case-police': pluginCasePolice
+      'jsx-a11y': pluginJsxA11y,
+      'case-police': pluginCasePolice,
     },
     rules: {
       ...configPrettier.rules,
       ...pluginPrettier.configs.recommended.rules,
       ...pluginSonarjs.configs.recommended.rules,
+      ...pluginJsxA11y.configs.recommended.rules,
       ...pluginCasePolice.configs.recommended.rules,
       /*
        * Eslint rule configuration
@@ -41,24 +44,24 @@ export default defineFlatConfig([
         'error',
         {
           argsIgnorePattern: '^_',
-          varsIgnorePattern: '^_'
-        }
+          varsIgnorePattern: '^_',
+        },
       ],
       // Using the prettier plugin
       'prettier/prettier': [
         'error',
         {
-          endOfLine: 'auto'
-        }
+          endOfLine: 'auto',
+        },
       ],
 
-     // Sonarlint
-     'sonarjs/no-duplicate-string': 'off',
-     'sonarjs/no-nested-template-literals': 'off',
-    }
+      // Sonarlint
+      'sonarjs/no-duplicate-string': 'off',
+      'sonarjs/no-nested-template-literals': 'off',
+    },
   },
   {
-    files: ["**/*.?([cm])ts", "**/*.?([cm])tsx"],
+    files: ['**/*.?([cm])ts', '**/*.?([cm])tsx'],
     languageOptions: {
       parser: parserTypeScript,
       parserOptions: {
@@ -66,12 +69,12 @@ export default defineFlatConfig([
         sourceType: 'module',
         jsxPragma: 'React',
         ecmaFeatures: {
-          jsx: true
-        }
+          jsx: true,
+        },
       },
     },
     plugins: {
-      '@typescript-eslint': pluginTypeScript
+      '@typescript-eslint': pluginTypeScript,
     },
     rules: {
       ...pluginTypeScript.configs.recommended.rules,
@@ -109,39 +112,39 @@ export default defineFlatConfig([
         'warn',
         {
           argsIgnorePattern: '^_',
-          varsIgnorePattern: '^_'
-        }
+          varsIgnorePattern: '^_',
+        },
       ],
       // Allow specifying the type keyword on imports
       '@typescript-eslint/consistent-type-imports': [
         'error',
         {
           disallowTypeAnnotations: false,
-          fixStyle: 'inline-type-imports'
-        }
+          fixStyle: 'inline-type-imports',
+        },
       ],
       // Allows enumeration member values ​​to be valid JS expressions of different types
       '@typescript-eslint/prefer-literal-enum-member': [
         'error',
         {
-          allowBitwiseExpressions: true
-        }
-      ]
-    }
+          allowBitwiseExpressions: true,
+        },
+      ],
+    },
   },
   {
     files: ['*.d.ts'],
     rules: {
       'eslint-comments/no-unlimited-disable': 'off',
       'import/no-duplicates': 'off',
-      'unused-imports/no-unused-vars': 'off'
-    }
+      'unused-imports/no-unused-vars': 'off',
+    },
   },
   {
     files: ['*.?([cm])js'],
     rules: {
       '@typescript-eslint/no-require-imports': 'off',
-      '@typescript-eslint/no-var-requires': 'off'
-    }
-  }
-])
+      '@typescript-eslint/no-var-requires': 'off',
+    },
+  },
+]);

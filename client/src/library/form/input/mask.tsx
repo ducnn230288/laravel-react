@@ -1,6 +1,6 @@
-import React, { forwardRef, Fragment, type Ref, useEffect, useImperativeHandle, useRef } from 'react';
-import classNames from 'classnames';
 import type { FormInstance } from 'antd';
+import classNames from 'classnames';
+import { forwardRef, Fragment, type Ref, useEffect, useImperativeHandle, useRef } from 'react';
 
 import type { ITableItemFilterList } from '@/types';
 import { CButton } from '../../button';
@@ -21,7 +21,6 @@ const Component = forwardRef(
       onChange,
       onPressEnter,
       list,
-      autoFocus = false,
     }: Type,
     ref: Ref<{ input: HTMLInputElement }>,
   ) => {
@@ -61,7 +60,6 @@ const Component = forwardRef(
               after: !!addonAfter,
               disabled: disabled,
             })}
-            autoFocus={autoFocus}
             readOnly={disabled}
             defaultValue={value}
             placeholder={placeholder}
@@ -114,6 +112,5 @@ interface Type {
   onChange?: (e: any) => any;
   onPressEnter?: (e: any) => any;
   list?: ITableItemFilterList[];
-  autoFocus?: boolean;
 }
 export default Component;

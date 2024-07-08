@@ -1,8 +1,8 @@
-import React, { type PropsWithChildren, useEffect } from 'react';
+import { type PropsWithChildren, useEffect } from 'react';
 
+import { CSvgIcon } from '@/library/svg-icon';
 import { SGlobal } from '@/services';
 import { APP_NAME } from '@/utils';
-import { CSvgIcon } from '@/library/svg-icon';
 
 const Layout = ({ children }: PropsWithChildren) => {
   const sGlobal = SGlobal();

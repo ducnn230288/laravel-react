@@ -11,7 +11,7 @@ import { formatDataChart } from '@/utils';
 const Page = () => {
   return (
     <div className='h-full pb-10'>
-      <h1 className='mb-14 text-center text-3xl font-bold text-teal-900 '>{'Welcome'}</h1>
+      <h1 className='mb-14 text-center text-3xl font-bold text-primary'>{'Welcome'}</h1>
       <CGantt data={task} event={event} />
       <CEditTable table={table2} />
       <CEditTable table={table} />

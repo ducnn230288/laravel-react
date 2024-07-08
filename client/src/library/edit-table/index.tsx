@@ -1,5 +1,5 @@
-import React, { Fragment, type PropsWithChildren } from 'react';
 import classNames from 'classnames';
+import { Fragment, type PropsWithChildren } from 'react';
 
 import type { IEditTable } from '@/types';
 import { cssInObject } from '@/utils';

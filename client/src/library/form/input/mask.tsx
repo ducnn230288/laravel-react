@@ -66,7 +66,7 @@ const Component = forwardRef(
             onBlur={onBlur}
             onChange={onChange}
             onFocus={onFocus}
-            onKeyUp={e => e.keyCode === 13 && onPressEnter && onPressEnter(e)}
+            onKeyUp={e => e.key === 'Enter' && onPressEnter?.(e)}
           />
           {!!addonAfter && <span className='after'>{addonAfter(form)}</span>}
         </div>

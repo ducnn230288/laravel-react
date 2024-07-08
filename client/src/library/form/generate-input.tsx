@@ -1,12 +1,11 @@
-import React from 'react';
 import {
   Checkbox,
   DatePicker as DateAntDesign,
+  Input,
   Radio,
   Slider,
   Switch,
   TimePicker,
-  Input,
   type FormInstance,
 } from 'antd';
 import classNames from 'classnames';
@@ -15,12 +14,14 @@ import type { TFunction } from 'i18next';
 
 import { EFormType } from '@/enums';
 import type { IForm } from '@/types';
+import { CSvgIcon } from '../svg-icon';
+import { CUpload } from '../upload';
 import {
   CIAddable,
   CICascader,
   CIChips,
-  CIEditor,
   CIDatePicker,
+  CIEditor,
   CIMask,
   CIPassword,
   CISelect,
@@ -30,8 +31,6 @@ import {
   CITableTransfer,
   CITreeSelect,
 } from './input';
-import { CUpload } from '../upload';
-import { CSvgIcon } from '../svg-icon';
 
 export const generateInput = ({
   item,
@@ -55,6 +54,57 @@ export const generateInput = ({
     switch (formItem.type) {
       case EFormType.hidden:
         return <input type={'hidden'} name={item.name} tabIndex={-1} />;
+      case EFormType.editor:
+        return <CIEditor placeholder={t(formItem.placeholder ?? 'Enter', { title: item.title.toLowerCase() })} />;
+      case EFormType.upload:
+        return <CUpload multiple={!!formItem.mode} />;
+      case EFormType.tableTransfer:
+        return <CITableTransfer formItem={formItem} form={form} />;
+      case EFormType.otp:
+        return <Input.OTP length={formItem.maxLength ?? 5} />;
+      case EFormType.password:
+        return (
+          <CIPassword
+            placeholder={t(formItem.placeholder ?? 'Enter', { title: item.title.toLowerCase() })}
+            disabled={formItem.disabled?.(values, form)}
+          />
+        );
+      case EFormType.chips:
+        return (
+          <CIChips
+            placeholder={t(formItem.placeholder ?? 'Enter', { title: item.title.toLowerCase() })}
+            disabled={formItem.disabled?.(values, form)}
+            list={formItem.list}
+          />
+        );
+      case EFormType.switch:
+        return (
+          <Switch
+            checkedChildren={<CSvgIcon name='check' size={20} className='fill-white' />}
+            unCheckedChildren={<CSvgIcon name='times' size={20} className='fill-white' />}
+            defaultChecked={!!values && values[item.name || ''] === 1}
+            onChange={e => formItem.onChange?.(e, form)}
+          />
+        );
+      case EFormType.slider:
+        return (
+          <Slider
+            tooltip={{ formatter: (value = 0) => formItem?.sliderMarks?.[value] }}
+            max={formItem.max ? formItem.max : 100}
+            min={formItem.min ? formItem.min : 0}
+            marks={formItem.sliderMarks}
+          />
+        );
+      case EFormType.radio:
+        return (
+          <Radio.Group
+            options={formItem.list}
+            optionType={'button'}
+            disabled={formItem.disabled?.(values, form)}
+            onChange={({ target }) => formItem.onChange?.(target.value, form)}
+          />
+        );
+
       case EFormType.tab:
         return (
           <CITab
@@ -63,6 +113,123 @@ export const generateInput = ({
             form={form}
             column={formItem.column}
             list={formItem.list}
+          />
+        );
+      case EFormType.tag:
+        return (
+          <CISelectTag
+            maxTagCount={formItem.maxTagCount ?? 'responsive'}
+            placeholder={t(formItem.placeholder ?? 'Choose', { title: item.title.toLowerCase() })}
+            tag={formItem.tag}
+            form={form}
+            disabled={formItem.disabled?.(values, form)}
+          />
+        );
+      case EFormType.treeSelect:
+      case EFormType.cascader:
+      case EFormType.selectTable:
+      case EFormType.sliderNumber:
+      case EFormType.textarea:
+      case EFormType.addable:
+      case EFormType.date:
+        return switchCaseMore1({ item, values, formatDate, generateForm, form, t });
+
+      case EFormType.dateRange:
+      case EFormType.time:
+      case EFormType.timeRange:
+      case EFormType.checkbox:
+      case EFormType.select:
+        return switchCaseMore2({ item, values, formatDate, form, t });
+
+      default:
+        return (
+          <CIMask
+            list={formItem.list}
+            form={form}
+            mask={formItem.mask}
+            addonBefore={formItem.addonBefore}
+            addonAfter={formItem.addonAfter}
+            placeholder={t(formItem.placeholder ?? 'Enter', { title: item.title.toLowerCase() })}
+            onBlur={(e: any) => formItem.onBlur?.(e.target.value, form, name)}
+            onChange={(e: any) => formItem.onChange?.(e.target.value, form)}
+            disabled={formItem.disabled?.(values, form)}
+          />
+        );
+    }
+  }
+};
+const switchCaseMore1 = ({
+  item,
+  values,
+  formatDate,
+  generateForm,
+  form,
+  t,
+}: {
+  item: IForm;
+  values: any;
+  formatDate: string;
+  generateForm: any;
+  form: FormInstance;
+  t: TFunction<'locale', 'library'>;
+}) => {
+  const { formItem } = item;
+  if (formItem) {
+    switch (formItem.type) {
+      case EFormType.treeSelect:
+        return (
+          <CITreeSelect
+            formItem={formItem}
+            showSearch={formItem.showSearch}
+            form={form}
+            disabled={formItem.disabled?.(values, form)}
+            placeholder={t(formItem.placeholder ?? 'Choose', { title: item.title.toLowerCase() })}
+          />
+        );
+      case EFormType.cascader:
+        return (
+          <CICascader
+            formItem={formItem}
+            showSearch={formItem.showSearch}
+            form={form}
+            disabled={formItem.disabled?.(values, form)}
+            placeholder={t(formItem.placeholder ?? 'Choose', { title: item.title.toLowerCase() })}
+          />
+        );
+      case EFormType.selectTable:
+        return (
+          <CISelectTable
+            form={form}
+            onChange={(value: any) => formItem.onChange?.(value, form)}
+            placeholder={t(formItem.placeholder ?? 'Choose', { title: item.title.toLowerCase() })}
+            disabled={formItem.disabled?.(values, form)}
+            mode={formItem.mode}
+            get={formItem.get}
+          />
+        );
+      case EFormType.sliderNumber:
+        return (
+          <Slider
+            range
+            tooltip={{
+              formatter: value =>
+                (value ? value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : '0') +
+                (formItem.symbol ? formItem.symbol : ''),
+            }}
+            max={formItem.max ? formItem.max : 9999999}
+          />
+        );
+      case EFormType.textarea:
+        return (
+          <textarea
+            disabled={formItem.disabled?.(values, form)}
+            className={classNames('ant-input', {
+              disabled: formItem.disabled?.(values, form),
+            })}
+            rows={4}
+            maxLength={1000}
+            placeholder={t(formItem.placeholder ?? 'Enter', { title: item.title.toLowerCase() })}
+            onChange={e => formItem.onChange?.(e.target.value, form)}
           />
         );
       case EFormType.addable:
@@ -79,60 +246,11 @@ export const generateInput = ({
             form={form}
           />
         );
-      case EFormType.editor:
-        return <CIEditor placeholder={t(formItem.placeholder ?? 'Enter', { title: item.title.toLowerCase() })} />;
-      case EFormType.upload:
-        return <CUpload multiple={!!formItem.mode} />;
-      case EFormType.tableTransfer:
-        return <CITableTransfer formItem={formItem} form={form} />;
-      case EFormType.password:
-        return (
-          <CIPassword
-            placeholder={t(formItem.placeholder ?? 'Enter', { title: item.title.toLowerCase() })}
-            disabled={formItem.disabled?.(values, form)}
-          />
-        );
-      case EFormType.textarea:
-        return (
-          <textarea
-            disabled={formItem.disabled?.(values, form)}
-            className={classNames('ant-input', {
-              disabled: formItem.disabled?.(values, form),
-            })}
-            rows={4}
-            maxLength={1000}
-            placeholder={t(formItem.placeholder ?? 'Enter', { title: item.title.toLowerCase() })}
-            onChange={e => formItem.onChange?.(e.target.value, form)}
-          />
-        );
-      case EFormType.slider:
-        return (
-          <Slider
-            tooltip={{ formatter: (value = 0) => formItem?.sliderMarks?.[value] }}
-            max={formItem.max ? formItem.max : 100}
-            min={formItem.min ? formItem.min : 0}
-            marks={formItem.sliderMarks}
-          />
-        );
-      case EFormType.sliderNumber:
-        return (
-          <Slider
-            range
-            tooltip={{
-              formatter: value =>
-                (value ? value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : '0') +
-                (formItem.symbol ? formItem.symbol : ''),
-            }}
-            max={formItem.max ? formItem.max : 9999999}
-          />
-        );
       case EFormType.date:
         return (
           <CIDatePicker
             format={
-              !formItem.picker || formItem.picker === 'date'
-                ? formatDate + (formItem.showTime ? ' HH:mm' : '')
-                : formatDate
+              formatDate + ((!formItem.picker || formItem.picker === 'date') && formItem.showTime ? ' HH:mm' : '')
             }
             onChange={(date: any) => formItem.onChange?.(date, form)}
             disabledDate={(current: any) => (formItem.disabledDate ? formItem.disabledDate(current, form) : false)}
@@ -144,6 +262,26 @@ export const generateInput = ({
             placeholder={t(formItem.placeholder ?? 'Choose', { title: item.title.toLowerCase() })}
           />
         );
+    }
+  }
+};
+
+const switchCaseMore2 = ({
+  item,
+  values,
+  formatDate,
+  form,
+  t,
+}: {
+  item: IForm;
+  values: any;
+  formatDate: string;
+  form: FormInstance;
+  t: TFunction<'locale', 'library'>;
+}) => {
+  const { formItem } = item;
+  if (formItem) {
+    switch (formItem.type) {
       case EFormType.dateRange:
         return (
           <DateAntDesign.RangePicker
@@ -221,33 +359,6 @@ export const generateInput = ({
             {formItem.label}
           </Checkbox>
         );
-      case EFormType.radio:
-        return (
-          <Radio.Group
-            options={formItem.list}
-            optionType={'button'}
-            disabled={formItem.disabled?.(values, form)}
-            onChange={({ target }) => formItem.onChange?.(target.value, form)}
-          />
-        );
-      case EFormType.tag:
-        return (
-          <CISelectTag
-            maxTagCount={formItem.maxTagCount ?? 'responsive'}
-            placeholder={t(formItem.placeholder ?? 'Choose', { title: item.title.toLowerCase() })}
-            tag={formItem.tag}
-            form={form}
-            disabled={formItem.disabled?.(values, form)}
-          />
-        );
-      case EFormType.chips:
-        return (
-          <CIChips
-            placeholder={t(formItem.placeholder ?? 'Enter', { title: item.title.toLowerCase() })}
-            disabled={formItem.disabled?.(values, form)}
-            list={formItem.list}
-          />
-        );
       case EFormType.select:
         return (
           <CISelect
@@ -260,62 +371,6 @@ export const generateInput = ({
             get={formItem.get}
             list={formItem.list}
             mode={formItem.mode}
-          />
-        );
-      case EFormType.selectTable:
-        return (
-          <CISelectTable
-            form={form}
-            onChange={(value: any) => formItem.onChange?.(value, form)}
-            placeholder={t(formItem.placeholder ?? 'Choose', { title: item.title.toLowerCase() })}
-            disabled={formItem.disabled?.(values, form)}
-            mode={formItem.mode}
-            get={formItem.get}
-          />
-        );
-      case EFormType.treeSelect:
-        return (
-          <CITreeSelect
-            formItem={formItem}
-            showSearch={formItem.showSearch}
-            form={form}
-            disabled={formItem.disabled?.(values, form)}
-            placeholder={t(formItem.placeholder ?? 'Choose', { title: item.title.toLowerCase() })}
-          />
-        );
-      case EFormType.cascader:
-        return (
-          <CICascader
-            formItem={formItem}
-            showSearch={formItem.showSearch}
-            form={form}
-            disabled={formItem.disabled?.(values, form)}
-            placeholder={t(formItem.placeholder ?? 'Choose', { title: item.title.toLowerCase() })}
-          />
-        );
-      case EFormType.switch:
-        return (
-          <Switch
-            checkedChildren={<CSvgIcon name='check' size={20} className='fill-white' />}
-            unCheckedChildren={<CSvgIcon name='times' size={20} className='fill-white' />}
-            defaultChecked={!!values && values[item.name || ''] === 1}
-            onChange={e => formItem.onChange?.(e, form)}
-          />
-        );
-      case EFormType.otp:
-        return <Input.OTP length={formItem.maxLength ?? 5} />;
-      default:
-        return (
-          <CIMask
-            list={formItem.list}
-            form={form}
-            mask={formItem.mask}
-            addonBefore={formItem.addonBefore}
-            addonAfter={formItem.addonAfter}
-            placeholder={t(formItem.placeholder ?? 'Enter', { title: item.title.toLowerCase() })}
-            onBlur={(e: any) => formItem.onBlur?.(e.target.value, form, name)}
-            onChange={(e: any) => formItem.onChange?.(e.target.value, form)}
-            disabled={formItem.disabled?.(values, form)}
           />
         );
     }

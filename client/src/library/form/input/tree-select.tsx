@@ -1,5 +1,5 @@
-import React, { useState, useEffect, Fragment, useCallback, useRef } from 'react';
-import { TreeSelect, Checkbox, type FormInstance } from 'antd';
+import { Checkbox, TreeSelect, type FormInstance } from 'antd';
+import { Fragment, useEffect, useRef, useState } from 'react';
 
 import { API } from '@/utils';
 import { CButton } from '../../button';
@@ -9,31 +9,25 @@ const Component = ({ formItem, placeholder, onChange, value, form, disabled, sho
   const [temp, setTemp] = useState({ list: formItem.list || [], checkAll: false });
   const allValue = useRef<any>([]);
 
-  const loadData = useCallback(
-    async (fullTextSearch: string) => {
-      if (formItem.api) {
-        if (!formItem.api.condition || formItem.api.condition({ value: form.getFieldValue })) {
-          const url = formItem.api.link(form.getFieldValue);
-          if (url) {
-            const params = formItem.api.params
-              ? formItem.api.params(form.getFieldValue, fullTextSearch)
-              : { fullTextSearch };
-            const { data } = await API.get<any>({ url, params });
-            const list = data.data.map(formItem.api.format);
-            if (formItem.mode === 'multiple' && value?.length) {
-              const array = formItem.api.convertData ? formItem.api.convertData(list) : list;
-              setTemp({ list, checkAll: array.length === value.length });
-            } else setTemp(pre => ({ ...pre, list }));
-          }
-        }
-      } else if (formItem.renderList) {
-        setTemp(pre => ({ ...pre, list: formItem.renderList(form.getFieldValue) }));
+  const loadData = async (fullTextSearch: string) => {
+    if ((formItem.api && !formItem.api.condition) || formItem.api.condition({ value: form.getFieldValue })) {
+      const url = formItem.api.link(form.getFieldValue);
+      if (url) {
+        const params = formItem.api.params
+          ? formItem.api.params(form.getFieldValue, fullTextSearch)
+          : { fullTextSearch };
+        const { data } = await API.get<any>({ url, params });
+        const list = data.data.map(formItem.api.format);
+        if (formItem.mode === 'multiple' && value?.length) {
+          const array = formItem.api.convertData ? formItem.api.convertData(list) : list;
+          setTemp({ list, checkAll: array.length === value.length });
+        } else setTemp(pre => ({ ...pre, list }));
       }
-    },
-    [form, formItem, value],
-  );
-
-  const initFunction = useCallback(async () => {
+    } else if (formItem.renderList) {
+      setTemp(pre => ({ ...pre, list: formItem.renderList(form.getFieldValue) }));
+    }
+  };
+  const initFunction = async () => {
     if (
       typeof value === 'object' &&
       value.length > 0 &&
@@ -43,7 +37,7 @@ const Component = ({ formItem, placeholder, onChange, value, form, disabled, sho
     }
     if ((temp.list.length === 0 && formItem.api) || formItem.renderList) await loadData('');
     setTemp(pre => ({ ...pre, checkAll: value?.length > 0 && value?.length === allValue.current.length }));
-  }, [formItem, loadData, temp.list, allValue, value, onChange]);
+  };
 
   useEffect(() => {
     initFunction();
@@ -56,13 +50,13 @@ const Component = ({ formItem, placeholder, onChange, value, form, disabled, sho
     }
   };
 
-  const handleGetAllValue = useCallback((item: any) => {
+  const handleGetAllValue = (item: any) => {
     allValue.current.push({ value: item.value, label: item.title });
 
     if (item?.children?.length) {
       item?.children?.map(handleGetAllValue);
     }
-  }, []);
+  };
 
   useEffect(() => {
     temp.list.map(handleGetAllValue);
@@ -103,6 +97,56 @@ const Component = ({ formItem, placeholder, onChange, value, form, disabled, sho
     return value;
   };
 
+  const dropdownRender = originNode => (
+    <Fragment>
+      {formItem.mode === 'multiple' && (
+        <Checkbox checked={temp.checkAll} onChange={() => onChange?.(!temp.checkAll ? allValue.current : [])}>
+          Select all
+        </Checkbox>
+      )}
+      {originNode}
+    </Fragment>
+  );
+
+  const tagRender = props => {
+    const item = handleGetData(temp.list, props.value);
+    const arrayValue = value.map((item: any) => item.value);
+    if (
+      arrayValue.indexOf(props.value) > -1 &&
+      !!item.length &&
+      (arrayValue.indexOf(item[0].value) === -1 ||
+        arrayValue.indexOf(item[0].value) === arrayValue.indexOf(props.value))
+    ) {
+      const arraySlice = arrayValue.slice(0, arrayValue.indexOf(props.value));
+      let checkShow = true;
+      if (!!arraySlice.length && arrayValue.indexOf(item[0]?.value) === -1) {
+        arraySlice.map((valueSlide: any) => {
+          if (checkShow) {
+            const itemSlice = handleGetData(temp.list, valueSlide);
+            if (!!itemSlice.length && item[0].value === itemSlice[0].value) {
+              checkShow = false;
+            }
+          }
+          return valueSlide;
+        });
+      }
+      return (
+        checkShow && (
+          <div className='relative -left-2.5 mr-2.5 rounded-xl bg-primary/20 px-2 py-1'>
+            <CButton
+              icon={<CSvgIcon name='times' size={20} className='fill-error' />}
+              className='absolute -right-2 -top-1 z-10 rounded-full !bg-error/20 leading-none !text-error'
+              onClick={() => onChange?.(clearTag(item[0], value))}
+              disabled={disabled}
+            />
+            {item[0].title} ({totalChildren(item[0], 0, arrayValue)})
+          </div>
+        )
+      );
+    }
+    return <></>;
+  };
+
   return (
     <TreeSelect
       treeNodeFilterProp={'title'}
@@ -129,16 +173,7 @@ const Component = ({ formItem, placeholder, onChange, value, form, disabled, sho
           onChange?.(data);
         }
       }}
-      dropdownRender={originNode => (
-        <Fragment>
-          {formItem.mode === 'multiple' && (
-            <Checkbox checked={temp.checkAll} onChange={() => onChange?.(!temp.checkAll ? allValue.current : [])}>
-              Select all
-            </Checkbox>
-          )}
-          {originNode}
-        </Fragment>
-      )}
+      dropdownRender={dropdownRender}
       treeDefaultExpandAll={!!formItem.list}
       labelInValue={true}
       value={value}
@@ -147,44 +182,7 @@ const Component = ({ formItem, placeholder, onChange, value, form, disabled, sho
       treeCheckable={formItem.mode === 'multiple'}
       loadData={loadDataTree}
       treeData={temp.list}
-      tagRender={props => {
-        const item = handleGetData(temp.list, props.value);
-        const arrayValue = value.map((item: any) => item.value);
-        if (
-          arrayValue.indexOf(props.value) > -1 &&
-          !!item.length &&
-          (arrayValue.indexOf(item[0].value) === -1 ||
-            arrayValue.indexOf(item[0].value) === arrayValue.indexOf(props.value))
-        ) {
-          const arraySlice = arrayValue.slice(0, arrayValue.indexOf(props.value));
-          let checkShow = true;
-          if (!!arraySlice.length && arrayValue.indexOf(item[0]?.value) === -1) {
-            arraySlice.map((valueSlide: any) => {
-              if (checkShow) {
-                const itemSlice = handleGetData(temp.list, valueSlide);
-                if (!!itemSlice.length && item[0].value === itemSlice[0].value) {
-                  checkShow = false;
-                }
-              }
-              return valueSlide;
-            });
-          }
-          return (
-            checkShow && (
-              <div className='relative -left-2.5 mr-2.5 rounded-xl bg-teal-100 px-2 py-1'>
-                <CButton
-                  icon={<CSvgIcon name='times' size={20} className='fill-error' />}
-                  className='absolute -right-2 -top-1 z-10 rounded-full !bg-error/20 leading-none !text-error'
-                  onClick={() => onChange?.(clearTag(item[0], value))}
-                  disabled={disabled}
-                />
-                {item[0].title} ({totalChildren(item[0], 0, arrayValue)})
-              </div>
-            )
-          );
-        }
-        return <></>;
-      }}
+      tagRender={tagRender}
       placement={'bottomLeft'}
       showCheckedStrategy={TreeSelect.SHOW_ALL}
     />

@@ -1,14 +1,14 @@
-import React, { Fragment, useState } from 'react';
-import { Form, Checkbox, type FormInstance } from 'antd';
+import { Checkbox, Form, type FormInstance } from 'antd';
 import classNames from 'classnames';
+import { Fragment, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import type { IForm } from '@/types';
-import { CSvgIcon } from '../../svg-icon';
 import { CButton } from '../../button';
+import { CSvgIcon } from '../../svg-icon';
 
 const Component = ({
-  name,
+  name = '',
   column = [],
   textAdd = 'Thêm dòng',
   onAdd = () => null,
@@ -56,7 +56,7 @@ const Component = ({
   const { t } = useTranslation('locale', { keyPrefix: 'library' });
 
   return (
-    <Form.List name={name!}>
+    <Form.List name={name}>
       {(fields, { add, remove }) =>
         isTable ? (
           <Fragment>
@@ -70,7 +70,7 @@ const Component = ({
                 <div className={'table-cell w-10 border bg-gray-300 p-1 text-center font-bold'}>STT</div>
                 {column.map((col: any, index: number) => (
                   <div
-                    key={index}
+                    key={name + index}
                     className={classNames('table-cell border bg-gray-300 font-bold p-1 text-center', {
                       'w-full': column.length === 1,
                       'w-1/2': column.length === 2,
@@ -86,7 +86,7 @@ const Component = ({
                 <div className={'h-1 w-8'} />
               </div>
               {fields.map(({ name: n }, i) => (
-                <div className='table-row' key={i}>
+                <div className='table-row' key={name + i}>
                   {!!idCheck && (
                     <div className={'table-cell text-center'}>
                       <Checkbox
@@ -97,7 +97,7 @@ const Component = ({
                   )}
                   <div className={'table-cell border bg-base-200 text-center'}>{i + 1}</div>
                   {column.map((col: any, index: number) => (
-                    <div className={'relative table-cell border'} key={index}>
+                    <div className={'relative table-cell border'} key={name + index}>
                       {generateForm({ item: col, index: index + '_' + i, showLabel: false, name: [n, col.name], t })}
                     </div>
                   ))}
@@ -131,7 +131,7 @@ const Component = ({
         ) : (
           <div>
             {fields.map(({ name: n }, i) => (
-              <div className={'grid grid-cols-12 gap-x-5'} key={i}>
+              <div className={'grid grid-cols-12 gap-x-5'} key={name + i}>
                 {column.map((col: any, index: number) => (
                   <div
                     className={classNames(

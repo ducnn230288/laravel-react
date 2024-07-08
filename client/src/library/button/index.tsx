@@ -1,5 +1,5 @@
-import React, { type MouseEventHandler } from 'react';
 import classNames from 'classnames';
+import React, { type MouseEventHandler } from 'react';
 
 import { CSvgIcon } from '../svg-icon';
 

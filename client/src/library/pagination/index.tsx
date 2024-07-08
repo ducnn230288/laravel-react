@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useCallback, useState } from 'react';
 import classNames from 'classnames';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { CISelect } from '../form/input';
 import { CSvgIcon } from '../svg-icon';

@@ -1,13 +1,12 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Cascader, type FormInstance } from 'antd';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { API } from '@/utils';
 import { CButton } from '../../button';
 import { CSvgIcon } from '../../svg-icon';
 
 const Component = ({ formItem, placeholder, onChange, value, form, disabled, showSearch = true }: Type) => {
-  const [_list, set_list] = useState(formItem.list || []);
-  // const [checkAll, set_checkAll] = useState(false);
+  const [list, setList] = useState(formItem.list || []);
   const allValue = useRef<any>([]);
 
   const loadData = useCallback(
@@ -21,15 +20,11 @@ const Component = ({ formItem, placeholder, onChange, value, form, disabled, sho
               : { fullTextSearch };
             const { data } = await API.get<any>({ url, params });
             const listData = data.data.map(formItem.api.format);
-            if (formItem.mode === 'multiple' && value?.length) {
-              // const array = formItem.api.convertData ? formItem.api.convertData(listData) : listData;
-              // set_checkAll(array.length === value.length);
-            }
-            set_list(listData);
+            setList(listData);
           }
         }
       } else if (formItem.renderList) {
-        set_list(formItem.renderList(form.getFieldValue));
+        setList(formItem.renderList(form.getFieldValue));
       }
     },
     [form, formItem, value],
@@ -41,13 +36,10 @@ const Component = ({ formItem, placeholder, onChange, value, form, disabled, sho
       value.length > 0 &&
       !value?.filter((item: any) => typeof item === 'object')?.length
     ) {
-      onChange && onChange(value.map((item: any) => ({ value: item, label: item })));
+      onChange?.(value.map((item: any) => ({ value: item, label: item })));
     }
-    if ((_list.length === 0 && formItem.api) || formItem.renderList) await loadData('');
-
-    // if (value?.length > 0 && value?.length === allValue.current.length) set_checkAll(true);
-    // else set_checkAll(false);
-  }, [formItem, loadData, _list, allValue, value, onChange]);
+    if ((list.length === 0 && formItem.api) || formItem.renderList) await loadData('');
+  }, [formItem, loadData, list, allValue, value, onChange]);
 
   useEffect(() => {
     initFunction();
@@ -55,8 +47,8 @@ const Component = ({ formItem, placeholder, onChange, value, form, disabled, sho
 
   const loadDataTree = async (treeNode: any) => {
     if (formItem?.api?.loadData) {
-      const data = await formItem.api.loadData(treeNode, _list);
-      set_list(data);
+      const data = await formItem.api.loadData(treeNode, list);
+      setList(data);
     }
   };
 
@@ -69,8 +61,8 @@ const Component = ({ formItem, placeholder, onChange, value, form, disabled, sho
   }, []);
 
   useEffect(() => {
-    _list.map(handleGetAllValue);
-  }, [_list, handleGetAllValue]);
+    list.map(handleGetAllValue);
+  }, [list, handleGetAllValue]);
 
   const handleGetData = (array: any, valueTag: any) => {
     return array.filter((item: any) => handleFindId(item, valueTag));
@@ -107,6 +99,45 @@ const Component = ({ formItem, placeholder, onChange, value, form, disabled, sho
     return value;
   };
 
+  const tagRender = (props: { value: string }) => {
+    const item = handleGetData(list, props.value);
+    const arrayValue = value.map((item: any) => item.value);
+    if (
+      arrayValue.indexOf(props.value) > -1 &&
+      !!item.length &&
+      (arrayValue.indexOf(item[0].value) === -1 ||
+        arrayValue.indexOf(item[0].value) === arrayValue.indexOf(props.value))
+    ) {
+      const arraySlice = arrayValue.slice(0, arrayValue.indexOf(props.value));
+      let checkShow = true;
+      if (!!arraySlice.length && arrayValue.indexOf(item[0]?.value) === -1) {
+        arraySlice.map((valueSlide: any) => {
+          if (checkShow) {
+            const itemSlice = handleGetData(list, valueSlide);
+            if (!!itemSlice.length && item[0].value === itemSlice[0].value) {
+              checkShow = false;
+            }
+          }
+          return valueSlide;
+        });
+      }
+      return (
+        checkShow && (
+          <div className='relative -left-2.5 mr-2.5 rounded-xl bg-primary/20 px-2 py-1'>
+            <CButton
+              icon={<CSvgIcon name='times' size={20} className='fill-error' />}
+              className='absolute -right-2 -top-1 z-10 rounded-full !bg-error/20 leading-none !text-error'
+              onClick={() => onChange?.(clearTag(item[0], value))}
+              disabled={disabled}
+            />
+            {item[0].title} ({totalChildren(item[0], 0, arrayValue)})
+          </div>
+        )
+      );
+    }
+    return <></>;
+  };
+
   return (
     <Cascader
       allowClear={true}
@@ -114,22 +145,21 @@ const Component = ({ formItem, placeholder, onChange, value, form, disabled, sho
       onChange={(data: any) => {
         if (formItem.api?.loadData) {
           if (formItem.mode !== 'multiple') {
-            const _data = _list.filter((_item: any) => _item.id === data.value)[0];
-            onChange && onChange({ ..._data, label: _data.fullTitle });
+            const _data = list.filter((_item: any) => _item.id === data.value)[0];
+            onChange?.({ ..._data, label: _data.fullTitle });
           } else {
-            onChange &&
-              onChange(
-                data.map((__item: any) => {
-                  const _data = _list.filter((_item: any) => _item.id === __item.value)[0];
-                  if (_data) {
-                    return { ..._data, label: _data.fullTitle };
-                  }
-                  return __item;
-                }),
-              );
+            onChange?.(
+              data.map((__item: any) => {
+                const _data = list.filter((_item: any) => _item.id === __item.value)[0];
+                if (_data) {
+                  return { ..._data, label: _data.fullTitle };
+                }
+                return __item;
+              }),
+            );
           }
         } else {
-          onChange && onChange(data[0]);
+          onChange?.(data[0]);
         }
       }}
       value={value}
@@ -137,45 +167,8 @@ const Component = ({ formItem, placeholder, onChange, value, form, disabled, sho
       placeholder={placeholder}
       multiple={formItem.mode === 'multiple'}
       loadData={loadDataTree}
-      options={_list}
-      tagRender={props => {
-        const item = handleGetData(_list, props.value);
-        const arrayValue = value.map((item: any) => item.value);
-        if (
-          arrayValue.indexOf(props.value) > -1 &&
-          !!item.length &&
-          (arrayValue.indexOf(item[0].value) === -1 ||
-            arrayValue.indexOf(item[0].value) === arrayValue.indexOf(props.value))
-        ) {
-          const arraySlice = arrayValue.slice(0, arrayValue.indexOf(props.value));
-          let checkShow = true;
-          if (!!arraySlice.length && arrayValue.indexOf(item[0]?.value) === -1) {
-            arraySlice.map((valueSlide: any) => {
-              if (checkShow) {
-                const itemSlice = handleGetData(_list, valueSlide);
-                if (!!itemSlice.length && item[0].value === itemSlice[0].value) {
-                  checkShow = false;
-                }
-              }
-              return valueSlide;
-            });
-          }
-          return (
-            checkShow && (
-              <div className='relative -left-2.5 mr-2.5 rounded-xl bg-teal-100 px-2 py-1'>
-                <CButton
-                  icon={<CSvgIcon name='times' size={20} className='fill-error' />}
-                  className='absolute -right-2 -top-1 z-10 rounded-full !bg-error/20 leading-none !text-error'
-                  onClick={() => onChange && onChange(clearTag(item[0], value))}
-                  disabled={disabled}
-                />
-                {item[0].title} ({totalChildren(item[0], 0, arrayValue)})
-              </div>
-            )
-          );
-        }
-        return <></>;
-      }}
+      options={list}
+      tagRender={tagRender}
       placement={'bottomLeft'}
     />
   );

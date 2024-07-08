@@ -76,7 +76,7 @@ export const formatColumns = ({
       }
       if (item && !item?.onCell) {
         item.onCell = record => ({
-          className: record?.id && record?.id === facade?.data?.id ? '!bg-teal-100' : '',
+          className: record?.id && record?.id === facade?.data?.id ? '!bg-primary/20' : '',
         });
       }
       return {

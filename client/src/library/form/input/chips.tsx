@@ -1,5 +1,3 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { TweenOneGroup } from 'rc-tween-one';
 import {
   closestCenter,
   DndContext,
@@ -15,12 +13,14 @@ import {
   sortableKeyboardCoordinates,
   useSortable,
 } from '@dnd-kit/sortable';
+import { TweenOneGroup } from 'rc-tween-one';
+import React, { useEffect, useRef, useState } from 'react';
 
 import type { ITableItemFilterList } from '@/types';
 import { reorderArray } from '@/utils';
-import { CIMask, CISelect } from './index';
 import { CButton } from '../../button';
 import { CSvgIcon } from '../../svg-icon';
+import { CIMask, CISelect } from './index';
 
 const Component = ({
   onChange,
@@ -39,14 +39,12 @@ const Component = ({
   const inputRef = useRef<any>(null);
   useEffect(() => {
     if (inputVisible) {
-      setTimeout(() => {
-        inputRef.current && inputRef.current.input.focus();
-      });
+      setTimeout(() => inputRef.current?.input.focus());
     }
   }, [inputVisible]);
 
   const handleClose = (removedTag: any) => {
-    onChange && onChange(value.filter(tag => tag !== removedTag));
+    onChange?.(value.filter(tag => tag !== removedTag));
   };
 
   const showInput = () => {
@@ -55,9 +53,9 @@ const Component = ({
 
   const handleInputConfirm = (inputValue: string | string[]) => {
     if (typeof inputValue === 'string' && inputValue && value.indexOf(inputValue) === -1) {
-      onChange && onChange([...value, inputValue]);
+      onChange?.([...value, inputValue]);
     } else if (typeof inputValue === 'object') {
-      onChange && onChange([...value, ...inputValue.filter(i => value.indexOf(i) === -1)]);
+      onChange?.([...value, ...inputValue.filter(i => value.indexOf(i) === -1)]);
     }
 
     !list && setInputVisible(false);
@@ -71,13 +69,30 @@ const Component = ({
     if (active.id !== over.id) {
       const oldIndex = value.findIndex(item => item === active.id);
       const newIndex = value.findIndex(item => item === over.id);
-      onChange && onChange(reorderArray(value, oldIndex, newIndex));
+      onChange?.(reorderArray(value, oldIndex, newIndex));
     }
   };
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
+  );
+
+  const renderEntry = !list ? (
+    <CIMask
+      ref={inputRef}
+      placeholder={placeholder}
+      onPressEnter={() => handleInputConfirm(inputRef.current?.input.value)}
+      disabled={!!disabled}
+    />
+  ) : (
+    <CISelect
+      onChange={(value: any) => handleInputConfirm(value)}
+      onBlur={() => setInputVisible(false)}
+      disabled={!!disabled}
+      mode={'multiple'}
+      list={list.filter(i => i.value && value.indexOf(i.value.toString()) === -1)}
+    />
   );
 
   return (
@@ -107,22 +122,7 @@ const Component = ({
             />
           ))}
           {inputVisible ? (
-            !list ? (
-              <CIMask
-                ref={inputRef}
-                placeholder={placeholder}
-                onPressEnter={() => handleInputConfirm(inputRef.current?.input.value)}
-                disabled={!!disabled}
-              />
-            ) : (
-              <CISelect
-                onChange={(value: any) => handleInputConfirm(value)}
-                onBlur={() => setInputVisible(false)}
-                disabled={!!disabled}
-                mode={'multiple'}
-                list={list.filter(i => i.value && value.indexOf(i.value.toString()) === -1)}
-              />
-            )
+            renderEntry
           ) : (
             <CButton
               icon={<CSvgIcon name='plus' size={32} className='p-2' />}
@@ -156,7 +156,7 @@ const DraggableTag = ({
 
   return (
     <div
-      className='relative inline-block cursor-move rounded-xl border bg-teal-100 px-2 py-1.5'
+      className='relative inline-block cursor-move rounded-xl border bg-primary/20 px-2 py-1.5'
       style={style}
       ref={setNodeRef}
       {...listeners}

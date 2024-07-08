@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
 import { type FormInstance, Select } from 'antd';
+import { useCallback, useEffect, useState } from 'react';
 
 import { API } from '@/utils';
 import { CAvatar } from '../../avatar';
@@ -12,7 +12,11 @@ const Component = ({ tag, onChange, form, value, disabled, maxTagCount, placehol
     async (fullTextSearch = '', value?: any) => {
       if (tag) {
         const params = tag.params
-          ? tag.params(form.getFieldValue, fullTextSearch, value && value.filter((item: any) => !!item))
+          ? tag.params(
+              form.getFieldValue,
+              fullTextSearch,
+              value?.filter((item: any) => !!item),
+            )
           : { fullTextSearch };
         const { data } = await API.get<any>({ url: tag.api, params });
         setOptions(
@@ -35,6 +39,18 @@ const Component = ({ tag, onChange, form, value, disabled, maxTagCount, placehol
     loadData();
   }, [loadData]);
 
+  const tagRender = ({ label, onClose }) => (
+    <div className='relative -left-2.5 mr-2.5 rounded-xl bg-primary/20 px-2 py-1'>
+      <CButton
+        icon={<CSvgIcon name='times' size={20} className='fill-error' />}
+        className='absolute -right-2 -top-1 z-auto rounded-full !bg-error/20 leading-none !text-error'
+        onClick={onClose}
+        disabled={disabled}
+      />
+      {label}
+    </div>
+  );
+
   return (
     <Select
       disabled={disabled}
@@ -49,17 +65,7 @@ const Component = ({ tag, onChange, form, value, disabled, maxTagCount, placehol
       optionFilterProp='label'
       filterOption={false}
       maxTagPlaceholder={array => '+' + array.length}
-      tagRender={({ label, onClose }) => (
-        <div className='relative -left-2.5 mr-2.5 rounded-xl bg-teal-100 px-2 py-1'>
-          <CButton
-            icon={<CSvgIcon name='times' size={20} className='fill-error' />}
-            className='absolute -right-2 -top-1 z-auto rounded-full !bg-error/20 leading-none !text-error'
-            onClick={onClose}
-            disabled={disabled}
-          />
-          {label}
-        </div>
-      )}
+      tagRender={tagRender}
       onChange={value => {
         onChange?.(value);
         loadData('', value);

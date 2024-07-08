@@ -1,29 +1,29 @@
-import CIChips from './chips';
+import CIAddable from './addable';
 import CICascader from './cascader';
+import CIChips from './chips';
 import CIDatePicker from './date-picker';
 import CIEditor from './editor';
-import CIPassword from './password';
 import CIMask from './mask';
-import CISelectTag from './select-tag';
+import CIPassword from './password';
 import CISelect from './select';
 import CISelectTable from './select-table';
-import CITreeSelect from './tree-select';
-import CITableTransfer from './table-transfer';
-import CIAddable from './addable';
+import CISelectTag from './select-tag';
 import CITab from './tab';
+import CITableTransfer from './table-transfer';
+import CITreeSelect from './tree-select';
 
 export {
-  CIChips,
+  CIAddable,
   CICascader,
+  CIChips,
   CIDatePicker,
   CIEditor,
-  CIPassword,
   CIMask,
-  CISelectTag,
+  CIPassword,
   CISelect,
   CISelectTable,
-  CITreeSelect,
-  CITableTransfer,
-  CIAddable,
+  CISelectTag,
   CITab,
+  CITableTransfer,
+  CITreeSelect,
 };

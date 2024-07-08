@@ -1,4 +1,3 @@
-import React from 'react';
 import { CSvgIcon } from '../svg-icon';
 
 export const CBreadcrumbs = ({ title, list }: { title: string; list: string[] }) => (

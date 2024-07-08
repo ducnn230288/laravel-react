@@ -1,6 +1,6 @@
-import React, { useRef } from 'react';
 import type { SorterResult } from 'antd/lib/table/interface';
 import type { TFunction } from 'i18next';
+import React, { useRef } from 'react';
 
 import type { IPaginationQuery } from '@/types';
 import { uuidv4 } from '@/utils';

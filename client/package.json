@@ -22,8 +22,6 @@
     "@reduxjs/toolkit": "^2.2.1",
     "@tanstack/react-virtual": "^3.8.1",
     "antd": "^5.17.4",
-    "echarts": "^5.5.0",
-    "glightbox": "^3.3.0",
     "i18next-http-backend": "^2.5.2",
     "query-string": "^9.0.0",
     "rc-tween-one": "^3.0.6",
@@ -34,12 +32,10 @@
     "react-router": "^6.22.1",
     "react-router-dom": "^6.22.1",
     "slug": "^8.2.3",
-    "socket.io-client": "^4.7.4",
     "terser": "^5.31.1",
     "web-vitals": "^3.5.2"
   },
   "devDependencies": {
-    "@types/inputmask": "^5.0.7",
     "@types/node": "^20.11.20",
     "@types/react": "^18.2.57",
     "@types/react-dom": "^18.2.19",

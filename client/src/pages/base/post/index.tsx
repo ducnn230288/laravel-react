@@ -105,7 +105,7 @@ const FormPostType = () => {
   );
 };
 
-import { Scrollbar } from '@/library/perfect-scrollbar';
+import { Scrollbar } from '@/library/scrollbar';
 import { KEY_ROLE } from '@/utils';
 import queryString from 'query-string';
 import { useLocation, useNavigate } from 'react-router';
@@ -130,7 +130,7 @@ const Side = () => {
       <Spin spinning={sCrud.typeIsLoading}>
         <div className='desktop'>
           {sCrud.typeResult?.data && (
-            <Scrollbar options={{ wheelSpeed: 1 }}>
+            <Scrollbar>
               <Tree
                 blockNode
                 showLine

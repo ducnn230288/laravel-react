@@ -25,7 +25,7 @@
       "@/*": ["./src/*"],
       "#/*": ["types/*"]
     },
-    "types": ["vite/client", "vite-plugin-svg-icons/client", "inputmask"],
+    "types": ["vite/client", "vite-plugin-svg-icons/client"],
     "noEmit": true
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "vite.config.ts"],

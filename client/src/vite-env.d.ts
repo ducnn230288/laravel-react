@@ -13,6 +13,6 @@ interface ImportMeta {
 
 declare const GLightbox: GLightbox;
 declare const echarts: echarts;
-declare const Swal: any;
 declare const SUNEDITOR: any;
+declare const Inputmask: any;
 declare const PerfectScrollbar: any;

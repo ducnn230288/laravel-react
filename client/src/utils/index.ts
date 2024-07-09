@@ -1,6 +1,5 @@
 import { ETypeChart } from '@/enums';
 import type { CheckboxOptionType } from 'antd';
-import { io } from 'socket.io-client';
 
 import { KEY_TOKEN, LANGUAGE, LINK_API, LIST_LANGUAGE } from './variable';
 
@@ -10,7 +9,6 @@ export * from './convertFormValue';
 export * from './reportWebVitals';
 export * from './variable';
 
-export const socket = io(import.meta.env.VITE_URL_SOCKET, { autoConnect: false });
 export const cleanObjectKeyNull = (obj: { [selector: string]: any }) => {
   for (const propName in obj) {
     if (Object.hasOwn(obj, propName)) {

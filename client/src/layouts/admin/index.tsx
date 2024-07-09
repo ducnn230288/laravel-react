@@ -11,7 +11,7 @@ import { CSvgIcon } from '@/library/svg-icon';
 import { SCrud, SGlobal } from '@/services';
 import { APP_NAME, lang, routerLinks } from '@/utils';
 
-import { Scrollbar } from '@/library/perfect-scrollbar';
+import { Scrollbar } from '@/library/scrollbar';
 import menus, { findMenu } from './menus';
 
 const Layout = ({ children }: PropsWithChildren) => {
@@ -22,7 +22,7 @@ const Layout = ({ children }: PropsWithChildren) => {
       <CSide />
       <section>
         <CHeader />
-        <Scrollbar options={{ wheelSpeed: 1 }}>
+        <Scrollbar>
           <main>{children}</main>
         </Scrollbar>
         <footer>{t('Footer', { year: new Date().getFullYear() })}</footer>
@@ -58,7 +58,7 @@ const CSide = () => {
           <h1 className={classNames({ active: sGlobal.isCollapseMenu })}>{APP_NAME}</h1>
         </a>
         <Spin size='small' spinning={sCrud.isLoading || sCrud.typeIsLoading}>
-          <Scrollbar options={{ wheelSpeed: 1 }}>
+          <Scrollbar>
             <Menu
               defaultSelectedKeys={[location.pathname]}
               defaultOpenKeys={['/' + location.pathname.substring(1).split('/').slice(0, 2).join('/')]}

@@ -1,14 +1,17 @@
-import type { EChartsType, SeriesOption } from 'echarts';
+import React, { forwardRef, useEffect, useImperativeHandle, useRef, type Ref } from 'react';
 import type {
+  CallbackDataParams,
+  CommonTooltipOption,
+  EChartsType,
   GridOption,
   LegendComponentOption,
+  OptionDataValue,
+  SeriesOption,
   TitleOption,
   TooltipOption,
   XAXisOption,
   YAXisOption,
-} from 'echarts/types/dist/shared';
-import type { CallbackDataParams, CommonTooltipOption, OptionDataValue } from 'echarts/types/src/util/types';
-import React, { forwardRef, useEffect, useImperativeHandle, useRef, type Ref } from 'react';
+} from './types';
 
 import { ETypeChart } from '@/enums';
 import { uuidv4 } from '@/utils';

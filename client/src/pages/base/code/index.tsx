@@ -69,7 +69,7 @@ const Form = () => {
   );
 };
 
-import { Scrollbar } from '@/library/perfect-scrollbar';
+import { Scrollbar } from '@/library/scrollbar';
 import { CSvgIcon } from '@/library/svg-icon';
 import { Select, Spin, Tree } from 'antd';
 import queryString from 'query-string';
@@ -90,7 +90,7 @@ const Side = () => {
       <Spin spinning={sCrud.typeIsLoading}>
         <div className='desktop'>
           {sCrud.typeResult?.data && (
-            <Scrollbar options={{ wheelSpeed: 1 }}>
+            <Scrollbar>
               <Tree
                 blockNode
                 showLine

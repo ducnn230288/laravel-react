@@ -6,8 +6,7 @@ export const Scrollbar = ({
   className = '',
   id = '',
   style = undefined,
-  option = undefined,
-  options = undefined,
+  options = {},
   containerRef = () => {},
   onSync = ps => ps.update(),
   ...props
@@ -15,7 +14,6 @@ export const Scrollbar = ({
   className?: string;
   id?: string;
   style?: React.CSSProperties;
-  option?: Options;
   options?: Options;
   containerRef?: (container: HTMLElement) => void;
   onScrollY?: (container: HTMLElement) => void;
@@ -51,7 +49,7 @@ export const Scrollbar = ({
 
   useEffect(() => {
     if (_container.current) {
-      _ps.current = new PerfectScrollbar(_container.current, options || option);
+      _ps.current = new PerfectScrollbar(_container.current, { wheelSpeed: 1, minScrollbarLength: 20, ...options });
       _updateEventHook();
       _updateClassName();
       onSync(_ps.current);

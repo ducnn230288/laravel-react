@@ -1,4 +1,4 @@
-import { Scrollbar } from '@/library/perfect-scrollbar';
+import { Scrollbar } from '@/library/scrollbar';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { useRef } from 'react';
 import './index.less';
@@ -33,7 +33,6 @@ export const CVirtualScroll = ({
       id={id}
       className={className}
       onYReachStart={onYReachStart}
-      options={{ wheelSpeed: 1, minScrollbarLength: 10 }}
       containerRef={(ref: any) => {
         parentRef.current = ref;
         containerRef?.(ref);

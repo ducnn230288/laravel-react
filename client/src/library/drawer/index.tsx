@@ -1,4 +1,4 @@
-import { Scrollbar } from '@/library/perfect-scrollbar';
+import { Scrollbar } from '@/library/scrollbar';
 import { Drawer, Form } from 'antd';
 import classNames from 'classnames';
 import { forwardRef, useImperativeHandle, type Ref } from 'react';
@@ -54,7 +54,7 @@ export const CDrawerForm = forwardRef(
         closeIcon={null}
         destroyOnClose={true}
       >
-        <Scrollbar options={{ wheelSpeed: 1 }}>
+        <Scrollbar>
           <CForm
             className='intro-x'
             values={{ ...facade[keyData] }}

@@ -3,7 +3,6 @@ import type { ItemType } from 'antd/es/menu/interface';
 import classNames from 'classnames';
 import { Fragment, type PropsWithChildren, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import PerfectScrollbar from 'react-perfect-scrollbar';
 import { useLocation, useNavigate } from 'react-router';
 import { createSearchParams } from 'react-router-dom';
 
@@ -12,6 +11,7 @@ import { CSvgIcon } from '@/library/svg-icon';
 import { SCrud, SGlobal } from '@/services';
 import { APP_NAME, lang, routerLinks } from '@/utils';
 
+import { Scrollbar } from '@/library/perfect-scrollbar';
 import menus, { findMenu } from './menus';
 
 const Layout = ({ children }: PropsWithChildren) => {
@@ -22,9 +22,9 @@ const Layout = ({ children }: PropsWithChildren) => {
       <CSide />
       <section>
         <CHeader />
-        <PerfectScrollbar options={{ wheelSpeed: 1 }}>
+        <Scrollbar options={{ wheelSpeed: 1 }}>
           <main>{children}</main>
-        </PerfectScrollbar>
+        </Scrollbar>
         <footer>{t('Footer', { year: new Date().getFullYear() })}</footer>
       </section>
     </div>
@@ -58,7 +58,7 @@ const CSide = () => {
           <h1 className={classNames({ active: sGlobal.isCollapseMenu })}>{APP_NAME}</h1>
         </a>
         <Spin size='small' spinning={sCrud.isLoading || sCrud.typeIsLoading}>
-          <PerfectScrollbar options={{ wheelSpeed: 1 }}>
+          <Scrollbar options={{ wheelSpeed: 1 }}>
             <Menu
               defaultSelectedKeys={[location.pathname]}
               defaultOpenKeys={['/' + location.pathname.substring(1).split('/').slice(0, 2).join('/')]}
@@ -75,7 +75,7 @@ const CSide = () => {
                 }
               }}
             />
-          </PerfectScrollbar>
+          </Scrollbar>
         </Spin>
       </aside>
     </Fragment>

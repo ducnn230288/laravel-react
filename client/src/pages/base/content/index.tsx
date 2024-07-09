@@ -68,10 +68,10 @@ const Form = () => {
   );
 };
 
+import { Scrollbar } from '@/library/perfect-scrollbar';
 import { CSvgIcon } from '@/library/svg-icon';
 import { Select, Spin, Tree } from 'antd';
 import queryString from 'query-string';
-import PerfectScrollbar from 'react-perfect-scrollbar';
 import { useLocation, useNavigate } from 'react-router';
 const Side = () => {
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.content' });
@@ -89,7 +89,7 @@ const Side = () => {
       <Spin spinning={sCrud.typeIsLoading}>
         <div className='desktop'>
           {sCrud.typeResult?.data && (
-            <PerfectScrollbar options={{ wheelSpeed: 1 }}>
+            <Scrollbar options={{ wheelSpeed: 1 }}>
               <Tree
                 blockNode
                 showLine
@@ -110,7 +110,7 @@ const Side = () => {
                   navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
                 }}
               />
-            </PerfectScrollbar>
+            </Scrollbar>
           )}
         </div>
         <div className='mobile'>

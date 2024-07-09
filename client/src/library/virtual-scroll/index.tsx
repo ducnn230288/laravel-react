@@ -1,6 +1,6 @@
+import { Scrollbar } from '@/library/perfect-scrollbar';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { useRef } from 'react';
-import PerfectScrollbar from 'react-perfect-scrollbar';
 import './index.less';
 
 export const CVirtualScroll = ({
@@ -29,7 +29,7 @@ export const CVirtualScroll = ({
   });
   const items = virtualizer.getVirtualItems();
   return (
-    <PerfectScrollbar
+    <Scrollbar
       id={id}
       className={className}
       onYReachStart={onYReachStart}
@@ -58,6 +58,6 @@ export const CVirtualScroll = ({
           ))}
         </div>
       </div>
-    </PerfectScrollbar>
+    </Scrollbar>
   );
 };

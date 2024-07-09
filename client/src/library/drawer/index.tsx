@@ -1,8 +1,8 @@
+import { Scrollbar } from '@/library/perfect-scrollbar';
 import { Drawer, Form } from 'antd';
 import classNames from 'classnames';
 import { forwardRef, useImperativeHandle, type Ref } from 'react';
 import { useTranslation } from 'react-i18next';
-import PerfectScrollbar from 'react-perfect-scrollbar';
 
 import type { IForm, IFormModalRefObject } from '@/types';
 import { convertFormValue } from '@/utils';
@@ -54,7 +54,7 @@ export const CDrawerForm = forwardRef(
         closeIcon={null}
         destroyOnClose={true}
       >
-        <PerfectScrollbar options={{ wheelSpeed: 1 }}>
+        <Scrollbar options={{ wheelSpeed: 1 }}>
           <CForm
             className='intro-x'
             values={{ ...facade[keyData] }}
@@ -62,7 +62,7 @@ export const CDrawerForm = forwardRef(
             columns={columns}
             spinning={facade[keyIsLoading]}
           />
-        </PerfectScrollbar>
+        </Scrollbar>
       </Drawer>
     );
   },

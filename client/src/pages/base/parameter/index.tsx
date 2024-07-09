@@ -36,9 +36,9 @@ const Page = () => {
 };
 export default Page;
 
+import { Scrollbar } from '@/library/perfect-scrollbar';
 import { Select, Spin, Tree } from 'antd';
 import queryString from 'query-string';
-import PerfectScrollbar from 'react-perfect-scrollbar';
 
 import { CSvgIcon } from '@/library/svg-icon';
 const Side = () => {
@@ -56,7 +56,7 @@ const Side = () => {
       <Spin spinning={sCrud.isLoading}>
         <div className='desktop'>
           {sCrud.result?.data && (
-            <PerfectScrollbar options={{ wheelSpeed: 1 }}>
+            <Scrollbar options={{ wheelSpeed: 1 }}>
               <Tree
                 blockNode
                 showLine
@@ -77,7 +77,7 @@ const Side = () => {
                   navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
                 }}
               />
-            </PerfectScrollbar>
+            </Scrollbar>
           )}
         </div>
         <div className='mobile'>

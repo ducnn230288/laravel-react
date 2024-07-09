@@ -127,11 +127,11 @@ export const CEditTable = ({
                 formula = formula.replaceAll(i.field, item[i.field]);
               }
             });
-            const value = eval(formula);
-            total =
-              !!value && value !== Infinity && !isNaN(value)
-                ? (/^\d+$/.test(value) ? value : parseFloat(value.toFixed(2))).toLocaleString('vi')
-                : 0;
+            // const value = eval(formula);
+            // total =
+            //   !!value && value !== Infinity && !isNaN(value)
+            //     ? (/^\d+$/.test(value) ? value : parseFloat(value.toFixed(2))).toLocaleString('vi')
+            //     : 0;
           } else if (item.level <= row.level - 2) {
             total = table.data
               ?.filter(i => i.level === item.level + 1 && !i.isSummary)
@@ -177,15 +177,15 @@ export const CEditTable = ({
                   formula = formula.replaceAll(i.field, row[i.field]);
                 }
               });
-              const el = e
-                .closest('tbody')!
-                .querySelector(`tr:nth-child(${indexRow + 1}) td[data-name="${meta.field}"] > *`)!;
-              const value = eval(formula);
-              el.innerHTML =
-                !!value && value !== Infinity && !isNaN(value)
-                  ? (/^\d+$/.test(value) ? value : parseFloat(value.toFixed(2))).toLocaleString('vi')
-                  : 0;
-              handleSum(el, value, indexRow, meta.field, table, meta.type, maxLevel);
+              // const el = e
+              //   .closest('tbody')!
+              //   .querySelector(`tr:nth-child(${indexRow + 1}) td[data-name="${meta.field}"] > *`)!;
+              // const value = eval(formula);
+              // el.innerHTML =
+              //   !!value && value !== Infinity && !isNaN(value)
+              //     ? (/^\d+$/.test(value) ? value : parseFloat(value.toFixed(2))).toLocaleString('vi')
+              //     : 0;
+              // handleSum(el, value, indexRow, meta.field, table, meta.type, maxLevel);
             }
           }
         });

@@ -15,3 +15,4 @@ declare const GLightbox: GLightbox;
 declare const echarts: echarts;
 declare const Swal: any;
 declare const SUNEDITOR: any;
+declare const PerfectScrollbar: any;

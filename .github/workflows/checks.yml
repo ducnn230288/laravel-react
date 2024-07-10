@@ -21,10 +21,10 @@ jobs:
         uses: actions/checkout@v2
       - name: Build the docker-compose stack
         run: docker-compose -f docker/docker-test.yml up -d
-      - name: Run Test Backend
-        run: docker-compose -f docker/docker-test.yml exec -T server ./vendor/bin/phpunit
       - name: Run Clear config
         run: docker-compose -f docker/docker-test.yml exec -T server php artisan config:clear
+      - name: Run Test Backend
+        run: docker-compose -f docker/docker-test.yml exec -T server ./vendor/bin/phpunit
       - name: Run Migration && Seed Database
         run: docker-compose -f docker/docker-test.yml exec -T server php artisan migrate:refresh --seed
       - name: Generate key

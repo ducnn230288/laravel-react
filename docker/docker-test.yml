@@ -27,4 +27,6 @@ services:
       - 3000:3000
     depends_on:
       - db
+    volumes:
+      - ../output:/app/robot/result
     command: php artisan serve --host 0.0.0.0 --port=3000

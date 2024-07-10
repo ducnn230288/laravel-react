@@ -26,7 +26,7 @@ jobs:
       - name: Run Clear config
         run: docker-compose -f docker/docker-test.yml exec -T server php artisan config:clear
       - name: Wait for MySQL to initialize
-        run: sleep 1
+        run: sleep 0.5
       - name: Run Migration && Seed Database
         run: docker-compose -f docker/docker-test.yml exec -T server php artisan migrate:refresh --seed
       - name: Generate key

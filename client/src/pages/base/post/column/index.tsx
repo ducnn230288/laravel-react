@@ -174,7 +174,7 @@ export default {
         formItem: {
           col: 6,
           type: EFormType.date,
-          rules: [{ type: EFormRuleType.required }],
+          rules: sCrud.data?.id ? [{ type: EFormRuleType.required }] : [],
         },
       },
       {

@@ -18,7 +18,6 @@ import { CSvgIcon } from '../svg-icon';
 import { CUpload } from '../upload';
 import {
   CIAddable,
-  CICascader,
   CIChips,
   CIDatePicker,
   CIEditor,
@@ -26,9 +25,7 @@ import {
   CIPassword,
   CISelect,
   CISelectTable,
-  CISelectTag,
   CITab,
-  CITableTransfer,
   CITreeSelect,
 } from './input';
 
@@ -58,8 +55,6 @@ export const generateInput = ({
         return <CIEditor placeholder={t(formItem.placeholder ?? 'Enter', { title: item.title.toLowerCase() })} />;
       case EFormType.upload:
         return <CUpload multiple={!!formItem.mode} />;
-      case EFormType.tableTransfer:
-        return <CITableTransfer formItem={formItem} form={form} />;
       case EFormType.otp:
         return <Input.OTP length={formItem.maxLength ?? 5} />;
       case EFormType.password:
@@ -115,31 +110,21 @@ export const generateInput = ({
             list={formItem.list}
           />
         );
-      case EFormType.tag:
-        return (
-          <CISelectTag
-            maxTagCount={formItem.maxTagCount ?? 'responsive'}
-            placeholder={t(formItem.placeholder ?? 'Choose', { title: item.title.toLowerCase() })}
-            tag={formItem.tag}
-            form={form}
-            disabled={formItem.disabled?.(values, form)}
-          />
-        );
-      case EFormType.treeSelect:
-      case EFormType.cascader:
-      case EFormType.selectTable:
+
       case EFormType.sliderNumber:
       case EFormType.textarea:
       case EFormType.addable:
       case EFormType.date:
+      case EFormType.dateRange:
         return switchCaseMore1({ item, values, formatDate, generateForm, form, t });
 
-      case EFormType.dateRange:
+      case EFormType.treeSelect:
+      case EFormType.selectTable:
       case EFormType.time:
       case EFormType.timeRange:
       case EFormType.checkbox:
       case EFormType.select:
-        return switchCaseMore2({ item, values, formatDate, form, t });
+        return switchCaseMore2({ item, values, form, t });
 
       default:
         return (
@@ -176,49 +161,6 @@ const switchCaseMore1 = ({
   const { formItem } = item;
   if (formItem) {
     switch (formItem.type) {
-      case EFormType.treeSelect:
-        return (
-          <CITreeSelect
-            formItem={formItem}
-            showSearch={formItem.showSearch}
-            form={form}
-            disabled={formItem.disabled?.(values, form)}
-            placeholder={t(formItem.placeholder ?? 'Choose', { title: item.title.toLowerCase() })}
-          />
-        );
-      case EFormType.cascader:
-        return (
-          <CICascader
-            formItem={formItem}
-            showSearch={formItem.showSearch}
-            form={form}
-            disabled={formItem.disabled?.(values, form)}
-            placeholder={t(formItem.placeholder ?? 'Choose', { title: item.title.toLowerCase() })}
-          />
-        );
-      case EFormType.selectTable:
-        return (
-          <CISelectTable
-            form={form}
-            onChange={(value: any) => formItem.onChange?.(value, form)}
-            placeholder={t(formItem.placeholder ?? 'Choose', { title: item.title.toLowerCase() })}
-            disabled={formItem.disabled?.(values, form)}
-            mode={formItem.mode}
-            get={formItem.get}
-          />
-        );
-      case EFormType.sliderNumber:
-        return (
-          <Slider
-            range
-            tooltip={{
-              formatter: value =>
-                (value ? value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : '0') +
-                (formItem.symbol ? formItem.symbol : ''),
-            }}
-            max={formItem.max ? formItem.max : 9999999}
-          />
-        );
       case EFormType.textarea:
         return (
           <textarea
@@ -262,26 +204,6 @@ const switchCaseMore1 = ({
             placeholder={t(formItem.placeholder ?? 'Choose', { title: item.title.toLowerCase() })}
           />
         );
-    }
-  }
-};
-
-const switchCaseMore2 = ({
-  item,
-  values,
-  formatDate,
-  form,
-  t,
-}: {
-  item: IForm;
-  values: any;
-  formatDate: string;
-  form: FormInstance;
-  t: TFunction<'locale', 'library'>;
-}) => {
-  const { formItem } = item;
-  if (formItem) {
-    switch (formItem.type) {
       case EFormType.dateRange:
         return (
           <DateAntDesign.RangePicker
@@ -305,6 +227,57 @@ const switchCaseMore2 = ({
             }
             showTime={formItem.showTime}
             disabled={formItem.disabled?.(values, form)}
+          />
+        );
+    }
+  }
+};
+
+const switchCaseMore2 = ({
+  item,
+  values,
+  form,
+  t,
+}: {
+  item: IForm;
+  values: any;
+  form: FormInstance;
+  t: TFunction<'locale', 'library'>;
+}) => {
+  const { formItem } = item;
+  if (formItem) {
+    switch (formItem.type) {
+      case EFormType.treeSelect:
+        return (
+          <CITreeSelect
+            formItem={formItem}
+            showSearch={formItem.showSearch}
+            form={form}
+            disabled={formItem.disabled?.(values, form)}
+            placeholder={t(formItem.placeholder ?? 'Choose', { title: item.title.toLowerCase() })}
+          />
+        );
+      case EFormType.selectTable:
+        return (
+          <CISelectTable
+            form={form}
+            onChange={(value: any) => formItem.onChange?.(value, form)}
+            placeholder={t(formItem.placeholder ?? 'Choose', { title: item.title.toLowerCase() })}
+            disabled={formItem.disabled?.(values, form)}
+            mode={formItem.mode}
+            get={formItem.get}
+          />
+        );
+      case EFormType.sliderNumber:
+        return (
+          <Slider
+            range
+            tooltip={{
+              formatter: value =>
+                (value ? value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : '0') +
+                (formItem.symbol ? formItem.symbol : ''),
+            }}
+            max={formItem.max ? formItem.max : 9999999}
           />
         );
       case EFormType.time:

@@ -41,7 +41,7 @@ export const CDrawerForm = forwardRef(
               onClick={() => facade.set({ [keyData]: undefined, [keyState]: false })}
             />
             <CButton
-              text={typeof textCancel === 'string' ? t(textSubmit) : textSubmit}
+              text={typeof textSubmit === 'string' ? t(textSubmit) : textSubmit}
               onClick={async () => onSubmit(convertFormValue(columns, await form.validateFields()))}
               disabled={facade[keyIsLoading]}
               className={'w-full sm:w-auto sm:min-w-48'}

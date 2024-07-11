@@ -174,9 +174,24 @@ const mapRule = ({
       case EFormRuleType.required:
         const config: any = {
           required: true,
-          message: t(rule.message ?? (item.formItem.type !== EFormType.otp ? 'Please choose' : 'Please enter'), {
-            title: item.title.toLowerCase(),
-          }),
+          message: t(
+            rule.message ??
+              (!item.formItem.type ||
+              [
+                EFormType.text,
+                EFormType.name,
+                EFormType.number,
+                EFormType.hidden,
+                EFormType.password,
+                EFormType.textarea,
+                EFormType.otp,
+              ].includes(item.formItem.type)
+                ? 'Please enter'
+                : 'Please choose'),
+            {
+              title: item.title.toLowerCase(),
+            },
+          ),
         };
         if (
           item.formItem.type &&

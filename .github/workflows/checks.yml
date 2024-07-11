@@ -24,7 +24,7 @@ jobs:
       - name: Run Test Backend
         run: docker-compose -f docker/docker-test.yml exec -T server ./vendor/bin/phpunit
       - name: Run Clear config
-        if: always()
+        if: ${{ !cancelled() }}
         run: docker-compose -f docker/docker-test.yml exec -T server php artisan config:clear
       - name: Generate key
         run: docker-compose -f docker/docker-test.yml exec -T server php artisan key:generate
@@ -35,7 +35,7 @@ jobs:
       - name: Run Test Frontend
         run: docker-compose -f docker/docker-test.yml exec -T server robot -d e2e/result e2e/testcases/Post_List.robot
       - uses: actions/upload-artifact@v4
-        if: always()
+        if: ${{ !cancelled() }}
         with:
           name: output
           path: output/

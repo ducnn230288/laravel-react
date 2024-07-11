@@ -23,8 +23,8 @@ jobs:
         run: docker-compose -f docker/docker-test.yml up -d
       - name: Run Test Backend
         run: docker-compose -f docker/docker-test.yml exec -T server ./vendor/bin/phpunit
-        continue-on-error: true
       - name: Run Clear config
+        if: always()
         run: docker-compose -f docker/docker-test.yml exec -T server php artisan config:clear
       - name: Generate key
         run: docker-compose -f docker/docker-test.yml exec -T server php artisan key:generate
@@ -34,8 +34,8 @@ jobs:
         run: docker-compose -f docker/docker-test.yml exec -T server php artisan migrate:refresh --seed
       - name: Run Test Frontend
         run: docker-compose -f docker/docker-test.yml exec -T server robot -d e2e/result e2e/testcases/Post_List.robot
-        continue-on-error: true
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: output
           path: output/

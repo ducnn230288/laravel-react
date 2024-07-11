@@ -172,22 +172,26 @@ const mapRule = ({
   if (item.formItem) {
     switch (rule.type) {
       case EFormRuleType.required:
-        rules.push({
+        const config: any = {
           required: true,
-          whitespace:
-            item.formItem.type &&
-            [
-              EFormType.text,
-              EFormType.name,
-              EFormType.number,
-              EFormType.hidden,
-              EFormType.password,
-              EFormType.textarea,
-            ].includes(item.formItem.type),
           message: t(rule.message ?? (item.formItem.type !== EFormType.otp ? 'Please choose' : 'Please enter'), {
             title: item.title.toLowerCase(),
           }),
-        });
+        };
+        if (
+          item.formItem.type &&
+          [
+            EFormType.text,
+            EFormType.name,
+            EFormType.number,
+            EFormType.hidden,
+            EFormType.password,
+            EFormType.textarea,
+          ].includes(item.formItem.type)
+        ) {
+          config.whitespace = true;
+        }
+        rules.push(config);
         break;
       case EFormRuleType.email:
         rules.push(() => ({

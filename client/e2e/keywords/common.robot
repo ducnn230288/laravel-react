@@ -17,13 +17,6 @@ ${STATE}                Evaluate  json.loads("""{}""")  json
 ${EMAIL_ADMIN}          admin@gmail.com
 ${PASSWORD_ADMIN}       Password1!
 
-
-${email_admin}          admin@gmail.com
-${password_admin}       Password1!
-${name_admin}           May Rodriguez PhD
-${phone_admin}          053702170206
-${new_password}         Password1#
-
 *** Keywords ***
 Login to admin
   Enter "email" in "Tên đăng nhập" with "${EMAIL_ADMIN}"
@@ -195,7 +188,6 @@ Get Element Table Item By Name
 
 Click on the "${text}" button in the "${name}" table line
   Wait For Load State       domcontentloaded                  timeout=${BROWSER_TIMEOUT}
-  Sleep                     0.1
   ${name}=                  Check Text                        ${name}
   ${text}=                  Check Text                        ${text}
   ${element}=               Get Element Table Item By Name    ${name}                       //button[@title = "${text}"]
@@ -422,6 +414,6 @@ The status button in the "${name}" table line should change to "${text}"
 Confirm locating exactly in "${name}" page of "${menu}" menu
   Wait Until Element Spin
   ${element}=               Set Variable                       //main//div[contains(@class, "breadcrumbs")]//li[text()="${menu}"]
-  Element Should Be Exist                                      ${element}
+  Wait Until Element Is Existent                               ${element}
   ${cnt}=                   Get Element Count                  //main//*[text()="${name}"]
   Should Be True            ${cnt} == 2

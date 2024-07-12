@@ -17,7 +17,7 @@ class CodeTypeFactory extends Factory
      */
     public function definition(): array
     {
-      $name = $this->faker->unique()->sentence(2);
+      $name = $this->faker->unique()->sentence(5);
         return [
           'name' => $name,
           'code' => strtoupper(Str::slug($name)),

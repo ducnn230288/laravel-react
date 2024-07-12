@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
 use Tests\ERole;
 use Tests\TestCase;
 
-class CodeTest extends CodeBase
+class CodeTest extends TestCase
 {
   use WithFaker, RefreshDatabase;
   protected function setUp(): void
@@ -23,15 +23,7 @@ class CodeTest extends CodeBase
   {
     $this->base(ERole::SUPER_ADMIN);
   }
-}
-class CodeTestAdmin extends CodeBase
-{
-  use WithFaker, RefreshDatabase;
-  protected function setUp(): void
-  {
-    parent::setUp();
-    $this->withoutMiddleware(\App\Http\Middleware\FrontendCaseMiddleware::class);
-  }
+
   public function test_admin()
   {
     $this->base(ERole::ADMIN, [
@@ -48,22 +40,13 @@ class CodeTestAdmin extends CodeBase
       EPermissions::P_CODE_DESTROY->value,
     ]);
   }
-}
-class CodeTestUser extends CodeBase
-{
-  use WithFaker, RefreshDatabase;
-  protected function setUp(): void
-  {
-    parent::setUp();
-    $this->withoutMiddleware(\App\Http\Middleware\FrontendCaseMiddleware::class);
-  }
+
   public function test_user()
   {
     $this->base(ERole::USER);
   }
-}
-class CodeBase extends TestCase {
-  function base(ERole $eRole, $permissions = []): void
+
+  private function base(ERole $eRole, $permissions = []): void
   {
     $auth = $this->signIn($eRole, $permissions);
     $type = CodeType::factory()->raw();
@@ -73,6 +56,7 @@ class CodeBase extends TestCase {
     $res = $this->get('/api/codes/types/')->assertStatus($eRole !== ERole::USER ? 200 : 403);
     if ($eRole !== ERole::USER) {
       $this->assertCount(2, $res['data']);
+      dd($res['data']);
       foreach($type as $key=>$value) {
         $this->assertEquals($value, $res['data'][1][Str::camel($key)]);
       }

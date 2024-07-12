@@ -8,6 +8,7 @@ Library                DateTime
 ### Link to testcases https://docs.google.com/spreadsheets/d/1R_jW5GBVBaMy7YgNKJQ2Ha5xW12Vn0nRzOHE0-OsyF8/edit#gid=1857962472 ###
 PL_00 Verify the User Interface of "Bài đăng" page
   [Tags]                                                                                                MainPage                   UI                     Smoketest
+  Login to admin
   When Click "Thiết lập" menu
   When Click "Bài đăng" sub menu to "#/vn/setting/post"
   Then Heading should contain "Bài đăng" inner text

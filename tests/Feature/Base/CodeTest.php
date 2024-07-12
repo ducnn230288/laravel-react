@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
 use Tests\ERole;
 use Tests\TestCase;
 
-class CodeTest extends TestCase
+class CodeTest extends CodeBase
 {
   use WithFaker, RefreshDatabase;
   protected function setUp(): void
@@ -23,7 +23,15 @@ class CodeTest extends TestCase
   {
     $this->base(ERole::SUPER_ADMIN);
   }
-
+}
+class CodeTestAdmin extends CodeBase
+{
+  use WithFaker, RefreshDatabase;
+  protected function setUp(): void
+  {
+    parent::setUp();
+    $this->withoutMiddleware(\App\Http\Middleware\FrontendCaseMiddleware::class);
+  }
   public function test_admin()
   {
     $this->base(ERole::ADMIN, [
@@ -40,13 +48,22 @@ class CodeTest extends TestCase
       EPermissions::P_CODE_DESTROY->value,
     ]);
   }
-
+}
+class CodeTestUser extends CodeBase
+{
+  use WithFaker, RefreshDatabase;
+  protected function setUp(): void
+  {
+    parent::setUp();
+    $this->withoutMiddleware(\App\Http\Middleware\FrontendCaseMiddleware::class);
+  }
   public function test_user()
   {
     $this->base(ERole::USER);
   }
-
-  private function base(ERole $eRole, $permissions = []): void
+}
+class CodeBase extends TestCase {
+  function base(ERole $eRole, $permissions = []): void
   {
     $auth = $this->signIn($eRole, $permissions);
     $type = CodeType::factory()->raw();

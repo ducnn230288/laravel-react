@@ -27,12 +27,16 @@ jobs:
         if: ${{ !cancelled() }}
         run: docker-compose -f docker/docker-test.yml exec -T server php artisan config:clear
       - name: Generate key
+        if: ${{ !cancelled() }}
         run: docker-compose -f docker/docker-test.yml exec -T server php artisan key:generate
       - name: Wait for MySQL to initialize
+        if: ${{ !cancelled() }}
         run: sleep 1
       - name: Run Migration && Seed Database
+        if: ${{ !cancelled() }}
         run: docker-compose -f docker/docker-test.yml exec -T server php artisan migrate:refresh --seed
       - name: Run Test Frontend
+        if: ${{ !cancelled() }}
         run: docker-compose -f docker/docker-test.yml exec -T server robot -d e2e/result e2e/testcases/Post_List.robot
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}

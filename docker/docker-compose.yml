@@ -15,7 +15,7 @@ services:
   server:
     build:
       context: ..
-      dockerfile: Dockerfile
+      dockerfile: docker/Dockerfile
     image: f08bc222baa618ff8eaaf6f9c84575aa083a1bb5e04fc4879921cc1fe2c0c697
     ports:
       - 3000:3000

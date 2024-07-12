@@ -365,11 +365,13 @@ Heading should contain "${text}" inner text
   Wait Until Element Is Existent                              ${element}
 
 Webpage should contain "${name}" input field
+  Wait Until Element Spin
   ${element}=               Get Element                       (//label[@title="${name}"]//ancestor::div[contains(@class,"ant-row")][1]//div[@class="ant-form-item-control-input"])[1]
   ${count}=                 Get Element Count                 ${element}
   Should Be True            ${count} >= 1
 
 Webpage should contain "${name}" button
+  Wait Until Element Spin
   ${element}=               Set Variable                      //button[(text()="${name}")]
   ${cnt}=                   Get Element Count                 ${element}
   Should Be True            ${cnt} > 0
@@ -379,6 +381,7 @@ Webpage should contain "${name}" tab
   Wait Until Element Is Existent                               ${element}
 
 Webpage should contain "${name}" column with sort and search function
+  Wait Until Element Spin
   Element Should Be Exist                   //th[@aria-label = "${name}"]
   ${count2}=                Get Element Count                   //th[@aria-label = "${name}"]//span[contains(@class,"ant-table-column-sorter")]
   Should Be True            ${count2} > 0
@@ -386,6 +389,7 @@ Webpage should contain "${name}" column with sort and search function
   Should Be True            ${count3} > 0
 
 Webpage should contain "${name}" image upload field
+  Wait Until Element Spin
   Element Should Be Exist                                       //label[@title="${name}"]
   ${cnt}=                   Get Element Count                   //label[@title="${name}"]
   IF    ${cnt} > 0
@@ -398,6 +402,7 @@ Webpage should contain "${name}" group
   Element Should Be Exist                                       ${element}
 
 Webpage should contain the list data from database
+  Wait Until Element Spin
   ${count}=                 Get Element Count                   //div[contains(@class,"container")]
   Should Be True            ${count} >= 1
 

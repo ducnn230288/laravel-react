@@ -63,21 +63,7 @@ export enum EFormRuleType {
 }
 export enum EStatusState {
   idle = 'idle',
-  getPending = 'get.pending',
-  getFulfilled = 'get.fulfilled',
-  getRejected = 'get.rejected',
-  getByIdPending = 'getById.pending',
-  getByIdFulfilled = 'getById.fulfilled',
-  getByIdRejected = 'getById.rejected',
-  postPending = 'post.pending',
-  postFulfilled = 'post.fulfilled',
-  postRejected = 'post.rejected',
-  putPending = 'put.pending',
-  putFulfilled = 'put.fulfilled',
-  putRejected = 'put.rejected',
-  deletePending = 'delete.pending',
-  deleteFulfilled = 'delete.fulfilled',
-  deleteRejected = 'delete.rejected',
+  reGet = 're.get',
 }
 export enum ETypeChart {
   pie = 'pie',

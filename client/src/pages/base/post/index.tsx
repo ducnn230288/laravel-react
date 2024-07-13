@@ -47,12 +47,8 @@ const FormPost = () => {
   const request = JSON.parse(sCrud?.queryParams ?? '{}');
 
   useEffect(() => {
-    switch (sCrud.status) {
-      case EStatusState.postFulfilled:
-      case EStatusState.putFulfilled:
-      case EStatusState.deleteFulfilled:
-        sCrud.get(request);
-        break;
+    if (sCrud.status === EStatusState.reGet) {
+      sCrud.get(request);
     }
   }, [sCrud.status]);
 
@@ -79,12 +75,8 @@ const FormPostType = () => {
 
   const request = JSON.parse(sCrud?.typeQueryParams ?? '{}');
   useEffect(() => {
-    switch (sCrud.typeStatus) {
-      case EStatusState.postFulfilled:
-      case EStatusState.putFulfilled:
-      case EStatusState.deleteFulfilled:
-        sCrud.getType(request);
-        break;
+    if (sCrud.typeStatus === EStatusState.reGet) {
+      sCrud.getType(request);
     }
   }, [sCrud.typeStatus]);
 

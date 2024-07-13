@@ -44,12 +44,8 @@ const Form = () => {
   const request = JSON.parse(sCrud?.queryParams ?? '{}');
 
   useEffect(() => {
-    switch (sCrud.status) {
-      case EStatusState.postFulfilled:
-      case EStatusState.putFulfilled:
-      case EStatusState.deleteFulfilled:
-        sCrud.get(request);
-        break;
+    if (sCrud.status === EStatusState.reGet) {
+      sCrud.get(request);
     }
   }, [sCrud.status]);
 

@@ -1,15 +1,9 @@
-import { type PropsWithChildren, useEffect } from 'react';
+import type { PropsWithChildren } from 'react';
 
 import { CSvgIcon } from '@/library/svg-icon';
-import { SGlobal } from '@/services';
 import { APP_NAME } from '@/utils';
 
 const Layout = ({ children }: PropsWithChildren) => {
-  const sGlobal = SGlobal();
-  useEffect(() => {
-    sGlobal.logout();
-  }, []);
-
   return (
     <div className='l-login'>
       <div />

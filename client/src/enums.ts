@@ -63,7 +63,7 @@ export enum EFormRuleType {
 }
 export enum EStatusState {
   idle = 'idle',
-  reGet = 're.get',
+  isFulfilled = 'is.fulfilled',
 }
 export enum ETypeChart {
   pie = 'pie',

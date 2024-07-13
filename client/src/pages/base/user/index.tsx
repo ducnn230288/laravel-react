@@ -43,7 +43,7 @@ const Form = () => {
   const request = JSON.parse(sCrud?.queryParams ?? '{}');
 
   useEffect(() => {
-    if (sCrud.status === EStatusState.reGet) {
+    if (sCrud.status === EStatusState.isFulfilled) {
       sCrud.get(request);
     }
   }, [sCrud.status]);

@@ -52,7 +52,6 @@ export class RGet extends RReducer {
     };
   }
 }
-
 export class RGetId extends RReducer {
   public constructor(name: string) {
     super();
@@ -71,7 +70,6 @@ export class RGetId extends RReducer {
     };
   }
 }
-
 export class RPost extends RReducer {
   public constructor(name: string) {
     super();
@@ -86,12 +84,11 @@ export class RPost extends RReducer {
       if (action.payload) {
         if (JSON.stringify(state.data) !== JSON.stringify(action.payload)) state.data = action.payload;
         state.isVisible = false;
-        state.status = EStatusState.reGet;
+        state.status = EStatusState.isFulfilled;
       }
     };
   }
 }
-
 export class RPut extends RReducer {
   public constructor(name: string) {
     super();
@@ -109,12 +106,11 @@ export class RPut extends RReducer {
       if (action.payload) {
         if (JSON.stringify(state.data) !== JSON.stringify(action.payload)) state.data = action.payload;
         state.isVisible = false;
-        state.status = EStatusState.reGet;
+        state.status = EStatusState.isFulfilled;
       }
     };
   }
 }
-
 export class RDelete extends RReducer {
   public constructor(name: string) {
     super();
@@ -123,7 +119,7 @@ export class RDelete extends RReducer {
       return data;
     });
     this.fulfilled = state => {
-      state.status = EStatusState.reGet;
+      state.status = EStatusState.isFulfilled;
     };
   }
 }

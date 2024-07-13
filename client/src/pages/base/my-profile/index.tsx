@@ -4,9 +4,9 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { useSearchParams } from 'react-router-dom';
 
-import { EFormRuleType, EFormType } from '@/enums';
+import { EFormRuleType, EFormType, EStatusState } from '@/enums';
 import { CBreadcrumbs } from '@/library/breadcrumbs';
-import { EStatusGlobal, SGlobal } from '@/services';
+import { SGlobal } from '@/services';
 import { lang, routerLinks } from '@/utils';
 import './index.less';
 
@@ -17,7 +17,7 @@ const Page = () => {
   }, []);
 
   useEffect(() => {
-    if (sGlobal.status === EStatusGlobal.putProfileFulfilled) sGlobal.profile();
+    if (sGlobal.status === EStatusState.isFulfilled) sGlobal.profile();
   }, [sGlobal.status]);
 
   const [searchParams] = useSearchParams();

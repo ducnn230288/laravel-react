@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router';
 import { Spin } from 'antd';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router';
 
-import { EFormRuleType, EFormType } from '@/enums';
+import { EFormRuleType, EFormType, EStatusState } from '@/enums';
 import { CForm } from '@/library/form';
-import { EStatusGlobal, SGlobal } from '@/services';
+import { SGlobal } from '@/services';
 import { lang, routerLinks } from '@/utils';
 import { useTranslation } from 'react-i18next';
 
@@ -13,7 +13,7 @@ const Page = () => {
   const sGlobal = SGlobal();
 
   useEffect(() => {
-    if (sGlobal.status === EStatusGlobal.otpConfirmationFulfilled) {
+    if (sGlobal.status === EStatusState.isFulfilled) {
       navigate(`/${lang}${routerLinks('SetPassword')}`, { replace: true });
     }
   }, [sGlobal.status]);

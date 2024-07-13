@@ -1,18 +1,18 @@
-import React, { useEffect } from 'react';
+import { Spin } from 'antd';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
-import { Spin } from 'antd';
 
-import { EFormRuleType, EFormType } from '@/enums';
+import { EFormRuleType, EFormType, EStatusState } from '@/enums';
 import { CForm } from '@/library/form';
-import { EStatusGlobal, SGlobal } from '@/services';
+import { SGlobal } from '@/services';
 import { lang, routerLinks } from '@/utils';
 
 const Page = () => {
   const sGlobal = SGlobal();
   const navigate = useNavigate();
   useEffect(() => {
-    if (sGlobal.status === EStatusGlobal.resetPasswordFulfilled) {
+    if (sGlobal.status === EStatusState.isFulfilled) {
       navigate(`/${lang}${routerLinks('Login')}`, { replace: true });
     }
   }, [sGlobal.status]);

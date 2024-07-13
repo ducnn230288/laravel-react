@@ -52,7 +52,6 @@ export class RGetType extends RReducer {
     };
   }
 }
-
 export class RGetTypeId extends RReducer {
   public constructor(name: string) {
     super();
@@ -71,7 +70,6 @@ export class RGetTypeId extends RReducer {
     };
   }
 }
-
 export class RPostType extends RReducer {
   public constructor(name: string) {
     super();
@@ -89,12 +87,11 @@ export class RPostType extends RReducer {
       if (action.payload) {
         if (JSON.stringify(state.typeData) !== JSON.stringify(action.payload)) state.typeData = action.payload;
         state.typeIsVisible = false;
-        state.typeStatus = EStatusState.reGet;
+        state.typeStatus = EStatusState.isFulfilled;
       }
     };
   }
 }
-
 export class RPutType extends RReducer {
   public constructor(name: string) {
     super();
@@ -112,12 +109,11 @@ export class RPutType extends RReducer {
       if (action.payload) {
         if (JSON.stringify(state.typeData) !== JSON.stringify(action.payload)) state.typeData = action.payload;
         state.typeIsVisible = false;
-        state.typeStatus = EStatusState.reGet;
+        state.typeStatus = EStatusState.isFulfilled;
       }
     };
   }
 }
-
 export class RDeleteType extends RReducer {
   public constructor(name: string) {
     super();
@@ -129,7 +125,7 @@ export class RDeleteType extends RReducer {
       },
     );
     this.fulfilled = state => {
-      state.typeStatus = EStatusState.reGet;
+      state.typeStatus = EStatusState.isFulfilled;
     };
   }
 }

@@ -1,4 +1,3 @@
-import type { IUser } from '@/services';
 interface ICommon {
   id?: string;
   createdAt?: string;
@@ -113,4 +112,29 @@ export interface IMUserRole extends ICommon {
   users?: IUser[];
   createdAt?: string;
   updatedAt?: string;
+}
+export interface IUser extends ICommon {
+  name?: string;
+  avatar?: string;
+  password?: string;
+  email?: string;
+  phoneNumber?: string;
+  dob?: string;
+  description?: string;
+  positionCode?: string;
+  position?: IMContent;
+  retypedPassword?: string;
+  roleCode?: string;
+  role?: IMUserRole;
+  createdAt?: string;
+  updatedAt?: string;
+  isDisable?: boolean;
+}
+
+export interface IResetPassword {
+  password?: string;
+  retypedPassword?: string;
+  passwordOld?: string;
+  email?: string;
+  otp?: string;
 }

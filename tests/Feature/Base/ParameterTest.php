@@ -44,15 +44,25 @@ class ParameterTest extends TestCase
     $auth = $this->signIn($eRole, $permissions);
 
     $data = Parameter::factory()->raw();
-    $this->post('/api/parameters/', $data)->assertStatus($eRole !== ERole::USER ? 201 : 403);
-    if ($eRole !== ERole::USER) $this->assertDatabaseHas('parameters', $data);
+    $res = $this->post('/api/parameters/', $data)->assertStatus($eRole !== ERole::USER ? 201 : 403);
+    if ($eRole !== ERole::USER) {
+      $this->assertDatabaseHas('parameters', $data);
+      $data = $res['data'];
+    }
 
     $res = $this->get('/api/parameters/')->assertStatus($eRole !== ERole::USER ? 200 : 403);
     if ($eRole !== ERole::USER) {
       $this->assertCount(1, $res['data']);
-      foreach($data as $key=>$value) {
-        $this->assertEquals($value, $res['data'][0][$key]);
+      $check = false;
+      foreach ($res['data'] as $item) {
+        if ($item['id'] == $data['id']) {
+          foreach($data as $key=>$value) {
+            $check = true;
+            $this->assertEquals($value, $item[Str::camel($key)]);
+          }
+        }
       }
+      $this->assertTrue($check);
     }
 
     if ($eRole !== ERole::USER) $this->assertFalse($res['data'][0][Str::camel('is_disable')]);

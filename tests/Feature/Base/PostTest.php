@@ -51,15 +51,25 @@ class PostTest extends TestCase
   {
     $auth = $this->signIn($eRole, $permissions);
     $type = PostType::factory()->raw();
-    $this->post('/api/posts/types/', $type)->assertStatus($eRole !== ERole::USER ? 201 : 403);
-    if ($eRole !== ERole::USER) $this->assertDatabaseHas('post_types', $type);
+    $res = $this->post('/api/posts/types/', $type)->assertStatus($eRole !== ERole::USER ? 201 : 403);
+    if ($eRole !== ERole::USER) {
+      $this->assertDatabaseHas('post_types', $type);
+      $type = $res['data'];
+    }
 
     $res = $this->get('/api/posts/types/')->assertStatus($eRole !== ERole::USER ? 200 : 403);
     if ($eRole !== ERole::USER) {
       $this->assertCount(1, $res['data']);
-      foreach($type as $key=>$value) {
-        $this->assertEquals($value, $res['data'][0][Str::camel($key)]);
+      $check = false;
+      foreach ($res['data'] as $item) {
+        if ($item['id'] == $type['id']) {
+          foreach($type as $key=>$value) {
+            $check = true;
+            $this->assertEquals($value, $item[Str::camel($key)]);
+          }
+        }
       }
+      $this->assertTrue($check);
     }
 
     if ($eRole !== ERole::USER) {
@@ -74,18 +84,26 @@ class PostTest extends TestCase
 
     $data = Post::factory()->raw(['type_code' => $type['code']]);
     $data['languages'] = array(PostLanguage::factory()->raw());
-    $this->post('/api/posts/', $data)->assertStatus($eRole !== ERole::USER ? 201 : 403);
+    $res = $this->post('/api/posts/', $data)->assertStatus($eRole !== ERole::USER ? 201 : 403);
     if ($eRole !== ERole::USER) {
       unset($data['languages']);
       $this->assertDatabaseHas('posts', $data);
+      $data = $res['data'];
     }
 
     $res = $this->get('/api/posts/')->assertStatus($eRole !== ERole::USER ? 200 : 403);
     if ($eRole !== ERole::USER) {
       $this->assertCount(1, $res['data']);
-      foreach($data as $key=>$value) {
-        $this->assertEquals($value, $res['data'][0][Str::camel($key)]);
+      $check = false;
+      foreach ($res['data'] as $item) {
+        if ($item['id'] == $data['id']) {
+          foreach($data as $key=>$value) {
+            $check = true;
+            $this->assertEquals($value, $item[Str::camel($key)]);
+          }
+        }
       }
+      $this->assertTrue($check);
     }
 
     if ($eRole === ERole::USER) $data = Post::factory()->create()->getAttributes();

@@ -51,15 +51,25 @@ class ContentTest extends TestCase
   {
     $auth = $this->signIn($eRole, $permissions);
     $type = ContentType::factory()->raw();
-    $this->post('/api/contents/types/', $type)->assertStatus($eRole !== ERole::USER ? 201 : 403);
-    if ($eRole !== ERole::USER) $this->assertDatabaseHas('content_types', $type);
+    $res = $this->post('/api/contents/types/', $type)->assertStatus($eRole !== ERole::USER ? 201 : 403);
+    if ($eRole !== ERole::USER) {
+      $this->assertDatabaseHas('content_types', $type);
+      $type = $res['data'];
+    }
 
     $res = $this->get('/api/contents/types/')->assertStatus($eRole !== ERole::USER ? 200 : 403);
     if ($eRole !== ERole::USER) {
       $this->assertCount(1, $res['data']);
-      foreach($type as $key=>$value) {
-        $this->assertEquals($value, $res['data'][0][Str::camel($key)]);
+      $check = false;
+      foreach ($res['data'] as $item) {
+        if ($item['id'] == $type['id']) {
+          foreach($type as $key=>$value) {
+            $check = true;
+            $this->assertEquals($value, $item[Str::camel($key)]);
+          }
+        }
       }
+      $this->assertTrue($check);
     }
 
     if ($eRole !== ERole::USER) {
@@ -75,18 +85,26 @@ class ContentTest extends TestCase
     $data = Content::factory()->raw(['type_code' => $type['code']]);
     $data['languages'] = ContentLanguage::factory(2)->raw();
 
-    $this->post('/api/contents/', $data)->assertStatus($eRole !== ERole::USER ? 201 : 403);
+    $res = $this->post('/api/contents/', $data)->assertStatus($eRole !== ERole::USER ? 201 : 403);
     if ($eRole !== ERole::USER) {
       unset($data['languages']);
       $this->assertDatabaseHas('contents', $data);
+      $data = $res['data'];
     }
 
     $res = $this->get('/api/contents/')->assertStatus($eRole !== ERole::USER ? 200 : 403);
     if ($eRole !== ERole::USER) {
       $this->assertCount(1, $res['data']);
-      foreach($data as $key=>$value) {
-        $this->assertEquals($value, $res['data'][0][Str::camel($key)]);
+      $check = false;
+      foreach ($res['data'] as $item) {
+        if ($item['id'] == $data['id']) {
+          foreach($data as $key=>$value) {
+            $check = true;
+            $this->assertEquals($value, $item[Str::camel($key)]);
+          }
+        }
       }
+      $this->assertTrue($check);
     }
 
     if ($eRole === ERole::USER) $data = Content::factory()->create()->getAttributes();

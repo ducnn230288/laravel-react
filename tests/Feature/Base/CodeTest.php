@@ -50,15 +50,25 @@ class CodeTest extends TestCase
   {
     $auth = $this->signIn($eRole, $permissions);
     $type = CodeType::factory()->raw();
-    $this->post('/api/codes/types/', $type)->assertStatus($eRole !== ERole::USER ? 201 : 403);
-    if ($eRole !== ERole::USER) $this->assertDatabaseHas('code_types', $type);
+    $res = $this->post('/api/codes/types/', $type)->assertStatus($eRole !== ERole::USER ? 201 : 403);
+    if ($eRole !== ERole::USER) {
+      $this->assertDatabaseHas('code_types', $type);
+      $type = $res['data'];
+    }
 
     $res = $this->get('/api/codes/types/')->assertStatus($eRole !== ERole::USER ? 200 : 403);
     if ($eRole !== ERole::USER) {
       $this->assertCount(2, $res['data']);
-      foreach($type as $key=>$value) {
-        $this->assertEquals($value, $res['data'][1][Str::camel($key)]);
+      $check = false;
+      foreach ($res['data'] as $item) {
+        if ($item['id'] == $type['id']) {
+          foreach($type as $key=>$value) {
+            $check = true;
+            $this->assertEquals($value, $item[Str::camel($key)]);
+          }
+        }
       }
+      $this->assertTrue($check);
     }
 
     if ($eRole !== ERole::USER) {
@@ -72,15 +82,25 @@ class CodeTest extends TestCase
     if ($eRole !== ERole::USER) $this->assertDatabaseHas('code_types', $type);
 
     $data = Code::factory()->raw(['type_code' => $type['code']]);
-    $this->post('/api/codes/', $data)->assertStatus($eRole !== ERole::USER ? 201 : 403);
-    if ($eRole !== ERole::USER) $this->assertDatabaseHas('codes', $data);
+    $res = $this->post('/api/codes/', $data)->assertStatus($eRole !== ERole::USER ? 201 : 403);
+    if ($eRole !== ERole::USER) {
+      $this->assertDatabaseHas('codes', $data);
+      $data = $res['data'];
+    }
 
     $res = $this->get('/api/codes/')->assertStatus($eRole !== ERole::USER ? 200 : 403);
     if ($eRole !== ERole::USER) {
       $this->assertCount(2, $res['data']);
-      foreach($data as $key=>$value) {
-        $this->assertEquals($value, $res['data'][1][Str::camel($key)]);
+      $check = false;
+      foreach ($res['data'] as $item) {
+        if ($item['id'] == $data['id']) {
+          foreach($data as $key=>$value) {
+            $check = true;
+            $this->assertEquals($value, $item[Str::camel($key)]);
+          }
+        }
       }
+      $this->assertTrue($check);
     }
 
     $res = $this->get('/api/codes/'. $data['code']. '?include=type')->assertStatus($eRole !== ERole::USER ? 200 : 403);

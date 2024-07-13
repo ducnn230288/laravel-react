@@ -50,15 +50,25 @@ class UserTest extends TestCase
   {
     $auth = $this->signIn($eRole, $permissions);
     $role = UserRole::factory()->raw();
-    $this->post('/api/users/roles/', $role)->assertStatus($eRole !== ERole::USER ? 201 : 403);
-    if ($eRole !== ERole::USER) $this->assertDatabaseHas('user_roles', [...$role, 'permissions' => json_encode($role['permissions'])]);
+    $res = $this->post('/api/users/roles/', $role)->assertStatus($eRole !== ERole::USER ? 201 : 403);
+    if ($eRole !== ERole::USER) {
+      $this->assertDatabaseHas('user_roles', [...$role, 'permissions' => json_encode($role['permissions'])]);
+      $role = $res['data'];
+    }
 
     $res = $this->get('/api/users/roles/')->assertStatus($eRole !== ERole::USER ? 200 : 403);
     if ($eRole !== ERole::USER) {
       $this->assertCount(2, $res['data']);
-      foreach($role as $key=>$value) {
-        $this->assertEquals($value, $res['data'][1][Str::camel($key)]);
+      $check = false;
+      foreach ($res['data'] as $item) {
+        if ($item['id'] == $role['id']) {
+          foreach($role as $key=>$value) {
+            $check = true;
+            $this->assertEquals($value, $item[Str::camel($key)]);
+          }
+        }
       }
+      $this->assertTrue($check);
     }
 
     if ($eRole !== ERole::USER) {
@@ -72,16 +82,27 @@ class UserTest extends TestCase
     if ($eRole !== ERole::USER) $this->assertDatabaseHas('user_roles', [...$role, 'permissions' => json_encode($role['permissions'])]);
 
     $data = User::factory()->raw(['role_code' => $role['code']]);
-    $this->post('/api/users/', [...$data, 'password_confirmation' => 'Password1!'])->assertStatus($eRole !== ERole::USER ? 201 : 403);
+    $res = $this->post('/api/users/', [...$data, 'password_confirmation' => 'Password1!'])->assertStatus($eRole !== ERole::USER ? 201 : 403);
     unset($data['password']);
-    if ($eRole !== ERole::USER) $this->assertDatabaseHas('users', $data);
+    if ($eRole !== ERole::USER) {
+      $this->assertDatabaseHas('users', $data);
+      $data = $res['data'];
+      $data['dob'] = \Carbon\Carbon::parse($data['dob'])->format('Y-m-d H:i:s');
+    }
 
     $res = $this->get('/api/users/')->assertStatus($eRole !== ERole::USER ? 200 : 403);
     if ($eRole !== ERole::USER) {
       $this->assertCount(2, $res['data']);
-      foreach($data as $key=>$value) {
-        $this->assertEquals($value, $res['data'][1][Str::camel($key)]);
+      $check = false;
+      foreach ($res['data'] as $item) {
+        if ($item['id'] == $data['id']) {
+          foreach($data as $key=>$value) {
+            $check = true;
+            $this->assertEquals($value, $item[Str::camel($key)]);
+          }
+        }
       }
+      $this->assertTrue($check);
     }
 
     $id = $eRole !== ERole::USER ? $res['data'][1]['id'] : $auth['id'];

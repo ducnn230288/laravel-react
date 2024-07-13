@@ -4,8 +4,8 @@ import type { EStatusState } from '@/enums';
 import { useAppDispatch, useTypedSelector } from '@/services';
 import type { IPaginationQuery, IResponses } from '@/types';
 import { RDelete, RGet, RGetId, RPost, RPut } from './reducer';
+import { RDeleteType, RGetType, RGetTypeId, RPostType, RPutType } from './reducer-type';
 import { initialStateCrud, type StateCrud } from './state';
-import { RDeleteType, RGetType, RGetTypeId, RPostType, RPutType } from './type-reducer';
 
 const name = 'crud';
 const rGet = new RGet(name);

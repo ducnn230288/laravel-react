@@ -2,7 +2,7 @@ import { EStatusState } from '@/enums';
 import type { IPaginationQuery } from '@/types';
 import { API, routerLinks } from '@/utils';
 import { createAsyncThunk, type ActionReducerMapBuilder } from '@reduxjs/toolkit';
-import type { StateCrud } from '..';
+import type { StateCrud } from './state';
 
 class RReducer {
   public action;

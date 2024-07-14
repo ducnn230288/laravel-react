@@ -21,7 +21,7 @@ export default {
   // Use lf for line breaks Optional values ​​auto|lf|crlf|cr
   endOfLine: 'lf',
   // Indent lines with tabs instead of spaces
-    useTabs: false,
+  useTabs: false,
   // Use single quotes instead of double quotes in JSX
   jsxSingleQuote: true,
-}
+};

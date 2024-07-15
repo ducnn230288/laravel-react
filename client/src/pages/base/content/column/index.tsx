@@ -15,7 +15,7 @@ export default {
   useTable: (): IDataTable[] => {
     const sGlobal = SGlobal();
     const { t } = useTranslation('locale', { keyPrefix: 'pages.base.content' });
-    const sCrud = new SCrud<IMContent, IContentType>('Content', 'ContentType');
+    const sCrud = SCrud<IMContent, IContentType>('Content', 'ContentType');
 
     return [
       {
@@ -118,7 +118,7 @@ export default {
   },
   useForm: (type?: string): IForm[] => {
     const { t } = useTranslation('locale', { keyPrefix: 'pages.base.content' });
-    const sCrud = new SCrud<IMContent, IContentType>('Content', 'ContentType');
+    const sCrud = SCrud<IMContent, IContentType>('Content', 'ContentType');
 
     return [
       {

@@ -16,7 +16,7 @@ export default {
   useTable: (): IDataTable[] => {
     const sGlobal = SGlobal();
     const { t } = useTranslation('locale', { keyPrefix: 'pages.base.post' });
-    const sCrud = new SCrud<IMPost, IMPostType>('Post', 'PostType');
+    const sCrud = SCrud<IMPost, IMPostType>('Post', 'PostType');
 
     return [
       {
@@ -165,7 +165,7 @@ export default {
   },
   useForm: (): IForm[] => {
     const { t } = useTranslation('locale', { keyPrefix: 'pages.base.post' });
-    const sCrud = new SCrud<IMPost, IMPostType>('Post', 'PostType');
+    const sCrud = SCrud<IMPost, IMPostType>('Post', 'PostType');
 
     return [
       {

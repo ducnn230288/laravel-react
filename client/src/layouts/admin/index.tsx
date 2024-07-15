@@ -47,7 +47,7 @@ const CSide = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const listMenu = menus({ lang: sGlobal.language, permissions: sGlobal.user?.role?.permissions });
-  const sCrud = new SCrud('');
+  const sCrud = SCrud('');
 
   return (
     <Fragment>

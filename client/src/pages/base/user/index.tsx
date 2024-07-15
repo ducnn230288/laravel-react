@@ -6,7 +6,7 @@ import { SCrud, SGlobal } from '@/services';
 import type { IMUser, IMUserRole } from '@/types/model';
 
 const Page = () => {
-  const sCrud = new SCrud<IMUser, IMUserRole>('User', 'UserRole');
+  const sCrud = SCrud<IMUser, IMUserRole>('User', 'UserRole');
   useEffect(() => {
     return () => {
       sCrud.reset();
@@ -39,7 +39,7 @@ import { CDrawerForm } from '@/library/drawer';
 import { useTranslation } from 'react-i18next';
 import _column from './column';
 const Form = () => {
-  const sCrud = new SCrud<IMUser, IMUserRole>('User', 'UserRole');
+  const sCrud = SCrud<IMUser, IMUserRole>('User', 'UserRole');
   const request = JSON.parse(sCrud?.queryParams ?? '{}');
 
   useEffect(() => {
@@ -73,7 +73,7 @@ import { CSvgIcon } from '@/library/svg-icon';
 const Side = () => {
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.user' });
 
-  const sCrud = new SCrud<IMUser, IMUserRole>('User', 'UserRole');
+  const sCrud = SCrud<IMUser, IMUserRole>('User', 'UserRole');
   const request = JSON.parse(sCrud?.queryParams ?? '{}');
   const navigate = useNavigate();
   const location = useLocation();
@@ -131,7 +131,7 @@ import { CButton } from '@/library/button';
 import { CDataTable } from '@/library/data-table';
 import { KEY_ROLE } from '@/utils';
 const Main = () => {
-  const sCrud = new SCrud<IMUser, IMUserRole>('User', 'UserRole');
+  const sCrud = SCrud<IMUser, IMUserRole>('User', 'UserRole');
   const sGlobal = SGlobal();
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.user' });
   const request = JSON.parse(sCrud?.queryParams ?? '{}');

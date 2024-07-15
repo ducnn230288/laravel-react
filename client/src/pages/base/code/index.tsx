@@ -6,7 +6,7 @@ import { SCrud, SGlobal } from '@/services';
 import type { IMCode, IMCodeType } from '@/types/model';
 
 const Page = () => {
-  const sCrud = new SCrud<IMCode, IMCodeType>('Code', 'CodeType');
+  const sCrud = SCrud<IMCode, IMCodeType>('Code', 'CodeType');
 
   useEffect(() => {
     return () => {
@@ -40,7 +40,7 @@ import { CDrawerForm } from '@/library/drawer';
 import { useTranslation } from 'react-i18next';
 import _column from './column';
 const Form = () => {
-  const sCrud = new SCrud<IMCode, IMCodeType>('Code', 'CodeType');
+  const sCrud = SCrud<IMCode, IMCodeType>('Code', 'CodeType');
   const request = JSON.parse(sCrud?.queryParams ?? '{}');
 
   useEffect(() => {
@@ -73,7 +73,7 @@ import { useLocation, useNavigate } from 'react-router';
 const Side = () => {
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.code' });
 
-  const sCrud = new SCrud<IMCode, IMCodeType>('Code', 'CodeType');
+  const sCrud = SCrud<IMCode, IMCodeType>('Code', 'CodeType');
   const request = JSON.parse(sCrud?.queryParams ?? '{}');
   const navigate = useNavigate();
   const location = useLocation();
@@ -131,7 +131,7 @@ import { CButton } from '@/library/button';
 import { CDataTable } from '@/library/data-table';
 import { KEY_ROLE } from '@/utils';
 const Main = () => {
-  const sCrud = new SCrud<IMCode, IMCodeType>('Code', 'CodeType');
+  const sCrud = SCrud<IMCode, IMCodeType>('Code', 'CodeType');
   const sGlobal = SGlobal();
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.code' });
   const request = JSON.parse(sCrud?.queryParams ?? '{}');

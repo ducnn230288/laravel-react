@@ -6,7 +6,7 @@ import { SCrud, SGlobal } from '@/services';
 import type { IContentType, IMContent } from '@/types/model';
 
 const Page = () => {
-  const sCrud = new SCrud<IMContent, IContentType>('Content', 'ContentType');
+  const sCrud = SCrud<IMContent, IContentType>('Content', 'ContentType');
   useEffect(() => {
     return () => {
       sCrud.reset();
@@ -39,7 +39,7 @@ import { CDrawerForm } from '@/library/drawer';
 import { useTranslation } from 'react-i18next';
 import _column from './column';
 const Form = () => {
-  const sCrud = new SCrud<IMContent, IContentType>('Content', 'ContentType');
+  const sCrud = SCrud<IMContent, IContentType>('Content', 'ContentType');
   const request = JSON.parse(sCrud?.queryParams ?? '{}');
 
   useEffect(() => {
@@ -72,7 +72,7 @@ import { useLocation, useNavigate } from 'react-router';
 const Side = () => {
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.content' });
 
-  const sCrud = new SCrud<IMContent, IContentType>('Content', 'ContentType');
+  const sCrud = SCrud<IMContent, IContentType>('Content', 'ContentType');
   const request = JSON.parse(sCrud?.queryParams ?? '{}');
   const navigate = useNavigate();
   const location = useLocation();
@@ -130,7 +130,7 @@ import { CButton } from '@/library/button';
 import { CDataTable } from '@/library/data-table';
 import { KEY_ROLE } from '@/utils';
 const Main = () => {
-  const sCrud = new SCrud<IMContent, IContentType>('Content', 'ContentType');
+  const sCrud = SCrud<IMContent, IContentType>('Content', 'ContentType');
   const sGlobal = SGlobal();
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.content' });
   const request = JSON.parse(sCrud?.queryParams ?? '{}');

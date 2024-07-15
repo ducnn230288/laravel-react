@@ -15,7 +15,7 @@ export default {
   useTable: (): IDataTable[] => {
     const sGlobal = SGlobal();
     const { t } = useTranslation('locale', { keyPrefix: 'pages.base.user' });
-    const sCrud = new SCrud<IMUser, IMUserRole>('User', 'UserRole');
+    const sCrud = SCrud<IMUser, IMUserRole>('User', 'UserRole');
 
     return [
       {
@@ -145,7 +145,7 @@ export default {
   },
   useForm: (): IForm[] => {
     const { t } = useTranslation('locale', { keyPrefix: 'pages.base.user' });
-    const sCrud = new SCrud<IMUser, IMUserRole>('User', 'UserRole');
+    const sCrud = SCrud<IMUser, IMUserRole>('User', 'UserRole');
 
     return [
       {

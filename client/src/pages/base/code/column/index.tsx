@@ -16,7 +16,7 @@ export default {
   useTable: (): IDataTable[] => {
     const sGlobal = SGlobal();
     const { t } = useTranslation('locale', { keyPrefix: 'pages.base.code' });
-    const sCrud = new SCrud<IMCode, IMCodeType>('Code', 'CodeType');
+    const sCrud = SCrud<IMCode, IMCodeType>('Code', 'CodeType');
 
     return [
       {

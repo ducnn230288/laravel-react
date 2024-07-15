@@ -9,7 +9,7 @@ import { SCrud, SGlobal } from '@/services';
 import type { IMPost, IMPostType } from '@/types/model';
 
 const Page = () => {
-  const sCrud = new SCrud<IMPost, IMPostType>('Post', 'PostType');
+  const sCrud = SCrud<IMPost, IMPostType>('Post', 'PostType');
   useEffect(() => {
     return () => {
       sCrud.reset();
@@ -43,7 +43,7 @@ import { CSvgIcon } from '@/library/svg-icon';
 import { useTranslation } from 'react-i18next';
 import _column from './column';
 const FormPost = () => {
-  const sCrud = new SCrud<IMPost, IMPostType>('Post', 'PostType');
+  const sCrud = SCrud<IMPost, IMPostType>('Post', 'PostType');
   const request = JSON.parse(sCrud?.queryParams ?? '{}');
 
   useEffect(() => {
@@ -71,7 +71,7 @@ const FormPost = () => {
 
 import _columnType from './column/type';
 const FormPostType = () => {
-  const sCrud = new SCrud<IMPost, IMPostType>('Post', 'PostType');
+  const sCrud = SCrud<IMPost, IMPostType>('Post', 'PostType');
 
   const request = JSON.parse(sCrud?.typeQueryParams ?? '{}');
   useEffect(() => {
@@ -104,7 +104,7 @@ import { useLocation, useNavigate } from 'react-router';
 const Side = () => {
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.post' });
 
-  const sCrud = new SCrud<IMPost, IMPostType>('Post', 'PostType');
+  const sCrud = SCrud<IMPost, IMPostType>('Post', 'PostType');
   const request = JSON.parse(sCrud?.queryParams ?? '{}');
   const navigate = useNavigate();
   const location = useLocation();
@@ -208,7 +208,7 @@ const Side = () => {
 import { CButton } from '@/library/button';
 import { CDataTable } from '@/library/data-table';
 const Main = () => {
-  const sCrud = new SCrud<IMPost, IMPostType>('Post', 'PostType');
+  const sCrud = SCrud<IMPost, IMPostType>('Post', 'PostType');
   const sGlobal = SGlobal();
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.post' });
   const request = JSON.parse(sCrud?.queryParams ?? '{}');

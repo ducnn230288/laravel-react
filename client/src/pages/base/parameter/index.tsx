@@ -7,7 +7,7 @@ import { SCrud } from '@/services';
 import type { IMParameter } from '@/types/model';
 
 const Page = () => {
-  const sCrud = new SCrud<IMParameter>('Parameter');
+  const sCrud = SCrud<IMParameter>('Parameter');
   const location = useLocation();
   useEffect(() => {
     sCrud.get({});
@@ -43,7 +43,7 @@ import queryString from 'query-string';
 import { CSvgIcon } from '@/library/svg-icon';
 const Side = () => {
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.parameter' });
-  const sCrud = new SCrud<IMParameter>('Parameter');
+  const sCrud = SCrud<IMParameter>('Parameter');
   const request = JSON.parse(sCrud?.queryParams ?? '{}');
   const navigate = useNavigate();
   const location = useLocation();
@@ -101,7 +101,7 @@ import { EFormType } from '@/enums';
 import { CForm } from '@/library/form';
 const Main = () => {
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.parameter' });
-  const sCrud = new SCrud<IMParameter>('Parameter');
+  const sCrud = SCrud<IMParameter>('Parameter');
 
   return (
     <div className='card'>

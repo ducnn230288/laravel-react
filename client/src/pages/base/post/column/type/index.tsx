@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 export default {
   useForm: (): IForm[] => {
     const { t } = useTranslation('locale', { keyPrefix: 'pages.base.post' });
-    const sCrud = new SCrud<IMPost, IMPostType>('Post', 'PostType');
+    const sCrud = SCrud<IMPost, IMPostType>('Post', 'PostType');
 
     return [
       {

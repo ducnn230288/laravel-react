@@ -35,7 +35,7 @@ const groupButton = ({
     />
     <CButton
       isTiny={true}
-      icon={<CSvgIcon name='search' size={12} className='fill-primary-content' />}
+      icon={<CSvgIcon name='search' size={12} className='fill-text-base-100' />}
       text={t('Search')}
       onClick={() => confirm(value)}
     />

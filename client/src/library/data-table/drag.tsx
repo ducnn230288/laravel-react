@@ -2,7 +2,10 @@ import { DndContext } from '@dnd-kit/core';
 import { restrictToHorizontalAxis } from '@dnd-kit/modifiers';
 import React, { type PropsWithChildren } from 'react';
 
-export const CWrapper = ({ children, tableRef }: PropsWithChildren<{ tableRef: React.RefObject<HTMLDivElement> }>) => {
+export const CTableDrag = ({
+  children,
+  tableRef,
+}: PropsWithChildren<{ tableRef: React.RefObject<HTMLDivElement> }>) => {
   let indexLeft: number;
   let left: any;
   let wLeft: number;

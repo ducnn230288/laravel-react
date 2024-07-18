@@ -53,10 +53,13 @@ const CSide = () => {
     <Fragment>
       <div className={classNames('overload', { active: !sGlobal.isCollapseMenu })}></div>
       <aside className={classNames({ active: sGlobal.isCollapseMenu })}>
-        <a href='/vn/dashboard' className={classNames('logo', { active: sGlobal.isCollapseMenu })}>
+        <button
+          onClick={() => navigate(`/${lang}${routerLinks('Dashboard')}`, { replace: true })}
+          className={classNames('logo', { active: sGlobal.isCollapseMenu })}
+        >
           <CSvgIcon name='logo' />
           <h1 className={classNames({ active: sGlobal.isCollapseMenu })}>{APP_NAME}</h1>
-        </a>
+        </button>
         <Spin size='small' spinning={sCrud.isLoading || sCrud.typeIsLoading}>
           <Scrollbar>
             <Menu

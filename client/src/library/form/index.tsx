@@ -124,7 +124,7 @@ export const CForm = ({
               text={textSubmit ?? t('Save')}
               onClick={() => form?.submit()}
               disabled={disableSubmit || spinning}
-              className={'text-primary-content bg-primary hover:bg-primary/90 leading-4 w-full rounded-lg !h-12'}
+              className={'text-base-100 bg-primary hover:bg-primary/90 leading-4 w-full rounded-lg !h-12'}
             />
           )}
         </div>

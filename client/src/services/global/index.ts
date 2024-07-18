@@ -29,9 +29,6 @@ export const globalSlice = createSlice({
         i18n.changeLanguage(language);
         state.formatDate = formatDate;
         state.locale = locale;
-        if (state.routeLanguage) state.pathname = state.routeLanguage[language];
-        else
-          state.pathname = location.hash.substring(1).replace('/' + state.language + '/', '/' + action.payload + '/');
         state.language = language;
       }
     },

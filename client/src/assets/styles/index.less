@@ -33,7 +33,7 @@ h4 {
   @apply border border-current text-sm rounded-lg px-2 leading-4;
 
   &.ant-btn-primary {
-    @apply bg-primary text-primary-content;
+    @apply bg-primary text-base-100;
 
     &:hover {
       @apply bg-primary/90;
@@ -173,7 +173,7 @@ h4 {
   .ant-menu-sub .ant-menu-item:not(.ant-menu-submenu-selected) {
     &::before {
       content: '';
-      @apply mr-2 rounded-lg ~"-ml-2.5 w-1.5 h-0.5 bg-neutral/30";
+      @apply mr-2 rounded-lg ~"-ml-2.5 w-1.5 h-0.5 bg-base-content/30";
     }
   }
   .ant-menu-sub {
@@ -263,7 +263,7 @@ h4 {
     .ant-btn {
       @apply h-6 px-2;
       &.ant-btn-primary {
-        @apply text-primary-content bg-primary;
+        @apply text-base-100 bg-primary;
         &:hover {
           @apply bg-primary/90;
         }
@@ -272,7 +272,7 @@ h4 {
   }
 }
 .btn {
-  @apply rounded-lg flex items-center justify-center ~'gap-1.5' text-primary-content bg-primary hover:bg-primary/90;
+  @apply rounded-lg flex items-center justify-center ~'gap-1.5' text-base-100 bg-primary hover:bg-primary/90;
 }
 svg {
   fill: currentColor;

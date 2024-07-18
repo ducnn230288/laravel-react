@@ -14,9 +14,9 @@ import type { IDataTable, IPaginationQuery, ITableRefObject } from '@/types';
 import { cleanObjectKeyNull, getSizePageByHeight, uuidv4 } from '@/utils';
 import CPagination from '../pagination';
 
+import { CTableDrag } from './drag';
 import { formatColumns, formatFilter } from './format';
 import { CSearch } from './search';
-import { CWrapper } from './wrapper';
 
 export const CDataTable = forwardRef(
   (
@@ -187,7 +187,7 @@ export const CDataTable = forwardRef(
           </div>
         )}
 
-        <CWrapper tableRef={tableRef}>
+        <CTableDrag tableRef={tableRef}>
           <Table
             onRow={onRow}
             components={{ header: { cell: componentsCell } }}
@@ -221,7 +221,7 @@ export const CDataTable = forwardRef(
               }
             />
           )}
-        </CWrapper>
+        </CTableDrag>
       </div>
     );
   },

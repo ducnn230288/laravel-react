@@ -9,11 +9,8 @@ export interface StateGlobal {
   [selector: string]: any;
   user?: IUser;
   data?: IResetPassword & IUser;
-  routeLanguage?: Record<string, string>;
   isLoading?: boolean;
-  isVisible?: boolean;
   status?: EStatusState;
-  pathname?: string;
   formatDate?: string;
   language?: string;
   locale?: typeof viVN | typeof enUS;
@@ -33,8 +30,6 @@ export const initialStateGlobal: StateGlobal = {
   data: JSON.parse(localStorage.getItem(KEY_USER) ?? '{}'),
   user: JSON.parse(localStorage.getItem(KEY_USER) ?? '{}'),
   isLoading: false,
-  isVisible: false,
   status: EStatusState.idle,
-  pathname: '',
   ...checkLanguage(lang),
 };

@@ -54,14 +54,8 @@ export const CDrawerForm = forwardRef(
         closeIcon={null}
         destroyOnClose={true}
       >
-        <Scrollbar>
-          <CForm
-            className='intro-x'
-            values={{ ...facade[keyData] }}
-            formAnt={form}
-            columns={columns}
-            spinning={facade[keyIsLoading]}
-          />
+        <Scrollbar className='intro-x'>
+          <CForm values={{ ...facade[keyData] }} formAnt={form} columns={columns} spinning={facade[keyIsLoading]} />
         </Scrollbar>
       </Drawer>
     );
@@ -70,7 +64,7 @@ export const CDrawerForm = forwardRef(
 CDrawerForm.displayName = 'CDrawerForm';
 interface Type {
   facade: any;
-  size?: undefined | 'large';
+  size?: 'large';
   keyState?: string;
   keyIsLoading?: string;
   keyData?: string;

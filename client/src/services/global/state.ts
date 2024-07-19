@@ -4,6 +4,7 @@ import { KEY_USER, lang } from '@/utils';
 import enUS from 'antd/lib/locale/en_US';
 import viVN from 'antd/lib/locale/vi_VN';
 import dayjs from 'dayjs';
+import { enLocale, viLocale } from './locale';
 
 export interface StateGlobal {
   [selector: string]: any;
@@ -11,19 +12,19 @@ export interface StateGlobal {
   data?: IResetPassword & IUser;
   isLoading?: boolean;
   status?: EStatusState;
-  formatDate?: string;
   language?: string;
   locale?: typeof viVN | typeof enUS;
+  localeDate?: typeof enLocale | typeof viLocale;
   isCollapseMenu?: boolean;
 }
 
 export const checkLanguage = (language: string) => {
-  const formatDate = language === 'vn' ? 'DD-MM-YYYY' : 'MM-DD-YYYY';
-  const locale = language === 'vn' ? viVN : enUS;
-  dayjs.locale(language === 'vn' ? 'vi' : language);
+  const locale = language === 'vi' ? viVN : enUS;
+  const localeDate = language === 'vi' ? viLocale : enLocale;
+  dayjs.locale(language);
   localStorage.setItem('i18nextLng', language);
   document.querySelector('html')?.setAttribute('lang', language);
-  return { language, formatDate, locale };
+  return { language, locale, localeDate };
 };
 
 export const initialStateGlobal: StateGlobal = {

@@ -217,6 +217,16 @@ const Main = () => {
     <div className='card'>
       <div className='body'>
         <CDataTable
+          action={{
+            isDisable: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_POST_UPDATE) && sCrud.put,
+            isEdit: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_POST_UPDATE) && sCrud.getById,
+            isDelete: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_POST_DESTROY) && sCrud.delete,
+            label: t('Content'),
+            name: data =>
+              data.languages?.length
+                ? data.languages?.find((item: any) => item?.language === localStorage.getItem('i18nextLng')).name
+                : '',
+          }}
           defaultRequest={{ include: 'languages' }}
           facade={sCrud}
           paginationDescription={(from: number, to: number, total: number) => t('Pagination post', { from, to, total })}

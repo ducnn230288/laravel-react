@@ -205,7 +205,7 @@ export const CUpload = ({
             {showBtnDelete(file) && (
               <Popconfirm
                 destroyTooltipOnHide={true}
-                title={t('Are you sure want delete?')}
+                title={t('Are you sure want delete?', { name: file.name, label: t('File').toLowerCase() })}
                 onConfirm={async () => {
                   if (deleteFile && file?.id) {
                     const data = await deleteFile(file?.id);

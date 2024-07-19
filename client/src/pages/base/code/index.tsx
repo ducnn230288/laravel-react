@@ -140,6 +140,13 @@ const Main = () => {
     <div className='card'>
       <div className='body'>
         <CDataTable
+          action={{
+            isDisable: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_CODE_UPDATE) && sCrud.put,
+            isEdit: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_CODE_UPDATE) && sCrud.getById,
+            isDelete: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_CODE_DESTROY) && sCrud.delete,
+            label: t('Code'),
+            name: data => data.name,
+          }}
           facade={sCrud}
           paginationDescription={(from: number, to: number, total: number) => t('Pagination code', { from, to, total })}
           columns={_column.useTable()}

@@ -4,7 +4,6 @@ import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { EFormType } from '@/enums';
-import { SGlobal } from '@/services';
 import type { IForm } from '@/types';
 import { convertFormValue } from '@/utils';
 
@@ -37,7 +36,6 @@ export const CForm = ({
   }, [values]);
 
   const { t } = useTranslation('locale', { keyPrefix: 'library' });
-  const sGlobal = SGlobal();
 
   const handFinish = (values: any) => {
     values = convertFormValue(columns, values);
@@ -92,7 +90,6 @@ export const CForm = ({
                         form,
                         t,
                         widthLabel,
-                        formatDate: sGlobal.formatDate!,
                       })}
                     </div>
                   ),

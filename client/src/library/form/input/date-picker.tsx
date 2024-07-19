@@ -1,6 +1,7 @@
 import { DatePicker, type FormInstance } from 'antd';
 import dayjs from 'dayjs';
 
+import { SGlobal } from '@/services';
 import { uuidv4 } from '@/utils';
 
 const Component = ({
@@ -15,6 +16,8 @@ const Component = ({
   disabled,
   ...props
 }: Type) => {
+  const sGlobal = SGlobal();
+
   return (
     <DatePicker
       id={id}
@@ -23,6 +26,7 @@ const Component = ({
       disabledDate={disabledDate}
       showTime={showTime}
       picker={picker}
+      locale={sGlobal.localeDate}
       disabled={disabled}
       {...props}
       onOpenChange={e => {

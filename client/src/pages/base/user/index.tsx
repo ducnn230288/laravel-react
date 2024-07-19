@@ -140,6 +140,13 @@ const Main = () => {
     <div className='card'>
       <div className='body'>
         <CDataTable
+          action={{
+            isDisable: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_USER_UPDATE) && sCrud.put,
+            isEdit: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_USER_UPDATE) && sCrud.getById,
+            isDelete: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_USER_DESTROY) && sCrud.delete,
+            label: t('User'),
+            name: data => data.name,
+          }}
           defaultRequest={{ include: 'position' }}
           facade={sCrud}
           paginationDescription={(from: number, to: number, total: number) => t('Pagination user', { from, to, total })}

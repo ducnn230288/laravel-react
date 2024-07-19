@@ -6,6 +6,7 @@ export const APP_NAME = import.meta.env.VITE_APP_NAME;
 export const LINK_API = import.meta.env.VITE_URL_API;
 export const LIST_LANGUAGE = import.meta.env.VITE_URL_LANGUAGES.split(',');
 export const LANGUAGE = import.meta.env.VITE_URL_LANGUAGE;
+export const FORMAT_DATE = import.meta.env.VITE_APP_FORMAT_DATE;
 
 export enum KEY_ROLE {
   P_ADDRESS_PROVINCE_INDEX = '92cf77b7-aac5-43b1-8385-a6fdbb5690aa',

@@ -15,7 +15,6 @@ export const generateForm = ({
   form,
   t,
   widthLabel,
-  formatDate,
 }: {
   item: IForm;
   index: number;
@@ -25,7 +24,6 @@ export const generateForm = ({
   form: FormInstance;
   t: TFunction<'locale', 'library'>;
   widthLabel?: string;
-  formatDate: string;
 }): any => {
   if (!!item?.formItem?.condition && !item?.formItem?.condition({ value: values[item.name], form, index, values }))
     return;
@@ -100,14 +98,13 @@ export const generateForm = ({
           item,
           values,
           name: otherProps.name,
-          formatDate: formatDate,
           form,
           generateForm,
           t,
         })}
       </Form.Item>
     ) : (
-      generateInput({ item, values, name: otherProps.name, formatDate: formatDate, form, generateForm, t })
+      generateInput({ item, values, name: otherProps.name, form, generateForm, t })
     );
   }
   return null;

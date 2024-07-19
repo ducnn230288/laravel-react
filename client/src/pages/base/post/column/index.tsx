@@ -1,22 +1,16 @@
-import { Popconfirm } from 'antd';
-import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 import slug from 'slug';
 
-import { EFormRuleType, EFormType, ETableAlign, ETableFilterType } from '@/enums';
+import { EFormRuleType, EFormType, ETableFilterType } from '@/enums';
 import { CAvatar } from '@/library/avatar';
-import { CSvgIcon } from '@/library/svg-icon';
-import { CTooltip } from '@/library/tooltip';
-import { SCrud, SGlobal } from '@/services';
+import { SCrud } from '@/services';
 import type { IDataTable, IForm } from '@/types';
 import type { IMPost, IMPostType } from '@/types/model';
-import { KEY_ROLE, routerLinks } from '@/utils';
+import { routerLinks } from '@/utils';
 
 export default {
   useTable: (): IDataTable[] => {
-    const sGlobal = SGlobal();
     const { t } = useTranslation('locale', { keyPrefix: 'pages.base.post' });
-    const sCrud = SCrud<IMPost, IMPostType>('Post', 'PostType');
 
     return [
       {
@@ -56,109 +50,7 @@ export default {
           width: 120,
           filter: { type: ETableFilterType.date },
           sorter: true,
-          render: text => (
-            <CTooltip title={dayjs(text).format(sGlobal.formatDate + ' HH:mm:ss')}>
-              {dayjs(text).format(sGlobal.formatDate)}
-            </CTooltip>
-          ),
-        },
-      },
-      {
-        title: t('Action'),
-        tableItem: {
-          width: 100,
-          align: ETableAlign.center,
-          render: (_: string, data) => (
-            <div className={'action'}>
-              {sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_POST_UPDATE) && (
-                <CTooltip
-                  title={t(data.isDisable ? 'Disabled post' : 'Enabled post', {
-                    name: data.languages?.length
-                      ? data.languages?.find((item: any) => item?.language === localStorage.getItem('i18nextLng')).name
-                      : '',
-                  })}
-                >
-                  <Popconfirm
-                    destroyTooltipOnHide={true}
-                    title={t(!data.isDisable ? 'Are you sure want disable post?' : 'Are you sure want enable post?', {
-                      name: data.languages?.length
-                        ? data.languages?.find((item: any) => item?.language === localStorage.getItem('i18nextLng'))
-                            .name
-                        : '',
-                    })}
-                    onConfirm={() => sCrud.put({ id: data.id, isDisable: !data.isDisable })}
-                  >
-                    <button
-                      title={t(data.isDisable ? 'Disabled post' : 'Enabled post', {
-                        name: data.languages?.length
-                          ? data.languages?.find((item: any) => item?.language === localStorage.getItem('i18nextLng'))
-                              .name
-                          : '',
-                      })}
-                    >
-                      {data.isDisable ? (
-                        <CSvgIcon name='disable' className='warning' />
-                      ) : (
-                        <CSvgIcon name='check' className='success' />
-                      )}
-                    </button>
-                  </Popconfirm>
-                </CTooltip>
-              )}
-              {sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_POST_UPDATE) && (
-                <CTooltip
-                  title={t('Edit Post', {
-                    name: data.languages?.length
-                      ? data.languages?.find((item: any) => item?.language === localStorage.getItem('i18nextLng')).name
-                      : '',
-                  })}
-                >
-                  <button
-                    title={t('Edit Post', {
-                      name: data.languages?.length
-                        ? data.languages?.find((item: any) => item?.language === localStorage.getItem('i18nextLng'))
-                            .name
-                        : '',
-                    })}
-                    onClick={() => sCrud.getById({ id: data.id, params: { include: 'languages' } })}
-                  >
-                    <CSvgIcon name='edit' className='primary' />
-                  </button>
-                </CTooltip>
-              )}
-              {sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_POST_DESTROY) && (
-                <CTooltip
-                  title={t('Delete post', {
-                    name: data.languages?.length
-                      ? data.languages?.find((item: any) => item?.language === localStorage.getItem('i18nextLng')).name
-                      : '',
-                  })}
-                >
-                  <Popconfirm
-                    destroyTooltipOnHide={true}
-                    title={t('Are you sure want delete post?', {
-                      name: data.languages?.length
-                        ? data.languages?.find((item: any) => item?.language === localStorage.getItem('i18nextLng'))
-                            .name
-                        : '',
-                    })}
-                    onConfirm={() => sCrud.delete(data.id)}
-                  >
-                    <button
-                      title={t('Delete post', {
-                        name: data.languages?.length
-                          ? data.languages?.find((item: any) => item?.language === localStorage.getItem('i18nextLng'))
-                              .name
-                          : '',
-                      })}
-                    >
-                      <CSvgIcon name='trash' className='error' />
-                    </button>
-                  </Popconfirm>
-                </CTooltip>
-              )}
-            </div>
-          ),
+          isDateTime: true,
         },
       },
     ];

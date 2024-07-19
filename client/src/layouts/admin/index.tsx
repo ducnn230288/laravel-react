@@ -131,6 +131,27 @@ const CHeader = () => {
     },
   ];
 
+  const listLanguage = [
+    {
+      key: 'en',
+      label: (
+        <button onClick={() => sGlobal.setLanguage('en')}>
+          <CSvgIcon name='en' size={20} className='rounded-lg' />
+          {t('en')}
+        </button>
+      ),
+    },
+    {
+      key: 'vi',
+      label: (
+        <button onClick={() => sGlobal.setLanguage('vi')}>
+          <CSvgIcon name='vi' size={20} className='rounded-lg' />
+          {t('vi')}
+        </button>
+      ),
+    },
+  ];
+
   return (
     <header>
       <button
@@ -146,29 +167,11 @@ const CHeader = () => {
         <Dropdown
           trigger={['click']}
           menu={{
-            items: [
-              {
-                key: 'language',
-                label: (
-                  <button onClick={() => sGlobal.setLanguage(sGlobal.language === 'vn' ? 'en' : 'vn')}>
-                    {sGlobal.language === 'en' ? (
-                      <CSvgIcon name='vn' size={20} className='rounded-lg' />
-                    ) : (
-                      <CSvgIcon name='us' size={20} className='rounded-lg' />
-                    )}
-                    {t(sGlobal.language === 'vn' ? 'en' : 'vn')}
-                  </button>
-                ),
-              },
-            ],
+            items: listLanguage.filter(item => item.key !== sGlobal.language),
           }}
         >
           <button>
-            {sGlobal.language === 'en' ? (
-              <CSvgIcon name='us' size={24} className='rounded-lg' />
-            ) : (
-              <CSvgIcon name='vn' size={24} className='rounded-lg' />
-            )}
+            <CSvgIcon name={sGlobal.language!} size={24} className='rounded-lg' />
           </button>
         </Dropdown>
         <button onClick={changeTheme}>

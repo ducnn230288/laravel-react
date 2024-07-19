@@ -25,11 +25,11 @@ export const globalSlice = createSlice({
     },
     setLanguage: (state, action) => {
       if (action.payload !== state.language) {
-        const { language, formatDate, locale } = checkLanguage(action.payload);
+        const { language, locale, localeDate } = checkLanguage(action.payload);
         i18n.changeLanguage(language);
-        state.formatDate = formatDate;
         state.locale = locale;
         state.language = language;
+        state.localeDate = localeDate;
       }
     },
   },

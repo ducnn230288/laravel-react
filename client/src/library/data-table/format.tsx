@@ -1,9 +1,12 @@
 import type { FilterValue } from 'antd/lib/table/interface';
+import dayjs from 'dayjs';
 import type { TFunction } from 'i18next';
 
 import { ETableFilterType } from '@/enums';
 import type { IDataTable, IPaginationQuery } from '@/types';
 
+import { FORMAT_DATE } from '@/utils';
+import { CTooltip } from '../tooltip';
 import { getColumnSearchCheckbox, getColumnSearchDate, getColumnSearchInput, getColumnSearchRadio } from './filter';
 
 export const formatColumns = ({
@@ -78,6 +81,11 @@ export const formatColumns = ({
         item.onCell = record => ({
           className: record?.id && record?.id === facade?.data?.id ? '!bg-primary/20' : '',
         });
+      }
+      if (item?.isDateTime) {
+        item.render = text => (
+          <CTooltip title={dayjs(text).format(FORMAT_DATE + ' HH:mm:ss')}>{dayjs(text).format(FORMAT_DATE)}</CTooltip>
+        );
       }
       return {
         title: col.title,

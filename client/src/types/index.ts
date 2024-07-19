@@ -53,6 +53,7 @@ export interface ITableItem {
   render?: (text: any, item: any) => JSX.Element | string;
   defaultSortOrder?: string;
   defaultFilteredValue?: string;
+  isDateTime?: boolean;
 }
 export interface ITableItemFilter {
   type?: ETableFilterType;

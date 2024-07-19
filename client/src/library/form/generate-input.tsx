@@ -14,6 +14,7 @@ import type { TFunction } from 'i18next';
 
 import { EFormType } from '@/enums';
 import type { IForm } from '@/types';
+import { FORMAT_DATE } from '@/utils';
 import { CSvgIcon } from '../svg-icon';
 import { CUpload } from '../upload';
 import {
@@ -33,7 +34,6 @@ export const generateInput = ({
   item,
   values,
   name,
-  formatDate,
   generateForm,
   form,
   t,
@@ -41,7 +41,6 @@ export const generateInput = ({
   item: IForm;
   values: any;
   name: string;
-  formatDate: string;
   generateForm: any;
   form: FormInstance;
   t: TFunction<'locale', 'library'>;
@@ -116,7 +115,7 @@ export const generateInput = ({
       case EFormType.addable:
       case EFormType.date:
       case EFormType.dateRange:
-        return switchCaseMore1({ item, values, formatDate, generateForm, form, t });
+        return switchCaseMore1({ item, values, generateForm, form, t });
 
       case EFormType.treeSelect:
       case EFormType.selectTable:
@@ -146,14 +145,12 @@ export const generateInput = ({
 const switchCaseMore1 = ({
   item,
   values,
-  formatDate,
   generateForm,
   form,
   t,
 }: {
   item: IForm;
   values: any;
-  formatDate: string;
   generateForm: any;
   form: FormInstance;
   t: TFunction<'locale', 'library'>;
@@ -192,7 +189,7 @@ const switchCaseMore1 = ({
         return (
           <CIDatePicker
             format={
-              formatDate + ((!formItem.picker || formItem.picker === 'date') && formItem.showTime ? ' HH:mm' : '')
+              FORMAT_DATE + ((!formItem.picker || formItem.picker === 'date') && formItem.showTime ? ' HH:mm' : '')
             }
             onChange={(date: any) => formItem.onChange?.(date, form)}
             disabledDate={(current: any) => (formItem.disabledDate ? formItem.disabledDate(current, form) : false)}
@@ -220,7 +217,7 @@ const switchCaseMore1 = ({
             onOpenChange={open => {
               if (!open && form.getFieldValue(item.name)?.length < 2) form.resetFields([item.name]);
             }}
-            format={formatDate + (formItem.showTime ? ' HH:mm' : '')}
+            format={FORMAT_DATE + (formItem.showTime ? ' HH:mm' : '')}
             disabledDate={current => (formItem.disabledDate ? formItem.disabledDate(current, form) : false)}
             defaultValue={
               formItem.initialValues && [dayjs(formItem.initialValues.start), dayjs(formItem.initialValues.end)]

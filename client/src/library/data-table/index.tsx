@@ -1,5 +1,5 @@
 import { useDraggable } from '@dnd-kit/core';
-import { Table } from 'antd';
+import { Popconfirm, Table } from 'antd';
 import type { SorterResult } from 'antd/lib/table/interface';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -14,6 +14,9 @@ import type { IDataTable, IPaginationQuery, ITableRefObject } from '@/types';
 import { cleanObjectKeyNull, getSizePageByHeight, uuidv4 } from '@/utils';
 import CPagination from '../pagination';
 
+import { ETableAlign } from '@/enums';
+import { CSvgIcon } from '../svg-icon';
+import { CTooltip } from '../tooltip';
 import { CTableDrag } from './drag';
 import { formatColumns, formatFilter } from './format';
 import { CSearch } from './search';
@@ -33,6 +36,7 @@ export const CDataTable = forwardRef(
       showSearch = true,
       onRow,
       isLoading,
+      action,
     }: Type,
     ref: Ref<ITableRefObject>,
   ) => {
@@ -108,6 +112,77 @@ export const CDataTable = forwardRef(
     const valueFilter = useRef<{ [selector: string]: boolean }>({});
     const typeKeys = useRef<Record<string, string>>({});
     const timeoutSearch = useRef<ReturnType<typeof setTimeout>>();
+    if (action?.label) {
+      columns.push({
+        title: t('Action'),
+        tableItem: {
+          width: 100,
+          align: ETableAlign.center,
+          render: (_: string, data) => (
+            <div className={'action'}>
+              {!!action.isDisable && (
+                <CTooltip
+                  title={t(data.isDisable ? 'Disabled' : 'Enabled', {
+                    name: action.name(data),
+                    label: action.label.toLowerCase(),
+                  })}
+                >
+                  <Popconfirm
+                    destroyTooltipOnHide={true}
+                    title={t(!data.isDisable ? 'Are you sure want disable?' : 'Are you sure want enable?', {
+                      name: action.name(data),
+                      label: action.label.toLowerCase(),
+                    })}
+                    onConfirm={() => action.isDisable({ id: data.code, isDisable: !data.isDisable })}
+                  >
+                    <button
+                      title={t(data.isDisable ? 'Disabled' : 'Enabled', {
+                        name: action.name(data),
+                        label: action.label.toLowerCase(),
+                      })}
+                    >
+                      {data.isDisable ? (
+                        <CSvgIcon name='disable' className='warning' />
+                      ) : (
+                        <CSvgIcon name='check' className='success' />
+                      )}
+                    </button>
+                  </Popconfirm>
+                </CTooltip>
+              )}
+
+              {!!action.isEdit && (
+                <CTooltip title={t('Edit', { name: action.name(data), label: action.label.toLowerCase() })}>
+                  <button
+                    title={t('Edit', { name: action.name(data), label: action.label.toLowerCase() })}
+                    onClick={() => action.isEdit({ id: data.code })}
+                  >
+                    <CSvgIcon name='edit' className='primary' />
+                  </button>
+                </CTooltip>
+              )}
+
+              {!!action.isDelete && (
+                <CTooltip title={t('Delete', { name: action.name(data), label: action.label.toLowerCase() })}>
+                  <Popconfirm
+                    destroyTooltipOnHide={true}
+                    title={t('Are you sure want delete?', {
+                      name: action.name(data),
+                      label: action.label.toLowerCase(),
+                    })}
+                    onConfirm={() => action.isDelete(data.code)}
+                  >
+                    <button title={t('Delete', { name: action.name(data), label: action.label.toLowerCase() })}>
+                      <CSvgIcon name='trash' className='error' />
+                    </button>
+                  </Popconfirm>
+                </CTooltip>
+              )}
+            </div>
+          ),
+        },
+      });
+    }
     const cols = useRef<IDataTable[]>(
       formatColumns({ columns, params: params.current, typeKeys, valueFilter, timeoutSearch, t, facade }),
     );
@@ -240,6 +315,7 @@ interface Type {
   showSearch?: boolean;
   onRow?: (data: any) => { onDoubleClick?: () => void; onClick?: () => void };
   isLoading?: boolean;
+  action?: { isDisable?: any; isEdit?: any; isDelete?: any; label: any; name: any };
 }
 const Draggable = (props: any) => {
   const { attributes, listeners, setNodeRef } = useDraggable({ id: props.id });

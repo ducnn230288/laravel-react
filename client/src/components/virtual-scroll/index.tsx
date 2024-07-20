@@ -1,4 +1,4 @@
-import { Scrollbar } from '@/library/scrollbar';
+import { Scrollbar } from '@/components/scrollbar';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { useRef } from 'react';
 import './index.less';

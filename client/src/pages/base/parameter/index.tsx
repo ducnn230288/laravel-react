@@ -2,7 +2,7 @@ import { Fragment, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router';
 
-import { CBreadcrumbs } from '@/library/breadcrumbs';
+import { CBreadcrumbs } from '@/components/breadcrumbs';
 import { SCrud } from '@/services';
 import type { IMParameter } from '@/types/model';
 
@@ -36,11 +36,11 @@ const Page = () => {
 };
 export default Page;
 
-import { Scrollbar } from '@/library/scrollbar';
+import { Scrollbar } from '@/components/scrollbar';
 import { Select, Spin, Tree } from 'antd';
 import queryString from 'query-string';
 
-import { CSvgIcon } from '@/library/svg-icon';
+import { CSvgIcon } from '@/components/svg-icon';
 const Side = () => {
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.parameter' });
   const sCrud = SCrud<IMParameter>('Parameter');
@@ -97,8 +97,8 @@ const Side = () => {
   );
 };
 
+import { CForm } from '@/components/form';
 import { EFormType } from '@/enums';
-import { CForm } from '@/library/form';
 const Main = () => {
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.parameter' });
   const sCrud = SCrud<IMParameter>('Parameter');

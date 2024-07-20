@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import slug from 'slug';
 
+import { CAvatar } from '@/components/avatar';
 import { EFormRuleType, EFormType, ETableFilterType } from '@/enums';
-import { CAvatar } from '@/library/avatar';
 import { SCrud } from '@/services';
 import type { IDataTable, IForm } from '@/types';
 import type { IMPost, IMPostType } from '@/types/model';

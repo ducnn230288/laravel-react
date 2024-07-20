@@ -1,10 +1,10 @@
 import dayjs from 'dayjs';
 import 'dayjs/locale/vi';
 
+import { CEChart } from '@/components/echart';
+import { CEditTable } from '@/components/edit-table';
+import { CGantt } from '@/components/gantt';
 import { ETypeChart } from '@/enums';
-import { CEChart } from '@/library/echart';
-import { CEditTable } from '@/library/edit-table';
-import { CGantt } from '@/library/gantt';
 import type { IEditTable } from '@/types';
 import { formatDataChart } from '@/utils';
 

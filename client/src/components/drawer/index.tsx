@@ -1,4 +1,4 @@
-import { Scrollbar } from '@/library/scrollbar';
+import { Scrollbar } from '@/components/scrollbar';
 import { Drawer, Form } from 'antd';
 import classNames from 'classnames';
 import { forwardRef, useImperativeHandle, type Ref } from 'react';

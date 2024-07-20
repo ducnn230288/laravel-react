@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { useSearchParams } from 'react-router-dom';
 
+import { CBreadcrumbs } from '@/components/breadcrumbs';
 import { EFormRuleType, EFormType, EStatusState } from '@/enums';
-import { CBreadcrumbs } from '@/library/breadcrumbs';
 import { SGlobal } from '@/services';
 import { lang, routerLinks } from '@/utils';
 import './index.less';
@@ -69,8 +69,8 @@ const Page = () => {
 };
 export default Page;
 
-import { CForm } from '@/library/form';
-import { CSvgIcon } from '@/library/svg-icon';
+import { CForm } from '@/components/form';
+import { CSvgIcon } from '@/components/svg-icon';
 const Side = ({ form }: { form: FormInstance }) => {
   const sGlobal = SGlobal();
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import type { URLSearchParamsInit } from 'react-router-dom';
 
-import { CSvgIcon } from '@/library/svg-icon';
+import { CSvgIcon } from '@/components/svg-icon';
 import { KEY_ROLE, LANGUAGE, routerLinks } from '@/utils';
 
 const Layout = ({ lang = LANGUAGE, permissions = [] }: { lang?: string; permissions?: string[] }): IMenu[] => {

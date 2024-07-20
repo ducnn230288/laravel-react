@@ -3,8 +3,8 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 
+import { CForm } from '@/components/form';
 import { EFormRuleType, EStatusState } from '@/enums';
-import { CForm } from '@/library/form';
 import { SGlobal } from '@/services';
 import { lang, routerLinks } from '@/utils';
 

@@ -6,12 +6,12 @@ import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router';
 import { createSearchParams } from 'react-router-dom';
 
-import { CAvatar } from '@/library/avatar';
-import { CSvgIcon } from '@/library/svg-icon';
+import { CAvatar } from '@/components/avatar';
+import { CSvgIcon } from '@/components/svg-icon';
 import { SCrud, SGlobal } from '@/services';
 import { APP_NAME, lang, routerLinks } from '@/utils';
 
-import { Scrollbar } from '@/library/scrollbar';
+import { Scrollbar } from '@/components/scrollbar';
 import menus, { findMenu } from './menus';
 
 const Layout = ({ children }: PropsWithChildren) => {

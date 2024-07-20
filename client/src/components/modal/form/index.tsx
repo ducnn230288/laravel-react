@@ -3,8 +3,8 @@ import { forwardRef, type Ref, useImperativeHandle } from 'react';
 
 import type { IForm, IFormModalRefObject } from '@/types';
 import { convertFormValue } from '@/utils';
+import { CModal } from '..';
 import { CForm } from '../../form';
-import { CModal } from '../../modal';
 
 export const CModalForm = forwardRef(
   (

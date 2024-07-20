@@ -1,6 +1,6 @@
 import type { PropsWithChildren } from 'react';
 
-import { CSvgIcon } from '@/library/svg-icon';
+import { CSvgIcon } from '@/components/svg-icon';
 import { APP_NAME } from '@/utils';
 
 const Layout = ({ children }: PropsWithChildren) => {

@@ -2,9 +2,9 @@ import { Popconfirm, Spin, Tree, TreeSelect } from 'antd';
 import classNames from 'classnames';
 import { Fragment, useEffect } from 'react';
 
+import { CBreadcrumbs } from '@/components/breadcrumbs';
+import { CTooltip } from '@/components/tooltip';
 import { EStatusState } from '@/enums';
-import { CBreadcrumbs } from '@/library/breadcrumbs';
-import { CTooltip } from '@/library/tooltip';
 import { SCrud, SGlobal } from '@/services';
 import type { IMPost, IMPostType } from '@/types/model';
 
@@ -38,8 +38,8 @@ const Page = () => {
   );
 };
 
-import { CDrawerForm } from '@/library/drawer';
-import { CSvgIcon } from '@/library/svg-icon';
+import { CDrawerForm } from '@/components/drawer';
+import { CSvgIcon } from '@/components/svg-icon';
 import { useTranslation } from 'react-i18next';
 import _column from './column';
 const FormPost = () => {
@@ -97,7 +97,7 @@ const FormPostType = () => {
   );
 };
 
-import { Scrollbar } from '@/library/scrollbar';
+import { Scrollbar } from '@/components/scrollbar';
 import { KEY_ROLE } from '@/utils';
 import queryString from 'query-string';
 import { useLocation, useNavigate } from 'react-router';
@@ -205,8 +205,8 @@ const Side = () => {
   );
 };
 
-import { CButton } from '@/library/button';
-import { CDataTable } from '@/library/data-table';
+import { CButton } from '@/components/button';
+import { CDataTable } from '@/components/data-table';
 const Main = () => {
   const sCrud = SCrud<IMPost, IMPostType>('Post', 'PostType');
   const sGlobal = SGlobal();

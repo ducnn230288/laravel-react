@@ -1,7 +1,7 @@
 import { Fragment, useEffect } from 'react';
 
+import { CBreadcrumbs } from '@/components/breadcrumbs';
 import { EStatusState } from '@/enums';
-import { CBreadcrumbs } from '@/library/breadcrumbs';
 import { SCrud, SGlobal } from '@/services';
 import type { IMCode, IMCodeType } from '@/types/model';
 
@@ -36,7 +36,7 @@ const Page = () => {
 };
 export default Page;
 
-import { CDrawerForm } from '@/library/drawer';
+import { CDrawerForm } from '@/components/drawer';
 import { useTranslation } from 'react-i18next';
 import _column from './column';
 const Form = () => {
@@ -65,8 +65,8 @@ const Form = () => {
   );
 };
 
-import { Scrollbar } from '@/library/scrollbar';
-import { CSvgIcon } from '@/library/svg-icon';
+import { Scrollbar } from '@/components/scrollbar';
+import { CSvgIcon } from '@/components/svg-icon';
 import { Select, Spin, Tree } from 'antd';
 import queryString from 'query-string';
 import { useLocation, useNavigate } from 'react-router';
@@ -127,8 +127,8 @@ const Side = () => {
   );
 };
 
-import { CButton } from '@/library/button';
-import { CDataTable } from '@/library/data-table';
+import { CButton } from '@/components/button';
+import { CDataTable } from '@/components/data-table';
 import { KEY_ROLE } from '@/utils';
 const Main = () => {
   const sCrud = SCrud<IMCode, IMCodeType>('Code', 'CodeType');

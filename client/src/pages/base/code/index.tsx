@@ -15,7 +15,7 @@ const Page = () => {
   }, []);
 
   useEffect(() => {
-    if (sCrud.result && !sCrud?.typeResult) sCrud.getType({});
+    if (sCrud.result && !sCrud?.resultType) sCrud.getType({});
   }, [sCrud.result]);
 
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.code' });
@@ -55,7 +55,7 @@ const Form = () => {
       facade={sCrud}
       columns={_column.useForm()}
       title={t(sCrud.data?.id ? 'Edit Code' : 'Add new Code', {
-        name: sCrud.typeResult?.data?.find(item => item.code === request.typeCode)?.name,
+        name: sCrud.resultType?.data?.find(item => item.code === request.typeCode)?.name,
       })}
       onSubmit={values => {
         if (sCrud.data?.id) sCrud.put({ ...values, id: sCrud.data.id, typeCode: request.typeCode });
@@ -83,9 +83,9 @@ const Side = () => {
       <div className='header'>
         <h3>{t('Type code')}</h3>
       </div>
-      <Spin spinning={sCrud.typeIsLoading}>
+      <Spin spinning={sCrud.isLoadingType}>
         <div className='desktop'>
-          {sCrud.typeResult?.data && (
+          {sCrud.resultType?.data && (
             <Scrollbar>
               <Tree
                 blockNode
@@ -94,7 +94,7 @@ const Side = () => {
                 defaultExpandAll
                 switcherIcon={<CSvgIcon name='arrow' size={12} />}
                 defaultSelectedKeys={[request.typeCode]}
-                treeData={sCrud.typeResult?.data?.map((item: any) => ({
+                treeData={sCrud.resultType?.data?.map((item: any) => ({
                   title: item?.name,
                   key: item?.code,
                   isLeaf: true,
@@ -114,7 +114,7 @@ const Side = () => {
           <Select
             value={request.typeCode}
             className={'w-full'}
-            options={sCrud.typeResult?.data?.map(data => ({ label: data.name, value: data.code }))}
+            options={sCrud.resultType?.data?.map(data => ({ label: data.name, value: data.code }))}
             onChange={e => {
               request.typeCode = e;
               sCrud.get(request);
@@ -155,7 +155,7 @@ const Main = () => {
               <CButton
                 icon={<CSvgIcon name='plus' size={12} />}
                 text={t('Add new Code', {
-                  name: sCrud.typeResult?.data?.find(item => item.code === request.typeCode)?.name,
+                  name: sCrud.resultType?.data?.find(item => item.code === request.typeCode)?.name,
                 })}
                 onClick={() => sCrud.set({ data: undefined, isVisible: true })}
               />

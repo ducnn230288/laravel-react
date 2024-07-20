@@ -14,18 +14,18 @@ class RReducer {
     this.reducer = (builder: ActionReducerMapBuilder<StateCrud>) => {
       builder
         .addCase(this.action.pending, (state, action) => {
-          state.typeIsLoading = true;
-          state.typeStatus = EStatusState.idle;
+          state.isLoadingType = true;
+          state.statusType = EStatusState.idle;
           this.pending(state, action);
         })
 
         .addCase(this.action.fulfilled, (state, action) => {
-          state.typeIsLoading = false;
+          state.isLoadingType = false;
           this.fulfilled(state, action);
         })
 
         .addCase(this.action.rejected, (state, action) => {
-          state.typeIsLoading = false;
+          state.isLoadingType = false;
           this.rejected(state, action);
         });
     };
@@ -40,14 +40,14 @@ export class RGetType extends RReducer {
         await API.get({ url: `${routerLinks(keyApiType, 'api')}`, params }),
     );
     this.pending = (state, action) => {
-      state.typeTime = new Date().getTime() + (state.keepUnusedDataFor ?? 60) * 1000;
+      state.timeType = new Date().getTime() + (state.keepUnusedDataFor ?? 60) * 1000;
       const queryParams = JSON.parse(JSON.stringify(action.meta.arg));
       delete queryParams.keyApiType;
-      state.typeQueryParams = JSON.stringify(queryParams.params);
+      state.queryParamsType = JSON.stringify(queryParams.params);
     };
     this.fulfilled = (state, action) => {
       if (action.payload.data) {
-        state.typeResult = action.payload;
+        state.resultType = action.payload;
       }
     };
   }
@@ -64,8 +64,8 @@ export class RGetTypeId extends RReducer {
     );
     this.fulfilled = (state, action) => {
       if (action.payload) {
-        if (JSON.stringify(state.typeData) !== JSON.stringify(action.payload)) state.typeData = action.payload;
-        state.typeIsVisible = true;
+        if (JSON.stringify(state.dataType) !== JSON.stringify(action.payload)) state.dataType = action.payload;
+        state.isVisibleType = true;
       }
     };
   }
@@ -81,13 +81,13 @@ export class RPostType extends RReducer {
       },
     );
     this.pending = (state, action) => {
-      state.typeData = action.meta.arg;
+      state.dataType = action.meta.arg;
     };
     this.fulfilled = (state, action) => {
       if (action.payload) {
-        if (JSON.stringify(state.typeData) !== JSON.stringify(action.payload)) state.typeData = action.payload;
-        state.typeIsVisible = false;
-        state.typeStatus = EStatusState.isFulfilled;
+        if (JSON.stringify(state.dataType) !== JSON.stringify(action.payload)) state.dataType = action.payload;
+        state.isVisibleType = false;
+        state.statusType = EStatusState.isFulfilled;
       }
     };
   }
@@ -103,13 +103,13 @@ export class RPutType extends RReducer {
       },
     );
     this.pending = (state, action) => {
-      state.typeData = action.meta.arg;
+      state.dataType = action.meta.arg;
     };
     this.fulfilled = (state, action) => {
       if (action.payload) {
-        if (JSON.stringify(state.typeData) !== JSON.stringify(action.payload)) state.typeData = action.payload;
-        state.typeIsVisible = false;
-        state.typeStatus = EStatusState.isFulfilled;
+        if (JSON.stringify(state.dataType) !== JSON.stringify(action.payload)) state.dataType = action.payload;
+        state.isVisibleType = false;
+        state.statusType = EStatusState.isFulfilled;
       }
     };
   }
@@ -125,7 +125,7 @@ export class RDeleteType extends RReducer {
       },
     );
     this.fulfilled = state => {
-      state.typeStatus = EStatusState.isFulfilled;
+      state.statusType = EStatusState.isFulfilled;
     };
   }
 }

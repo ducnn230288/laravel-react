@@ -89,7 +89,7 @@ export default {
                 tab: 'language',
                 list: [
                   { label: t('English'), value: 'en' },
-                  { label: t('Vietnamese'), value: 'vn' },
+                  { label: t('Vietnamese'), value: 'vi' },
                 ],
                 column: [
                   { title: 'id', name: 'id', formItem: { type: EFormType.hidden } },

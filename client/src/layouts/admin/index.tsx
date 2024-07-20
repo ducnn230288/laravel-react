@@ -60,7 +60,7 @@ const CSide = () => {
           <CSvgIcon name='logo' />
           <h1 className={classNames({ active: sGlobal.isCollapseMenu })}>{APP_NAME}</h1>
         </button>
-        <Spin size='small' spinning={sCrud.isLoading || sCrud.typeIsLoading}>
+        <Spin size='small' spinning={sCrud.isLoading || sCrud.isLoadingType}>
           <Scrollbar>
             <Menu
               defaultSelectedKeys={[location.pathname]}

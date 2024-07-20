@@ -11,14 +11,14 @@ export interface StateCrud<T = object, Y = object> {
   keepUnusedDataFor?: number;
   time?: number;
 
-  typeResult?: IResponses<Y[]>;
-  typeData?: Y;
-  typeIsLoading?: boolean;
-  typeIsVisible?: boolean;
-  typeStatus?: EStatusState;
-  typeQueryParams?: string;
-  typeKeepUnusedDataFor?: number;
-  typeTime?: number;
+  resultType?: IResponses<Y[]>;
+  dataType?: Y;
+  isLoadingType?: boolean;
+  isVisibleType?: boolean;
+  statusType?: EStatusState;
+  queryParamsType?: string;
+  keepUnusedDataForType?: number;
+  timeType?: number;
 }
 
 export const initialStateCrud: StateCrud = {
@@ -31,12 +31,12 @@ export const initialStateCrud: StateCrud = {
   keepUnusedDataFor: 60,
   time: 0,
 
-  typeResult: undefined,
-  typeData: undefined,
-  typeIsLoading: false,
-  typeIsVisible: false,
-  typeStatus: EStatusState.idle,
-  typeQueryParams: undefined,
-  typeKeepUnusedDataFor: 60,
-  typeTime: 0,
+  resultType: undefined,
+  dataType: undefined,
+  isLoadingType: false,
+  isVisibleType: false,
+  statusType: EStatusState.idle,
+  queryParamsType: undefined,
+  keepUnusedDataForType: 60,
+  timeType: 0,
 };

@@ -17,7 +17,7 @@ class ContentLanguageFactory extends Factory
     public function definition(): array
     {
         return [
-          'language' => 'vn',
+          'language' => 'en',
           'name' => $this->faker->unique()->sentence(2),
           'description' => null,
           'content' => null,

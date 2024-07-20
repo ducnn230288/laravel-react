@@ -24,7 +24,7 @@ class StoreParameterRequest extends FormRequest
         return [
           'name' => 'required|string|max:255',
           'code' => 'required|string|max:255|unique:parameters',
-          'vn' => 'nullable|string',
+          'vi' => 'nullable|string',
           'en' => 'nullable|string',
         ];
     }

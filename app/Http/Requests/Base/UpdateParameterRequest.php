@@ -23,7 +23,7 @@ class UpdateParameterRequest extends FormRequest
     {
         return [
           'name' => 'sometimes|string|max:255',
-          'vn' => 'nullable|string',
+          'vi' => 'nullable|string',
           'en' => 'nullable|string',
           'is_disable' => 'boolean',
         ];

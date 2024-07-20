@@ -15,7 +15,7 @@ const Page = () => {
   useEffect(() => {
     if (sGlobal.status === EStatusState.isFulfilled && sGlobal.user && Object.keys(sGlobal.user).length > 0) {
       navigate('/' + lang + '/dashboard', { replace: true });
-      sGlobal.profile();
+      sGlobal.set({ status: EStatusState.idle });
     }
   }, [sGlobal.status]);
 

@@ -133,7 +133,7 @@ export const CDataTable = forwardRef(
                       name: action.name(data),
                       label: action.label.toLowerCase(),
                     })}
-                    onConfirm={() => action.isDisable({ id: data.code, isDisable: !data.isDisable })}
+                    onConfirm={() => action.isDisable({ id: data.code ?? data.id, isDisable: !data.isDisable })}
                   >
                     <button
                       title={t(data.isDisable ? 'Disabled' : 'Enabled', {
@@ -155,7 +155,7 @@ export const CDataTable = forwardRef(
                 <CTooltip title={t('Edit', { name: action.name(data), label: action.label.toLowerCase() })}>
                   <button
                     title={t('Edit', { name: action.name(data), label: action.label.toLowerCase() })}
-                    onClick={() => action.isEdit({ id: data.code })}
+                    onClick={() => action.isEdit({ id: data.code ?? data.id, params: defaultRequest })}
                   >
                     <CSvgIcon name='edit' className='primary' />
                   </button>
@@ -170,7 +170,7 @@ export const CDataTable = forwardRef(
                       name: action.name(data),
                       label: action.label.toLowerCase(),
                     })}
-                    onConfirm={() => action.isDelete(data.code)}
+                    onConfirm={() => action.isDelete(data.code ?? data.id)}
                   >
                     <button title={t('Delete', { name: action.name(data), label: action.label.toLowerCase() })}>
                       <CSvgIcon name='trash' className='error' />

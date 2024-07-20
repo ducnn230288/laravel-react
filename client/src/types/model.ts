@@ -55,7 +55,7 @@ export interface IContentType extends ICommon {
 export interface IMParameter extends ICommon {
   name?: string;
   code?: string;
-  vn?: string;
+  vi?: string;
   en?: string;
   updatedAt?: string;
 }

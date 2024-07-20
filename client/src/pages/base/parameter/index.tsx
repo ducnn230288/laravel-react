@@ -116,7 +116,7 @@ const Main = () => {
             columns={[
               {
                 title: t('Vietnamese parameter'),
-                name: 'vn',
+                name: 'vi',
                 formItem: {
                   col: 6,
                   type: EFormType.textarea,

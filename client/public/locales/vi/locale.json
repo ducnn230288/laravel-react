@@ -36,7 +36,7 @@
     "Are you sure want enable?": "Bạn có chắc chắn muốn kích hoạt {{label}} {{name}}?",
     "Disabled": "Đã vô hiệu hóa {{label}} {{name}}",
     "Enabled": "Đã kích hoạt {{label}} {{name}}",
-    "Edit": "Sửa {{label}} {{name}}",
+    "Edit": "Chỉnh sửa {{label}} {{name}}",
     "Delete": "Xóa {{label}} {{name}}",
     "Are you sure want delete?": "Bạn có chắc muốn xóa {{label}} {{name}}?",
     "File": "Tập tin"

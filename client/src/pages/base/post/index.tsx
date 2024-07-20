@@ -17,7 +17,7 @@ const Page = () => {
   }, []);
 
   useEffect(() => {
-    if (sCrud.result && !sCrud.typeResult) sCrud.getType({ include: 'children', postTypeId: '' });
+    if (sCrud.result && !sCrud.resultType) sCrud.getType({ include: 'children', postTypeId: '' });
   }, [sCrud.result]);
 
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.post' });
@@ -59,7 +59,7 @@ const FormPost = () => {
       facade={sCrud}
       columns={_column.useForm()}
       title={t(sCrud.data?.id ? 'Edit Post' : 'Add new Post', {
-        name: sCrud.typeResult?.data?.find(item => item.code === request.typeCode)?.name,
+        name: sCrud.resultType?.data?.find(item => item.code === request.typeCode)?.name,
       })}
       onSubmit={values => {
         if (sCrud.data?.id) sCrud.put({ ...values, id: sCrud.data.id, typeCode: request.typeCode });
@@ -73,24 +73,24 @@ import _columnType from './column/type';
 const FormPostType = () => {
   const sCrud = SCrud<IMPost, IMPostType>('Post', 'PostType');
 
-  const request = JSON.parse(sCrud?.typeQueryParams ?? '{}');
+  const request = JSON.parse(sCrud?.queryParamsType ?? '{}');
   useEffect(() => {
-    if (sCrud.typeStatus === EStatusState.isFulfilled) {
+    if (sCrud.statusType === EStatusState.isFulfilled) {
       sCrud.getType(request);
     }
-  }, [sCrud.typeStatus]);
+  }, [sCrud.statusType]);
 
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.post' });
   return (
     <CDrawerForm
       facade={sCrud}
-      keyData='typeData'
-      keyIsLoading='typeIsLoading'
-      keyState='typeIsVisible'
+      keyData='dataType'
+      keyIsLoading='isLoadingType'
+      keyState='isVisibleType'
       columns={_columnType.useForm()}
-      title={t(sCrud.typeData?.id ? 'Edit Type Post' : 'Add new Type Post')}
+      title={t(sCrud.dataType?.id ? 'Edit Type Post' : 'Add new Type Post')}
       onSubmit={values => {
-        if (sCrud.typeData?.id) sCrud.putType({ ...values, id: sCrud.typeData.id });
+        if (sCrud.dataType?.id) sCrud.putType({ ...values, id: sCrud.dataType.id });
         else sCrud.postType({ ...values });
       }}
     />
@@ -116,12 +116,12 @@ const Side = () => {
         <h3>{t('Type Post')}</h3>
         <CButton
           icon={<CSvgIcon name='plus' size={12} />}
-          onClick={() => sCrud.set({ typeData: undefined, typeIsVisible: true })}
+          onClick={() => sCrud.set({ dataType: undefined, isVisibleType: true })}
         />
       </div>
-      <Spin spinning={sCrud.typeIsLoading}>
+      <Spin spinning={sCrud.isLoadingType}>
         <div className='desktop'>
-          {sCrud.typeResult?.data && (
+          {sCrud.resultType?.data && (
             <Scrollbar>
               <Tree
                 blockNode
@@ -130,7 +130,7 @@ const Side = () => {
                 defaultExpandAll
                 switcherIcon={<CSvgIcon name='arrow' size={12} />}
                 defaultSelectedKeys={[request.typeCode]}
-                treeData={sCrud.typeResult?.data?.map((item: any) => ({
+                treeData={sCrud.resultType?.data?.map((item: any) => ({
                   title: item?.name,
                   key: item?.code,
                   isLeaf: true,
@@ -184,7 +184,7 @@ const Side = () => {
             switcherIcon={<CSvgIcon name='arrow' size={12} />}
             value={request.typeCode}
             className={'w-full'}
-            treeData={sCrud.typeResult?.data?.map((item: any) => ({
+            treeData={sCrud.resultType?.data?.map((item: any) => ({
               title: item?.name,
               value: item?.code,
               isLeaf: true,
@@ -221,7 +221,7 @@ const Main = () => {
             isDisable: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_POST_UPDATE) && sCrud.put,
             isEdit: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_POST_UPDATE) && sCrud.getById,
             isDelete: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_POST_DESTROY) && sCrud.delete,
-            label: t('Content'),
+            label: t('Post'),
             name: data =>
               data.languages?.length
                 ? data.languages?.find((item: any) => item?.language === localStorage.getItem('i18nextLng')).name
@@ -236,7 +236,7 @@ const Main = () => {
               <CButton
                 icon={<CSvgIcon name='plus' size={12} />}
                 text={t('Add new Post', {
-                  name: sCrud.typeResult?.data?.find(item => item.code === request.typeCode)?.name,
+                  name: sCrud.resultType?.data?.find(item => item.code === request.typeCode)?.name,
                 })}
                 onClick={() => sCrud.set({ data: undefined, isVisible: true })}
               />

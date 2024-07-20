@@ -21,7 +21,7 @@ class ParameterFactory extends Factory
       return [
         'name' => $name,
         'code' => strtoupper(Str::slug($name)),
-        'vn' => $this->faker->text,
+        'vi' => $this->faker->text,
         'en' => $this->faker->text,
       ];
     }

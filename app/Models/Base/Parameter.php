@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class Parameter extends Model
 {
     use HasFactory, HasUuids;
-  protected $fillable = ['code', 'name', 'vn', 'en', 'is_disable'];
+  protected $fillable = ['code', 'name', 'vi', 'en', 'is_disable'];
   protected static function boot(): void
   {
     parent::boot();

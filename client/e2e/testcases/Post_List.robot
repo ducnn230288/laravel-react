@@ -11,7 +11,7 @@ PL_00 Verify the User Interface of "Bài đăng" page
   ${yesterday}=                                                                                         Get Current Date                local                         -1 day                                     result_format=%d-%m-%Y
   Login to admin
   When Click "Thiết lập" menu
-  When Click "Bài đăng" sub menu to "#/vn/setting/post"
+  When Click "Bài đăng" sub menu to "#/vi/setting/post"
   Then Heading should contain "Bài đăng" inner text
   Then Confirm locating exactly in "Bài đăng" page of "Thiết lập" menu
   Then Webpage should contain the list data from database
@@ -40,7 +40,7 @@ PL_00 Verify the User Interface of "Bài đăng" page
   When Click "Lưu lại" button
   Then User look message "Tạo thành công" popup
 
-  When Click on the "Chỉnh sửa Bài đăng _@Tên Bài đăng@_" button in the "_@Tên Bài đăng@_" table line
+  When Click on the "Chỉnh sửa bài đăng _@Tên Bài đăng@_" button in the "_@Tên Bài đăng@_" table line
   When Click on "Tiếng Anh" tab
   When Enter "test name" in "Tên Bài đăng" with ""
   When Click "Lưu lại" button
@@ -61,7 +61,7 @@ PL_00 Verify the User Interface of "Bài đăng" page
   When Click "Lưu lại" button
   Then User look message "Cập nhật thành công" popup
 
-  When Click on the "Chỉnh sửa Bài đăng _@Tên Bài đăng@_" button in the "_@Tên Bài đăng@_" table line
+  When Click on the "Chỉnh sửa bài đăng _@Tên Bài đăng@_" button in the "_@Tên Bài đăng@_" table line
   When Click on "Tiếng Việt" tab
   Then Data's information in "Ngày tạo" should be equal "${yesterday}"
   Then Data's information in "Tên Bài đăng" should be equal "_@Tên Bài đăng@_"
@@ -70,10 +70,10 @@ PL_00 Verify the User Interface of "Bài đăng" page
   Then Data's information in "Nội dung" should be equal "_@Nội dung@_"
 
   When Click "Huỷ bỏ" button
-  When Click on the "Xóa Bài đăng _@Tên Bài đăng@_" button in the "_@Tên Bài đăng@_" table line with cancel
+  When Click on the "Xóa bài đăng _@Tên Bài đăng@_" button in the "_@Tên Bài đăng@_" table line with cancel
   Then "_@Tên Bài đăng@_" should be visible in the table line
 
-  When Click on the "Xóa Bài đăng _@Tên Bài đăng@_" button in the "_@Tên Bài đăng@_" table line
+  When Click on the "Xóa bài đăng _@Tên Bài đăng@_" button in the "_@Tên Bài đăng@_" table line
   Then User look message "Xóa thành công" popup
   Then "_@Tên Bài đăng@_" should not be visible in the table line
 
@@ -81,7 +81,7 @@ PL_00 Verify the User Interface of "Bài đăng" page
 Go to "Bài đăng" page with "${category}" list
   Login to admin
   Click "Thiết lập" menu
-  Click "Bài đăng" sub menu to "#/vn/setting/post"
+  Click "Bài đăng" sub menu to "#/vi/setting/post"
   Select on the "${category}" item line
 
 ### Post ###

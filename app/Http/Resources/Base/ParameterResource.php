@@ -19,7 +19,7 @@ class ParameterResource extends JsonResource
         'id' => $this->whenHas('id'),
         'code' => $this->whenHas('code'),
         'name' => $this->whenHas('name'),
-        'vn' => $this->whenHas('vn'),
+        'vi' => $this->whenHas('vi'),
         'en' => $this->whenHas('en'),
         Str::camel('is_disable') => $this->disabled_at != null,
       ];

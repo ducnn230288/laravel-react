@@ -28,15 +28,15 @@ export default {
         name: 'code',
         formItem: {
           rules: [{ type: EFormRuleType.required }, { type: EFormRuleType.max, value: 100 }],
-          type: sCrud.typeData?.id ? EFormType.hidden : EFormType.text,
+          type: sCrud.dataType?.id ? EFormType.hidden : EFormType.text,
         },
       },
       {
         title: t('Subtype'),
         name: 'post_type_id',
         formItem: {
-          type: sCrud.typeData?.id ? EFormType.hidden : EFormType.treeSelect,
-          list: loopMapSelect(sCrud.typeResult?.data),
+          type: sCrud.dataType?.id ? EFormType.hidden : EFormType.treeSelect,
+          list: loopMapSelect(sCrud.resultType?.data),
         },
       },
     ];

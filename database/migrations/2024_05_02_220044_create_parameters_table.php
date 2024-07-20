@@ -15,7 +15,7 @@ return new class extends Migration
           $table->uuid('id');
           $table->string('code');
           $table->string('name');
-          $table->text('vn');
+          $table->text('vi');
           $table->text('en');
             $table->timestamps();
           $table->softDeletes();

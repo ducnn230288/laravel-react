@@ -7,7 +7,6 @@ import dayjs from 'dayjs';
 import { enLocale, viLocale } from './locale';
 
 export interface StateGlobal {
-  [selector: string]: any;
   user?: IUser;
   data?: IResetPassword & IUser;
   isLoading?: boolean;

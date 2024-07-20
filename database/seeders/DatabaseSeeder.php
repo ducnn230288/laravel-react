@@ -27,8 +27,8 @@ class DatabaseSeeder extends Seeder
         PostTypeSeeder::class,
         UserRoleSeeder::class,
         UserSeeder::class,
-        AddressSeeder::class,
+        // AddressSeeder::class,
       ]);
     }
 }
- 
+

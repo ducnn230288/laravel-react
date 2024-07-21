@@ -98,7 +98,7 @@ const FormPostType = () => {
 };
 
 import { Scrollbar } from '@/components/scrollbar';
-import { KEY_ROLE } from '@/utils';
+import { KEY_ROLE, mapTreeObject } from '@/utils';
 import queryString from 'query-string';
 import { useLocation, useNavigate } from 'react-router';
 const Side = () => {
@@ -130,13 +130,7 @@ const Side = () => {
                 defaultExpandAll
                 switcherIcon={<CSvgIcon name='arrow' size={12} />}
                 defaultSelectedKeys={[request.typeCode]}
-                treeData={sCrud.resultType?.data?.map((item: any) => ({
-                  title: item?.name,
-                  key: item?.code,
-                  isLeaf: true,
-                  expanded: true,
-                  children: [],
-                }))}
+                treeData={sCrud.resultType?.data?.map(mapTreeObject)}
                 onSelect={selectedKeys => {
                   if (selectedKeys[0]) {
                     request.typeCode = selectedKeys[0];
@@ -152,7 +146,7 @@ const Side = () => {
                         <CTooltip title={t('Edit Type Post', { name: data.title })}>
                           <button
                             title={t('Edit Type Post', { name: data.title })}
-                            onClick={() => sCrud.getByIdType({ id: data.code })}
+                            onClick={() => sCrud.getByIdType({ id: data.key })}
                           >
                             <CSvgIcon name='edit' className='primary' />
                           </button>
@@ -163,7 +157,7 @@ const Side = () => {
                           <Popconfirm
                             destroyTooltipOnHide={true}
                             title={t('Are you sure want delete type post?', { name: data.title })}
-                            onConfirm={() => sCrud.deleteType(data.code)}
+                            onConfirm={() => sCrud.deleteType(data.key)}
                           >
                             <button title={t('Delete type post', { name: data.title })}>
                               <CSvgIcon name='trash' className='error' />
@@ -184,13 +178,7 @@ const Side = () => {
             switcherIcon={<CSvgIcon name='arrow' size={12} />}
             value={request.typeCode}
             className={'w-full'}
-            treeData={sCrud.resultType?.data?.map((item: any) => ({
-              title: item?.name,
-              value: item?.code,
-              isLeaf: true,
-              expanded: true,
-              children: [],
-            }))}
+            treeData={sCrud.resultType?.data?.map(mapTreeObject)}
             onChange={e => {
               if (e) {
                 request.typeCode = e;

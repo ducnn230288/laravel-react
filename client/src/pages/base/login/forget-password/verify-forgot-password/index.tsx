@@ -1,12 +1,12 @@
 import { Spin } from 'antd';
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 
 import { CForm } from '@/components/form';
 import { EFormRuleType, EFormType, EStatusState } from '@/enums';
 import { SGlobal } from '@/services';
 import { lang, routerLinks } from '@/utils';
-import { useTranslation } from 'react-i18next';
 
 const Page = () => {
   const navigate = useNavigate();

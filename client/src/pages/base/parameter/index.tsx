@@ -64,13 +64,7 @@ const Side = () => {
                 defaultExpandAll
                 switcherIcon={<CSvgIcon name='arrow' size={12} />}
                 selectedKeys={[sCrud.data?.code ?? '']}
-                treeData={sCrud.result?.data?.map(item => ({
-                  title: item?.name,
-                  key: item?.code,
-                  isLeaf: true,
-                  expanded: true,
-                  children: [],
-                }))}
+                treeData={sCrud.result?.data?.map(mapTreeObject)}
                 onSelect={selectedKeys => {
                   request.code = selectedKeys[0];
                   sCrud.getById({ id: request.code });
@@ -84,7 +78,7 @@ const Side = () => {
           <Select
             value={sCrud.data?.code}
             className={'w-full'}
-            options={sCrud?.result?.data?.map(data => ({ label: data.name, value: data.code }))}
+            options={sCrud?.result?.data?.map(mapTreeObject)}
             onChange={e => {
               request.code = e;
               sCrud.getById({ id: e });
@@ -99,6 +93,7 @@ const Side = () => {
 
 import { CForm } from '@/components/form';
 import { EFormType } from '@/enums';
+import { mapTreeObject } from '@/utils';
 const Main = () => {
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.parameter' });
   const sCrud = SCrud<IMParameter>('Parameter');

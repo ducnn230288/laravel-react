@@ -63,7 +63,9 @@
     }
     main {
       @apply overflow-auto md:pl-0 pl-12 mx-auto;
-      width: calc(100vw - 14rem);
+      @media only screen and (min-width: 768px) {
+        width: calc(100vw - 14rem);
+      }
 
       h2 {
         @apply text-xl font-bold text-base-content;

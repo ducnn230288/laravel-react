@@ -93,13 +93,7 @@ const Side = () => {
                 defaultExpandAll
                 switcherIcon={<CSvgIcon name='arrow' size={12} />}
                 defaultSelectedKeys={[request.typeCode]}
-                treeData={sCrud.resultType?.data?.map((item: any) => ({
-                  title: item?.name,
-                  key: item?.code,
-                  isLeaf: true,
-                  expanded: true,
-                  children: [],
-                }))}
+                treeData={sCrud.resultType?.data?.map(mapTreeObject)}
                 onSelect={selectedKeys => {
                   request.typeCode = selectedKeys[0];
                   sCrud.get(request);
@@ -113,7 +107,7 @@ const Side = () => {
           <Select
             value={request.typeCode}
             className={'w-full'}
-            options={sCrud.resultType?.data?.map(data => ({ label: data.name, value: data.code }))}
+            options={sCrud.resultType?.data?.map(mapTreeObject)}
             onChange={e => {
               request.typeCode = e;
               sCrud.get(request);
@@ -128,7 +122,7 @@ const Side = () => {
 
 import { CButton } from '@/components/button';
 import { CDataTable } from '@/components/data-table';
-import { KEY_ROLE } from '@/utils';
+import { KEY_ROLE, mapTreeObject } from '@/utils';
 const Main = () => {
   const sCrud = SCrud<IMContent, IContentType>('Content', 'ContentType');
   const sGlobal = SGlobal();

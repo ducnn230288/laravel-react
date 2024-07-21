@@ -131,9 +131,9 @@ export const isNumeric = (str: string) => {
 export const mapTreeObject = (item: any): any => {
   return {
     ...item,
-    title: item?.name,
-    key: item?.code || item?.id,
-    value: item?.code || item?.id,
+    title: item?.title ?? item?.name,
+    key: item?.code ?? item?.id,
+    value: item?.code ?? item?.id,
     isLeaf: !item?.children?.length,
     expanded: true,
     children: !item?.children ? null : item?.children?.map((i: any) => mapTreeObject(i)),

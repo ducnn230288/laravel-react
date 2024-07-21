@@ -126,15 +126,15 @@ const Main = () => {
       <div className='body'>
         <CDataTable
           action={{
-            disable: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_POST_UPDATE) && sCrud.put,
-            edit: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_POST_UPDATE) && sCrud.getById,
-            delete: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_POST_DESTROY) && sCrud.delete,
+            onDisable: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_POST_UPDATE) && sCrud.put,
+            onEdit: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_POST_UPDATE) && sCrud.getById,
+            onDelete: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_POST_DESTROY) && sCrud.delete,
             label: t('Post'),
             name: data =>
               data.languages?.length
                 ? data.languages?.find((item: any) => item?.language === localStorage.getItem('i18nextLng')).name
                 : '',
-            add: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_POST_STORE) && sCrud.set,
+            onAdd: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_POST_STORE) && sCrud.set,
             labelAdd: t('Add new Post', {
               name: sCrud.resultType?.data?.find(item => item.code === request.typeCode)?.name,
             }),

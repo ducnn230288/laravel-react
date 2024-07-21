@@ -121,7 +121,7 @@ export const CDataTable = forwardRef(
           align: ETableAlign.center,
           render: (_: string, data) => (
             <div className={'action'}>
-              {!!action.disable && (
+              {!!action.onDisable && (
                 <CTooltip
                   title={t(data.isDisable ? 'Disabled' : 'Enabled', {
                     name: action.name(data),
@@ -134,7 +134,7 @@ export const CDataTable = forwardRef(
                       name: action.name(data),
                       label: action.label.toLowerCase(),
                     })}
-                    onConfirm={() => action.disable({ id: data.code ?? data.id, isDisable: !data.isDisable })}
+                    onConfirm={() => action.onDisable({ id: data.code ?? data.id, isDisable: !data.isDisable })}
                   >
                     <button
                       title={t(data.isDisable ? 'Disabled' : 'Enabled', {
@@ -152,18 +152,18 @@ export const CDataTable = forwardRef(
                 </CTooltip>
               )}
 
-              {!!action.edit && (
+              {!!action.onEdit && (
                 <CTooltip title={t('Edit', { name: action.name(data), label: action.label.toLowerCase() })}>
                   <button
                     title={t('Edit', { name: action.name(data), label: action.label.toLowerCase() })}
-                    onClick={() => action.edit({ id: data.code ?? data.id, params: defaultRequest })}
+                    onClick={() => action.onEdit({ id: data.code ?? data.id, params: defaultRequest })}
                   >
                     <CSvgIcon name='edit' className='primary' />
                   </button>
                 </CTooltip>
               )}
 
-              {!!action.delete && (
+              {!!action.onDelete && (
                 <CTooltip title={t('Delete', { name: action.name(data), label: action.label.toLowerCase() })}>
                   <Popconfirm
                     destroyTooltipOnHide={true}
@@ -171,7 +171,7 @@ export const CDataTable = forwardRef(
                       name: action.name(data),
                       label: action.label.toLowerCase(),
                     })}
-                    onConfirm={() => action.delete(data.code ?? data.id)}
+                    onConfirm={() => action.onDelete(data.code ?? data.id)}
                   >
                     <button title={t('Delete', { name: action.name(data), label: action.label.toLowerCase() })}>
                       <CSvgIcon name='trash' className='error' />
@@ -259,12 +259,12 @@ export const CDataTable = forwardRef(
             ) : (
               <div />
             )}
-            {(!!rightHeader || !!action?.add) && !!action?.add && (
+            {(!!rightHeader || !!action?.onAdd) && !!action?.onAdd && (
               <div className={'right'}>
                 <CButton
                   icon={<CSvgIcon name='plus' size={12} />}
                   text={action?.labelAdd}
-                  onClick={() => action?.add({ data: undefined, isVisible: true })}
+                  onClick={() => action?.onAdd({ data: undefined, isVisible: true })}
                 />
                 {rightHeader}
               </div>
@@ -325,7 +325,7 @@ interface Type {
   showSearch?: boolean;
   onRow?: (data: any) => { onDoubleClick?: () => void; onClick?: () => void };
   isLoading?: boolean;
-  action?: { disable?: any; edit?: any; delete?: any; label: any; name: any; add?: any; labelAdd?: any };
+  action?: { onDisable?: any; onEdit?: any; onDelete?: any; label: any; name: any; onAdd?: any; labelAdd?: any };
 }
 const Draggable = (props: any) => {
   const { attributes, listeners, setNodeRef } = useDraggable({ id: props.id });

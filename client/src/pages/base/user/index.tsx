@@ -93,12 +93,12 @@ const Main = () => {
       <div className='body'>
         <CDataTable
           action={{
-            disable: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_USER_UPDATE) && sCrud.put,
-            edit: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_USER_UPDATE) && sCrud.getById,
-            delete: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_USER_DESTROY) && sCrud.delete,
+            onDisable: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_USER_UPDATE) && sCrud.put,
+            onEdit: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_USER_UPDATE) && sCrud.getById,
+            onDelete: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_USER_DESTROY) && sCrud.delete,
             label: t('User'),
             name: data => data.name,
-            add: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_USER_STORE) && sCrud.set,
+            onAdd: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_USER_STORE) && sCrud.set,
             labelAdd: t('Add new User', {
               name: sCrud.resultType?.data?.find(item => item.code === request.roleCode)?.name,
             }),

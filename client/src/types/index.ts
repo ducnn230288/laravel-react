@@ -21,11 +21,6 @@ export interface IResponses<T> {
     total: number;
   };
 }
-export interface ICommonEntity {
-  id?: string;
-  createdAt?: string;
-  isDisable?: boolean;
-}
 export interface IPaginationQuery<T = object> {
   [selector: string]: any;
   perPage?: number;

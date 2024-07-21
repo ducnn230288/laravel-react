@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import i18n from 'i18next';
 
-import type { IResetPassword, IUser } from '@/types/model';
+import type { IMUser, IResetPassword } from '@/types/model';
 import { useAppDispatch, useTypedSelector } from '..';
 import { RForgottenPassword, RLogin, ROtpConfirmation, RProfile, RPutProfile, RResetPassword } from './reducer';
 import { checkLanguage, initialStateGlobal, type StateGlobal } from './state';
@@ -51,7 +51,7 @@ export const SGlobal = () => {
     setLanguage: (value: string) => dispatch(globalSlice.actions.setLanguage(value)),
 
     profile: () => dispatch(rProfile.action()),
-    putProfile: (values: IUser) => dispatch(rPutProfile.action(values)),
+    putProfile: (values: IMUser) => dispatch(rPutProfile.action(values)),
     login: (values: { password: string; email: string }) => dispatch(rLogin.action(values)),
     forgottenPassword: (values: { email: string }) => dispatch(rForgottenPassword.action(values)),
     otpConfirmation: (values: { email: string; otp: string }) => dispatch(rOtpConfirmation.action(values)),

@@ -1,5 +1,5 @@
 import { EStatusState } from '@/enums';
-import type { IResetPassword, IUser } from '@/types/model';
+import type { IMUser, IResetPassword } from '@/types/model';
 import { API, KEY_REFRESH_TOKEN, KEY_TOKEN, KEY_USER, routerLinks } from '@/utils';
 import { createAsyncThunk, type ActionReducerMapBuilder } from '@reduxjs/toolkit';
 import type { StateGlobal } from './state';
@@ -35,7 +35,7 @@ export class RProfile extends RReducer {
   public constructor(name: string) {
     super();
     this.action = createAsyncThunk(name + '/profile', async () => {
-      const { data } = await API.get<IUser>({ url: `${routerLinks(name, 'api')}/profile` });
+      const { data } = await API.get<IMUser>({ url: `${routerLinks(name, 'api')}/profile` });
       return data || {};
     });
 
@@ -52,8 +52,8 @@ export class RProfile extends RReducer {
 export class RPutProfile extends RReducer {
   public constructor(name: string) {
     super();
-    this.action = createAsyncThunk(name + '/putProfile', async (values: IUser) => {
-      const { data } = await API.put<{ user: IUser; token: string; refreshToken: string }>({
+    this.action = createAsyncThunk(name + '/putProfile', async (values: IMUser) => {
+      const { data } = await API.put<{ user: IMUser; token: string; refreshToken: string }>({
         url: `${routerLinks(name, 'api')}/profile`,
         values,
       });
@@ -80,7 +80,7 @@ export class RLogin extends RReducer {
   public constructor(name: string) {
     super();
     this.action = createAsyncThunk(name + '/login', async (values: { password: string; email: string }) => {
-      const { data } = await API.post<{ user: IUser; token: string; refreshToken: string }>({
+      const { data } = await API.post<{ user: IMUser; token: string; refreshToken: string }>({
         url: `${routerLinks(name, 'api')}/login`,
         values,
         params: { include: 'role' },

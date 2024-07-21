@@ -1,5 +1,5 @@
 import { EStatusState } from '@/enums';
-import type { IResetPassword, IUser } from '@/types/model';
+import type { IMUser, IResetPassword } from '@/types/model';
 import { KEY_USER, lang } from '@/utils';
 import enUS from 'antd/lib/locale/en_US';
 import viVN from 'antd/lib/locale/vi_VN';
@@ -7,8 +7,8 @@ import dayjs from 'dayjs';
 import { enLocale, viLocale } from './locale';
 
 export interface StateGlobal {
-  user?: IUser;
-  data?: IResetPassword & IUser;
+  user?: IMUser;
+  data?: IResetPassword & IMUser;
   isLoading?: boolean;
   status?: EStatusState;
   language?: string;

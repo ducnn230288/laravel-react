@@ -1,6 +1,10 @@
+import queryString from 'query-string';
 import { Fragment, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useLocation, useNavigate } from 'react-router';
 
 import { CBreadcrumbs } from '@/components/breadcrumbs';
+import { CSideTree } from '@/components/slide-tree';
 import { EStatusState } from '@/enums';
 import { SCrud, SGlobal } from '@/services';
 import type { IMCode, IMCodeType } from '@/types/model';
@@ -18,6 +22,9 @@ const Page = () => {
     if (sCrud.result && !sCrud?.resultType) sCrud.getType({});
   }, [sCrud.result]);
 
+  const request = JSON.parse(sCrud?.queryParams ?? '{}');
+  const navigate = useNavigate();
+  const location = useLocation();
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.code' });
   return (
     <Fragment>
@@ -25,7 +32,17 @@ const Page = () => {
       <Form />
       <div className={'wrapper-grid'}>
         <div className='-intro-x left'>
-          <Side />
+          <CSideTree
+            label={t('Type code')}
+            isLoading={sCrud.isLoadingType}
+            listData={sCrud.resultType?.data}
+            value={request.typeCode}
+            onSelect={e => {
+              request.typeCode = e;
+              sCrud.get(request);
+              navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
+            }}
+          />
         </div>
         <div className='intro-x right'>
           <Main />
@@ -37,7 +54,6 @@ const Page = () => {
 export default Page;
 
 import { CDrawerForm } from '@/components/drawer';
-import { useTranslation } from 'react-i18next';
 import _column from './column';
 const Form = () => {
   const sCrud = SCrud<IMCode, IMCodeType>('Code', 'CodeType');
@@ -65,65 +81,8 @@ const Form = () => {
   );
 };
 
-import { Scrollbar } from '@/components/scrollbar';
-import { CSvgIcon } from '@/components/svg-icon';
-import { Select, Spin, Tree } from 'antd';
-import queryString from 'query-string';
-import { useLocation, useNavigate } from 'react-router';
-const Side = () => {
-  const { t } = useTranslation('locale', { keyPrefix: 'pages.base.code' });
-
-  const sCrud = SCrud<IMCode, IMCodeType>('Code', 'CodeType');
-  const request = JSON.parse(sCrud?.queryParams ?? '{}');
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  return (
-    <div className='card'>
-      <div className='header'>
-        <h3>{t('Type code')}</h3>
-      </div>
-      <Spin spinning={sCrud.isLoadingType}>
-        <div className='desktop'>
-          {sCrud.resultType?.data && (
-            <Scrollbar>
-              <Tree
-                blockNode
-                showLine
-                autoExpandParent
-                defaultExpandAll
-                switcherIcon={<CSvgIcon name='arrow' size={12} />}
-                defaultSelectedKeys={[request.typeCode]}
-                treeData={sCrud.resultType?.data?.map(mapTreeObject)}
-                onSelect={selectedKeys => {
-                  request.typeCode = selectedKeys[0];
-                  sCrud.get(request);
-                  navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
-                }}
-              />
-            </Scrollbar>
-          )}
-        </div>
-        <div className='mobile'>
-          <Select
-            value={request.typeCode}
-            className={'w-full'}
-            options={sCrud.resultType?.data?.map(mapTreeObject)}
-            onChange={e => {
-              request.typeCode = e;
-              sCrud.get(request);
-              navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
-            }}
-          />
-        </div>
-      </Spin>
-    </div>
-  );
-};
-
-import { CButton } from '@/components/button';
 import { CDataTable } from '@/components/data-table';
-import { KEY_ROLE, mapTreeObject } from '@/utils';
+import { KEY_ROLE } from '@/utils';
 const Main = () => {
   const sCrud = SCrud<IMCode, IMCodeType>('Code', 'CodeType');
   const sGlobal = SGlobal();
@@ -135,26 +94,19 @@ const Main = () => {
       <div className='body'>
         <CDataTable
           action={{
-            isDisable: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_CODE_UPDATE) && sCrud.put,
-            isEdit: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_CODE_UPDATE) && sCrud.getById,
-            isDelete: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_CODE_DESTROY) && sCrud.delete,
+            disable: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_CODE_UPDATE) && sCrud.put,
+            edit: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_CODE_UPDATE) && sCrud.getById,
+            delete: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_CODE_DESTROY) && sCrud.delete,
             label: t('Code'),
             name: data => data.name,
+            add: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_CODE_STORE) && sCrud.set,
+            labelAdd: t('Add new Code', {
+              name: sCrud.resultType?.data?.find(item => item.code === request.typeCode)?.name,
+            }),
           }}
           facade={sCrud}
           paginationDescription={(from: number, to: number, total: number) => t('Pagination code', { from, to, total })}
           columns={_column.useTable()}
-          rightHeader={
-            sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_CODE_STORE) && (
-              <CButton
-                icon={<CSvgIcon name='plus' size={12} />}
-                text={t('Add new Code', {
-                  name: sCrud.resultType?.data?.find(item => item.code === request.typeCode)?.name,
-                })}
-                onClick={() => sCrud.set({ data: undefined, isVisible: true })}
-              />
-            )
-          }
         />
       </div>
     </div>

@@ -1,9 +1,10 @@
-import { Popconfirm, Spin, Tree, TreeSelect } from 'antd';
-import classNames from 'classnames';
+import queryString from 'query-string';
 import { Fragment, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useLocation, useNavigate } from 'react-router';
 
 import { CBreadcrumbs } from '@/components/breadcrumbs';
-import { CTooltip } from '@/components/tooltip';
+import { CSideTree } from '@/components/slide-tree';
 import { EStatusState } from '@/enums';
 import { SCrud, SGlobal } from '@/services';
 import type { IMPost, IMPostType } from '@/types/model';
@@ -20,6 +21,10 @@ const Page = () => {
     if (sCrud.result && !sCrud.resultType) sCrud.getType({ include: 'children', postTypeId: '' });
   }, [sCrud.result]);
 
+  const sGlobal = SGlobal();
+  const request = JSON.parse(sCrud?.queryParams ?? '{}');
+  const navigate = useNavigate();
+  const location = useLocation();
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.post' });
   return (
     <Fragment>
@@ -28,7 +33,20 @@ const Page = () => {
       <FormPostType />
       <div className={'wrapper-grid'}>
         <div className='-intro-x left'>
-          <Side />
+          <CSideTree
+            label={t('Type Post')}
+            isLoading={sCrud.isLoadingType}
+            listData={sCrud.resultType?.data}
+            value={request.typeCode}
+            onAdd={sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_POST_TYPE_STORE) && sCrud.set}
+            onEdit={sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_POST_TYPE_UPDATE) && sCrud.getByIdType}
+            onDelete={sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_POST_TYPE_DESTROY) && sCrud.deleteType}
+            onSelect={e => {
+              request.typeCode = e;
+              sCrud.get(request);
+              navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
+            }}
+          />
         </div>
         <div className='intro-x right'>
           <Main />
@@ -39,8 +57,6 @@ const Page = () => {
 };
 
 import { CDrawerForm } from '@/components/drawer';
-import { CSvgIcon } from '@/components/svg-icon';
-import { useTranslation } from 'react-i18next';
 import _column from './column';
 const FormPost = () => {
   const sCrud = SCrud<IMPost, IMPostType>('Post', 'PostType');
@@ -97,104 +113,8 @@ const FormPostType = () => {
   );
 };
 
-import { Scrollbar } from '@/components/scrollbar';
-import { KEY_ROLE, mapTreeObject } from '@/utils';
-import queryString from 'query-string';
-import { useLocation, useNavigate } from 'react-router';
-const Side = () => {
-  const { t } = useTranslation('locale', { keyPrefix: 'pages.base.post' });
-
-  const sCrud = SCrud<IMPost, IMPostType>('Post', 'PostType');
-  const request = JSON.parse(sCrud?.queryParams ?? '{}');
-  const navigate = useNavigate();
-  const location = useLocation();
-  const sGlobal = SGlobal();
-
-  return (
-    <div className='card'>
-      <div className='header'>
-        <h3>{t('Type Post')}</h3>
-        <CButton
-          icon={<CSvgIcon name='plus' size={12} />}
-          onClick={() => sCrud.set({ dataType: undefined, isVisibleType: true })}
-        />
-      </div>
-      <Spin spinning={sCrud.isLoadingType}>
-        <div className='desktop'>
-          {sCrud.resultType?.data && (
-            <Scrollbar>
-              <Tree
-                blockNode
-                showLine
-                autoExpandParent
-                defaultExpandAll
-                switcherIcon={<CSvgIcon name='arrow' size={12} />}
-                defaultSelectedKeys={[request.typeCode]}
-                treeData={sCrud.resultType?.data?.map(mapTreeObject)}
-                onSelect={selectedKeys => {
-                  if (selectedKeys[0]) {
-                    request.typeCode = selectedKeys[0];
-                    sCrud.get(request);
-                    navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
-                  }
-                }}
-                titleRender={(data: any) => (
-                  <span className={classNames('item')}>
-                    {data.title}
-                    <div className='action'>
-                      {sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_POST_TYPE_UPDATE) && (
-                        <CTooltip title={t('Edit Type Post', { name: data.title })}>
-                          <button
-                            title={t('Edit Type Post', { name: data.title })}
-                            onClick={() => sCrud.getByIdType({ id: data.key })}
-                          >
-                            <CSvgIcon name='edit' className='primary' />
-                          </button>
-                        </CTooltip>
-                      )}
-                      {sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_POST_TYPE_DESTROY) && (
-                        <CTooltip title={t('Delete type post', { name: data.title })}>
-                          <Popconfirm
-                            destroyTooltipOnHide={true}
-                            title={t('Are you sure want delete type post?', { name: data.title })}
-                            onConfirm={() => sCrud.deleteType(data.key)}
-                          >
-                            <button title={t('Delete type post', { name: data.title })}>
-                              <CSvgIcon name='trash' className='error' />
-                            </button>
-                          </Popconfirm>
-                        </CTooltip>
-                      )}
-                    </div>
-                  </span>
-                )}
-              />
-            </Scrollbar>
-          )}
-        </div>
-        <div className='mobile'>
-          <TreeSelect
-            treeLine
-            switcherIcon={<CSvgIcon name='arrow' size={12} />}
-            value={request.typeCode}
-            className={'w-full'}
-            treeData={sCrud.resultType?.data?.map(mapTreeObject)}
-            onChange={e => {
-              if (e) {
-                request.typeCode = e;
-                sCrud.get(request);
-                navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
-              }
-            }}
-          />
-        </div>
-      </Spin>
-    </div>
-  );
-};
-
-import { CButton } from '@/components/button';
 import { CDataTable } from '@/components/data-table';
+import { KEY_ROLE } from '@/utils';
 const Main = () => {
   const sCrud = SCrud<IMPost, IMPostType>('Post', 'PostType');
   const sGlobal = SGlobal();
@@ -206,30 +126,23 @@ const Main = () => {
       <div className='body'>
         <CDataTable
           action={{
-            isDisable: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_POST_UPDATE) && sCrud.put,
-            isEdit: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_POST_UPDATE) && sCrud.getById,
-            isDelete: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_POST_DESTROY) && sCrud.delete,
+            disable: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_POST_UPDATE) && sCrud.put,
+            edit: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_POST_UPDATE) && sCrud.getById,
+            delete: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_POST_DESTROY) && sCrud.delete,
             label: t('Post'),
             name: data =>
               data.languages?.length
                 ? data.languages?.find((item: any) => item?.language === localStorage.getItem('i18nextLng')).name
                 : '',
+            add: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_POST_STORE) && sCrud.set,
+            labelAdd: t('Add new Post', {
+              name: sCrud.resultType?.data?.find(item => item.code === request.typeCode)?.name,
+            }),
           }}
           defaultRequest={{ include: 'languages' }}
           facade={sCrud}
           paginationDescription={(from: number, to: number, total: number) => t('Pagination post', { from, to, total })}
           columns={_column.useTable()}
-          rightHeader={
-            sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_POST_STORE) && (
-              <CButton
-                icon={<CSvgIcon name='plus' size={12} />}
-                text={t('Add new Post', {
-                  name: sCrud.resultType?.data?.find(item => item.code === request.typeCode)?.name,
-                })}
-                onClick={() => sCrud.set({ data: undefined, isVisible: true })}
-              />
-            )
-          }
         />
       </div>
     </div>

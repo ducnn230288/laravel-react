@@ -140,17 +140,21 @@
           }
         }
       }
-      .item {
-        @apply flex justify-between items-center h-8;
-        > .action {
-          @apply flex w-16 justify-end gap-1;
 
-          button {
-            @apply opacity-0 transition-all duration-300 ease-in-out;
+      .ant-tree-title {
+        @apply w-full;
+        .item {
+          @apply flex justify-between items-center h-8;
+          > .action {
+            @apply flex w-16 justify-end gap-1;
+
+            button {
+              @apply opacity-0 transition-all duration-300 ease-in-out;
+            }
           }
-        }
-        &:hover > .action button {
-          @apply opacity-100;
+          &:hover > .action button {
+            @apply opacity-100;
+          }
         }
       }
     }

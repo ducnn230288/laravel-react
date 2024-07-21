@@ -43,7 +43,7 @@ export const crudSlice = createSlice({
   },
 });
 
-export const SCrud = <T, Y = object>(keyApi: string, keyApiType: string = '') => {
+export const SCrud = <T, Y = object>(keyApi: string, keyApiType?: string) => {
   const dispatch = useAppDispatch();
   return {
     ...(useTypedSelector(state => state[name]) as StateCrud<T, Y>),

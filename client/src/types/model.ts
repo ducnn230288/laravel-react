@@ -1,6 +1,7 @@
 interface ICommon {
   id?: string;
   createdAt?: string;
+  updatedAt?: string;
   isDisable?: boolean;
 }
 export interface IMCode extends ICommon {
@@ -11,7 +12,7 @@ export interface IMCode extends ICommon {
   createdAt?: string;
   updatedAt?: string;
   item?: IMCodeType;
-  users?: IUser[];
+  users?: IMUser[];
 }
 
 export interface IMCodeType extends ICommon {
@@ -99,9 +100,6 @@ export interface IMUser extends ICommon {
   retypedPassword?: string;
   roleCode?: string;
   role?: IMUserRole;
-  createdAt?: string;
-  updatedAt?: string;
-  isDisable?: boolean;
 }
 
 export interface IMUserRole extends ICommon {
@@ -109,26 +107,9 @@ export interface IMUserRole extends ICommon {
   code?: string;
   isSystemAdmin?: boolean;
   permissions?: string[];
-  users?: IUser[];
+  users?: IMUser[];
   createdAt?: string;
   updatedAt?: string;
-}
-export interface IUser extends ICommon {
-  name?: string;
-  avatar?: string;
-  password?: string;
-  email?: string;
-  phoneNumber?: string;
-  dob?: string;
-  description?: string;
-  positionCode?: string;
-  position?: IMContent;
-  retypedPassword?: string;
-  roleCode?: string;
-  role?: IMUserRole;
-  createdAt?: string;
-  updatedAt?: string;
-  isDisable?: boolean;
 }
 
 export interface IResetPassword {

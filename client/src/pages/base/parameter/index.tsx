@@ -1,8 +1,10 @@
+import queryString from 'query-string';
 import { Fragment, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router';
 
 import { CBreadcrumbs } from '@/components/breadcrumbs';
+import { CSideTree } from '@/components/slide-tree';
 import { SCrud } from '@/services';
 import type { IMParameter } from '@/types/model';
 
@@ -19,13 +21,25 @@ const Page = () => {
     };
   }, []);
 
+  const request = JSON.parse(sCrud?.queryParams ?? '{}');
+  const navigate = useNavigate();
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.parameter' });
   return (
     <Fragment>
       <CBreadcrumbs title={t('Parameter')} list={[t('Setting'), t('Parameter')]} />
       <div className={'wrapper-grid'}>
         <div className='-intro-x left'>
-          <Side />
+          <CSideTree
+            label={t('Parameter')}
+            isLoading={sCrud.isLoading}
+            listData={sCrud.result?.data}
+            value={sCrud.data?.code ?? ''}
+            onSelect={e => {
+              request.code = e;
+              sCrud.getById({ id: request.code });
+              navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
+            }}
+          />
         </div>
         <div className='intro-x right'>
           <Main />
@@ -36,64 +50,9 @@ const Page = () => {
 };
 export default Page;
 
-import { Scrollbar } from '@/components/scrollbar';
-import { Select, Spin, Tree } from 'antd';
-import queryString from 'query-string';
-
-import { CSvgIcon } from '@/components/svg-icon';
-const Side = () => {
-  const { t } = useTranslation('locale', { keyPrefix: 'pages.base.parameter' });
-  const sCrud = SCrud<IMParameter>('Parameter');
-  const request = JSON.parse(sCrud?.queryParams ?? '{}');
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  return (
-    <div className='card'>
-      <div className='header'>
-        <h3>{t('Parameter')}</h3>
-      </div>
-      <Spin spinning={sCrud.isLoading}>
-        <div className='desktop'>
-          {sCrud.result?.data && (
-            <Scrollbar>
-              <Tree
-                blockNode
-                showLine
-                autoExpandParent
-                defaultExpandAll
-                switcherIcon={<CSvgIcon name='arrow' size={12} />}
-                selectedKeys={[sCrud.data?.code ?? '']}
-                treeData={sCrud.result?.data?.map(mapTreeObject)}
-                onSelect={selectedKeys => {
-                  request.code = selectedKeys[0];
-                  sCrud.getById({ id: request.code });
-                  navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
-                }}
-              />
-            </Scrollbar>
-          )}
-        </div>
-        <div className='mobile'>
-          <Select
-            value={sCrud.data?.code}
-            className={'w-full'}
-            options={sCrud?.result?.data?.map(mapTreeObject)}
-            onChange={e => {
-              request.code = e;
-              sCrud.getById({ id: e });
-              navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
-            }}
-          />
-        </div>
-      </Spin>
-    </div>
-  );
-};
-
 import { CForm } from '@/components/form';
 import { EFormType } from '@/enums';
-import { mapTreeObject } from '@/utils';
+import { Spin } from 'antd';
 const Main = () => {
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.parameter' });
   const sCrud = SCrud<IMParameter>('Parameter');

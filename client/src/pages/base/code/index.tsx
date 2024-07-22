@@ -54,6 +54,7 @@ const Page = () => {
 export default Page;
 
 import { CDrawerForm } from '@/components/drawer';
+import { KEY_ROLE, searchTree } from '@/utils';
 import _column from './column';
 const Form = () => {
   const sCrud = SCrud<IMCode, IMCodeType>('Code', 'CodeType');
@@ -71,7 +72,7 @@ const Form = () => {
       facade={sCrud}
       columns={_column.useForm()}
       title={t(sCrud.data?.id ? 'Edit Code' : 'Add new Code', {
-        name: sCrud.resultType?.data?.find(item => item.code === request.typeCode)?.name,
+        name: searchTree(sCrud.resultType?.data, request.typeCode, 'code')?.name,
       })}
       onSubmit={values => {
         if (sCrud.data?.id) sCrud.put({ ...values, id: sCrud.data.id, typeCode: request.typeCode });
@@ -82,7 +83,6 @@ const Form = () => {
 };
 
 import { CDataTable } from '@/components/data-table';
-import { KEY_ROLE } from '@/utils';
 const Main = () => {
   const sCrud = SCrud<IMCode, IMCodeType>('Code', 'CodeType');
   const sGlobal = SGlobal();
@@ -101,7 +101,7 @@ const Main = () => {
             name: data => data.name,
             onAdd: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_CODE_STORE) && sCrud.set,
             labelAdd: t('Add new Code', {
-              name: sCrud.resultType?.data?.find(item => item.code === request.typeCode)?.name,
+              name: searchTree(sCrud.resultType?.data, request.typeCode, 'code')?.name,
             }),
           }}
           facade={sCrud}

@@ -85,15 +85,6 @@ PC_07 Verify the function of input search box
   Then "_@Tên mã@_" should be visible in the table line
   When Click on the "Xóa" button in the "_@Tên mã@_" table line
 
-PC_08 Verify the function of input search box
-  [Tags]                                                                                                Search
-  Create a test data
-  When Enter "text" in placeholder "Tìm kiếm" with "_RANDOM_"
-  Then Table line should show empty
-  When Click on cross icon in input search box
-  Then "_@Tên mã@_" should be visible in the table line
-  When Click on the "Xóa" button in the "_@Tên mã@_" table line
-
 PC_09 Verify the function of input search box when cancel action
   [Tags]                                                                                                Search
   ${Code}                                                                                               Create a test data

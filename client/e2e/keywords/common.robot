@@ -37,10 +37,6 @@ Wait Until Element Is Existent
   [Arguments]               ${locator}  ${message}=${EMPTY}   ${timeout}=${BROWSER_TIMEOUT}
   Wait For Elements State   ${locator}  attached              ${timeout}                    ${message}
 
-Wait Until Element Is Visible
-  [Arguments]               ${locator}  ${message}=${EMPTY}   ${timeout}=${BROWSER_TIMEOUT}
-  Wait For Elements State   ${locator}  visible              ${timeout}                     ${message}
-
 Wait Until Page Does Not Contain Element
   [Arguments]               ${locator}  ${message}=${EMPTY}   ${timeout}=${BROWSER_TIMEOUT}
   Wait For Elements State   ${locator}  detached              ${timeout}                    ${message}
@@ -49,17 +45,9 @@ Element Should Be Exist
   [Arguments]               ${locator}  ${message}=${EMPTY}   ${timeout}=${SHOULD_TIMEOUT}
   Wait For Elements State   ${locator}  attached              ${timeout}                    ${message}
 
-Element Should Be Visible
-  [Arguments]               ${locator}  ${message}=${EMPTY}   ${timeout}=${SHOULD_TIMEOUT}
-  Wait For Elements State   ${locator}  visible               ${timeout}                    ${message}
-
 Element Text Should Be
   [Arguments]               ${locator}  ${expected}           ${message}=${EMPTY}           ${ignore_case}=${EMPTY}
   Get Text                  ${locator}  equal                 ${expected}                   ${message}
-
-Element Should Not Be Visible
-  [Arguments]               ${locator}  ${message}=${EMPTY}   ${timeout}=${SHOULD_TIMEOUT}
-  Wait For Elements State   ${locator}  hidden                ${timeout}                    ${message}
 
 Check Text
   [Arguments]               ${text}
@@ -195,11 +183,6 @@ Click on the "${text}" button in the "${name}" table line
   Click                     ${element}
   Click Confirm To Action
 
-###  -----  Tree  -----  ###
-Get Element Tree By Name
-  [Arguments]               ${name}                           ${xpath}=${EMPTY}
-  RETURN                    xpath=//*[contains(@class, "ant-tree-node-content-wrapper") and @title = "${name}"]//*[contains(@class, "group")]${xpath}
-
 ###  -----  Element  -----  ###
 Click "${text}" button
   Wait Until Element Spin
@@ -246,21 +229,6 @@ Wait Until Element Spin
   IF    ${count} > 0
     Wait Until Page Does Not Contain Element                  ${element}
   END
-
-### ----- NEW ----- ###
-Click on eye icon in "${name}" field
-  Wait Until Element Spin
-  ${element}=                Get Element                       //label[@title="${name}"]//ancestor::div[contains(@class,"ant-row")]//div[contains(@class,"relative")]//*[@id="Layer_1"]
-  Click                      ${element}
-
-Click on cross icon in input search box
-  Click                      //input[contains(@id,"input_search")]//following-sibling::*[contains(@id,"Layer_1")]
-
-The hidden password in "${name}" field should be visibled as "${text}"
-  ${text}=                  Check Text                         ${text}
-  ${element}=               Get Element                        //*[contains(@class, "ant-form-item-label")]/label[text()="${name}"]/../../*[contains(@class, "ant-form-item")]//input
-  Get Property              ${element}                         type                       ==                             text
-  Get Text                  ${element}                         equal                      ${text}
 
 Click on "${name}" tab
   ${element}=               Set Variable                       //*[contains(@class,"ant-tabs")]//*[@role="tab" and text()="${name}"]

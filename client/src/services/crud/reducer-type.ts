@@ -81,7 +81,7 @@ export class RPostType extends RReducer {
       },
     );
     this.pending = (state, action) => {
-      state.dataType = action.meta.arg;
+      state.dataType = action.meta.arg.values;
     };
     this.fulfilled = (state, action) => {
       if (action.payload) {
@@ -103,7 +103,7 @@ export class RPutType extends RReducer {
       },
     );
     this.pending = (state, action) => {
-      state.dataType = action.meta.arg;
+      state.dataType = action.meta.arg.values;
     };
     this.fulfilled = (state, action) => {
       if (action.payload) {

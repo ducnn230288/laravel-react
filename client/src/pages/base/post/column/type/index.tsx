@@ -4,7 +4,7 @@ import { EFormRuleType, EFormType } from '@/enums';
 import { SCrud } from '@/services';
 import type { IForm } from '@/types';
 import type { IMPost, IMPostType } from '@/types/model';
-import { loopMapSelect } from '@/utils';
+import { mapTreeObject } from '@/utils';
 import { useTranslation } from 'react-i18next';
 
 export default {
@@ -36,7 +36,7 @@ export default {
         name: 'post_type_id',
         formItem: {
           type: sCrud.dataType?.id ? EFormType.hidden : EFormType.treeSelect,
-          list: loopMapSelect(sCrud.resultType?.data),
+          list: sCrud.resultType?.data?.map(mapTreeObject),
         },
       },
     ];

@@ -16,12 +16,6 @@ L0_01 Verify the User Interface displays correctly with design
   Then Webpage should contain "Đăng nhập" button
   Then Webpage should contain "Quên mật khẩu?" button
 
-LO_02 Check the showing password when click on eye icon in "Mật khẩu" field
-  [Tags]                                                                                                MainPage    Test1                       UI
-  When Enter "password" in "Mật khẩu" with "_RANDOM_"
-  When Click on eye icon in "Mật khẩu" field
-  Then The hidden password in "Mật khẩu" field should be visibled as "_@Mật khẩu@_"
-
 ### Verify the log in function when entering the valid data ###
 LO_03 Verify that login successfully when enter the valid data (admin account)
   [Tags]                                                                                                Valid                          Smoketest

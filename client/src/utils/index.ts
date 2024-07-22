@@ -1,5 +1,4 @@
 import { ETypeChart } from '@/enums';
-import type { CheckboxOptionType } from 'antd';
 
 import { KEY_TOKEN, LANGUAGE, LINK_API, LIST_LANGUAGE } from './variable';
 
@@ -44,16 +43,6 @@ export const getSizePageByHeight = (height = 39, minusNumber = 3) =>
   ) - minusNumber;
 export const getFilter = (queryParams = '{}', key = 'id') =>
   JSON.parse(JSON.parse(queryParams || '{}').filter || '{}')[key] || null;
-
-export const loopMapSelect = (array?: any[], label = 'name', value = 'id'): CheckboxOptionType[] =>
-  array?.length
-    ? array.map(item => ({
-        label: item[label],
-        value: item[value],
-        isLeaf: !item.children?.length,
-        children: item.children ? loopMapSelect(item.children, label, value) : undefined,
-      }))
-    : [];
 
 export const lang = LIST_LANGUAGE.indexOf(location.hash.split('/')[1]) > -1 ? location.hash.split('/')[1] : LANGUAGE;
 
@@ -127,7 +116,17 @@ export const uuidv4 = () => {
 export const isNumeric = (str: string) => {
   return !isNaN(Number(str)) && !isNaN(parseFloat(str));
 };
-
+export const searchTree = (array, value, key?: string) => {
+  if (array?.length)
+    for (let i = 0; i < array.length; i++) {
+      if (array[i][key] == value) {
+        return array[i];
+      } else if (array[i].children != null) {
+        return searchTree(array[i].children, value, key);
+      }
+    }
+  return null;
+};
 export const mapTreeObject = (item: any): any => {
   return {
     ...item,

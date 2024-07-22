@@ -53,6 +53,7 @@ const Page = () => {
 export default Page;
 
 import { CDrawerForm } from '@/components/drawer';
+import { KEY_ROLE, searchTree } from '@/utils';
 import _column from './column';
 const Form = () => {
   const sCrud = SCrud<IMContent, IContentType>('Content', 'ContentType');
@@ -70,7 +71,7 @@ const Form = () => {
       facade={sCrud}
       columns={_column.useForm()}
       title={t(sCrud.data?.id ? 'Edit Content' : 'Add new Content', {
-        name: sCrud.resultType?.data?.find(item => item.code === request.typeCode)?.name,
+        name: searchTree(sCrud.resultType?.data, request.typeCode, 'code')?.name,
       })}
       onSubmit={values => {
         if (sCrud.data?.id) sCrud.put({ ...values, id: sCrud.data.id, typeCode: request.typeCode });
@@ -81,7 +82,6 @@ const Form = () => {
 };
 
 import { CDataTable } from '@/components/data-table';
-import { KEY_ROLE } from '@/utils';
 const Main = () => {
   const sCrud = SCrud<IMContent, IContentType>('Content', 'ContentType');
   const sGlobal = SGlobal();
@@ -100,7 +100,7 @@ const Main = () => {
             name: data => data.name,
             onAdd: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_CONTENT_STORE) && sCrud.set,
             labelAdd: t('Add new Content', {
-              name: sCrud.resultType?.data?.find(item => item.code === request.typeCode)?.name,
+              name: searchTree(sCrud.resultType?.data, request.typeCode, 'code')?.name,
             }),
           }}
           defaultRequest={{ include: 'languages' }}

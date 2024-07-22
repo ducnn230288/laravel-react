@@ -13,9 +13,6 @@ const Page = () => {
   const location = useLocation();
   useEffect(() => {
     sCrud.get({});
-    sCrud.getById({
-      id: queryString.parse(location.search, { arrayFormat: 'index' })?.code?.toString() ?? 'ADDRESS',
-    });
     return () => {
       sCrud.reset();
     };
@@ -33,7 +30,11 @@ const Page = () => {
             label={t('Parameter')}
             isLoading={sCrud.isLoading}
             listData={sCrud.result?.data}
-            value={sCrud.data?.code ?? ''}
+            value={
+              sCrud.data?.code ??
+              queryString.parse(location.search, { arrayFormat: 'index' })?.code?.toString() ??
+              'ADDRESS'
+            }
             onSelect={e => {
               request.code = e;
               sCrud.getById({ id: request.code });
@@ -56,16 +57,21 @@ import { Spin } from 'antd';
 const Main = () => {
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.parameter' });
   const sCrud = SCrud<IMParameter>('Parameter');
-
+  const data =
+    sCrud.data ??
+    sCrud.result?.data?.find(
+      item =>
+        item.code === (queryString.parse(location.search, { arrayFormat: 'index' })?.code?.toString() ?? 'ADDRESS'),
+    );
   return (
     <div className='card'>
       <div className='header'>
-        <h3>{t('Edit Parameter', { code: sCrud.data?.name })}</h3>
+        <h3>{t('Edit Parameter', { code: data?.name })}</h3>
       </div>
       <div className='desktop has-header'>
         <Spin spinning={sCrud.isLoading}>
           <CForm
-            values={{ ...sCrud.data }}
+            values={{ ...data }}
             className='intro-x'
             columns={[
               {
@@ -85,7 +91,7 @@ const Main = () => {
                 },
               },
             ]}
-            handSubmit={values => sCrud.put({ ...values, id: sCrud.data!.code })}
+            handSubmit={values => sCrud.put({ ...values, id: data!.code })}
             disableSubmit={sCrud.isLoading}
           />
         </Spin>

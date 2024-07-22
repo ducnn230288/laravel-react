@@ -12,6 +12,7 @@ PL_00 Verify the User Interface of "Bài đăng" page
   Login to admin
   When Click "Thiết lập" menu
   When Click "Bài đăng" sub menu to "#/vi/setting/post"
+  Select on the "Projects" item line
   Then Heading should contain "Bài đăng" inner text
   Then Confirm locating exactly in "Bài đăng" page of "Thiết lập" menu
   Then Webpage should contain the list data from database
@@ -23,6 +24,16 @@ PL_00 Verify the User Interface of "Bài đăng" page
   Then Webpage should contain "Thêm mới Bài đăng Projects" button
 
   When Click "Thêm mới Bài đăng Projects" button
+  Then Heading should contain "Thêm mới Bài đăng Projects" inner text
+  Then Webpage should contain "Ngày tạo" input field
+  Then Webpage should contain "Hình ảnh" image upload field
+  Then Webpage should contain "Tiếng Anh" tab
+  Then Webpage should contain "Tên Bài đăng" input field
+  Then Webpage should contain "Slug" input field
+  Then Webpage should contain "Mô tả" input field
+  Then Webpage should contain "Nội dung" input field
+  Then Webpage should contain "Lưu lại" button
+  Then Webpage should contain "Huỷ bỏ" button
   When Click "Lưu lại" button
   Then Required message "Xin vui lòng nhập tên bài đăng" displayed under "Tên Bài đăng" field
   Then Required message "Xin vui lòng nhập slug" displayed under "Slug" field
@@ -31,23 +42,33 @@ PL_00 Verify the User Interface of "Bài đăng" page
   When Select file in "Hình ảnh" with "image.jpg"
   When Click on "Tiếng Anh" tab
   When Enter "test name" in "Tên Bài đăng" with "_RANDOM_"
-  When Enter "text" in "Mô tả" with "_RANDOM_"
+  When Enter "paragraph" in textarea "Mô tả" with "_RANDOM_"
   When Enter "text" in editor "Nội dung" with "_RANDOM_"
   When Click on "Tiếng Việt" tab
   When Enter "test name" in "Tên Bài đăng" with "_RANDOM_"
-  When Enter "text" in "Mô tả" with "_RANDOM_"
+  When Enter "paragraph" in textarea "Mô tả" with "_RANDOM_"
   When Enter "text" in editor "Nội dung" with "_RANDOM_"
   When Click "Lưu lại" button
   Then User look message "Tạo thành công" popup
 
   When Click on the "Chỉnh sửa bài đăng _@Tên Bài đăng@_" button in the "_@Tên Bài đăng@_" table line
+  Then Heading should contain "Chỉnh sửa Bài đăng Projects" inner text
+  Then Webpage should contain "Ngày tạo" input field
+  Then Webpage should contain "Hình ảnh" image upload field
+  Then Webpage should contain "Tiếng Anh" tab
+  Then Webpage should contain "Tên Bài đăng" input field
+  Then Webpage should contain "Slug" input field
+  Then Webpage should contain "Mô tả" input field
+  Then Webpage should contain "Nội dung" input field
+  Then Webpage should contain "Lưu lại" button
+  Then Webpage should contain "Huỷ bỏ" button
   When Click on "Tiếng Anh" tab
   When Enter "test name" in "Tên Bài đăng" with ""
   When Click "Lưu lại" button
   Then Required message "Xin vui lòng nhập tên bài đăng" displayed under "Tên Bài đăng" field
 
   When Enter "test name" in "Tên Bài đăng" with "_RANDOM_"
-  When Enter "text" in "Mô tả" with "_RANDOM_"
+  When Enter "paragraph" in textarea "Mô tả" with "_RANDOM_"
   When Click on "Tiếng Việt" tab
   When Enter "test name" in "Tên Bài đăng" with ""
   When Click "Lưu lại" button
@@ -56,7 +77,7 @@ PL_00 Verify the User Interface of "Bài đăng" page
   When Click "date" in "Ngày tạo" with "yesterday"
   When Enter "test name" in "Tên Bài đăng" with "_RANDOM_"
   When Enter "text" in "Slug" with "_RANDOM_"
-  When Enter "text" in "Mô tả" with "_RANDOM_"
+  When Enter "paragraph" in textarea "Mô tả" with "_RANDOM_"
   When Enter "text" in editor "Nội dung" with "_RANDOM_"
   When Click "Lưu lại" button
   Then User look message "Cập nhật thành công" popup
@@ -69,41 +90,28 @@ PL_00 Verify the User Interface of "Bài đăng" page
   Then Data's information in "Mô tả" should be equal "_@Mô tả@_"
   Then Data's information in "Nội dung" should be equal "_@Nội dung@_"
 
+  ${before}=                     Get the image's information in "Hình ảnh" field
+  When Click on cross icon inside image in "Hình ảnh"
+  When Select file in "Hình ảnh" with "image2.jpg"
+  When Click "Lưu lại" button
+  Then User look message "Cập nhật thành công" popup
+  When Click on the "Chỉnh sửa bài đăng _@Tên Bài đăng@_" button in the "_@Tên Bài đăng@_" table line
+  ${after}=                      Get the image's information in "Hình ảnh" field
+  Then Should Not Be Equal       ${after}    ${before}
+
+  When Click on cross icon in select "Ngày tạo"
+  When Click "Lưu lại" button
+  Then Required message "Xin vui lòng chọn ngày tạo" displayed under "Ngày tạo" field
   When Click "Huỷ bỏ" button
+
+  When Click on the "Đã kích hoạt bài đăng _@Tên Bài đăng@_" button in the "_@Tên Bài đăng@_" table line
+  Then User look message "Cập nhật thành công" popup
+  Then The status button in the "_@Tên Bài đăng@_" table line should change to "Đã vô hiệu hóa bài đăng _@Tên Bài đăng@_"
+  When Click on the "Đã vô hiệu hóa bài đăng _@Tên Bài đăng@_" button in the "_@Tên Bài đăng@_" table line
+
   When Click on the "Xóa bài đăng _@Tên Bài đăng@_" button in the "_@Tên Bài đăng@_" table line with cancel
   Then "_@Tên Bài đăng@_" should be visible in the table line
 
   When Click on the "Xóa bài đăng _@Tên Bài đăng@_" button in the "_@Tên Bài đăng@_" table line
   Then User look message "Xóa thành công" popup
   Then "_@Tên Bài đăng@_" should not be visible in the table line
-
-*** Keywords ***
-Go to "Bài đăng" page with "${category}" list
-  Login to admin
-  Click "Thiết lập" menu
-  Click "Bài đăng" sub menu to "#/vi/setting/post"
-  Select on the "${category}" item line
-
-### Post ###
-Create a test post in "${category}" list
-  ${condition}=            Run Keyword And Return Status            Confirm locating exactly in "Bài đăng" page of "Thiết lập" menu
-  IF    '${condition}' == 'True'
-    Select on the "${category}" item line
-  ELSE
-    Go to "Bài đăng" page with "${category}" list
-  END
-  Click "Thêm mới Bài đăng ${category}" button
-  Click "date" in "Ngày tạo" with "today"
-  Select file in "Hình ảnh" with "image.jpg"
-  Click on "Tiếng Anh" tab
-  Enter "test name" in "Tên Bài đăng" with "_RANDOM_"
-  Enter "paragraph" in textarea "Mô tả" with "_RANDOM_"
-  Enter "paragraph" in editor "Nội dung" with "_RANDOM_"
-  Click on "Tiếng Việt" tab
-  Enter "test name" in "Tên Bài đăng" with "_RANDOM_"
-    ${name}=               Check Text                               _@Tên Bài đăng@_
-  Enter "paragraph" in textarea "Mô tả" with "_RANDOM_"
-  Enter "paragraph" in editor "Nội dung" with "_RANDOM_"
-  Click "Lưu lại" button
-  User look message "Tạo thành công" popup
-  RETURN               ${name}

@@ -78,7 +78,7 @@ export class RPost extends RReducer {
       return data;
     });
     this.pending = (state, action) => {
-      state.data = action.meta.arg;
+      state.data = action.meta.arg.values;
     };
     this.fulfilled = (state, action) => {
       if (action.payload) {
@@ -100,7 +100,7 @@ export class RPut extends RReducer {
       },
     );
     this.pending = (state, action) => {
-      state.data = action.meta.arg;
+      state.data = action.meta.arg.values;
     };
     this.fulfilled = (state, action) => {
       if (action.payload) {

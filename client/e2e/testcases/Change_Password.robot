@@ -57,7 +57,7 @@ CP_04 Verify the showing password function in "Xác nhận mật khẩu" field
   Then The hidden password in "Xác nhận mật khẩu" field should be visibled as "_@Xác nhận mật khẩu@_"
 
 ### Verify that change the account's password ###
-CP_05 Verify that changing a new password 
+CP_05 Verify that changing a new password
   [Tags]                                                                                                ChangePassword
   Go to "ĐỔI MẬT KHẨU" page
   When Enter "password" in "Mật khẩu" with "Password1!"
@@ -103,7 +103,7 @@ CP_08_02 Verify that changing new password by entering the confirm password diff
   When Click "Đổi mật khẩu" button
   Then Required message "Mật khẩu yêu cầu có 8 ký tự trở lên, có ít nhất 1 chữ hoa, 1 chữ thường, 1 chữ số và 1 kí tự đặc biệt" displayed under "Mật khẩu mới" field
 
-CP_09 Verify the chaging password function by leaving the blank field in "Mật khẩu" 
+CP_09 Verify the chaging password function by leaving the blank field in "Mật khẩu"
   [Tags]                                                                                                ChangePassword                        BlankField
   Go to "ĐỔI MẬT KHẨU" page
   When Enter "password" in "Mật khẩu mới" with "_RANDOM_"
@@ -119,7 +119,7 @@ CP_10 Verify the chaging password function by leaving the blank field in "Mật 
   When Click "Đổi mật khẩu" button
   Then Required message "Xin vui lòng nhập mật khẩu mới" displayed under "Mật khẩu mới" field
 
-CP_11 Verify the chaging password function by leaving the blank field in "Xác nhận mật khẩu" 
+CP_11 Verify the chaging password function by leaving the blank field in "Xác nhận mật khẩu"
   [Tags]                                                                                                ChangePassword                        BlankField
   Go to "ĐỔI MẬT KHẨU" page
   When Enter "password" in "Mật khẩu" with "Password1!"

@@ -71,7 +71,7 @@ const Form = () => {
       facade={sCrud}
       columns={_column.useForm()}
       title={t(sCrud.data?.id ? 'Edit User' : 'Add new User', {
-        name: searchTree(sCrud.resultType?.data, request.roleCode, 'code')?.name,
+        name: searchTree({ array: sCrud.resultType?.data, value: request.roleCode, key: 'code' })?.name,
       })}
       onSubmit={values => {
         if (sCrud.data?.id) sCrud.put({ ...values, id: sCrud.data.id, roleCode: request.roleCode });
@@ -100,7 +100,7 @@ const Main = () => {
             name: data => data.name,
             onAdd: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_USER_STORE) && sCrud.set,
             labelAdd: t('Add new User', {
-              name: searchTree(sCrud.resultType?.data, request.roleCode, 'code')?.name,
+              name: searchTree({ array: sCrud.resultType?.data, value: request.roleCode, key: 'code' })?.name,
             }),
           }}
           defaultRequest={{ include: 'position' }}

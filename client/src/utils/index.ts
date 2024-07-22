@@ -116,16 +116,19 @@ export const uuidv4 = () => {
 export const isNumeric = (str: string) => {
   return !isNaN(Number(str)) && !isNaN(parseFloat(str));
 };
-export const searchTree = (array, value, key?: string) => {
+export const searchTree = ({ array, value, key = '' }: { array: any; value?: string; key?: string }): any => {
+  let result = null;
   if (array?.length)
-    for (let i = 0; i < array.length; i++) {
-      if (array[i][key] == value) {
-        return array[i];
-      } else if (array[i].children != null) {
-        return searchTree(array[i].children, value, key);
+    array.forEach(item => {
+      if (!result) {
+        if (item[key] == value) {
+          result = item;
+        } else if (item.children != null) {
+          result = searchTree({ array: item.children, value, key });
+        }
       }
-    }
-  return null;
+    });
+  return result;
 };
 export const mapTreeObject = (item: any): any => {
   return {

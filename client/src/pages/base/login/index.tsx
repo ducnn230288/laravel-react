@@ -58,7 +58,7 @@ const Page = () => {
             </div>
           )}
           textSubmit={t('Log In')}
-          handSubmit={sGlobal.login}
+          handSubmit={sGlobal.postLogin}
           disableSubmit={sGlobal.isLoading}
         />
       </Spin>

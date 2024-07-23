@@ -2,7 +2,7 @@ import { EStatusState } from '@/enums';
 import type { IMUser, IResetPassword } from '@/types/model';
 import { API, KEY_REFRESH_TOKEN, KEY_TOKEN, KEY_USER, routerLinks } from '@/utils';
 import { createAsyncThunk, type ActionReducerMapBuilder } from '@reduxjs/toolkit';
-import type { StateGlobal } from './state';
+import { nameGlobal, type StateGlobal } from './state';
 
 class RReducer {
   public action;
@@ -31,7 +31,7 @@ class RReducer {
     };
   }
 }
-export class RProfile extends RReducer {
+class GetProfile extends RReducer {
   public constructor(name: string) {
     super();
     this.action = createAsyncThunk(name + '/profile', async () => {
@@ -49,7 +49,7 @@ export class RProfile extends RReducer {
     };
   }
 }
-export class RPutProfile extends RReducer {
+class PutProfile extends RReducer {
   public constructor(name: string) {
     super();
     this.action = createAsyncThunk(name + '/putProfile', async (values: IMUser) => {
@@ -76,7 +76,7 @@ export class RPutProfile extends RReducer {
     };
   }
 }
-export class RLogin extends RReducer {
+class PostLogin extends RReducer {
   public constructor(name: string) {
     super();
     this.action = createAsyncThunk(name + '/login', async (values: { password: string; email: string }) => {
@@ -105,7 +105,7 @@ export class RLogin extends RReducer {
     };
   }
 }
-export class RForgottenPassword extends RReducer {
+class PostForgottenPassword extends RReducer {
   public constructor(name: string) {
     super();
     this.action = createAsyncThunk(name + '/forgotten-password', async (values: { email: string }) => {
@@ -123,7 +123,7 @@ export class RForgottenPassword extends RReducer {
     };
   }
 }
-export class ROtpConfirmation extends RReducer {
+class PostOtpConfirmation extends RReducer {
   public constructor(name: string) {
     super();
     this.action = createAsyncThunk(name + '/otp-confirmation', async (values: { email: string; otp: string }) => {
@@ -141,7 +141,7 @@ export class ROtpConfirmation extends RReducer {
     };
   }
 }
-export class RResetPassword extends RReducer {
+class PostResetPassword extends RReducer {
   public constructor(name: string) {
     super();
     this.action = createAsyncThunk(name + '/reset-password', async (values: IResetPassword) => {
@@ -160,3 +160,11 @@ export class RResetPassword extends RReducer {
     };
   }
 }
+export const RGlobal = {
+  getProfile: new GetProfile(nameGlobal),
+  putProfile: new PutProfile(nameGlobal),
+  postLogin: new PostLogin(nameGlobal),
+  postForgottenPassword: new PostForgottenPassword(nameGlobal),
+  postOtpConfirmation: new PostOtpConfirmation(nameGlobal),
+  postResetPassword: new PostResetPassword(nameGlobal),
+};

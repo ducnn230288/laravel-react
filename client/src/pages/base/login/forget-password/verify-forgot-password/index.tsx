@@ -48,7 +48,7 @@ const Page = () => {
             },
           ]}
           textSubmit={t('Send code')}
-          handSubmit={values => sGlobal.otpConfirmation({ ...values })}
+          handSubmit={values => sGlobal.postOtpConfirmation({ ...values })}
           disableSubmit={sGlobal.isLoading}
         />
       </Spin>

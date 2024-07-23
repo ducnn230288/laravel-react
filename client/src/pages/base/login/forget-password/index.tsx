@@ -36,7 +36,7 @@ const Page = () => {
             },
           ]}
           textSubmit={t('Get OTP')}
-          handSubmit={values => sGlobal.forgottenPassword({ ...values })}
+          handSubmit={values => sGlobal.postForgottenPassword({ ...values })}
           disableSubmit={sGlobal.isLoading}
         />
       </Spin>

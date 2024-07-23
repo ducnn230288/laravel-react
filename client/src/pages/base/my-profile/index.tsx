@@ -13,11 +13,11 @@ import './index.less';
 const Page = () => {
   const sGlobal = SGlobal();
   useEffect(() => {
-    sGlobal.profile();
+    sGlobal.getProfile();
   }, []);
 
   useEffect(() => {
-    if (sGlobal.status === EStatusState.isFulfilled) sGlobal.profile();
+    if (sGlobal.status === EStatusState.isFulfilled) sGlobal.getProfile();
   }, [sGlobal.status]);
 
   const [searchParams] = useSearchParams();

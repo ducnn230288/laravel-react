@@ -6,6 +6,7 @@ import viVN from 'antd/lib/locale/vi_VN';
 import dayjs from 'dayjs';
 import { enLocale, viLocale } from './locale';
 
+export const nameGlobal = 'Auth';
 export interface StateGlobal {
   user?: IMUser;
   data?: IResetPassword & IMUser;

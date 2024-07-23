@@ -1,6 +1,7 @@
 import { EStatusState } from '@/enums';
 import type { IResponses } from '@/types';
 
+export const nameCrud = 'crud';
 export interface StateCrud<T = object, Y = object> {
   result?: IResponses<T[]>;
   data?: T;

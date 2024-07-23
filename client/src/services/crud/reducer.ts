@@ -2,7 +2,7 @@ import { EStatusState } from '@/enums';
 import type { IPaginationQuery } from '@/types';
 import { API, routerLinks } from '@/utils';
 import { createAsyncThunk, type ActionReducerMapBuilder } from '@reduxjs/toolkit';
-import type { StateCrud } from './state';
+import { nameCrud, type StateCrud } from './state';
 
 class RReducer {
   public action;
@@ -31,7 +31,7 @@ class RReducer {
     };
   }
 }
-export class RGet extends RReducer {
+class Get extends RReducer {
   public constructor(name: string) {
     super();
     this.action = createAsyncThunk(
@@ -52,7 +52,7 @@ export class RGet extends RReducer {
     };
   }
 }
-export class RGetId extends RReducer {
+class GetId extends RReducer {
   public constructor(name: string) {
     super();
     this.action = createAsyncThunk(
@@ -70,7 +70,7 @@ export class RGetId extends RReducer {
     };
   }
 }
-export class RPost extends RReducer {
+class Post extends RReducer {
   public constructor(name: string) {
     super();
     this.action = createAsyncThunk(name + '/post', async ({ values, keyApi }: { values: any; keyApi: string }) => {
@@ -89,7 +89,7 @@ export class RPost extends RReducer {
     };
   }
 }
-export class RPut extends RReducer {
+class Put extends RReducer {
   public constructor(name: string) {
     super();
     this.action = createAsyncThunk(
@@ -111,7 +111,7 @@ export class RPut extends RReducer {
     };
   }
 }
-export class RDelete extends RReducer {
+class Delete extends RReducer {
   public constructor(name: string) {
     super();
     this.action = createAsyncThunk(name + '/delete', async ({ id, keyApi }: { id: string; keyApi: string }) => {
@@ -123,3 +123,10 @@ export class RDelete extends RReducer {
     };
   }
 }
+export const RCurd = {
+  get: new Get(nameCrud),
+  getId: new GetId(nameCrud),
+  post: new Post(nameCrud),
+  put: new Put(nameCrud),
+  delete: new Delete(nameCrud),
+};

@@ -3,19 +3,11 @@ import i18n from 'i18next';
 
 import type { IMUser, IResetPassword } from '@/types/model';
 import { useAppDispatch, useTypedSelector } from '..';
-import { RForgottenPassword, RLogin, ROtpConfirmation, RProfile, RPutProfile, RResetPassword } from './reducer';
-import { checkLanguage, initialStateGlobal, type StateGlobal } from './state';
-
-const name = 'Auth';
-const rProfile = new RProfile(name);
-const rPutProfile = new RPutProfile(name);
-const rLogin = new RLogin(name);
-const rForgottenPassword = new RForgottenPassword(name);
-const rOtpConfirmation = new ROtpConfirmation(name);
-const rResetPassword = new RResetPassword(name);
+import { RGlobal } from './reducer';
+import { checkLanguage, initialStateGlobal, nameGlobal, type StateGlobal } from './state';
 
 export const globalSlice = createSlice({
-  name,
+  name: nameGlobal,
   initialState: initialStateGlobal,
   reducers: {
     set: (state, action) => {
@@ -34,27 +26,28 @@ export const globalSlice = createSlice({
     },
   },
   extraReducers: builder => {
-    rProfile.reducer(builder);
-    rPutProfile.reducer(builder);
-    rLogin.reducer(builder);
-    rForgottenPassword.reducer(builder);
-    rOtpConfirmation.reducer(builder);
-    rResetPassword.reducer(builder);
+    RGlobal.getProfile.reducer(builder);
+    RGlobal.putProfile.reducer(builder);
+    RGlobal.postLogin.reducer(builder);
+    RGlobal.postForgottenPassword.reducer(builder);
+    RGlobal.postOtpConfirmation.reducer(builder);
+    RGlobal.postResetPassword.reducer(builder);
   },
 });
 
 export const SGlobal = () => {
   const dispatch = useAppDispatch();
   return {
-    ...(useTypedSelector(state => state[name]) as StateGlobal),
+    ...(useTypedSelector(state => state[nameGlobal]) as StateGlobal),
     set: (values: StateGlobal) => dispatch(globalSlice.actions.set(values)),
     setLanguage: (value: string) => dispatch(globalSlice.actions.setLanguage(value)),
 
-    profile: () => dispatch(rProfile.action()),
-    putProfile: (values: IMUser) => dispatch(rPutProfile.action(values)),
-    login: (values: { password: string; email: string }) => dispatch(rLogin.action(values)),
-    forgottenPassword: (values: { email: string }) => dispatch(rForgottenPassword.action(values)),
-    otpConfirmation: (values: { email: string; otp: string }) => dispatch(rOtpConfirmation.action(values)),
-    resetPassword: (values: IResetPassword) => dispatch(rResetPassword.action(values)),
+    getProfile: () => dispatch(RGlobal.getProfile.action()),
+    putProfile: (values: IMUser) => dispatch(RGlobal.putProfile.action(values)),
+    postLogin: (values: { password: string; email: string }) => dispatch(RGlobal.postLogin.action(values)),
+    postForgottenPassword: (values: { email: string }) => dispatch(RGlobal.postForgottenPassword.action(values)),
+    postOtpConfirmation: (values: { email: string; otp: string }) =>
+      dispatch(RGlobal.postOtpConfirmation.action(values)),
+    postResetPassword: (values: IResetPassword) => dispatch(RGlobal.postResetPassword.action(values)),
   };
 };

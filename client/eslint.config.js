@@ -133,14 +133,6 @@ export default defineFlatConfig([
     },
   },
   {
-    files: ['*.d.ts'],
-    rules: {
-      'eslint-comments/no-unlimited-disable': 'off',
-      'import/no-duplicates': 'off',
-      'unused-imports/no-unused-vars': 'off',
-    },
-  },
-  {
     files: ['*.?([cm])js'],
     rules: {
       '@typescript-eslint/no-require-imports': 'off',

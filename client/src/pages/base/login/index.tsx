@@ -20,7 +20,35 @@ const Page = () => {
   }, [sGlobal.status]);
 
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.login' });
-
+  const columns = [
+    {
+      name: 'email',
+      title: t('Username'),
+      formItem: {
+        rules: [{ type: EFormRuleType.required }, { type: EFormRuleType.email }],
+      },
+    },
+    {
+      name: 'password',
+      title: t('Password'),
+      formItem: {
+        type: EFormType.password,
+        notDefaultValid: true,
+        rules: [{ type: EFormRuleType.required }],
+      },
+    },
+  ];
+  const renderExtendForm = () => (
+    <div className='-mt-2 text-right'>
+      <button
+        className='text-base-content/60'
+        type='button'
+        onClick={() => navigate(`/${lang}${routerLinks('ForgetPassword')}`)}
+      >
+        {t('Forgot Password')}
+      </button>
+    </div>
+  );
   return (
     <div className='intro-x'>
       <h1>{t('Sign In')}</h1>
@@ -28,35 +56,8 @@ const Page = () => {
       <Spin spinning={sGlobal.isLoading}>
         <CForm
           values={{ ...sGlobal.data }}
-          columns={[
-            {
-              name: 'email',
-              title: t('Username'),
-              formItem: {
-                rules: [{ type: EFormRuleType.required }, { type: EFormRuleType.email }],
-              },
-            },
-            {
-              name: 'password',
-              title: t('Password'),
-              formItem: {
-                type: EFormType.password,
-                notDefaultValid: true,
-                rules: [{ type: EFormRuleType.required }],
-              },
-            },
-          ]}
-          extendForm={() => (
-            <div className='-mt-2 text-right'>
-              <button
-                className='text-base-content/60'
-                type='button'
-                onClick={() => navigate(`/${lang}${routerLinks('ForgetPassword')}`)}
-              >
-                {t('Forgot Password')}
-              </button>
-            </div>
-          )}
+          columns={columns}
+          extendForm={renderExtendForm}
           textSubmit={t('Log In')}
           handSubmit={sGlobal.postLogin}
           disableSubmit={sGlobal.isLoading}

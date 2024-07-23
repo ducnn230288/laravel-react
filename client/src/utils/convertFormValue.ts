@@ -66,16 +66,12 @@ export const convertFormValue = (columns: IForm[], values: { [selector: string]:
                 item!
                   .formItem!.column!.filter(col => !!col.formItem)
                   .forEach(col => {
-                    switch (col!.formItem!.type) {
-                      case 'upload':
-                        result[col.name] =
-                          values[item.name]?.length && values[item.name]
-                            ? values[item.name][i][col.name] || null
-                            : null;
-                        break;
-                      default:
-                        result[col.name] =
-                          values[item.name]?.length && values[item.name] ? values[item.name][i][col.name] || '' : '';
+                    if (col!.formItem!.type === 'upload') {
+                      result[col.name] =
+                        values[item.name]?.length && values[item.name] ? values[item.name][i][col.name] || null : null;
+                    } else {
+                      result[col.name] =
+                        values[item.name]?.length && values[item.name] ? values[item.name][i][col.name] || '' : '';
                     }
                   });
                 return result;

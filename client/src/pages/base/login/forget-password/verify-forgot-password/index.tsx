@@ -23,6 +23,23 @@ const Page = () => {
   }, []);
 
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.login.forget-password.verify-forgot-password' });
+  const columns = [
+    {
+      name: 'otp',
+      title: t('Code OTP'),
+      formItem: {
+        type: EFormType.otp,
+        rules: [{ type: EFormRuleType.required }],
+      },
+    },
+    {
+      title: '',
+      name: 'email',
+      formItem: {
+        type: EFormType.hidden,
+      },
+    },
+  ];
   return (
     <div className='intro-x'>
       <h1>{t('Forgot Password')}</h1>
@@ -30,23 +47,7 @@ const Page = () => {
       <Spin spinning={sGlobal.isLoading}>
         <CForm
           values={{ ...sGlobal.data }}
-          columns={[
-            {
-              name: 'otp',
-              title: t('Code OTP'),
-              formItem: {
-                type: EFormType.otp,
-                rules: [{ type: EFormRuleType.required }],
-              },
-            },
-            {
-              title: '',
-              name: 'email',
-              formItem: {
-                type: EFormType.hidden,
-              },
-            },
-          ]}
+          columns={columns}
           textSubmit={t('Send code')}
           handSubmit={values => sGlobal.postOtpConfirmation({ ...values })}
           disableSubmit={sGlobal.isLoading}

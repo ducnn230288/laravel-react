@@ -24,6 +24,53 @@ const Page = () => {
   const { t } = useTranslation('locale', {
     keyPrefix: 'pages.base.login.forget-password.verify-forgot-password.reset-password',
   });
+  const columns = [
+    {
+      name: 'otp',
+      title: '',
+      formItem: {
+        type: EFormType.hidden,
+      },
+    },
+    {
+      title: '',
+      name: 'email',
+      formItem: {
+        type: EFormType.hidden,
+      },
+    },
+    {
+      name: 'password',
+      title: t('Password'),
+      formItem: {
+        type: EFormType.password,
+        rules: [{ type: EFormRuleType.required }, { type: EFormRuleType.min, value: 6 }],
+      },
+    },
+    {
+      name: 'passwordConfirmation',
+      title: t('Confirm Password'),
+      formItem: {
+        type: EFormType.password,
+        rules: [
+          { type: EFormRuleType.required },
+          { type: EFormRuleType.min, value: 6 },
+          {
+            type: EFormRuleType.custom,
+            validator: ({ getFieldValue }) => ({
+              validator(_, value: string) {
+                const errorMsg = t('Two passwords that you enter is inconsistent!');
+                if (!value || getFieldValue('password') === value) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(new Error(errorMsg));
+              },
+            }),
+          },
+        ],
+      },
+    },
+  ];
   return (
     <div className='intro-x'>
       <h1>{t('Reset Password')}</h1>
@@ -35,53 +82,7 @@ const Page = () => {
       <Spin spinning={sGlobal.isLoading}>
         <CForm
           values={{ ...sGlobal.data }}
-          columns={[
-            {
-              name: 'otp',
-              title: '',
-              formItem: {
-                type: EFormType.hidden,
-              },
-            },
-            {
-              title: '',
-              name: 'email',
-              formItem: {
-                type: EFormType.hidden,
-              },
-            },
-            {
-              name: 'password',
-              title: t('Password'),
-              formItem: {
-                type: EFormType.password,
-                rules: [{ type: EFormRuleType.required }, { type: EFormRuleType.min, value: 6 }],
-              },
-            },
-            {
-              name: 'passwordConfirmation',
-              title: t('Confirm Password'),
-              formItem: {
-                type: EFormType.password,
-                rules: [
-                  { type: EFormRuleType.required },
-                  { type: EFormRuleType.min, value: 6 },
-                  {
-                    type: EFormRuleType.custom,
-                    validator: ({ getFieldValue }) => ({
-                      validator(_, value: string) {
-                        const errorMsg = t('Two passwords that you enter is inconsistent!');
-                        if (!value || getFieldValue('password') === value) {
-                          return Promise.resolve();
-                        }
-                        return Promise.reject(new Error(errorMsg));
-                      },
-                    }),
-                  },
-                ],
-              },
-            },
-          ]}
+          columns={columns}
           textSubmit={t('Submit')}
           handSubmit={values => sGlobal.postResetPassword({ ...values })}
           disableSubmit={sGlobal.isLoading}

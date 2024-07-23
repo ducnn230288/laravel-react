@@ -11,8 +11,8 @@
     "build:stag": "tsc && vite build --mode staging",
     "build:prod": "tsc && vite build --mode prod",
     "preview": "vite preview",
-    "format": "prettier --write \"{src,public}/**/*.{tsx,jsx,ts,js,less}\"",
-    "lint": "eslint \"{src,public}/**/*.{tsx,jsx,ts,js}\" --fix",
+    "format": "prettier --write \"src/**/*.{tsx,jsx,ts,js,less}\"",
+    "lint": "eslint \"src/**/*.{tsx,jsx,ts,js}\" --fix",
     "update-all": "npx -p npm-check-updates ncu -u && npm install"
   },
   "dependencies": {

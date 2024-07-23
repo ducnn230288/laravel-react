@@ -21,6 +21,13 @@ const Page = () => {
   const request = JSON.parse(sCrud?.queryParams ?? '{}');
   const navigate = useNavigate();
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.parameter' });
+  const value =
+    sCrud.data?.code ?? queryString.parse(location.search, { arrayFormat: 'index' })?.code?.toString() ?? 'ADDRESS';
+  const onSelect = e => {
+    request.code = e;
+    sCrud.getById({ id: request.code });
+    navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
+  };
   return (
     <Fragment>
       <CBreadcrumbs title={t('Parameter')} list={[t('Setting'), t('Parameter')]} />
@@ -30,16 +37,8 @@ const Page = () => {
             label={t('Parameter')}
             isLoading={sCrud.isLoading}
             listData={sCrud.result?.data}
-            value={
-              sCrud.data?.code ??
-              queryString.parse(location.search, { arrayFormat: 'index' })?.code?.toString() ??
-              'ADDRESS'
-            }
-            onSelect={e => {
-              request.code = e;
-              sCrud.getById({ id: request.code });
-              navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
-            }}
+            value={value}
+            onSelect={onSelect}
           />
         </div>
         <div className='intro-x right'>
@@ -63,6 +62,24 @@ const Main = () => {
       item =>
         item.code === (queryString.parse(location.search, { arrayFormat: 'index' })?.code?.toString() ?? 'ADDRESS'),
     );
+  const columns = [
+    {
+      title: t('Vietnamese parameter'),
+      name: 'vi',
+      formItem: {
+        col: 6,
+        type: EFormType.textarea,
+      },
+    },
+    {
+      title: t('English parameter'),
+      name: 'en',
+      formItem: {
+        col: 6,
+        type: EFormType.textarea,
+      },
+    },
+  ];
   return (
     <div className='card'>
       <div className='header'>
@@ -73,24 +90,7 @@ const Main = () => {
           <CForm
             values={{ ...data }}
             className='intro-x'
-            columns={[
-              {
-                title: t('Vietnamese parameter'),
-                name: 'vi',
-                formItem: {
-                  col: 6,
-                  type: EFormType.textarea,
-                },
-              },
-              {
-                title: t('English parameter'),
-                name: 'en',
-                formItem: {
-                  col: 6,
-                  type: EFormType.textarea,
-                },
-              },
-            ]}
+            columns={columns}
             handSubmit={values => sCrud.put({ ...values, id: data!.code })}
             disableSubmit={sCrud.isLoading}
           />

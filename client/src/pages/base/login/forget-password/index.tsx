@@ -19,6 +19,15 @@ const Page = () => {
   }, [sGlobal.status]);
 
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.login.forget-password' });
+  const columns = [
+    {
+      name: 'email',
+      title: t('Recovery Email'),
+      formItem: {
+        rules: [{ type: EFormRuleType.required }, { type: EFormRuleType.email }],
+      },
+    },
+  ];
   return (
     <div className='intro-x'>
       <h1>{t('Forgot Password')}</h1>
@@ -26,15 +35,7 @@ const Page = () => {
       <Spin spinning={sGlobal.isLoading}>
         <CForm
           values={{ ...sGlobal.data }}
-          columns={[
-            {
-              name: 'email',
-              title: t('Recovery Email'),
-              formItem: {
-                rules: [{ type: EFormRuleType.required }, { type: EFormRuleType.email }],
-              },
-            },
-          ]}
+          columns={columns}
           textSubmit={t('Get OTP')}
           handSubmit={values => sGlobal.postForgottenPassword({ ...values })}
           disableSubmit={sGlobal.isLoading}

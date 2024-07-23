@@ -48,6 +48,15 @@ const CSide = () => {
   const navigate = useNavigate();
   const listMenu = menus({ lang: sGlobal.language, permissions: sGlobal.user?.role?.permissions });
   const sCrud = SCrud('');
+  const onSelect = ({ key }) => {
+    const menu = findMenu(listMenu, key);
+    if (location.pathname !== key && menu) {
+      navigate({
+        pathname: menu.key,
+        search: `?${createSearchParams(menu.queryparams)}`,
+      });
+    }
+  };
 
   return (
     <Fragment>
@@ -68,15 +77,7 @@ const CSide = () => {
               mode='inline'
               inlineCollapsed={sGlobal.isCollapseMenu}
               items={listMenu as any}
-              onSelect={({ key }) => {
-                const menu = findMenu(listMenu, key);
-                if (location.pathname !== key && menu) {
-                  navigate({
-                    pathname: menu.key,
-                    search: `?${createSearchParams(menu.queryparams)}`,
-                  });
-                }
-              }}
+              onSelect={onSelect}
             />
           </Scrollbar>
         </Spin>

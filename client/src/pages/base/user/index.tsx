@@ -25,6 +25,11 @@ const Page = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.user' });
+  const onSelect = e => {
+    request.roleCode = e;
+    sCrud.get(request);
+    navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
+  };
   return (
     <Fragment>
       <CBreadcrumbs title={t('User')} list={[t('User')]} />
@@ -36,11 +41,7 @@ const Page = () => {
             isLoading={sCrud.isLoadingType}
             listData={sCrud.resultType?.data}
             value={request.roleCode}
-            onSelect={e => {
-              request.roleCode = e;
-              sCrud.get(request);
-              navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
-            }}
+            onSelect={onSelect}
           />
         </div>
         <div className='intro-x right'>
@@ -66,6 +67,10 @@ const Form = () => {
   }, [sCrud.status]);
 
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.user' });
+  const onSubmit = values => {
+    if (sCrud.data?.id) sCrud.put({ ...values, id: sCrud.data.id, roleCode: request.roleCode });
+    else sCrud.post({ ...values, roleCode: request.roleCode });
+  };
   return (
     <CDrawerForm
       facade={sCrud}
@@ -73,10 +78,7 @@ const Form = () => {
       title={t(sCrud.data?.id ? 'Edit User' : 'Add new User', {
         name: searchTree({ array: sCrud.resultType?.data, value: request.roleCode, key: 'code' })?.name,
       })}
-      onSubmit={values => {
-        if (sCrud.data?.id) sCrud.put({ ...values, id: sCrud.data.id, roleCode: request.roleCode });
-        else sCrud.post({ ...values, roleCode: request.roleCode });
-      }}
+      onSubmit={onSubmit}
     />
   );
 };

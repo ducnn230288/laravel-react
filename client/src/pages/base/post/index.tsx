@@ -26,6 +26,11 @@ const Page = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.post' });
+  const onSelect = e => {
+    request.typeCode = e;
+    sCrud.get(request);
+    navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
+  };
   return (
     <Fragment>
       <CBreadcrumbs title={t('Post')} list={[t('Setting'), t('Post')]} />
@@ -41,11 +46,7 @@ const Page = () => {
             onAdd={sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_POST_TYPE_STORE) && sCrud.set}
             onEdit={sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_POST_TYPE_UPDATE) && sCrud.getByIdType}
             onDelete={sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_POST_TYPE_DESTROY) && sCrud.deleteType}
-            onSelect={e => {
-              request.typeCode = e;
-              sCrud.get(request);
-              navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
-            }}
+            onSelect={onSelect}
           />
         </div>
         <div className='intro-x right'>
@@ -70,6 +71,10 @@ const FormPost = () => {
   }, [sCrud.status]);
 
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.post' });
+  const onSubmit = values => {
+    if (sCrud.data?.id) sCrud.put({ ...values, id: sCrud.data.id, typeCode: request.typeCode });
+    else sCrud.post({ ...values, typeCode: request.typeCode });
+  };
   return (
     <CDrawerForm
       size={'large'}
@@ -78,10 +83,7 @@ const FormPost = () => {
       title={t(sCrud.data?.id ? 'Edit Post' : 'Add new Post', {
         name: searchTree({ array: sCrud.resultType?.data, value: request.typeCode, key: 'code' })?.name,
       })}
-      onSubmit={values => {
-        if (sCrud.data?.id) sCrud.put({ ...values, id: sCrud.data.id, typeCode: request.typeCode });
-        else sCrud.post({ ...values, typeCode: request.typeCode });
-      }}
+      onSubmit={onSubmit}
     />
   );
 };
@@ -98,6 +100,10 @@ const FormPostType = () => {
   }, [sCrud.statusType]);
 
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.post' });
+  const onSubmit = values => {
+    if (sCrud.dataType?.id) sCrud.putType({ ...values, id: sCrud.dataType.id });
+    else sCrud.postType({ ...values });
+  };
   return (
     <CDrawerForm
       facade={sCrud}
@@ -106,10 +112,7 @@ const FormPostType = () => {
       keyState='isVisibleType'
       columns={_columnType.useForm()}
       title={t(sCrud.dataType?.id ? 'Edit Type Post' : 'Add new Type Post')}
-      onSubmit={values => {
-        if (sCrud.dataType?.id) sCrud.putType({ ...values, id: sCrud.dataType.id });
-        else sCrud.postType({ ...values });
-      }}
+      onSubmit={onSubmit}
     />
   );
 };

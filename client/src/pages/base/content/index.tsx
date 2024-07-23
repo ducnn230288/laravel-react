@@ -21,10 +21,15 @@ const Page = () => {
     if (sCrud.result && !sCrud?.resultType) sCrud.getType({});
   }, [sCrud.result]);
 
+  const { t } = useTranslation('locale', { keyPrefix: 'pages.base.content' });
   const request = JSON.parse(sCrud?.queryParams ?? '{}');
   const navigate = useNavigate();
   const location = useLocation();
-  const { t } = useTranslation('locale', { keyPrefix: 'pages.base.content' });
+  const onSelect = e => {
+    request.typeCode = e;
+    sCrud.get(request);
+    navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
+  };
   return (
     <Fragment>
       <CBreadcrumbs title={t('Content')} list={[t('Setting'), t('Content')]} />
@@ -36,11 +41,7 @@ const Page = () => {
             isLoading={sCrud.isLoadingType}
             listData={sCrud.resultType?.data}
             value={request.typeCode}
-            onSelect={e => {
-              request.typeCode = e;
-              sCrud.get(request);
-              navigate(location.pathname + '?' + queryString.stringify(request, { arrayFormat: 'index' }));
-            }}
+            onSelect={onSelect}
           />
         </div>
         <div className='intro-x right'>
@@ -66,6 +67,10 @@ const Form = () => {
   }, [sCrud.status]);
 
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.content' });
+  const onSubmit = values => {
+    if (sCrud.data?.id) sCrud.put({ ...values, id: sCrud.data.id, typeCode: request.typeCode });
+    else sCrud.post({ ...values, typeCode: request.typeCode });
+  };
   return (
     <CDrawerForm
       facade={sCrud}
@@ -73,10 +78,7 @@ const Form = () => {
       title={t(sCrud.data?.id ? 'Edit Content' : 'Add new Content', {
         name: searchTree({ array: sCrud.resultType?.data, value: request.typeCode, key: 'code' })?.name,
       })}
-      onSubmit={values => {
-        if (sCrud.data?.id) sCrud.put({ ...values, id: sCrud.data.id, typeCode: request.typeCode });
-        else sCrud.post({ ...values, typeCode: request.typeCode });
-      }}
+      onSubmit={onSubmit}
     />
   );
 };

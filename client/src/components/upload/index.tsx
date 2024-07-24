@@ -162,74 +162,86 @@ export const CUpload = ({
     }
   };
 
+  const renderArrowUp = (index: number) =>
+    index > 0 && (
+      <button
+        onClick={() => moverImage(index, index - 1)}
+        className={
+          'top-1 absolute right-1 bg-base-200 hover:bg-primary size-5 cursor-pointer rounded-full text-base-content transition-all duration-300'
+        }
+      >
+        <CSvgIcon name='arrow' size={12} className={'m-1 rotate-180 fill-primary hover:fill-base-content'} />
+      </button>
+    );
+
+  const renderArrowDown = (index: number) =>
+    index < listFiles.length - 1 && (
+      <button
+        onClick={() => moverImage(index, index + 1)}
+        className={classNames(
+          'absolute right-1 bg-base-200 hover:bg-primary size-5 cursor-pointer rounded-full text-base-content transition-all duration-300',
+          {
+            'top-8': index > 0,
+            'top-1': index === 0,
+          },
+        )}
+      >
+        <CSvgIcon name='arrow' size={12} className={'m-1 fill-primary hover:fill-base-content'} />
+      </button>
+    );
+
+  const renderBtnDelete = (file, index) =>
+    showBtnDelete(file) && (
+      <Popconfirm
+        destroyTooltipOnHide={true}
+        title={t('Are you sure want delete?', { name: file.name, label: t('File').toLowerCase() })}
+        onConfirm={async () => {
+          if (deleteFile && file?.id) {
+            const data = await deleteFile(file?.id);
+            if (!data) {
+              return false;
+            }
+          }
+          onChange?.(listFiles.filter((_item: any) => _item.id !== file.id));
+        }}
+      >
+        <button
+          className={classNames('btn-delete', {
+            'top-16 ': listFiles.length > 1 && index > 0 && index < listFiles.length - 1,
+            'top-8': listFiles.length > 1 && (index === 0 || index === listFiles.length - 1),
+            'top-1': listFiles.length === 1,
+          })}
+        >
+          <CSvgIcon name='times' size={12} className={'m-1 fill-error hover:fill-base-content'} />
+        </button>
+      </Popconfirm>
+    );
+  const handlePaste = async event => {
+    const items = event.clipboardData.items;
+    for (const index in items) {
+      const item = items[index];
+      if (item.kind === 'file') {
+        const blob = item.getAsFile();
+        await onUpload({ target: { files: [blob] } });
+      }
+    }
+  };
+
+  const renderListFiles = listFiles.map((file: any, index: number) => (
+    <div key={'file-' + index} className={'relative'}>
+      <a href={file[keyImage] ? file[keyImage] : file} className='glightbox'>
+        <img src={file[keyImage] ? file[keyImage] : file} alt={file.name} />
+      </a>
+      {renderArrowUp(index)}
+      {renderArrowDown(index)}
+      {renderBtnDelete(file, index)}
+    </div>
+  ));
+
   return (
     <Spin spinning={isLoading.current}>
       <input type='file' className={'hidden'} accept={accept} multiple={multiple} ref={ref} onChange={onUpload} />
-      <div
-        className={classNames('upload', {
-          'upload-grid': multiple,
-          'w-24': !multiple,
-        })}
-      >
-        {listFiles.map((file: any, index: number) => (
-          <div key={'file-' + index} className={classNames('relative')}>
-            <a href={file[keyImage] ? file[keyImage] : file} className='glightbox'>
-              <img src={file[keyImage] ? file[keyImage] : file} alt={file.name} />
-            </a>
-            {index > 0 && (
-              <button
-                onClick={() => moverImage(index, index - 1)}
-                className={
-                  'top-1 absolute right-1 bg-base-200 hover:bg-primary size-5 cursor-pointer rounded-full text-base-content transition-all duration-300'
-                }
-              >
-                <CSvgIcon name='arrow' size={12} className={'m-1 rotate-180 fill-primary hover:fill-base-content'} />
-              </button>
-            )}
-
-            {index < listFiles.length - 1 && (
-              <button
-                onClick={() => moverImage(index, index + 1)}
-                className={classNames(
-                  'absolute right-1 bg-base-200 hover:bg-primary size-5 cursor-pointer rounded-full text-base-content transition-all duration-300',
-                  {
-                    'top-8': index > 0,
-                    'top-1': index === 0,
-                  },
-                )}
-              >
-                <CSvgIcon name='arrow' size={12} className={'m-1 fill-primary hover:fill-base-content'} />
-              </button>
-            )}
-
-            {showBtnDelete(file) && (
-              <Popconfirm
-                destroyTooltipOnHide={true}
-                title={t('Are you sure want delete?', { name: file.name, label: t('File').toLowerCase() })}
-                onConfirm={async () => {
-                  if (deleteFile && file?.id) {
-                    const data = await deleteFile(file?.id);
-                    if (!data) {
-                      return false;
-                    }
-                  }
-                  onChange?.(listFiles.filter((_item: any) => _item.id !== file.id));
-                }}
-              >
-                <button
-                  className={classNames('btn-delete', {
-                    'top-16 ': listFiles.length > 1 && index > 0 && index < listFiles.length - 1,
-                    'top-8': listFiles.length > 1 && (index === 0 || index === listFiles.length - 1),
-                    'top-1': listFiles.length === 1,
-                  })}
-                >
-                  <CSvgIcon name='times' size={12} className={'m-1 fill-error hover:fill-base-content'} />
-                </button>
-              </Popconfirm>
-            )}
-          </div>
-        ))}
-      </div>
+      <div className={classNames('upload', { 'upload-grid': multiple, 'w-24': !multiple })}>{renderListFiles}</div>
       <div className={'mt-2 flex gap-2'}>
         <CButton
           isTiny={true}
@@ -241,16 +253,7 @@ export const CUpload = ({
           isTiny={true}
           icon={<CSvgIcon name='paste' size={16} />}
           text={'Paste'}
-          onPaste={async event => {
-            const items = event.clipboardData.items;
-            for (const index in items) {
-              const item = items[index];
-              if (item.kind === 'file') {
-                const blob = item.getAsFile();
-                await onUpload({ target: { files: [blob] } });
-              }
-            }
-          }}
+          onPaste={handlePaste}
         ></CButton>
       </div>
     </Spin>

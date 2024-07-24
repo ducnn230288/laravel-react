@@ -8,7 +8,7 @@ export const Component: any = ({
   total = 4,
   page = 1,
   perPage = 10,
-  pageSizeOptions = [],
+  pageSizeOptions,
   paginationDescription = (from: number, to: number, total: number) => from + '-' + to + ' of ' + total + ' items',
   queryParams = () => null,
 }: Type) => {
@@ -122,40 +122,44 @@ export const Component: any = ({
     }
   };
 
+  const renderIconPrev = item => item.type === 'prev' && <CSvgIcon name='arrow' className={'rotate-180'} />;
+  const renderIconNext = item => item.type === 'next' && <CSvgIcon name='arrow' />;
+  const renderIconPrev10 = item => item.type === 'prev_10' && <CSvgIcon name='double-arrow' className={'rotate-180'} />;
+  const renderIconNext10 = item => item.type === 'next_10' && <CSvgIcon name='double-arrow' />;
+  const renderNumberPage = item => item.type.indexOf('page') === 0 && item.index;
+  const renderThreeDots = item => (item.type === 'prev_5' || item.type === 'next_5') && '...';
+  const renderPages = listOfPageItem.current.map((item: any) => (
+    <button
+      type={'button'}
+      disabled={item.disabled}
+      key={item.type}
+      className={classNames({ active: page === item.index, disabled: item.disabled })}
+      onClick={() => onPageIndexChange(item)}
+      aria-label={item.type}
+    >
+      {renderIconPrev(item)}
+      {renderIconNext(item)}
+      {renderIconPrev10(item)}
+      {renderIconNext10(item)}
+      {renderNumberPage(item)}
+      {renderThreeDots(item)}
+    </button>
+  ));
+
   return (
     total > 0 && (
       <div className={'pagination'}>
         <div className={'left'}>
-          {pageSizeOptions.length > 0 && (
-            <CISelect
-              allowClear={false}
-              showSearch={false}
-              value={perPage}
-              onChange={value => onPageSizeChange(value)}
-              list={pageSizeOptions.map((item: number) => ({ value: item, label: item + ' / page' }))}
-            />
-          )}
-          {!!paginationDescription && <label>{paginationDescription(temp.ranges[0], temp.ranges[1], total)}</label>}
+          <CISelect
+            allowClear={false}
+            showSearch={false}
+            value={perPage}
+            onChange={value => onPageSizeChange(value)}
+            list={pageSizeOptions.map((item: number) => ({ value: item, label: item + ' / page' }))}
+          />
+          <label>{paginationDescription(temp.ranges[0], temp.ranges[1], total)}</label>
         </div>
-        <div className='right'>
-          {listOfPageItem.current.map((item: any) => (
-            <button
-              type={'button'}
-              disabled={item.disabled}
-              key={item.type}
-              className={classNames({ active: page === item.index, disabled: item.disabled })}
-              onClick={() => onPageIndexChange(item)}
-              aria-label={item.type}
-            >
-              {item.type === 'prev' && <CSvgIcon name='arrow' className={'rotate-180'} />}
-              {item.type === 'next' && <CSvgIcon name='arrow' />}
-              {item.type === 'prev_10' && <CSvgIcon name='double-arrow' className={'rotate-180'} />}
-              {item.type === 'next_10' && <CSvgIcon name='double-arrow' />}
-              {item.type.indexOf('page') === 0 && item.index}
-              {(item.type === 'prev_5' || item.type === 'next_5') && '...'}
-            </button>
-          ))}
-        </div>
+        <div className='right'>{renderPages}</div>
       </div>
     )
   );

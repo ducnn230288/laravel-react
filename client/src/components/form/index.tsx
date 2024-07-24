@@ -42,6 +42,62 @@ export const CForm = ({
     handSubmit && handSubmit(values);
   };
 
+  const handleValuesChange = async objValue => {
+    if (form && checkHidden) {
+      clearTimeout(timeout.current);
+      timeout.current = setTimeout(async () => {
+        for (const key in objValue) {
+          if (Object.hasOwn(objValue, key)) columns.filter((_item: any) => _item.name === key);
+        }
+      }, 500);
+    }
+  };
+  const renderColumns = () =>
+    columns
+      .filter((item: any) => !!item && !!item.formItem)
+      .map(
+        (column: any, index: number) =>
+          (!column?.formItem?.condition ||
+            !!column?.formItem?.condition({ value: values[column.name], form, index, values })) && (
+            <div
+              className={classNames(
+                'col-span-12 type-' +
+                  (column?.formItem?.type || EFormType.text) +
+                  (' sm:col-span-' + (column?.formItem?.col ?? 12)) +
+                  (' lg:col-span-' + (column?.formItem?.col ?? 12)),
+              )}
+              key={index + column.name}
+            >
+              {generateForm({
+                item: column,
+                index,
+                values,
+                form,
+                t,
+                widthLabel,
+              })}
+            </div>
+          ),
+      );
+
+  const renderBtnCancel = () =>
+    handCancel && (
+      <CButton
+        text={textCancel ?? t('Cancel')}
+        className={'w-full justify-center !border-black sm:w-auto sm:min-w-32'}
+        onClick={handCancel}
+      />
+    );
+  const renderBtnSubmit = () =>
+    handSubmit && (
+      <CButton
+        text={textSubmit ?? t('Save')}
+        onClick={() => form?.submit()}
+        disabled={disableSubmit || spinning}
+        className={'text-base-100 bg-primary hover:bg-primary/90 leading-4 w-full rounded-lg !h-12'}
+      />
+    );
+
   const timeout = useRef<any>();
   return (
     <Spin spinning={spinning}>
@@ -55,47 +111,10 @@ export const CForm = ({
           failed?.errorFields?.length && form?.scrollToField(failed?.errorFields[0].name, { behavior: 'smooth' })
         }
         onFinish={handFinish}
-        onValuesChange={async objValue => {
-          if (form && checkHidden) {
-            clearTimeout(timeout.current);
-            timeout.current = setTimeout(async () => {
-              for (const key in objValue) {
-                if (Object.hasOwn(objValue, key)) columns.filter((_item: any) => _item.name === key);
-              }
-            }, 500);
-          }
-        }}
+        onValuesChange={handleValuesChange}
       >
         <div>
-          <div className={'grid grid-cols-12 gap-x-5'}>
-            {columns
-              .filter((item: any) => !!item && !!item.formItem)
-              .map(
-                (column: any, index: number) =>
-                  (!column?.formItem?.condition ||
-                    !!column?.formItem?.condition({ value: values[column.name], form, index, values })) && (
-                    <div
-                      className={classNames(
-                        'col-span-12 type-' +
-                          (column?.formItem?.type || EFormType.text) +
-                          (' sm:col-span-' + (column?.formItem?.col ?? 12)) +
-                          (' lg:col-span-' + (column?.formItem?.col ?? 12)),
-                      )}
-                      key={index + column.name}
-                    >
-                      {generateForm({
-                        item: column,
-                        index,
-                        values,
-                        form,
-                        t,
-                        widthLabel,
-                      })}
-                    </div>
-                  ),
-              )}
-          </div>
-
+          <div className={'grid grid-cols-12 gap-x-5'}>{renderColumns()}</div>
           {extendForm?.(values)}
         </div>
 
@@ -108,22 +127,9 @@ export const CForm = ({
               !handSubmit && (handCancel || extendButton),
           })}
         >
-          {handCancel && (
-            <CButton
-              text={textCancel ?? t('Cancel')}
-              className={'w-full justify-center !border-black sm:w-auto sm:min-w-32'}
-              onClick={handCancel}
-            />
-          )}
+          {renderBtnCancel()}
           {extendButton?.(form)}
-          {handSubmit && (
-            <CButton
-              text={textSubmit ?? t('Save')}
-              onClick={() => form?.submit()}
-              disabled={disableSubmit || spinning}
-              className={'text-base-100 bg-primary hover:bg-primary/90 leading-4 w-full rounded-lg !h-12'}
-            />
-          )}
+          {renderBtnSubmit()}
         </div>
       </Form>
     </Spin>

@@ -169,41 +169,43 @@ const mapRule = ({
   if (item.formItem) {
     switch (rule.type) {
       case EFormRuleType.required:
-        const config: any = {
-          required: true,
-          message: t(
-            rule.message ??
-              (!item.formItem.type ||
-              [
-                EFormType.text,
-                EFormType.name,
-                EFormType.number,
-                EFormType.hidden,
-                EFormType.password,
-                EFormType.textarea,
-                EFormType.otp,
-              ].includes(item.formItem.type)
-                ? 'Please enter'
-                : 'Please choose'),
-            {
-              title: item.title.toLowerCase(),
-            },
-          ),
-        };
-        if (
-          item.formItem.type &&
-          [
-            EFormType.text,
-            EFormType.name,
-            EFormType.number,
-            EFormType.hidden,
-            EFormType.password,
-            EFormType.textarea,
-          ].includes(item.formItem.type)
-        ) {
-          config.whitespace = true;
+        {
+          const config: any = {
+            required: true,
+            message: t(
+              rule.message ??
+                (!item.formItem.type ||
+                [
+                  EFormType.text,
+                  EFormType.name,
+                  EFormType.number,
+                  EFormType.hidden,
+                  EFormType.password,
+                  EFormType.textarea,
+                  EFormType.otp,
+                ].includes(item.formItem.type)
+                  ? 'Please enter'
+                  : 'Please choose'),
+              {
+                title: item.title.toLowerCase(),
+              },
+            ),
+          };
+          if (
+            item.formItem.type &&
+            [
+              EFormType.text,
+              EFormType.name,
+              EFormType.number,
+              EFormType.hidden,
+              EFormType.password,
+              EFormType.textarea,
+            ].includes(item.formItem.type)
+          ) {
+            config.whitespace = true;
+          }
+          rules.push(config);
         }
-        rules.push(config);
         break;
       case EFormRuleType.email:
         rules.push(() => ({

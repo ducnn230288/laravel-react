@@ -44,7 +44,7 @@ class GetProfile extends RReducer {
         state.user = action.payload;
         state.data = action.payload;
         localStorage.setItem(KEY_USER, JSON.stringify(action.payload));
-        state.status = EStatusState.isFulfilled;
+        state.status = EStatusState.idle;
       }
     };
   }

@@ -28,7 +28,7 @@ export const CSideTree = ({
 }) => {
   const { t } = useTranslation('locale', { keyPrefix: 'library' });
 
-  const titleRender = data => (
+  const renderTitle = data => (
     <span className={'item'}>
       {data.title}
       <div className='action'>
@@ -62,34 +62,34 @@ export const CSideTree = ({
     </span>
   );
 
+  const renderBtnAdd = !!onAdd && (
+    <CButton
+      icon={<CSvgIcon name='plus' size={12} />}
+      onClick={() => onAdd({ dataType: undefined, isVisibleType: true })}
+    />
+  );
+
   return (
     <div className='card'>
       <div className='header'>
         <h3>{label}</h3>
-        {!!onAdd && (
-          <CButton
-            icon={<CSvgIcon name='plus' size={12} />}
-            onClick={() => onAdd({ dataType: undefined, isVisibleType: true })}
-          />
-        )}
+        {renderBtnAdd}
       </div>
       <Spin spinning={isLoading}>
         <div className='desktop'>
-          {listData && (
-            <Scrollbar>
-              <Tree
-                blockNode
-                showLine
-                autoExpandParent
-                defaultExpandAll
-                switcherIcon={<CSvgIcon name='arrow' size={12} />}
-                defaultSelectedKeys={[value]}
-                treeData={listData?.map(mapTreeObject)}
-                onSelect={selectedKeys => selectedKeys[0] && !!onSelect && onSelect(selectedKeys[0])}
-                titleRender={titleRender}
-              />
-            </Scrollbar>
-          )}
+          <Scrollbar>
+            <Tree
+              blockNode
+              showLine
+              autoExpandParent
+              defaultExpandAll
+              switcherIcon={<CSvgIcon name='arrow' size={12} />}
+              defaultSelectedKeys={[value]}
+              treeData={listData?.map(mapTreeObject)}
+              onSelect={selectedKeys => selectedKeys[0] && !!onSelect && onSelect(selectedKeys[0])}
+              titleRender={renderTitle}
+            />
+          </Scrollbar>
         </div>
         <div className='mobile'>
           <TreeSelect

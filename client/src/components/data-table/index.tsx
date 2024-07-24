@@ -235,8 +235,8 @@ export const CDataTable = forwardRef(
       array
         ? formatData(array).map(item => ({
             ...item,
-            key: item.id || uuidv4(),
-            children: item.children && loopData(item.children),
+            key: item?.id || uuidv4(),
+            children: item?.children && loopData(item.children),
           }))
         : [];
     const componentsCell = ({ children, ...restProps }: { children: React.ReactNode; title?: string }) => (

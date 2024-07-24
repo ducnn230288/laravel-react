@@ -31,6 +31,17 @@ export const CModalForm = forwardRef(
       if (item.id && isGet) facade.getById({ id: item.id, keyState });
       else facade.set({ [keyState]: true, [keyData]: item });
     };
+
+    const handleOk = async () =>
+      form
+        .validateFields()
+        .then(async values => {
+          values = convertFormValue(columns, values);
+          if (facade[keyData]?.id) facade[keyPut]({ ...values, id: facade[keyData].id });
+          else facade[keyPost]({ ...values });
+          return true;
+        })
+        .catch(() => false);
     return (
       <CModal
         facade={facade}
@@ -41,17 +52,7 @@ export const CModalForm = forwardRef(
         className={className}
         footerCustom={footerCustom}
         title={() => title(facade[keyData])}
-        onOk={async () => {
-          return form
-            .validateFields()
-            .then(async values => {
-              values = convertFormValue(columns, values);
-              if (facade[keyData]?.id) facade[keyPut]({ ...values, id: facade[keyData].id });
-              else facade[keyPost]({ ...values });
-              return true;
-            })
-            .catch(() => false);
-        }}
+        onOk={handleOk}
       >
         <CForm values={{ ...facade[keyData] }} formAnt={form} columns={columns} />
       </CModal>

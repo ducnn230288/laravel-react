@@ -11,7 +11,7 @@ import { CSvgIcon } from '../svg-icon';
 export const CGantt = ({
   widthColumnDay = 36,
   perRow = 3,
-  maxHeight = 500,
+  maxHeight = 900,
   data = [],
   event = [],
 }: {
@@ -65,7 +65,7 @@ export const CGantt = ({
   };
   const [temp, setTemp] = useState<{ date: any; dateStart: Dayjs; task: any[] }>({
     date: { obj: {}, total: 0 },
-    dateStart: dayjs(),
+    dateStart: dayjs(data[0].startDate),
     task: data,
   });
 
@@ -227,7 +227,7 @@ export const CGantt = ({
           >
             <div
               className={classNames('text-center text-base-content text-xs h-4', {
-                'bg-base-300': !!temp.task[index + 1] && temp.task[index + 1].level > item.level,
+                'bg-base-content/50': !!temp.task[index + 1] && temp.task[index + 1].level > item.level,
                 'bg-primary': !temp.task[index + 1] || temp.task[index + 1].level <= item.level,
               })}
               style={{ width: item.percent + '%' }}
@@ -271,6 +271,158 @@ export const CGantt = ({
         ) + perRow) *
       (widthColumnDay / perRow) +
     'px';
+
+  const handleDragMoveHorizontal = ({ delta, active }) => {
+    const left: any = document.querySelector(`#${id.current} .left`);
+    const right: any = document.querySelector(`#${id.current} .right`);
+    if (active.id === 'side') {
+      if (dragStart) {
+        dragStart = false;
+        wLeft = parseFloat(left.clientWidth);
+        wRight = parseFloat(right.clientWidth);
+      }
+      const p = delta.x;
+      left.style.flexBasis = ((wLeft + p) / (wLeft + wRight)) * 100 + '%';
+      right.style.flexBasis = ((wRight - p) / (wLeft + wRight)) * 100 + '%';
+    }
+  };
+  const handleDragMoveVertical = ({ delta, active }) => {
+    if (active.id === 'vertical') {
+      const vertical = document.querySelectorAll(`#${id.current} .overflow-scroll`);
+      if (dragStart) {
+        dragStart = false;
+        height = vertical[0].clientHeight;
+      }
+      vertical.forEach((e: any) => (e.style.height = height + delta.y + 'px'));
+    }
+  };
+
+  const renderTasks = () =>
+    temp.task.map(
+      (item, index) =>
+        !item.hidden && (
+          <tr key={index} onFocus={handleHover} onBlur={handleHover} data-index={index} data-level={item.level}>
+            <td className='h-6 overflow-hidden border-x py-0 pl-5'>
+              <div
+                className={'flex items-center gap-1'}
+                style={{ paddingLeft: item.level * (widthColumnDay / perRow) + 'px' }}
+              >
+                {!!temp.task[index + 1] && temp.task[index + 1].level > item.level && (
+                  <TweenOne
+                    animation={{ rotate: 0, duration: 200 }} // @ts-ignore
+                    moment={!statusCollapse.current[index] ? null : 1}
+                    reverse={!statusCollapse.current[index]}
+                    className={'-ml-4 size-3 rotate-90 cursor-pointer'}
+                  >
+                    <CSvgIcon name='arrow' size={12} onClick={() => handleCollapse(index, item.level)} />
+                  </TweenOne>
+                )}
+                <span className={'truncate'}>{item.name}</span>
+              </div>
+            </td>
+            <td className='h-6 truncate border-x px-4 py-0'>{item.assignee}</td>
+            <td
+              className={classNames('border-x px-4 py-0 h-6 text-white truncate', {
+                'bg-primary': item.status === 'In Progress',
+                'bg-success': item.status === 'Completed',
+                'bg-base-content': item.status === 'On Hold',
+              })}
+            >
+              {item.status}
+            </td>
+            <td
+              className={classNames('border-x px-4 py-0 h-6 text-white truncate', {
+                'bg-error': item.priority === 'Critical',
+                'bg-secondary': item.priority === 'High',
+                'bg-warning': item.priority === 'Normal',
+              })}
+            >
+              {item.priority}
+            </td>
+            <td className='h-6 truncate border-x px-4 py-0'>
+              {item.planned} {item.planned ? 'hours' : ''}
+            </td>
+            <td className='h-6 truncate border-x px-4 py-0'>
+              {item.work} {item.work ? 'days' : ''}
+            </td>
+          </tr>
+        ),
+    );
+  const renderMonthYear = () =>
+    Object.keys(temp.date.obj).map(year =>
+      Object.keys(temp.date.obj[year]).map((month, index) => (
+        <th
+          key={index}
+          align={'left'}
+          className={'h-6 border-x border-t px-4 text-xs capitalize'}
+          style={{ width: widthGantt(year, month) }}
+        >
+          {temp.date.obj[year][month][0].format('MMMM')} {year}
+        </th>
+      )),
+    );
+
+  const renderDay = () =>
+    Object.keys(temp.date.obj).map(year =>
+      Object.keys(temp.date.obj[year]).map(month =>
+        temp.date.obj[year][month].map((day: Dayjs, index: number) => (
+          <th
+            key={index}
+            className={'h-6 border-x text-xs font-normal capitalize'}
+            style={{ width: widthColumnDay + 'px' }}
+          >
+            {day.format('DD')}
+          </th>
+        )),
+      ),
+    );
+
+  const renderEvent = () =>
+    event.map((item, index) => {
+      if (item.endDate)
+        return (
+          <div
+            key={'event' + index}
+            className={'absolute flex h-full items-center justify-center bg-base-300 text-base-content'}
+            style={{
+              width: (item.endDate.diff(item.startDate, 'day') + 1) * (widthColumnDay / perRow) + 'px',
+              left: item.startDate.diff(temp.dateStart, 'day') * (widthColumnDay / perRow) + 'px',
+            }}
+          >
+            <div
+              className='rotate-90 whitespace-nowrap text-center'
+              style={{ marginTop: -item.name.length * 6 + 'px' }}
+            >
+              {item.name}
+            </div>
+          </div>
+        );
+      else
+        return (
+          <div
+            key={'event' + index}
+            className={'absolute flex h-full items-center justify-center border-l border-dashed border-error'}
+            style={{
+              left: item.startDate.diff(temp.dateStart, 'day') * (widthColumnDay / perRow) + 'px',
+            }}
+          >
+            <div className='rounded-r-xl bg-error px-2 py-1 text-error-content'>{item.name}</div>
+          </div>
+        );
+    });
+  const renderGridDay = () =>
+    temp.task.map((item, index) => (
+      <tr key={index} onFocus={handleHover} onBlur={handleHover} data-index={index} data-level={item.level}>
+        {Object.keys(temp.date.obj).map(year =>
+          Object.keys(temp.date.obj[year]).map(month =>
+            temp.date.obj[year][month].map((_: Dayjs, i: number) => (
+              <td key={i} className={'relative h-6 border-x py-0 font-normal capitalize'} />
+            )),
+          ),
+        )}
+      </tr>
+    ));
+
   let wLeft = 0;
   let wRight = 0;
   let dragStart = true;
@@ -281,20 +433,7 @@ export const CGantt = ({
         <DndContext
           modifiers={[restrictToHorizontalAxis]}
           onDragEnd={() => (dragStart = true)}
-          onDragMove={({ delta, active }) => {
-            const left: any = document.querySelector(`#${id.current} .left`);
-            const right: any = document.querySelector(`#${id.current} .right`);
-            if (active.id === 'side') {
-              if (dragStart) {
-                dragStart = false;
-                wLeft = parseFloat(left.clientWidth);
-                wRight = parseFloat(right.clientWidth);
-              }
-              const p = delta.x;
-              left.style.flexBasis = ((wLeft + p) / (wLeft + wRight)) * 100 + '%';
-              right.style.flexBasis = ((wRight - p) / (wLeft + wRight)) * 100 + '%';
-            }
-          }}
+          onDragMove={handleDragMoveHorizontal}
         >
           <div className={'flex w-full gap-0.5'}>
             <div className={'left overflow-hidden'} style={{ flexBasis: '50%' }}>
@@ -315,68 +454,7 @@ export const CGantt = ({
 
               <div className='overflow-scroll' data-scroll-x={'.left-scroll'} onScroll={handleScroll}>
                 <table className={'body min-w-[600px] border-b'}>
-                  <tbody>
-                    {temp.task.map(
-                      (item, index) =>
-                        !item.hidden && (
-                          <tr
-                            key={index}
-                            onFocus={handleHover}
-                            onBlur={handleHover}
-                            data-index={index}
-                            data-level={item.level}
-                          >
-                            <td className='h-6 overflow-hidden border-x py-0 pl-5'>
-                              <div
-                                className={'flex items-center gap-1'}
-                                style={{ paddingLeft: item.level * (widthColumnDay / perRow) + 'px' }}
-                              >
-                                {!!temp.task[index + 1] && temp.task[index + 1].level > item.level && (
-                                  <TweenOne
-                                    animation={{ rotate: 0, duration: 200 }} // @ts-ignore
-                                    moment={!statusCollapse.current[index] ? null : 1}
-                                    reverse={!statusCollapse.current[index]}
-                                    className={'-ml-4 size-3 rotate-90 cursor-pointer'}
-                                  >
-                                    <CSvgIcon
-                                      name='arrow'
-                                      size={12}
-                                      onClick={() => handleCollapse(index, item.level)}
-                                    />
-                                  </TweenOne>
-                                )}
-                                <span className={'truncate'}>{item.name}</span>
-                              </div>
-                            </td>
-                            <td className='h-6 truncate border-x px-4 py-0'>{item.assignee}</td>
-                            <td
-                              className={classNames('border-x px-4 py-0 h-6 text-white truncate', {
-                                'bg-blue-600': item.status === 'In Progress',
-                                'bg-green-600': item.status === 'Completed',
-                                'bg-gray-600': item.status === 'On Hold',
-                              })}
-                            >
-                              {item.status}
-                            </td>
-                            <td
-                              className={classNames('border-x px-4 py-0 h-6 text-white truncate', {
-                                'bg-red-500': item.priority === 'Critical',
-                                'bg-orange-500': item.priority === 'High',
-                                'bg-yellow-500': item.priority === 'Normal',
-                              })}
-                            >
-                              {item.priority}
-                            </td>
-                            <td className='h-6 truncate border-x px-4 py-0'>
-                              {item.planned} {item.planned ? 'hours' : ''}
-                            </td>
-                            <td className='h-6 truncate border-x px-4 py-0'>
-                              {item.work} {item.work ? 'days' : ''}
-                            </td>
-                          </tr>
-                        ),
-                    )}
-                  </tbody>
+                  <tbody>{renderTasks()}</tbody>
                 </table>
               </div>
             </div>
@@ -388,20 +466,7 @@ export const CGantt = ({
                   style={{ width: temp.date.total * widthColumnDay + 'px' }}
                 >
                   <thead>
-                    <tr>
-                      {Object.keys(temp.date.obj).map(year =>
-                        Object.keys(temp.date.obj[year]).map((month, index) => (
-                          <th
-                            key={index}
-                            align={'left'}
-                            className={'h-6 border-x border-t px-4 text-xs capitalize'}
-                            style={{ width: widthGantt(year, month) }}
-                          >
-                            {temp.date.obj[year][month][0].format('MMMM')} {year}
-                          </th>
-                        )),
-                      )}
-                    </tr>
+                    <tr>{renderMonthYear()}</tr>
                   </thead>
                 </table>
                 <table
@@ -409,21 +474,7 @@ export const CGantt = ({
                   style={{ width: temp.date.total * widthColumnDay + 'px' }}
                 >
                   <thead>
-                    <tr>
-                      {Object.keys(temp.date.obj).map(year =>
-                        Object.keys(temp.date.obj[year]).map(month =>
-                          temp.date.obj[year][month].map((day: Dayjs, index: number) => (
-                            <th
-                              key={index}
-                              className={'h-6 border-x text-xs font-normal capitalize'}
-                              style={{ width: widthColumnDay + 'px' }}
-                            >
-                              {day.format('DD')}
-                            </th>
-                          )),
-                        ),
-                      )}
-                    </tr>
+                    <tr>{renderDay()}</tr>
                   </thead>
                 </table>
               </div>
@@ -432,40 +483,7 @@ export const CGantt = ({
                   className='event absolute left-0 top-0 z-10 flex h-full'
                   style={{ width: temp.date.total * widthColumnDay + 'px' }}
                 >
-                  {event.map((item, index) => {
-                    if (item.endDate)
-                      return (
-                        <div
-                          key={index}
-                          className={'absolute flex h-full items-center justify-center bg-base-300 text-base-content'}
-                          style={{
-                            width: (item.endDate.diff(item.startDate, 'day') + 1) * (widthColumnDay / perRow) + 'px',
-                            left: item.startDate.diff(temp.dateStart, 'day') * (widthColumnDay / perRow) + 'px',
-                          }}
-                        >
-                          <div
-                            className='rotate-90 whitespace-nowrap text-center'
-                            style={{ marginTop: -item.name.length * 6 + 'px' }}
-                          >
-                            {item.name}
-                          </div>
-                        </div>
-                      );
-                    else
-                      return (
-                        <div
-                          key={index}
-                          className={
-                            'absolute flex h-full items-center justify-center border-l border-dashed border-error'
-                          }
-                          style={{
-                            left: item.startDate.diff(temp.dateStart, 'day') * (widthColumnDay / perRow) + 'px',
-                          }}
-                        >
-                          <div className='rounded-r-xl bg-error px-2 py-1 text-base-content'>{item.name}</div>
-                        </div>
-                      );
-                  })}
+                  {renderEvent()}
                 </div>
                 <svg
                   className={'absolute left-0 top-0 z-10'}
@@ -486,25 +504,7 @@ export const CGantt = ({
                   className={'-z-10 min-w-[600px] border-b'}
                   style={{ width: temp.date.total * widthColumnDay + 'px' }}
                 >
-                  <tbody>
-                    {temp.task.map((item, index) => (
-                      <tr
-                        key={index}
-                        onFocus={handleHover}
-                        onBlur={handleHover}
-                        data-index={index}
-                        data-level={item.level}
-                      >
-                        {Object.keys(temp.date.obj).map(year =>
-                          Object.keys(temp.date.obj[year]).map(month =>
-                            temp.date.obj[year][month].map((_: Dayjs, i: number) => (
-                              <td key={i} className={'relative h-6 border-x py-0 font-normal capitalize'} />
-                            )),
-                          ),
-                        )}
-                      </tr>
-                    ))}
-                  </tbody>
+                  <tbody>{renderGridDay()}</tbody>
                 </table>
               </div>
             </div>
@@ -514,16 +514,7 @@ export const CGantt = ({
       <DndContext
         modifiers={[restrictToVerticalAxis]}
         onDragEnd={() => (dragStart = true)}
-        onDragMove={({ delta, active }) => {
-          if (active.id === 'vertical') {
-            const vertical = document.querySelectorAll(`#${id.current} .overflow-scroll`);
-            if (dragStart) {
-              dragStart = false;
-              height = vertical[0].clientHeight;
-            }
-            vertical.forEach((e: any) => (e.style.height = height + delta.y + 'px'));
-          }
-        }}
+        onDragMove={handleDragMoveVertical}
       >
         <DraggableVertical />
       </DndContext>

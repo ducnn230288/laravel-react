@@ -46,6 +46,16 @@ export const generateInput = ({
   t: TFunction<'locale', 'library'>;
 }) => {
   const { formItem } = item;
+  const onCalendarChange = date => {
+    form.setFieldValue(
+      item.name,
+      date?.filter(i => !!i),
+    );
+    formItem?.onChange?.(
+      date?.filter(i => !!i),
+      form,
+    );
+  };
   if (formItem) {
     switch (formItem.type) {
       case EFormType.hidden:
@@ -115,7 +125,7 @@ export const generateInput = ({
       case EFormType.addable:
       case EFormType.date:
       case EFormType.dateRange:
-        return switchCaseMore1({ item, values, generateForm, form, t });
+        return switchCaseMore1({ item, values, generateForm, form, t, onCalendarChange });
 
       case EFormType.treeSelect:
       case EFormType.selectTable:
@@ -123,7 +133,7 @@ export const generateInput = ({
       case EFormType.timeRange:
       case EFormType.checkbox:
       case EFormType.select:
-        return switchCaseMore2({ item, values, form, t });
+        return switchCaseMore2({ item, values, form, t, onCalendarChange });
 
       default:
         return (
@@ -148,12 +158,14 @@ const switchCaseMore1 = ({
   generateForm,
   form,
   t,
+  onCalendarChange,
 }: {
   item: IForm;
   values: any;
   generateForm: any;
   form: FormInstance;
   t: TFunction<'locale', 'library'>;
+  onCalendarChange: any;
 }) => {
   const { formItem } = item;
   if (formItem) {
@@ -204,16 +216,7 @@ const switchCaseMore1 = ({
       case EFormType.dateRange:
         return (
           <DateAntDesign.RangePicker
-            onCalendarChange={date => {
-              form.setFieldValue(
-                item.name,
-                date?.filter(i => !!i),
-              );
-              formItem.onChange?.(
-                date?.filter(i => !!i),
-                form,
-              );
-            }}
+            onCalendarChange={onCalendarChange}
             onOpenChange={open => {
               if (!open && form.getFieldValue(item.name)?.length < 2) form.resetFields([item.name]);
             }}
@@ -235,11 +238,13 @@ const switchCaseMore2 = ({
   values,
   form,
   t,
+  onCalendarChange,
 }: {
   item: IForm;
   values: any;
   form: FormInstance;
   t: TFunction<'locale', 'library'>;
+  onCalendarChange: any;
 }) => {
   const { formItem } = item;
   if (formItem) {
@@ -293,16 +298,7 @@ const switchCaseMore2 = ({
         return (
           <TimePicker.RangePicker
             minuteStep={10}
-            onCalendarChange={date => {
-              form.setFieldValue(
-                item.name,
-                date?.filter(i => !!i),
-              );
-              formItem.onChange?.(
-                date?.filter(i => !!i),
-                form,
-              );
-            }}
+            onCalendarChange={onCalendarChange}
             onOpenChange={open => {
               if (!open && form.getFieldValue(item.name)?.length < 2) form.resetFields([item.name]);
             }}

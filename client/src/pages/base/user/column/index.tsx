@@ -148,7 +148,7 @@ export default {
         title: t('Position'),
         name: 'positionCode',
         formItem: {
-          type: EFormType.select,
+          type: EFormType.selectTable,
           rules: [{ type: EFormRuleType.required }],
           get: {
             keyApi: 'Code',
@@ -162,6 +162,20 @@ export default {
               value: item.code,
             }),
             data: () => sCrud.data?.position,
+            column: [
+              {
+                title: t('Code'),
+                name: 'code',
+                tableItem: {
+                  width: 100,
+                },
+              },
+              {
+                title: t('Name Code'),
+                name: 'name',
+                tableItem: {},
+              },
+            ],
           },
         },
       },

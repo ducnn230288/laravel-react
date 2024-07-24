@@ -13,7 +13,7 @@ const Component = ({ form, mode, onChange, placeholder, disabled, get }: Type) =
   const onFocus = () => loadData('');
 
   let _data: any[] = [];
-  if (get?.data) {
+  if (get?.data && get.data()) {
     _data = mode === 'multiple' ? get.data() : [get.data()];
   }
   const _local = localStorage.getItem(KEY_TEMP);
@@ -70,7 +70,7 @@ const Component = ({ form, mode, onChange, placeholder, disabled, get }: Type) =
             if (get?.format) {
               const { label, value } = get.format(e);
               onChange(value);
-              if (input.current?.input.value && typeof label === 'string') {
+              if (input.current?.input && typeof label === 'string') {
                 input.current.input.value = label;
               }
             }

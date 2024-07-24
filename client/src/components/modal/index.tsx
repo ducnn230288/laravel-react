@@ -54,6 +54,24 @@ export const CModal = forwardRef(
       }
     }, [facade[keyState]]);
 
+    const renderFooter = footerCustom ? (
+      footerCustom(handleOk, handleCancel)
+    ) : (
+      <div className='flex justify-end gap-2'>
+        <CButton
+          text={typeof textCancel === 'string' ? t(textCancel) : textCancel}
+          className='bg-base-100 text-primary'
+          onClick={handleCancel}
+        />
+        <CButton
+          isLoading={isLoading}
+          text={typeof textCancel === 'string' ? t(textSubmit) : textSubmit}
+          disabled={!firstChange}
+          onClick={handleOk}
+        />
+      </div>
+    );
+
     return (
       <AntModal
         maskClosable={false}
@@ -65,25 +83,7 @@ export const CModal = forwardRef(
         onOk={handleOk}
         onCancel={handleCancel}
         wrapClassName={className}
-        footer={
-          footerCustom ? (
-            footerCustom(handleOk, handleCancel)
-          ) : (
-            <div className='flex justify-end gap-2'>
-              <CButton
-                text={typeof textCancel === 'string' ? t(textCancel) : textCancel}
-                className='bg-base-100 text-primary'
-                onClick={handleCancel}
-              />
-              <CButton
-                isLoading={isLoading}
-                text={typeof textCancel === 'string' ? t(textSubmit) : textSubmit}
-                disabled={!firstChange}
-                onClick={handleOk}
-              />
-            </div>
-          )
-        }
+        footer={renderFooter}
       >
         <Spin spinning={isLoading}>{children}</Spin>
       </AntModal>

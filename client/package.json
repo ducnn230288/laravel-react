@@ -13,7 +13,9 @@
     "preview": "vite preview",
     "format": "prettier --write \"src/**/*.{tsx,jsx,ts,js,less}\"",
     "lint": "eslint \"src/**/*.{tsx,jsx,ts,js}\" --fix",
-    "update-all": "npx -p npm-check-updates ncu -u && npm install"
+    "update-all": "npx -p npm-check-updates ncu -u && npm install",
+    "lint-staged": "lint-staged",
+    "prepare": "husky"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.1.0",
@@ -36,6 +38,8 @@
     "web-vitals": "^3.5.2"
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.3.0",
+    "@commitlint/config-conventional": "^19.2.2",
     "@types/node": "^20.11.20",
     "@types/react": "^18.2.57",
     "@types/react-dom": "^18.2.19",
@@ -51,8 +55,10 @@
     "eslint-plugin-jsx-a11y": "^6.9.0",
     "eslint-plugin-prettier": "^5.0.1",
     "eslint-plugin-sonarjs": "^1.0.3",
+    "husky": "^9.1.2",
     "less": "^4.2.0",
     "less-loader": "^12.2.0",
+    "lint-staged": "^15.2.7",
     "postcss": "^8.4.35",
     "prettier": "^3.2.5",
     "tailwindcss": "^3.4.1",
@@ -72,6 +78,13 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
+    ]
+  },
+  "lint-staged": {
+    "*.ts?(x)": [
+      "npm run lint",
+      "npm run format",
+      "git add ."
     ]
   }
 }

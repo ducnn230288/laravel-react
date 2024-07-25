@@ -1158,6 +1158,7 @@ const table: IEditTable = {
     },
   ],
 };
+
 const table2: IEditTable = {
   fields: {
     columns: [

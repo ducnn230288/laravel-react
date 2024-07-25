@@ -518,7 +518,6 @@ const task = [
     level: 3,
   },
 ];
-
 const event = [
   {
     name: 'New Year holiday',

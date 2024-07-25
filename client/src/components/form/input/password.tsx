@@ -25,8 +25,7 @@ const Component = ({
         className='ant-input pr-9'
         onChange={onChange}
       />
-      {!toggle && <CSvgIcon name='eye' onClick={() => setToggle(!toggle)} className='icon' />}
-      {toggle && <CSvgIcon name='eye-slash' onClick={() => setToggle(!toggle)} className='icon' />}
+      <CSvgIcon name={toggle ? 'eye-slash' : 'eye'} onClick={() => setToggle(!toggle)} className='icon' />
     </div>
   );
 };

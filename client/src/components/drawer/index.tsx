@@ -28,26 +28,27 @@ export const CDrawerForm = forwardRef(
     useImperativeHandle(ref, () => ({ form }));
     const { t } = useTranslation('locale', { keyPrefix: 'library' });
     const [form] = Form.useForm();
+    const renderFooter = () => (
+      <div className={classNames('gap-3 flex mt-2 items-center sm:flex-row justify-end')}>
+        <CButton
+          text={typeof textCancel === 'string' ? t(textCancel) : textCancel}
+          className={'w-full sm:w-auto sm:min-w-36 !bg-base-200 !text-base-content hover:!bg-base-200/60'}
+          onClick={() => facade.set({ [keyData]: undefined, [keyState]: false })}
+        />
+        <CButton
+          text={typeof textSubmit === 'string' ? t(textSubmit) : textSubmit}
+          onClick={async () => onSubmit(convertFormValue(columns, await form.validateFields()))}
+          disabled={facade[keyIsLoading]}
+          className={'w-full sm:w-auto sm:min-w-48'}
+        />
+      </div>
+    );
 
     return (
       <Drawer
         keyboard={false}
         size={size}
-        footer={
-          <div className={classNames('gap-3 flex mt-2 items-center sm:flex-row justify-end')}>
-            <CButton
-              text={typeof textCancel === 'string' ? t(textCancel) : textCancel}
-              className={'w-full sm:w-auto sm:min-w-36 !bg-base-200 !text-base-content hover:!bg-base-200/60'}
-              onClick={() => facade.set({ [keyData]: undefined, [keyState]: false })}
-            />
-            <CButton
-              text={typeof textSubmit === 'string' ? t(textSubmit) : textSubmit}
-              onClick={async () => onSubmit(convertFormValue(columns, await form.validateFields()))}
-              disabled={facade[keyIsLoading]}
-              className={'w-full sm:w-auto sm:min-w-48'}
-            />
-          </div>
-        }
+        footer={renderFooter()}
         title={<h3>{title}</h3>}
         open={facade[keyState]}
         onClose={() => facade.set({ [keyData]: undefined, [keyState]: false })}

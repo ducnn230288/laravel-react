@@ -28,57 +28,36 @@ export const CSearch = ({
 }) => {
   const idTable = useRef('temp-' + uuidv4());
 
+  const handlePressEnter = () =>
+    handleTableChange(
+      undefined,
+      params.like,
+      params.sort as SorterResult<any>,
+      (document.getElementById(idTable.current + '_input_search') as HTMLInputElement).value.trim(),
+    );
+
+  const handleChange = () => {
+    clearTimeout(timeoutSearch.current);
+    timeoutSearch.current = setTimeout(() => handlePressEnter, 500);
+  };
+
+  const handClick = () => {
+    if (params.fullTextSearch) {
+      (document.getElementById(idTable.current + '_input_search') as HTMLInputElement).value = '';
+      handleTableChange(undefined, params.like, params.sort as SorterResult<any>, '');
+    }
+  };
+
   return (
     <div className='search'>
       <CIMask
         id={idTable.current + '_input_search'}
         value={params.fullTextSearch}
         placeholder={t('Search')}
-        onChange={() => {
-          clearTimeout(timeoutSearch.current);
-          timeoutSearch.current = setTimeout(
-            () =>
-              handleTableChange(
-                undefined,
-                params.like,
-                params.sort as SorterResult<any>,
-                (document.getElementById(idTable.current + '_input_search') as HTMLInputElement).value.trim(),
-              ),
-            500,
-          );
-        }}
-        onPressEnter={() =>
-          handleTableChange(
-            undefined,
-            params.like,
-            params.sort as SorterResult<any>,
-            (document.getElementById(idTable.current + '_input_search') as HTMLInputElement).value.trim(),
-          )
-        }
+        onChange={handleChange}
+        onPressEnter={handlePressEnter}
       />
-      {!params.fullTextSearch ? (
-        <CSvgIcon
-          name='search'
-          onClick={() => {
-            if (params.fullTextSearch) {
-              (document.getElementById(idTable.current + '_input_search') as HTMLInputElement).value = '';
-              handleTableChange(undefined, params.like, params.sort as SorterResult<any>, '');
-            }
-          }}
-        />
-      ) : (
-        !!params.fullTextSearch && (
-          <CSvgIcon
-            name='times'
-            onClick={() => {
-              if (params.fullTextSearch) {
-                (document.getElementById(idTable.current + '_input_search') as HTMLInputElement).value = '';
-                handleTableChange(undefined, params.like, params.sort as SorterResult<any>, '');
-              }
-            }}
-          />
-        )
-      )}
+      <CSvgIcon name={params.fullTextSearch ? 'times' : 'search'} onClick={handClick} />
     </div>
   );
 };

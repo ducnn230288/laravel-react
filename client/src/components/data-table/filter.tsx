@@ -22,25 +22,23 @@ const groupButton = ({
   key: any;
   value: any;
   t: any;
-}) => (
-  <div className='mt-2 grid grid-cols-2 gap-2'>
-    <CButton
-      isTiny={true}
-      text={t('Reset')}
-      onClick={() => {
-        clearFilters();
-        confirm();
-      }}
-      className=' '
-    />
-    <CButton
-      isTiny={true}
-      icon={<CSvgIcon name='search' size={12} className='fill-text-base-100' />}
-      text={t('Search')}
-      onClick={() => confirm(value)}
-    />
-  </div>
-);
+}) => {
+  const handleClick = () => {
+    clearFilters();
+    confirm();
+  };
+  return (
+    <div className='mt-2 grid grid-cols-2 gap-2'>
+      <CButton isTiny={true} text={t('Reset')} onClick={handleClick} />
+      <CButton
+        isTiny={true}
+        icon={<CSvgIcon name='search' size={12} className='fill-text-base-100' />}
+        text={t('Search')}
+        onClick={() => confirm(value)}
+      />
+    </div>
+  );
+};
 
 const loadData = async ({
   get,
@@ -76,6 +74,20 @@ const loadData = async ({
         localStorage.setItem(KEY_TEMP, JSON.stringify(_temp));
       } catch (e) {}
   }
+};
+
+const handleChange = ({ e, timeoutSearch, get, selectedKeys, setTemp }: any) => {
+  clearTimeout(timeoutSearch.current);
+  timeoutSearch.current = setTimeout(
+    () =>
+      loadData({
+        get,
+        fullTextSearch: e.target.value,
+        value: selectedKeys.length > 0 ? selectedKeys : undefined,
+        setTemp,
+      }),
+    500,
+  );
 };
 
 export const getColumnSearchCheckbox = ({
@@ -118,19 +130,7 @@ export const getColumnSearchCheckbox = ({
           {!!get?.keyApi && (
             <CIMask
               placeholder={t('Search')}
-              onChange={e => {
-                clearTimeout(timeoutSearch.current);
-                timeoutSearch.current = setTimeout(
-                  () =>
-                    loadData({
-                      get,
-                      fullTextSearch: e.target.value,
-                      value: selectedKeys.length > 0 ? selectedKeys : undefined,
-                      setTemp,
-                    }),
-                  500,
-                );
-              }}
+              onChange={e => handleChange({ e, timeoutSearch, get, selectedKeys, setTemp })}
               onPressEnter={e => loadData({ get, fullTextSearch: e.target.value, setTemp })}
             />
           )}
@@ -196,19 +196,7 @@ export const getColumnSearchRadio = ({
           {get?.keyApi && (
             <CIMask
               placeholder={t('Search')}
-              onChange={e => {
-                clearTimeout(timeoutSearch.current);
-                timeoutSearch.current = setTimeout(
-                  () =>
-                    loadData({
-                      get,
-                      fullTextSearch: e.target.value,
-                      value: selectedKeys.length > 0 ? selectedKeys : undefined,
-                      setTemp,
-                    }),
-                  500,
-                );
-              }}
+              onChange={e => handleChange({ e, timeoutSearch, get, selectedKeys, setTemp })}
               onPressEnter={e => loadData({ get, fullTextSearch: e.target.value, setTemp })}
             />
           )}
@@ -234,31 +222,35 @@ export const getColumnSearchRadio = ({
   ),
 });
 export const getColumnSearchDate = ({ key, t }: { key: string; t: TFunction<'locale', 'library'> }) => ({
-  filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }: any) => (
-    <div className={'p-1'}>
-      <DatePicker.RangePicker
-        renderExtraFooter={() => (
-          <CButton
-            icon={<CSvgIcon name='check-circle' size={20} className='fill-base-100' />}
-            text={t('Ok')}
-            onClick={() => (document.activeElement as HTMLElement).blur()}
-            className={'w-full justify-center py-0'}
-          />
-        )}
-        format={['DD-MM-YYYY', 'DD-MM-YY']}
-        value={!!selectedKeys && selectedKeys.length && [dayjs(selectedKeys[0]), dayjs(selectedKeys[1])]}
-        onChange={(e: null | (Dayjs | null)[]) => {
-          if (e?.length && e[0] && e[1]) {
-            setSelectedKeys([
-              e[0].startOf('day').utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
-              e[1].endOf('day').utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
-            ]);
-          }
-        }}
+  filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }: any) => {
+    const renderExtraFooter = () => (
+      <CButton
+        icon={<CSvgIcon name='check-circle' size={20} className='fill-base-100' />}
+        text={t('Ok')}
+        onClick={() => (document.activeElement as HTMLElement).blur()}
+        className={'w-full justify-center py-0'}
       />
-      {groupButton({ confirm, clearFilters, key, value: selectedKeys, t })}
-    </div>
-  ),
+    );
+    const handleChange = (e: null | (Dayjs | null)[]) => {
+      if (e?.length && e[0] && e[1]) {
+        setSelectedKeys([
+          e[0].startOf('day').utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+          e[1].endOf('day').utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+        ]);
+      }
+    };
+    return (
+      <div className={'p-1'}>
+        <DatePicker.RangePicker
+          renderExtraFooter={renderExtraFooter}
+          format={['DD-MM-YYYY', 'DD-MM-YY']}
+          value={!!selectedKeys && selectedKeys.length && [dayjs(selectedKeys[0]), dayjs(selectedKeys[1])]}
+          onChange={handleChange}
+        />
+        {groupButton({ confirm, clearFilters, key, value: selectedKeys, t })}
+      </div>
+    );
+  },
   filterIcon: (filtered: boolean) => (
     <CSvgIcon
       name='calendar'

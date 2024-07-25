@@ -18,6 +18,22 @@ const Component = ({
 }: Type) => {
   const sGlobal = SGlobal();
 
+  const handleOpenChange = e => {
+    if (!e) {
+      const { value }: any = document.getElementById(id);
+      const selectDate = dayjs(value, format ?? 'DD/MM/YYYY');
+      if (
+        selectDate.isValid() &&
+        onChange &&
+        name &&
+        (!form ||
+          (form.getFieldValue(name) &&
+            form.getFieldValue(name).format(format ?? 'DD/MM/YYYY') !== selectDate.format(format ?? 'DD/MM/YYYY')))
+      ) {
+        onChange(selectDate, value);
+      }
+    }
+  };
   return (
     <DatePicker
       id={id}
@@ -29,22 +45,7 @@ const Component = ({
       locale={sGlobal.localeDate}
       disabled={disabled}
       {...props}
-      onOpenChange={e => {
-        if (!e) {
-          const { value }: any = document.getElementById(id);
-          const selectDate = dayjs(value, format ?? 'DD/MM/YYYY');
-          if (
-            selectDate.isValid() &&
-            onChange &&
-            name &&
-            (!form ||
-              (form.getFieldValue(name) &&
-                form.getFieldValue(name).format(format ?? 'DD/MM/YYYY') !== selectDate.format(format ?? 'DD/MM/YYYY')))
-          ) {
-            onChange(selectDate, value);
-          }
-        }
-      }}
+      onOpenChange={handleOpenChange}
     />
   );
 };

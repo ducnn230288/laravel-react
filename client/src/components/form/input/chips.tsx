@@ -43,13 +43,7 @@ const Component = ({
     }
   }, [inputVisible]);
 
-  const handleClose = (removedTag: any) => {
-    onChange?.(value.filter(tag => tag !== removedTag));
-  };
-
-  const showInput = () => {
-    setInputVisible(true);
-  };
+  const handleClose = (removedTag: any) => onChange?.(value.filter(tag => tag !== removedTag));
 
   const handleInputConfirm = (inputValue: string | string[]) => {
     if (typeof inputValue === 'string' && inputValue && value.indexOf(inputValue) === -1) {
@@ -95,42 +89,49 @@ const Component = ({
     />
   );
 
+  const handleEnd = e => {
+    if (e.type === 'appear' || e.type === 'enter') {
+      (e.target as any).style = 'display: inline-block';
+    }
+  };
+
+  const renderTag = () =>
+    value.map(tag => (
+      <DraggableTag
+        disabled={!!disabled}
+        tag={tag}
+        key={tag}
+        list={list}
+        onClose={(e: any) => {
+          e.preventDefault();
+          handleClose(tag);
+        }}
+      />
+    ));
+  const renderToggle = () =>
+    inputVisible ? (
+      renderEntry
+    ) : (
+      <CButton
+        icon={<CSvgIcon name='plus' size={32} className='p-2' />}
+        className='inline-block rounded-full border'
+        onClick={() => setInputVisible(true)}
+        disabled={disabled}
+      />
+    );
+
   return (
     <TweenOneGroup
       appear={false}
       enter={{ scale: 0.8, opacity: 0, type: 'from', duration: 100 }}
       leave={{ opacity: 0, width: 0, scale: 0, duration: 200 }}
-      onEnd={e => {
-        if (e.type === 'appear' || e.type === 'enter') {
-          (e.target as any).style = 'display: inline-block';
-        }
-      }}
+      onEnd={handleEnd}
       className={'flex flex-wrap gap-2.5 py-2'}
     >
       <DndContext sensors={sensors} onDragEnd={handleDragEnd} collisionDetection={closestCenter}>
         <SortableContext items={value} strategy={horizontalListSortingStrategy}>
-          {value.map(tag => (
-            <DraggableTag
-              disabled={!!disabled}
-              tag={tag}
-              key={tag}
-              list={list}
-              onClose={(e: any) => {
-                e.preventDefault();
-                handleClose(tag);
-              }}
-            />
-          ))}
-          {inputVisible ? (
-            renderEntry
-          ) : (
-            <CButton
-              icon={<CSvgIcon name='plus' size={32} className='p-2' />}
-              className='inline-block rounded-full border'
-              onClick={showInput}
-              disabled={disabled}
-            />
-          )}
+          {renderTag()}
+          {renderToggle()}
         </SortableContext>
       </DndContext>
     </TweenOneGroup>

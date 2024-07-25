@@ -54,125 +54,127 @@ const Component = ({
     }
   };
   const { t } = useTranslation('locale', { keyPrefix: 'library' });
+  const renderTable = ({ fields, add, remove }: any) => (
+    <Fragment>
+      <div className={'table w-full border-collapse'} style={{ minWidth: column.length * 150 }}>
+        <div className='table-row'>
+          {!!idCheck && (
+            <div className={'table-cell w-10 p-1 text-center font-bold'}>
+              <Checkbox indeterminate={temp.indeterminate} onChange={onCheckAllChange} checked={temp.checkAll} />
+            </div>
+          )}
+          <div className={'table-cell w-10 border bg-gray-300 p-1 text-center font-bold'}>STT</div>
+          {column.map((col: any, index: number) => (
+            <div
+              key={name + index}
+              className={classNames('table-cell border bg-gray-300 font-bold p-1 text-center', {
+                'w-full': column.length === 1,
+                'w-1/2': column.length === 2,
+                'w-1/3': column.length === 3,
+                'w-1/4': column.length === 4,
+                'w-1/5': column.length === 5,
+                'w-1/6': column.length === 6,
+              })}
+            >
+              {col.title}
+            </div>
+          ))}
+          <div className={'h-1 w-8'} />
+        </div>
+        {fields.map(({ name: n }, i) => (
+          <div className='table-row' key={name + i}>
+            {!!idCheck && (
+              <div className={'table-cell text-center'}>
+                <Checkbox
+                  onChange={e => onCheckChange(e, form.getFieldValue(name), n)}
+                  checked={temp.checkedList.indexOf(form.getFieldValue(name)[n][idCheck] ?? '') > -1}
+                />
+              </div>
+            )}
+            <div className={'table-cell border bg-base-200 text-center'}>{i + 1}</div>
+            {column.map((col: any, index: number) => (
+              <div className={'relative table-cell border'} key={name + index}>
+                {generateForm({ item: col, index: index + '_' + i, showLabel: false, name: [n, col.name], t })}
+              </div>
+            ))}
+            <div className={'table-cell w-8 align-middle sm:w-8'}>
+              {showRemove(form.getFieldValue([[name], n]), n) && (
+                <CSvgIcon
+                  name='trash'
+                  size={32}
+                  className='cursor-pointer fill-error hover:fill-error/50'
+                  onClick={() => {
+                    remove(n);
+                    onAdd(form.getFieldValue(name), form);
+                  }}
+                />
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className={'flex justify-end'}>
+        <CButton
+          onClick={() => {
+            add();
+            onAdd(form.getFieldValue(name), form);
+          }}
+          icon={<CSvgIcon name='plus' size={20} />}
+          text={textAdd}
+        />
+      </div>
+    </Fragment>
+  );
+
+  const renderInput = ({ fields, add, remove }: any) => (
+    <Fragment>
+      {fields.map(({ name: n }, i) => (
+        <div className={'grid grid-cols-12 gap-x-5'} key={name + i}>
+          {column.map((col: any, index: number) => (
+            <div
+              className={classNames(
+                col?.formItem?.classItem,
+                'col-span-12' +
+                  (' sm:col-span-' + (col?.formItem?.colTablet ? col?.formItem?.colTablet : col?.formItem?.col ?? 12)) +
+                  (' lg:col-span-' + (col?.formItem?.col ? col?.formItem?.col : 12)),
+              )}
+              key={'addable' + index}
+            >
+              {generateForm({ item: col, index: index + '_' + i, name: [n, col.name], t })}
+            </div>
+          ))}
+          <div className={'table-cell w-8 align-middle'}>
+            {showRemove(form.getFieldValue([[name], n]), n) && (
+              <CSvgIcon
+                name='trash'
+                size={32}
+                className='cursor-pointer fill-error hover:fill-error/50'
+                onClick={() => {
+                  remove(n);
+                  onAdd(form.getFieldValue(name), form);
+                }}
+              />
+            )}
+          </div>
+        </div>
+      ))}
+      <div className={'flex justify-end'}>
+        <CButton
+          icon={<CSvgIcon name='plus' size={20} />}
+          text={textAdd}
+          onClick={() => {
+            add();
+            onAdd(form.getFieldValue(name), form);
+          }}
+        />
+      </div>
+    </Fragment>
+  );
 
   return (
     <Form.List name={name}>
       {(fields, { add, remove }) =>
-        isTable ? (
-          <Fragment>
-            <div className={'table w-full border-collapse'} style={{ minWidth: column.length * 150 }}>
-              <div className='table-row'>
-                {!!idCheck && (
-                  <div className={'table-cell w-10 p-1 text-center font-bold'}>
-                    <Checkbox indeterminate={temp.indeterminate} onChange={onCheckAllChange} checked={temp.checkAll} />
-                  </div>
-                )}
-                <div className={'table-cell w-10 border bg-gray-300 p-1 text-center font-bold'}>STT</div>
-                {column.map((col: any, index: number) => (
-                  <div
-                    key={name + index}
-                    className={classNames('table-cell border bg-gray-300 font-bold p-1 text-center', {
-                      'w-full': column.length === 1,
-                      'w-1/2': column.length === 2,
-                      'w-1/3': column.length === 3,
-                      'w-1/4': column.length === 4,
-                      'w-1/5': column.length === 5,
-                      'w-1/6': column.length === 6,
-                    })}
-                  >
-                    {col.title}
-                  </div>
-                ))}
-                <div className={'h-1 w-8'} />
-              </div>
-              {fields.map(({ name: n }, i) => (
-                <div className='table-row' key={name + i}>
-                  {!!idCheck && (
-                    <div className={'table-cell text-center'}>
-                      <Checkbox
-                        onChange={e => onCheckChange(e, form.getFieldValue(name), n)}
-                        checked={temp.checkedList.indexOf(form.getFieldValue(name)[n][idCheck] ?? '') > -1}
-                      />
-                    </div>
-                  )}
-                  <div className={'table-cell border bg-base-200 text-center'}>{i + 1}</div>
-                  {column.map((col: any, index: number) => (
-                    <div className={'relative table-cell border'} key={name + index}>
-                      {generateForm({ item: col, index: index + '_' + i, showLabel: false, name: [n, col.name], t })}
-                    </div>
-                  ))}
-                  <div className={'table-cell w-8 align-middle sm:w-8'}>
-                    {showRemove(form.getFieldValue([[name], n]), n) && (
-                      <CSvgIcon
-                        name='trash'
-                        size={32}
-                        className='cursor-pointer fill-error hover:fill-error/50'
-                        onClick={() => {
-                          remove(n);
-                          onAdd(form.getFieldValue(name), form);
-                        }}
-                      />
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className={'flex justify-end'}>
-              <CButton
-                onClick={() => {
-                  add();
-                  onAdd(form.getFieldValue(name), form);
-                }}
-                icon={<CSvgIcon name='plus' size={20} />}
-                text={textAdd}
-              />
-            </div>
-          </Fragment>
-        ) : (
-          <div>
-            {fields.map(({ name: n }, i) => (
-              <div className={'grid grid-cols-12 gap-x-5'} key={name + i}>
-                {column.map((col: any, index: number) => (
-                  <div
-                    className={classNames(
-                      col?.formItem?.classItem,
-                      'col-span-12' +
-                        (' sm:col-span-' +
-                          (col?.formItem?.colTablet ? col?.formItem?.colTablet : col?.formItem?.col ?? 12)) +
-                        (' lg:col-span-' + (col?.formItem?.col ? col?.formItem?.col : 12)),
-                    )}
-                    key={'addable' + index}
-                  >
-                    {generateForm({ item: col, index: index + '_' + i, name: [n, col.name], t })}
-                  </div>
-                ))}
-                <div className={'table-cell w-8 align-middle'}>
-                  {showRemove(form.getFieldValue([[name], n]), n) && (
-                    <CSvgIcon
-                      name='trash'
-                      size={32}
-                      className='cursor-pointer fill-error hover:fill-error/50'
-                      onClick={() => {
-                        remove(n);
-                        onAdd(form.getFieldValue(name), form);
-                      }}
-                    />
-                  )}
-                </div>
-              </div>
-            ))}
-            <div className={'flex justify-end'}>
-              <CButton
-                icon={<CSvgIcon name='plus' size={20} />}
-                text={textAdd}
-                onClick={() => {
-                  add();
-                  onAdd(form.getFieldValue(name), form);
-                }}
-              />
-            </div>
-          </div>
-        )
+        isTable ? renderTable({ fields, add, remove }) : renderInput({ fields, add, remove })
       }
     </Form.List>
   );

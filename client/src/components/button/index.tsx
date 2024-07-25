@@ -13,18 +13,14 @@ export const CButton = ({
   isTiny = false,
   ...props
 }: Type) => {
+  className = classNames('btn', className, {
+    'h-10 px-3': !isTiny,
+    'h-6 px-2': isTiny,
+  });
+  const renderLoading = () => (!isLoading ? icon : <CSvgIcon name='spinner' size={12} />);
   return (
-    <button
-      type='button'
-      disabled={disabled}
-      title={title ?? text ?? ''}
-      className={classNames('btn', className, {
-        'h-10 px-3': !isTiny,
-        'h-6 px-2': isTiny,
-      })}
-      {...props}
-    >
-      {!isLoading ? icon : <CSvgIcon name='spinner' size={12} />}
+    <button type='button' disabled={disabled} title={title ?? text ?? ''} className={className} {...props}>
+      {renderLoading()}
       {text}
     </button>
   );

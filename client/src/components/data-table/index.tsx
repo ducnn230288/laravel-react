@@ -245,32 +245,54 @@ export const CDataTable = forwardRef(
         <Draggable id={restProps?.title} />
       </th>
     );
+    const renderHeader = () =>
+      (!!showSearch || !!rightHeader) && (
+        <div className='top-header'>
+          {showSearch ? (
+            <CSearch
+              params={params.current}
+              timeoutSearch={timeoutSearch}
+              t={t}
+              handleTableChange={handleTableChange}
+            />
+          ) : (
+            <div />
+          )}
+          {(!!rightHeader || !!action?.onAdd) && !!action?.onAdd && (
+            <div className={'right'}>
+              <CButton
+                icon={<CSvgIcon name='plus' size={12} />}
+                text={action?.labelAdd}
+                onClick={() => action?.onAdd({ data: undefined, isVisible: true })}
+              />
+              {rightHeader}
+            </div>
+          )}
+        </div>
+      );
+
+    const renderPagination = () =>
+      refPageSizeOptions.current &&
+      showPagination && (
+        <CPagination
+          total={facade.result?.meta?.total}
+          page={params.current.page!}
+          perPage={params.current.perPage!}
+          pageSizeOptions={refPageSizeOptions.current}
+          paginationDescription={paginationDescription}
+          queryParams={(pagination: { page?: number; perPage?: number }) =>
+            handleTableChange(
+              pagination,
+              params.current.like,
+              params.current.sort as SorterResult<any>,
+              params.current.fullTextSearch,
+            )
+          }
+        />
+      );
     return (
       <div ref={tableRef} className='data-table'>
-        {(!!showSearch || !!rightHeader) && (
-          <div className='top-header'>
-            {showSearch ? (
-              <CSearch
-                params={params.current}
-                timeoutSearch={timeoutSearch}
-                t={t}
-                handleTableChange={handleTableChange}
-              />
-            ) : (
-              <div />
-            )}
-            {(!!rightHeader || !!action?.onAdd) && !!action?.onAdd && (
-              <div className={'right'}>
-                <CButton
-                  icon={<CSvgIcon name='plus' size={12} />}
-                  text={action?.labelAdd}
-                  onClick={() => action?.onAdd({ data: undefined, isVisible: true })}
-                />
-                {rightHeader}
-              </div>
-            )}
-          </div>
-        )}
+        {renderHeader()}
 
         <CTableDrag tableRef={tableRef}>
           <Table
@@ -283,29 +305,14 @@ export const CDataTable = forwardRef(
             columns={cols.current}
             pagination={false}
             dataSource={loopData(data)}
-            onChange={(_, filters, sort) => {
-              return handleTableChange(undefined, filters, sort as SorterResult<any>, params.current.fullTextSearch);
-            }}
+            onChange={(_, filters, sort) =>
+              handleTableChange(undefined, filters, sort as SorterResult<any>, params.current.fullTextSearch)
+            }
             scroll={scroll.current}
             size='small'
           />
-          {refPageSizeOptions.current && showPagination && (
-            <CPagination
-              total={facade.result?.meta?.total}
-              page={params.current.page!}
-              perPage={params.current.perPage!}
-              pageSizeOptions={refPageSizeOptions.current}
-              paginationDescription={paginationDescription}
-              queryParams={(pagination: { page?: number; perPage?: number }) =>
-                handleTableChange(
-                  pagination,
-                  params.current.like,
-                  params.current.sort as SorterResult<any>,
-                  params.current.fullTextSearch,
-                )
-              }
-            />
-          )}
+
+          {renderPagination()}
         </CTableDrag>
       </div>
     );

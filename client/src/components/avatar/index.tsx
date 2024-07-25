@@ -14,81 +14,84 @@ export const CAvatar = ({
   if (typeof text !== 'object') {
     return <Avatar text={text} src={src} showName={showName} size={size} index={index} />;
   } else {
+    const renderList = () =>
+      !!text &&
+      text
+        .filter((_, index: number) => index < maxCount)
+        .map((item, index: number) => {
+          return (
+            <Avatar
+              text={item[keyName]}
+              src={item[keySrc]}
+              showName={false}
+              size={size}
+              index={index}
+              key={'avatar' + index}
+            />
+          );
+        });
+    const renderMorePopover = () =>
+      !!text &&
+      text.length > maxCount && (
+        <Popover
+          content={text
+            .filter((_, index: number) => index >= maxCount)
+            .map((item, index: number) => (
+              <Avatar showName={true} text={item[keyName]} src={item[keySrc]} size={size} key={'avatar' + index} />
+            ))}
+        >
+          <div
+            className={classNames(
+              'rounded-xl inline-block text-center border border-primary text-primary bg-primary/30 text-xs -ml-2',
+              'size-' + size,
+              'leading-' + size,
+            )}
+          >
+            +{text.length - maxCount}
+          </div>
+        </Popover>
+      );
     return (
       <div className='flex items-center'>
-        {!!text &&
-          text
-            .filter((_, index: number) => index < maxCount)
-            .map((item, index: number) => {
-              return (
-                <Avatar
-                  text={item[keyName]}
-                  src={item[keySrc]}
-                  showName={false}
-                  size={size}
-                  index={index}
-                  key={'avatar' + index}
-                />
-              );
-            })}
-        {!!text && text.length > maxCount && (
-          <Popover
-            content={text
-              .filter((_, index: number) => index >= maxCount)
-              .map((item, index: number) => (
-                <Avatar showName={true} text={item[keyName]} src={item[keySrc]} size={size} key={'avatar' + index} />
-              ))}
-          >
-            <div
-              className={classNames(
-                'rounded-xl inline-block text-center border border-primary text-primary bg-primary/30 text-xs -ml-2',
-                'size-' + size,
-                'leading-' + size,
-              )}
-            >
-              +{text.length - maxCount}
-            </div>
-          </Popover>
-        )}
+        {renderList()}
+        {renderMorePopover()}
       </div>
     );
   }
 };
-const Avatar = ({ text, src, showName, size, index = 0 }: Type) => (
-  <div className={classNames({ 'flex items-center': showName })}>
-    {!text || (src && src.indexOf('/defaultAvatar.png') === -1) ? (
-      <div className={classNames({ '-ml-2': index > 0 }, 'h-' + size, 'w-' + size)}>
-        <img
-          alt='Avatar'
-          className={classNames('rounded-full object-center', 'h-' + size, 'w-' + size, {
-            'object-contain': !showName,
-            'object-cover': showName,
-          })}
-          src={src}
-        />
-      </div>
-    ) : (
-      <div
-        className={classNames(
-          'rounded-xl inline-block text-center pt-0.5',
-          'w-' + size,
-          'h-' + size,
-          'leading-' + size,
-          {
-            '-ml-2': index > 0,
-          },
-        )}
-        style={{
-          color: pickTextColorBasedOnBgColorAdvanced(getColorByLetter(text as string)),
-          backgroundColor: getColorByLetter(text as string),
-        }}
-      >
-        <strong>{getFirstLetter(text as string)}</strong>
-      </div>
-    )}
-    {!!showName && !!text && <span className={classNames('ml-1')}>{text as string}</span>}
-  </div>
-);
+const Avatar = ({ text, src, showName, size, index = 0 }: Type) => {
+  const renderImage = () => (
+    <div className={classNames({ '-ml-2': index > 0 }, 'h-' + size, 'w-' + size)}>
+      <img
+        alt='Avatar'
+        className={classNames('rounded-full object-center', 'h-' + size, 'w-' + size, {
+          'object-contain': !showName,
+          'object-cover': showName,
+        })}
+        src={src}
+      />
+    </div>
+  );
+  const renderLetter = () => (
+    <div
+      className={classNames('rounded-xl inline-block text-center pt-0.5', 'w-' + size, 'h-' + size, 'leading-' + size, {
+        '-ml-2': index > 0,
+      })}
+      style={{
+        color: pickTextColorBasedOnBgColorAdvanced(getColorByLetter(text as string)),
+        backgroundColor: getColorByLetter(text as string),
+      }}
+    >
+      <strong>{getFirstLetter(text as string)}</strong>
+    </div>
+  );
+  return (
+    <div className={classNames({ 'flex items-center': showName })}>
+      {!text || (src && src.indexOf('/defaultAvatar.png') === -1) ? renderImage() : renderLetter()}
+      {!!showName && !!text && <span className={classNames('ml-1')}>{text as string}</span>}
+    </div>
+  );
+};
 const pickTextColorBasedOnBgColorAdvanced = (bgColor: string) => {
   if (bgColor) {
     let color = String(bgColor)

@@ -54,7 +54,9 @@ PL_00 Verify the User Interface of "Bài đăng" page
   When Click on the "Đã kích hoạt bài đăng _@Tên Bài đăng@_" button in the "_@Tên Bài đăng@_" table line
   Then User look message "Cập nhật thành công" popup
   Then The status button in the "_@Tên Bài đăng@_" table line should change to "Đã vô hiệu hóa bài đăng _@Tên Bài đăng@_"
+
   When Click on the "Đã vô hiệu hóa bài đăng _@Tên Bài đăng@_" button in the "_@Tên Bài đăng@_" table line
+  Then The status button in the "_@Tên Bài đăng@_" table line should change to "Đã kích hoạt bài đăng _@Tên Bài đăng@_"
 
   When Click on the "Chỉnh sửa bài đăng _@Tên Bài đăng@_" button in the "_@Tên Bài đăng@_" table line
   Then Heading should contain "Chỉnh sửa Bài đăng Projects" inner text

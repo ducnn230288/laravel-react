@@ -79,6 +79,12 @@ const Component = ({
   let __list = temp.list;
   if (temp.current.length) __list = __list?.length ? arrayUnique([...temp.current, ...__list], 'value') : temp.current;
 
+  const render = () =>
+    __list?.map((item: any, index: number) => (
+      <Select.Option key={`${item.value}${index}`} value={item.value} disabled={item.disabled}>
+        <span dangerouslySetInnerHTML={{ __html: item.label }} />
+      </Select.Option>
+    ));
   return (
     <Select
       maxTagCount={maxTagCount}
@@ -99,11 +105,7 @@ const Component = ({
       onDropdownVisibleChange={open => open && !temp.isLoading && loadData('')}
       className={className}
     >
-      {__list?.map((item: any, index: number) => (
-        <Select.Option key={`${item.value}${index}`} value={item.value} disabled={item.disabled}>
-          <span dangerouslySetInnerHTML={{ __html: item.label }} />
-        </Select.Option>
-      ))}
+      {render()}
     </Select>
   );
 };

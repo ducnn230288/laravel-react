@@ -97,6 +97,13 @@ export const CForm = ({
         className={'text-base-100 bg-primary hover:bg-primary/90 leading-4 w-full rounded-lg !h-12'}
       />
     );
+  const classNameFooter = classNames('gap-7 flex sm:block mt-2', {
+    'items-center sm:flex-row': handCancel && handSubmit,
+    'md:inline-flex w-full justify-end': handSubmit,
+    'sm:w-auto text-center items-center sm:flex-row flex-col': handSubmit && extendButton,
+    '!w-full sm:inline-flex text-center justify-end items-center sm:flex-row':
+      !handSubmit && (handCancel || extendButton),
+  });
 
   const timeout = useRef<any>();
   return (
@@ -118,15 +125,7 @@ export const CForm = ({
           {extendForm?.(values)}
         </div>
 
-        <div
-          className={classNames('gap-7 flex sm:block mt-2', {
-            'items-center sm:flex-row': handCancel && handSubmit,
-            'md:inline-flex w-full justify-end': handSubmit,
-            'sm:w-auto text-center items-center sm:flex-row flex-col': handSubmit && extendButton,
-            '!w-full sm:inline-flex text-center justify-end items-center sm:flex-row':
-              !handSubmit && (handCancel || extendButton),
-          })}
-        >
+        <div className={classNameFooter}>
           {renderBtnCancel()}
           {extendButton?.(form)}
           {renderBtnSubmit()}

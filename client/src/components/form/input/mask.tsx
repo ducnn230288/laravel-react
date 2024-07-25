@@ -48,6 +48,34 @@ const Component = forwardRef(
       }
     };
 
+    const className = classNames('ant-input', {
+      before: !!addonBefore,
+      after: !!addonAfter,
+      disabled: disabled,
+    });
+    const handleClick = item => {
+      if (item.value) {
+        const value = input.current?.value ?? '';
+        const position = getCursorPosition(input.current!);
+        input.current!.value = value.slice(0, position) + item.value + value.slice(position);
+        if (onChange) onChange({ target: input.current });
+        setCaretPosition(
+          input.current!,
+          position + item.value.toString().length,
+          position + item.value.toString().length,
+        );
+      }
+    };
+
+    const renderButton = () =>
+      list && (
+        <div className={'mt-2 flex flex-wrap gap-2'}>
+          {list.map((item, index) => (
+            <CButton key={item.value!.toString() + index} text={item.label} onClick={() => handleClick(item)} />
+          ))}
+        </div>
+      );
+
     return (
       <Fragment>
         <div className={'relative'}>
@@ -55,11 +83,7 @@ const Component = forwardRef(
           <input
             id={id}
             ref={input}
-            className={classNames('ant-input', {
-              before: !!addonBefore,
-              after: !!addonAfter,
-              disabled: disabled,
-            })}
+            className={className}
             readOnly={disabled}
             defaultValue={value}
             placeholder={placeholder}
@@ -70,29 +94,7 @@ const Component = forwardRef(
           />
           {!!addonAfter && <span className='after'>{addonAfter(form)}</span>}
         </div>
-        {list && (
-          <div className={'mt-2 flex flex-wrap gap-2'}>
-            {list.map((item, index) => (
-              <CButton
-                key={item.value!.toString() + index}
-                text={item.label}
-                onClick={() => {
-                  if (item.value) {
-                    const value = input.current?.value ?? '';
-                    const position = getCursorPosition(input.current!);
-                    input.current!.value = value.slice(0, position) + item.value + value.slice(position);
-                    if (onChange) onChange({ target: input.current });
-                    setCaretPosition(
-                      input.current!,
-                      position + item.value.toString().length,
-                      position + item.value.toString().length,
-                    );
-                  }
-                }}
-              />
-            ))}
-          </div>
-        )}
+        {renderButton()}
       </Fragment>
     );
   },

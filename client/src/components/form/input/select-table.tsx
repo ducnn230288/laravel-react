@@ -13,7 +13,7 @@ const Component = ({ form, mode, onChange, placeholder, disabled, get }: Type) =
   const onFocus = () => loadData('');
 
   let _data: any[] = [];
-  if (get?.data && get.data()) {
+  if (get?.data()) {
     _data = mode === 'multiple' ? get.data() : [get.data()];
   }
   const _local = localStorage.getItem(KEY_TEMP);
@@ -54,6 +54,17 @@ const Component = ({ form, mode, onChange, placeholder, disabled, get }: Type) =
 
   const table = useRef<ITableRefObject>(null);
   const input = useRef<{ input: HTMLInputElement }>(null);
+  const handleRow = e => ({
+    onClick: () => {
+      if (get?.format) {
+        const { label, value } = get.format(e);
+        onChange(value);
+        if (input.current?.input && typeof label === 'string') {
+          input.current.input.value = label;
+        }
+      }
+    },
+  });
   const renderDropdown = () => (
     <div className={'overflow-hidden bg-base-100 rounded-lg drop-shadow-lg'}>
       <CDataTable
@@ -65,17 +76,7 @@ const Component = ({ form, mode, onChange, placeholder, disabled, get }: Type) =
         showSearch={false}
         showPagination={false}
         isLoading={temp.isLoading}
-        onRow={e => ({
-          onClick: () => {
-            if (get?.format) {
-              const { label, value } = get.format(e);
-              onChange(value);
-              if (input.current?.input && typeof label === 'string') {
-                input.current.input.value = label;
-              }
-            }
-          },
-        })}
+        onRow={handleRow}
         columns={get?.column || []}
       />
     </div>

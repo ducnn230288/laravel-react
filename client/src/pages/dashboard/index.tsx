@@ -16,7 +16,7 @@ const Page = () => {
       <CEditTable table={table2} />
       <CEditTable table={table} />
       {dataDefault.map((item, index) => (
-        <CEChart key={index} option={item}></CEChart>
+        <CEChart key={index + 'chart'} option={item}></CEChart>
       ))}
     </div>
   );
@@ -517,6 +517,7 @@ const task = [
     level: 3,
   },
 ];
+
 const event = [
   {
     name: 'New Year holiday',
@@ -541,6 +542,7 @@ const event = [
   //   startDate: dayjs('2015-08-10'),
   // },
 ];
+
 const table: IEditTable = {
   fields: {
     columns: [

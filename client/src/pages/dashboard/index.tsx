@@ -1503,4 +1503,5 @@ const dataDefault: any[] = [
   formatDataChart({ obj: table, type: ETypeChart.stackedArea, title: 'Stacked Area Chart' }),
   formatDataChart({ obj: table, type: ETypeChart.lineBar, title: 'Line Bar Chart' }),
 ];
+
 export default Page;

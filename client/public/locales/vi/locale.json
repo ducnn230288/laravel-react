@@ -58,7 +58,7 @@
         "Setting": "Thiết lập",
         "Type code": "Loại mã",
         "Add new Code": "Thêm mới mã {{name}}",
-        "Edit Code": "Sửa mã {{name}}",
+        "Edit Code": "Chỉnh sửa mã {{name}}",
         "Pagination code": "Hiển thị {{from}} - {{to}} /Tổng số {{total}} mã",
         "Name Code": "Tên mã",
         "Created At": "Ngày tạo",

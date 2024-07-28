@@ -7,7 +7,7 @@ Library                DateTime
 *** Test Cases ***
 ### Link to testcases https://docs.google.com/spreadsheets/d/1R_jW5GBVBaMy7YgNKJQ2Ha5xW12Vn0nRzOHE0-OsyF8/edit#gid=1857962472 ###
 PL_00 Verify the User Interface of "Bài đăng" page
-  [Tags]                                                                                                MainPage                   UI                     Smoketest
+  [Tags]                                                                                                Develop                   UI                     Smoketest
   ${yesterday}=                                                                                         Get Current Date                local                         -1 day                                     result_format=%d-%m-%Y
   Login to admin
   When Click "Thiết lập" menu

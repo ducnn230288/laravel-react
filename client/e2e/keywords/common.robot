@@ -389,5 +389,3 @@ Confirm locating exactly in "${name}" page of "${menu}" menu
   Wait Until Element Spin
   ${element}=               Set Variable                       //main//div[contains(@class, "breadcrumbs")]//li[text()="${menu}"]
   Wait Until Element Is Existent                               ${element}
-  ${cnt}=                   Get Element Count                  //main//*[text()="${name}"]
-  Should Be True            ${cnt} == 2

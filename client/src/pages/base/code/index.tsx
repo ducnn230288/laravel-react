@@ -69,7 +69,7 @@ const Form = () => {
 
   const { t } = useTranslation('locale', { keyPrefix: 'pages.base.code' });
   const onSubmit = values => {
-    if (sCrud.data?.id) sCrud.put({ ...values, id: sCrud.data.id, typeCode: request.typeCode });
+    if (sCrud.data?.id) sCrud.put({ ...values, id: sCrud.data.code, typeCode: request.typeCode });
     else sCrud.post({ ...values, typeCode: request.typeCode });
   };
   return (

@@ -6,13 +6,12 @@ Library                DateTime
 
 *** Test Cases ***
 ### Link to testcases https://docs.google.com/spreadsheets/d/1R_jW5GBVBaMy7YgNKJQ2Ha5xW12Vn0nRzOHE0-OsyF8/edit#gid=1857962472 ###
-PL_00 Verify the User Interface of "Bài đăng" page
+PL_00 Post List
   [Tags]                                                                                                Develop                   UI                     Smoketest
   ${yesterday}=                                                                                         Get Current Date                local                         -1 day                                     result_format=%d-%m-%Y
   Login to admin
   When Click "Thiết lập" menu
   When Click "Bài đăng" sub menu to "#/vi/setting/post"
-  Select on the "Projects" item line
   Then Heading should contain "Bài đăng" inner text
   Then Confirm locating exactly in "Bài đăng" page of "Thiết lập" menu
   Then Webpage should contain the list data from database
@@ -42,10 +41,12 @@ PL_00 Verify the User Interface of "Bài đăng" page
   When Select file in "Hình ảnh" with "image.jpg"
   When Click on "Tiếng Anh" tab
   When Enter "test name" in "Tên Bài đăng" with "_RANDOM_"
+  When Enter "text" in "Slug" with "_RANDOM_"
   When Enter "paragraph" in textarea "Mô tả" with "_RANDOM_"
   When Enter "text" in editor "Nội dung" with "_RANDOM_"
   When Click on "Tiếng Việt" tab
   When Enter "test name" in "Tên Bài đăng" with "_RANDOM_"
+  When Enter "text" in "Slug" with "_RANDOM_"
   When Enter "paragraph" in textarea "Mô tả" with "_RANDOM_"
   When Enter "text" in editor "Nội dung" with "_RANDOM_"
   When Click "Lưu lại" button
@@ -57,6 +58,14 @@ PL_00 Verify the User Interface of "Bài đăng" page
 
   When Click on the "Đã vô hiệu hóa bài đăng _@Tên Bài đăng@_" button in the "_@Tên Bài đăng@_" table line
   Then The status button in the "_@Tên Bài đăng@_" table line should change to "Đã kích hoạt bài đăng _@Tên Bài đăng@_"
+
+  When Click on the "Chỉnh sửa bài đăng _@Tên Bài đăng@_" button in the "_@Tên Bài đăng@_" table line
+  When Click on "Tiếng Việt" tab
+  Then Data's information in "Tên Bài đăng" should be equal "_@Tên Bài đăng@_"
+  Then Data's information in "Slug" should be equal "_@Slug@_"
+  Then Data's information in "Mô tả" should be equal "_@Mô tả@_"
+  Then Data's information in "Nội dung" should be equal "_@Nội dung@_"
+  When Click "Huỷ bỏ" button
 
   When Click on the "Chỉnh sửa bài đăng _@Tên Bài đăng@_" button in the "_@Tên Bài đăng@_" table line
   Then Heading should contain "Chỉnh sửa Bài đăng Projects" inner text
@@ -90,13 +99,6 @@ PL_00 Verify the User Interface of "Bài đăng" page
   Then User look message "Cập nhật thành công" popup
 
   When Click on the "Chỉnh sửa bài đăng _@Tên Bài đăng@_" button in the "_@Tên Bài đăng@_" table line
-  When Click on "Tiếng Việt" tab
-  Then Data's information in "Ngày tạo" should be equal "${yesterday}"
-  Then Data's information in "Tên Bài đăng" should be equal "_@Tên Bài đăng@_"
-  Then Data's information in "Slug" should be equal "_@Slug@_"
-  Then Data's information in "Mô tả" should be equal "_@Mô tả@_"
-  Then Data's information in "Nội dung" should be equal "_@Nội dung@_"
-
   ${before}=                     Get the image's information in "Hình ảnh" field
   When Click on cross icon inside image in "Hình ảnh"
   When Select file in "Hình ảnh" with "image2.jpg"
@@ -106,6 +108,7 @@ PL_00 Verify the User Interface of "Bài đăng" page
   ${after}=                      Get the image's information in "Hình ảnh" field
   Then Should Not Be Equal       ${after}    ${before}
 
+  Then Data's information in "Ngày tạo" should be equal "${yesterday}"
   When Click on cross icon in select "Ngày tạo"
   When Click "Lưu lại" button
   Then Required message "Xin vui lòng chọn ngày tạo" displayed under "Ngày tạo" field

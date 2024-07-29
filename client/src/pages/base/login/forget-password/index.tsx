@@ -14,6 +14,7 @@ const Page = () => {
 
   useEffect(() => {
     if (sGlobal.status === EStatusState.isFulfilled) {
+      sGlobal.set({ status: EStatusState.idle });
       navigate(`/${lang}${routerLinks('VerifyForotPassword')}`);
     }
   }, [sGlobal.status]);
@@ -42,7 +43,9 @@ const Page = () => {
         />
       </Spin>
       <div className='mt-3 text-center'>
-        <button onClick={() => navigate(`/${lang}${routerLinks('Login')}`)}>{t('Go back to login')}</button>
+        <button title={t('Go back to login')} onClick={() => navigate(`/${lang}${routerLinks('Login')}`)}>
+          {t('Go back to login')}
+        </button>
       </div>
     </div>
   );

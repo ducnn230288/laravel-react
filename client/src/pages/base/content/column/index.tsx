@@ -2,10 +2,7 @@ import { useTranslation } from 'react-i18next';
 
 import { CAvatar } from '@/components/avatar';
 import { EFormRuleType, EFormType, ETableFilterType } from '@/enums';
-import { SCrud } from '@/services';
 import type { IDataTable, IForm } from '@/types';
-import type { IContentType, IMContent } from '@/types/model';
-import { routerLinks } from '@/utils';
 
 export default {
   useTable: (): IDataTable[] => {
@@ -54,7 +51,6 @@ export default {
   },
   useForm: (type?: string): IForm[] => {
     const { t } = useTranslation('locale', { keyPrefix: 'pages.base.content' });
-    const sCrud = SCrud<IMContent, IContentType>('Content', 'ContentType');
 
     return [
       {
@@ -98,18 +94,7 @@ export default {
                     name: 'name',
                     formItem: {
                       col: type === 'member' ? 6 : 12,
-                      rules: [
-                        { type: EFormRuleType.required },
-                        {
-                          type: EFormRuleType.api,
-                          api: {
-                            url: `${routerLinks('Content', 'api')}/valid`,
-                            name: 'name',
-                            label: t('Name'),
-                            id: sCrud.data?.id,
-                          },
-                        },
-                      ],
+                      rules: [{ type: EFormRuleType.required }],
                     },
                   },
 

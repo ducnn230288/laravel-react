@@ -99,7 +99,10 @@ const Main = () => {
             onEdit: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_CONTENT_UPDATE) && sCrud.getById,
             onDelete: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_CONTENT_DESTROY) && sCrud.delete,
             label: t('Content'),
-            name: data => data.name,
+            name: data =>
+              data.languages?.length
+                ? data.languages?.find((item: any) => item?.language === localStorage.getItem('i18nextLng')).name
+                : '',
             onAdd: sGlobal.user?.role?.permissions?.includes(KEY_ROLE.P_CONTENT_STORE) && sCrud.set,
             labelAdd: t('Add new Content', {
               name: searchTree({ array: sCrud.resultType?.data, value: request.typeCode, key: 'code' })?.name,

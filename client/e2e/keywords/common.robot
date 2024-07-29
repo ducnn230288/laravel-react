@@ -7,7 +7,7 @@ Library                 DateTime
 *** Variables ***
 ${BROWSER}              chromium
 ${HEADLESS}             %{HEADLESS=False}
-${BROWSER_TIMEOUT}      %{BROWSER_TIMEOUT=40} seconds
+${BROWSER_TIMEOUT}      %{BROWSER_TIMEOUT=20} seconds
 ${SHOULD_TIMEOUT}       0.1 seconds
 
 ${URL_DEFAULT}          %{HOST_ADDRESS=http://localhost:4000/}

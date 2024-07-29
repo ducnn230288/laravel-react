@@ -14,8 +14,8 @@ const Page = () => {
 
   useEffect(() => {
     if (sGlobal.status === EStatusState.isFulfilled && sGlobal.user && Object.keys(sGlobal.user).length > 0) {
-      navigate('/' + lang + '/dashboard', { replace: true });
       sGlobal.set({ status: EStatusState.idle });
+      navigate('/' + lang + '/dashboard', { replace: true });
     }
   }, [sGlobal.status]);
 
@@ -44,6 +44,7 @@ const Page = () => {
         className='text-base-content/60'
         type='button'
         onClick={() => navigate(`/${lang}${routerLinks('ForgetPassword')}`)}
+        title={t('Forgot Password')}
       >
         {t('Forgot Password')}
       </button>

@@ -13,6 +13,7 @@ const Page = () => {
   const navigate = useNavigate();
   useEffect(() => {
     if (sGlobal.status === EStatusState.isFulfilled) {
+      sGlobal.set({ status: EStatusState.idle });
       navigate(`/${lang}${routerLinks('Login')}`, { replace: true });
     }
   }, [sGlobal.status]);

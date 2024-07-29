@@ -67,7 +67,7 @@
       "content": {
         "Content": "Content",
         "Setting": "Setting",
-        "Type content": "Type content",
+        "Type content": "Type Content",
         "Add new Content": "Add new Content {{name}}",
         "Edit Content": "Edit Content {{name}}",
         "Pagination content": "Show {{from}} - {{to}} /Total {{total}} contents",
@@ -78,7 +78,7 @@
         "Image": "Image",
         "English": "English",
         "Vietnamese": "Vietnamese",
-        "Name": "Name",
+        "Name": "Name content",
         "Position": "Position",
         "Description": "Description"
       },

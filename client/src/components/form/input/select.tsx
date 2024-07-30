@@ -15,7 +15,7 @@ const Component = ({
   disabled,
   get,
   list = [],
-  mode,
+  isMultiple,
   className = '',
   allowClear = true,
 }: Type) => {
@@ -35,7 +35,7 @@ const Component = ({
   const loadData = async (fullTextSearch: string) => {
     if (get?.keyApi) {
       const params = cleanObjectKeyNull(
-        get.params ? get.params(fullTextSearch, form?.getFieldValue) : { fullTextSearch },
+        get.params ? get.params({ fullTextSearch, value: form?.getFieldValue }) : { fullTextSearch },
       );
       const obj = _temp['select-' + get.keyApi];
       if (!obj || (obj && (new Date().getTime() > obj.time || JSON.stringify(params) != obj.queryParams)))
@@ -70,7 +70,7 @@ const Component = ({
     if (get?.data) {
       let data = get.data();
       if (get?.format && data) {
-        data = mode === 'multiple' ? data.map(get.format) : [get.format(data)];
+        data = isMultiple ? data.map(get.format) : [get.format(data)];
         if (JSON.stringify(data) !== JSON.stringify(temp.current)) setTemp(pre => ({ ...pre, current: data }));
       }
     }
@@ -99,7 +99,7 @@ const Component = ({
       onSearch={showSearch ? value => loadData(value) : undefined}
       value={value}
       maxTagPlaceholder={array => '+' + array.length}
-      mode={mode}
+      mode={isMultiple ? 'multiple' : undefined}
       optionFilterProp='label'
       onBlur={onBlur}
       onDropdownVisibleChange={open => open && !temp.isLoading && loadData('')}
@@ -121,7 +121,7 @@ interface Type {
   disabled?: boolean;
   get?: ITableGet;
   list?: ITableItemFilterList[];
-  mode?: 'multiple' | 'tags';
+  isMultiple?: boolean;
   allowClear?: boolean;
 }
 export default Component;

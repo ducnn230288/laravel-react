@@ -52,7 +52,7 @@ const loadData = async ({
   setTemp: any;
 }) => {
   if (get?.keyApi) {
-    const params = cleanObjectKeyNull(get.params ? get.params(fullTextSearch, value) : { fullTextSearch });
+    const params = cleanObjectKeyNull(get.params ? get.params({ fullTextSearch, value }) : { fullTextSearch });
     const _local = localStorage.getItem(KEY_TEMP);
     const _temp = _local ? JSON.parse(_local) : {};
     const obj = _temp['table-filter-' + get.keyApi];

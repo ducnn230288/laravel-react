@@ -35,7 +35,7 @@ export default {
                 label: item.name,
                 value: item.code,
               }),
-              params: (fullTextSearch: string, value) => ({
+              params: ({ fullTextSearch, value }) => ({
                 fullTextSearch,
                 typeCode: 'POSITION',
                 extend: value && [value.map(item => ['code', item])],
@@ -114,12 +114,11 @@ export default {
           condition: ({ values }) => !values?.id,
           rules: [
             { type: EFormRuleType.required },
-            { type: EFormRuleType.min, value: 8 },
             {
               type: EFormRuleType.custom,
               validator: ({ getFieldValue }) => ({
                 validator(_, value: string) {
-                  if (!value || (getFieldValue('password') === value && value.length >= 8)) {
+                  if (!value || getFieldValue('password') === value) {
                     return Promise.resolve();
                   }
                   return Promise.reject(new Error(t('Two passwords that you enter is inconsistent!')));
@@ -152,7 +151,7 @@ export default {
           rules: [{ type: EFormRuleType.required }],
           get: {
             keyApi: 'Code',
-            params: (fullTextSearch: string, value) => ({
+            params: ({ fullTextSearch, value }) => ({
               fullTextSearch,
               typeCode: 'position',
               extend: value('positionCode') && [['code', value('positionCode')]],

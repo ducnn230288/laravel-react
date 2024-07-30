@@ -165,6 +165,18 @@ Enter "${type}" in textarea "${name}" with "${text}"
   Set Global Variable       \${STATE["${name}"]}              ${text}
   END
 
+Click select "${name}" with "${text}"
+  ${text}=                  Get Random Text                   Text                          ${text}
+  ${element}=               Get Element Form Item By Name     ${name}                       //*[contains(@class, "ant-select-show-arrow")]
+  Click                     ${element}
+  ${element}=               Get Element Form Item By Name     ${name}                       //*[contains(@class, "ant-select-selection-search-input")]
+  Fill Text                                                   ${element}                    ${text}
+  Click                     xpath=//*[contains(@class, "ant-select-item-option") and @title="${text}"]
+  ${cnt}=                   Get Length                        ${text}
+  IF  ${cnt} > 0
+    Set Global Variable     \${STATE["${name}"]}              ${text}
+  END
+
 Select file in "${name}" with "${text}"
   ${element}=               Get Element Form Item By Name     ${name}                       //input[@type = "file"]
   Upload File By Selector   ${element}                        e2e/upload/${text}
@@ -233,6 +245,14 @@ Wait Until Element Spin
 Click on "${name}" tab
   ${element}=               Set Variable                       //*[contains(@class,"ant-tabs")]//*[@role="tab" and text()="${name}"]
   Click                     ${element}
+
+Click "${name}" line in the avatar's account
+  Wait Until Element Spin
+  Click                     //*[contains(@id,"dropdown-profile")]
+  Wait Until Element Spin
+  ${element}=               Get Element                       //ul[contains(@class,"ant-dropdown-menu")]
+  Click                     ${element}//button[text()="${name}"]
+  Wait Until Element Spin
 
 Click on cross icon in select "${name}"
   Wait Until Element Spin
@@ -389,3 +409,8 @@ Confirm locating exactly in "${name}" page of "${menu}" menu
   Wait Until Element Spin
   ${element}=               Set Variable                       //main//div[contains(@class, "breadcrumbs")]//li[text()="${menu}"]
   Wait Until Element Is Existent                               ${element}
+
+Webpage should contain the profile information group with name and role
+  ${element}=               Get Element                       //div[contains(@class,"profile")]//div[@class="upload"]
+  ${count}=                 Get Element Count                 ${element}
+  Should Be True            ${count} >= 1

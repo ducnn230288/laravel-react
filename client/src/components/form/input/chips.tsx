@@ -84,7 +84,7 @@ const Component = ({
       onChange={(value: any) => handleInputConfirm(value)}
       onBlur={() => setInputVisible(false)}
       disabled={!!disabled}
-      mode={'multiple'}
+      isMultiple={true}
       list={list.filter(i => i.value && value.indexOf(i.value.toString()) === -1)}
     />
   );

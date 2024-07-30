@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
-import { EFormModeSelect, EFormType } from '@/enums';
+import { EFormType } from '@/enums';
 import type { IForm } from '@/types';
 dayjs.extend(utc);
 
@@ -18,10 +18,11 @@ export const convertFormValue = (columns: IForm[], values: { [selector: string]:
             break;
           case EFormType.upload:
             if (values[item.name] && typeof values[item.name] === 'object' && exportData) {
-              if (!item.formItem?.mode && values[item.name].length > 0) values[item.name] = values[item.name][0].path;
+              if (!item.formItem?.isMultiple && values[item.name].length > 0)
+                values[item.name] = values[item.name][0].path;
               else if (values[item.name].length > 1) {
                 values[item.name] = values[item.name].filter((_item: any) => _item.status === 'done' || !_item.status);
-              } else if (values[item.name].length == 0 && item.formItem?.mode != EFormModeSelect.multiple) {
+              } else if (values[item.name].length == 0 && !item.formItem?.isMultiple) {
                 values[item.name] = null;
               }
             }
@@ -88,7 +89,7 @@ export const convertFormValue = (columns: IForm[], values: { [selector: string]:
             }
             break;
           case EFormType.select:
-            if (!exportData && item?.formItem?.mode === 'multiple' && values[item.name]) {
+            if (!exportData && item?.formItem?.isMultiple && values[item.name]) {
               values[item.name] = values[item.name].map((item: any) => (item.id ? item.id : item));
             }
             break;

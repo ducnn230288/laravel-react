@@ -21,6 +21,7 @@ export const CDrawerForm = forwardRef(
       keyState = 'isVisible',
       keyIsLoading = 'isLoading',
       keyData = 'data',
+      checkHidden,
       onSubmit,
     }: Type,
     ref: Ref<IFormModalRefObject>,
@@ -56,7 +57,13 @@ export const CDrawerForm = forwardRef(
         destroyOnClose={true}
       >
         <Scrollbar className='intro-x'>
-          <CForm values={{ ...facade[keyData] }} formAnt={form} columns={columns} spinning={facade[keyIsLoading]} />
+          <CForm
+            checkHidden={checkHidden}
+            values={{ ...facade[keyData] }}
+            formAnt={form}
+            columns={columns}
+            spinning={facade[keyIsLoading]}
+          />
         </Scrollbar>
       </Drawer>
     );
@@ -73,5 +80,6 @@ interface Type {
   columns: IForm[];
   textSubmit?: any;
   textCancel?: any;
+  checkHidden?: boolean;
   onSubmit: (value: any) => void;
 }

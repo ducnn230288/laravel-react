@@ -87,7 +87,7 @@ const Side = ({ form }: { form: FormInstance }) => {
       title: 'routes.admin.user.Full name',
       name: 'name',
       formItem: {
-        render: (_, values) => (
+        render: ({ values }) => (
           <Fragment>
             <h2 className='text-center'>{values.name}</h2>
             <div className='line'></div>
@@ -155,7 +155,7 @@ const FormProfile = ({ form }: { form: FormInstance }) => {
         rules: [{ type: EFormRuleType.required }],
         get: {
           keyApi: 'Code',
-          params: (fullTextSearch: string, value) => ({
+          params: ({ fullTextSearch, value }) => ({
             fullTextSearch,
             typeCode: 'position',
             extend: value('positionCode') && [['code', value('positionCode')]],

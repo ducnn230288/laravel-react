@@ -51,10 +51,7 @@ export const generateInput = ({
       item.name,
       date?.filter(i => !!i),
     );
-    formItem?.onChange?.(
-      date?.filter(i => !!i),
-      form,
-    );
+    formItem?.onChange?.({ value: date?.filter(i => !!i), form });
   };
   if (formItem) {
     switch (formItem.type) {
@@ -63,21 +60,21 @@ export const generateInput = ({
       case EFormType.editor:
         return <CIEditor placeholder={t(formItem.placeholder ?? 'Enter', { title: item.title.toLowerCase() })} />;
       case EFormType.upload:
-        return <CUpload multiple={!!formItem.mode} />;
+        return <CUpload isMultiple={formItem.isMultiple} />;
       case EFormType.otp:
         return <Input.OTP length={formItem.maxLength ?? 5} />;
       case EFormType.password:
         return (
           <CIPassword
             placeholder={t(formItem.placeholder ?? 'Enter', { title: item.title.toLowerCase() })}
-            disabled={formItem.disabled?.(values, form)}
+            disabled={formItem.disabled?.({ value: values[item.name], form })}
           />
         );
       case EFormType.chips:
         return (
           <CIChips
             placeholder={t(formItem.placeholder ?? 'Enter', { title: item.title.toLowerCase() })}
-            disabled={formItem.disabled?.(values, form)}
+            disabled={formItem.disabled?.({ value: values[item.name], form })}
             list={formItem.list}
           />
         );
@@ -87,7 +84,7 @@ export const generateInput = ({
             checkedChildren={<CSvgIcon name='check' size={20} className='fill-white' />}
             unCheckedChildren={<CSvgIcon name='times' size={20} className='fill-white' />}
             defaultChecked={!!values && values[item.name || ''] === 1}
-            onChange={e => formItem.onChange?.(e, form)}
+            onChange={value => formItem.onChange?.({ value, form })}
           />
         );
       case EFormType.slider:
@@ -104,8 +101,8 @@ export const generateInput = ({
           <Radio.Group
             options={formItem.list}
             optionType={'button'}
-            disabled={formItem.disabled?.(values, form)}
-            onChange={({ target }) => formItem.onChange?.(target.value, form)}
+            disabled={formItem.disabled?.({ value: values[item.name], form })}
+            onChange={({ target }) => formItem.onChange?.({ value: target.value, form })}
           />
         );
 
@@ -144,9 +141,9 @@ export const generateInput = ({
             addonBefore={formItem.addonBefore}
             addonAfter={formItem.addonAfter}
             placeholder={t(formItem.placeholder ?? 'Enter', { title: item.title.toLowerCase() })}
-            onBlur={(e: any) => formItem.onBlur?.(e.target.value, form, name)}
-            onChange={(e: any) => formItem.onChange?.(e.target.value, form)}
-            disabled={formItem.disabled?.(values, form)}
+            onBlur={e => formItem.onBlur?.(e.target.value, form, name)}
+            onChange={e => formItem.onChange?.({ value: e.target.value, form })}
+            disabled={formItem.disabled?.({ value: values[item.name], form })}
           />
         );
     }
@@ -173,14 +170,14 @@ const switchCaseMore1 = ({
       case EFormType.textarea:
         return (
           <textarea
-            disabled={formItem.disabled?.(values, form)}
+            disabled={formItem.disabled?.({ value: values[item.name], form })}
             className={classNames('ant-input', {
-              disabled: formItem.disabled?.(values, form),
+              disabled: formItem.disabled?.({ value: values[item.name], form }),
             })}
             rows={4}
             maxLength={1000}
             placeholder={t(formItem.placeholder ?? 'Enter', { title: item.title.toLowerCase() })}
-            onChange={e => formItem.onChange?.(e.target.value, form)}
+            onChange={e => formItem.onChange?.({ value: e.target.value, form })}
           />
         );
       case EFormType.addable:
@@ -203,11 +200,11 @@ const switchCaseMore1 = ({
             format={
               FORMAT_DATE + ((!formItem.picker || formItem.picker === 'date') && formItem.showTime ? ' HH:mm' : '')
             }
-            onChange={(date: any) => formItem.onChange?.(date, form)}
-            disabledDate={(current: any) => (formItem.disabledDate ? formItem.disabledDate(current, form) : false)}
+            onChange={value => formItem.onChange?.({ value, form })}
+            disabledDate={current => (formItem.disabledDate ? formItem.disabledDate({ current, form }) : false)}
             showTime={!!formItem.showTime}
             picker={formItem.picker ?? 'date'}
-            disabled={formItem.disabled?.(values, form)}
+            disabled={formItem.disabled?.({ value: values[item.name], form })}
             form={form}
             name={item.name}
             placeholder={t(formItem.placeholder ?? 'Choose', { title: item.title.toLowerCase() })}
@@ -221,12 +218,12 @@ const switchCaseMore1 = ({
               if (!open && form.getFieldValue(item.name)?.length < 2) form.resetFields([item.name]);
             }}
             format={FORMAT_DATE + (formItem.showTime ? ' HH:mm' : '')}
-            disabledDate={current => (formItem.disabledDate ? formItem.disabledDate(current, form) : false)}
+            disabledDate={current => (formItem.disabledDate ? formItem.disabledDate({ current, form }) : false)}
             defaultValue={
               formItem.initialValues && [dayjs(formItem.initialValues.start), dayjs(formItem.initialValues.end)]
             }
             showTime={formItem.showTime}
-            disabled={formItem.disabled?.(values, form)}
+            disabled={formItem.disabled?.({ value: values[item.name], form })}
           />
         );
     }
@@ -255,7 +252,7 @@ const switchCaseMore2 = ({
             formItem={formItem}
             showSearch={formItem.showSearch}
             form={form}
-            disabled={formItem.disabled?.(values, form)}
+            disabled={formItem.disabled?.({ value: values[item.name], form })}
             placeholder={t(formItem.placeholder ?? 'Choose', { title: item.title.toLowerCase() })}
           />
         );
@@ -263,10 +260,10 @@ const switchCaseMore2 = ({
         return (
           <CISelectTable
             form={form}
-            onChange={(value: any) => formItem.onChange?.(value, form)}
+            onChange={value => formItem.onChange?.({ value, form })}
             placeholder={t(formItem.placeholder ?? 'Choose', { title: item.title.toLowerCase() })}
-            disabled={formItem.disabled?.(values, form)}
-            mode={formItem.mode}
+            disabled={formItem.disabled?.({ value: values[item.name], form })}
+            isMultiple={formItem.isMultiple}
             get={formItem.get}
           />
         );
@@ -287,9 +284,9 @@ const switchCaseMore2 = ({
           <TimePicker
             minuteStep={10}
             format={'HH:mm'}
-            onChange={(date: any) => formItem.onChange?.(date, form)}
-            disabledDate={(current: any) => (formItem.disabledDate ? formItem.disabledDate(current, form) : false)}
-            disabled={formItem.disabled?.(values, form)}
+            onChange={value => formItem.onChange?.({ value, form })}
+            disabledDate={current => (formItem.disabledDate ? formItem.disabledDate({ current, form }) : false)}
+            disabled={formItem.disabled?.({ value: values[item.name], form })}
             name={item.name}
             placeholder={t(formItem.placeholder ?? 'Choose', { title: item.title.toLowerCase() })}
           />
@@ -303,24 +300,24 @@ const switchCaseMore2 = ({
               if (!open && form.getFieldValue(item.name)?.length < 2) form.resetFields([item.name]);
             }}
             format={'HH:mm'}
-            disabledDate={current => (formItem.disabledDate ? formItem.disabledDate(current, form) : false)}
+            disabledDate={current => (formItem.disabledDate ? formItem.disabledDate({ current, form }) : false)}
             defaultValue={
               formItem.initialValues && [dayjs(formItem.initialValues.start), dayjs(formItem.initialValues.end)]
             }
-            disabled={formItem.disabled?.(values, form)}
+            disabled={formItem.disabled?.({ value: values[item.name], form })}
           />
         );
       case EFormType.checkbox:
         return formItem.list ? (
           <Checkbox.Group
             options={formItem.list}
-            onChange={value => formItem.onChange?.(value, form)}
-            disabled={formItem.disabled?.(values, form)}
+            onChange={value => formItem.onChange?.({ value, form })}
+            disabled={formItem.disabled?.({ value: values[item.name], form })}
           />
         ) : (
           <Checkbox
-            onChange={value => formItem.onChange?.(value.target.checked, form)}
-            disabled={formItem.disabled?.(values, form)}
+            onChange={value => formItem.onChange?.({ value: value.target.checked, form })}
+            disabled={formItem.disabled?.({ value: values[item.name], form })}
           >
             {formItem.label}
           </Checkbox>
@@ -330,13 +327,13 @@ const switchCaseMore2 = ({
           <CISelect
             showSearch={formItem.showSearch}
             maxTagCount={formItem.maxTagCount ?? 'responsive'}
-            onChange={(value: any) => formItem.onChange?.(value, form)}
+            onChange={value => formItem.onChange?.({ value, form })}
             placeholder={t(formItem.placeholder ?? 'Choose', { title: item.title.toLowerCase() })}
             form={form}
-            disabled={formItem.disabled?.(values, form)}
+            disabled={formItem.disabled?.({ value: values[item.name], form })}
             get={formItem.get}
             list={formItem.list}
-            mode={formItem.mode}
+            isMultiple={formItem.isMultiple}
           />
         );
     }

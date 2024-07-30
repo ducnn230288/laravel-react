@@ -138,7 +138,7 @@ const CHeader = () => {
       label: (
         <button onClick={() => sGlobal.setLanguage('en')}>
           <CSvgIcon name='en' size={20} className='rounded-lg' />
-          {t('en')}
+          English
         </button>
       ),
     },
@@ -147,7 +147,7 @@ const CHeader = () => {
       label: (
         <button onClick={() => sGlobal.setLanguage('vi')}>
           <CSvgIcon name='vi' size={20} className='rounded-lg' />
-          {t('vi')}
+          Tiếng Việt
         </button>
       ),
     },
@@ -179,7 +179,7 @@ const CHeader = () => {
           <CSvgIcon name='day-night' size={24} />
         </button>
         <Dropdown trigger={['click']} menu={{ items: listDropdown }} placement='bottomRight'>
-          <div className='flex cursor-pointer gap-1.5'>
+          <div id='dropdown-profile' className='flex cursor-pointer gap-1.5'>
             <CAvatar src={sGlobal.user?.avatar ?? ''} size={8} />
             <div className='leading-none'>
               <p className='text-sm font-semibold'>{sGlobal.user?.name}</p>

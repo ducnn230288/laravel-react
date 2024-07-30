@@ -6,7 +6,7 @@ import { API, KEY_TEMP, arrayUnique, cleanObjectKeyNull, routerLinks } from '@/u
 import { CDataTable } from '../../data-table';
 import Mask from './mask';
 
-const Component = ({ form, mode, onChange, placeholder, disabled, get }: Type) => {
+const Component = ({ form, isMultiple, onChange, placeholder, disabled, get }: Type) => {
   const onBlur = () => {
     setTimeout(() => setTemp(previousState => ({ ...previousState, isOpen: false })), 200);
   };
@@ -14,7 +14,7 @@ const Component = ({ form, mode, onChange, placeholder, disabled, get }: Type) =
 
   let _data: any[] = [];
   if (get?.data()) {
-    _data = mode === 'multiple' ? get.data() : [get.data()];
+    _data = isMultiple ? get.data() : [get.data()];
   }
   const _local = localStorage.getItem(KEY_TEMP);
   const _temp = _local ? JSON.parse(_local) : {};
@@ -28,7 +28,7 @@ const Component = ({ form, mode, onChange, placeholder, disabled, get }: Type) =
   const loadData = async (fullTextSearch: string) => {
     if (get?.keyApi) {
       const params = cleanObjectKeyNull(
-        get.params ? get.params(fullTextSearch, form?.getFieldValue) : { fullTextSearch },
+        get.params ? get.params({ fullTextSearch, value: form?.getFieldValue }) : { fullTextSearch },
       );
       const obj = _temp['select-table-' + get.keyApi];
       if (!obj || (obj && (new Date().getTime() > obj.time || JSON.stringify(params) != obj.queryParams))) {
@@ -62,6 +62,7 @@ const Component = ({ form, mode, onChange, placeholder, disabled, get }: Type) =
         if (input.current?.input && typeof label === 'string') {
           input.current.input.value = label;
         }
+        setTimeout(() => input.current?.input?.focus());
       }
     },
   });
@@ -124,7 +125,7 @@ const Component = ({ form, mode, onChange, placeholder, disabled, get }: Type) =
 };
 interface Type {
   form?: FormInstance;
-  mode?: 'multiple' | 'tags';
+  isMultiple?: boolean;
   onChange: (e: any) => any;
   placeholder: string;
   disabled?: boolean;

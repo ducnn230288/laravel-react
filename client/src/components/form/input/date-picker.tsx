@@ -33,6 +33,7 @@ const Component = ({
         onChange(selectDate, value);
       }
     }
+    setTimeout(() => document.getElementById(id)?.focus());
   };
   return (
     <DatePicker

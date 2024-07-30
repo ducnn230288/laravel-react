@@ -1,32 +1,14 @@
 import { Checkbox, TreeSelect, type FormInstance } from 'antd';
 import { Fragment, useEffect, useRef, useState } from 'react';
 
-import { API } from '@/utils';
+import type { IFormItem } from '@/types';
 import { CButton } from '../../button';
 import { CSvgIcon } from '../../svg-icon';
 
-const Component = ({ formItem, placeholder, onChange, value, form, disabled, showSearch = true }: Type) => {
+const Component = ({ formItem, placeholder, onChange, value, disabled, showSearch = true }: Type) => {
   const [temp, setTemp] = useState({ list: formItem.list || [], checkAll: false });
   const allValue = useRef<any>([]);
 
-  const loadData = async (fullTextSearch: string) => {
-    if ((formItem.api && !formItem.api.condition) || formItem.api.condition({ value: form.getFieldValue })) {
-      const url = formItem.api.link(form.getFieldValue);
-      if (url) {
-        const params = formItem.api.params
-          ? formItem.api.params(form.getFieldValue, fullTextSearch)
-          : { fullTextSearch };
-        const { data } = await API.get<any>({ url, params });
-        const list = data.data.map(formItem.api.format);
-        if (formItem.mode === 'multiple' && value?.length) {
-          const array = formItem.api.convertData ? formItem.api.convertData(list) : list;
-          setTemp({ list, checkAll: array.length === value.length });
-        } else setTemp(pre => ({ ...pre, list }));
-      }
-    } else if (formItem.renderList) {
-      setTemp(pre => ({ ...pre, list: formItem.renderList(form.getFieldValue) }));
-    }
-  };
   const initFunction = async () => {
     if (
       typeof value === 'object' &&
@@ -35,20 +17,12 @@ const Component = ({ formItem, placeholder, onChange, value, form, disabled, sho
     ) {
       onChange?.(value.map((item: any) => ({ value: item, label: item })));
     }
-    if ((temp.list.length === 0 && formItem.api) || formItem.renderList) await loadData('');
     setTemp(pre => ({ ...pre, checkAll: value?.length > 0 && value?.length === allValue.current.length }));
   };
 
   useEffect(() => {
     initFunction();
   }, [value]);
-
-  const loadDataTree = async (treeNode: any) => {
-    if (formItem.api.loadData) {
-      const data = await formItem.api.loadData(treeNode, temp.list);
-      setTemp(pre => ({ ...pre, list: data }));
-    }
-  };
 
   const handleGetAllValue = (item: any) => {
     allValue.current.push({ value: item.value, label: item.title });
@@ -99,7 +73,7 @@ const Component = ({ formItem, placeholder, onChange, value, form, disabled, sho
 
   const dropdownRender = originNode => (
     <Fragment>
-      {formItem.mode === 'multiple' && (
+      {formItem.isMultiple && (
         <Checkbox checked={temp.checkAll} onChange={() => onChange?.(!temp.checkAll ? allValue.current : [])}>
           Select all
         </Checkbox>
@@ -148,8 +122,8 @@ const Component = ({ formItem, placeholder, onChange, value, form, disabled, sho
   };
 
   const handleChange = (data: any) => {
-    if (formItem.api?.loadData) {
-      if (formItem.mode !== 'multiple') {
+    if (formItem.api) {
+      if (!formItem.isMultiple) {
         const _data = temp.list.filter((_item: any) => _item.id === data.value)[0];
         onChange?.({ ..._data, label: _data.fullTitle });
       } else {
@@ -181,8 +155,7 @@ const Component = ({ formItem, placeholder, onChange, value, form, disabled, sho
       value={value}
       disabled={disabled}
       placeholder={placeholder}
-      treeCheckable={formItem.mode === 'multiple'}
-      loadData={loadDataTree}
+      treeCheckable={formItem.isMultiple}
       treeData={temp.list}
       tagRender={tagRender}
       placement={'bottomLeft'}
@@ -191,7 +164,7 @@ const Component = ({ formItem, placeholder, onChange, value, form, disabled, sho
   );
 };
 interface Type {
-  formItem: any;
+  formItem: IFormItem;
   placeholder: string;
   onChange?: (e: any) => any;
   value?: any;

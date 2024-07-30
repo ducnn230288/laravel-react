@@ -5,8 +5,7 @@ Test Teardown          Tear Down
 Library                DateTime
 
 *** Test Cases ***
-### Link to testcases https://docs.google.com/spreadsheets/d/1R_jW5GBVBaMy7YgNKJQ2Ha5xW12Vn0nRzOHE0-OsyF8/edit#gid=1432644075 ###
-DL_00 Data List
+DL_00 Data
   [Tags]                                                                                                Develop                   UI                     Smoketest
   Login to admin
   When Click "Thiết lập" menu

@@ -5,10 +5,8 @@ Test Teardown          Tear Down
 Library                DateTime
 
 *** Test Cases ***
-### Link to testcases https://docs.google.com/spreadsheets/d/1R_jW5GBVBaMy7YgNKJQ2Ha5xW12Vn0nRzOHE0-OsyF8/edit#gid=1857962472 ###
-PL_00 Post List
+PL_00 Post
   [Tags]                                                                                                Develop                   UI                     Smoketest
-  ${yesterday}=                                                                                         Get Current Date                local                         -1 day                                     result_format=%d-%m-%Y
   Login to admin
   When Click "Thiết lập" menu
   When Click "Bài đăng" sub menu to "#/vi/setting/post"
@@ -108,6 +106,7 @@ PL_00 Post List
   ${after}=                      Get the image's information in "Hình ảnh" field
   Then Should Not Be Equal       ${after}    ${before}
 
+  ${yesterday}=                                                                                         Get Current Date                local                         -1 day                                     result_format=%d-%m-%Y
   Then Data's information in "Ngày tạo" should be equal "${yesterday}"
   When Click on cross icon in select "Ngày tạo"
   When Click "Lưu lại" button

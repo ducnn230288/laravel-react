@@ -15,7 +15,7 @@ export const CUpload = ({
   showBtnDelete = () => true,
   method = 'post',
   maxSize = 40,
-  multiple = true,
+  isMultiple = true,
   action = '/files',
   keyImage = 'path',
   accept = 'image/*',
@@ -27,7 +27,7 @@ export const CUpload = ({
   showBtnDelete?: (file: any) => boolean;
   method?: string;
   maxSize?: number;
-  multiple?: boolean;
+  isMultiple?: boolean;
   action?: string | ((file: any, config: any) => any);
   keyImage?: string;
   accept?: string;
@@ -56,7 +56,7 @@ export const CUpload = ({
       setListFiles(tempData);
       setTimeout(() => GLightbox({}), 100);
     }
-  }, [value, multiple]);
+  }, [value, isMultiple]);
 
   useEffect(() => {
     setTimeout(() => GLightbox({}), 100);
@@ -88,7 +88,7 @@ export const CUpload = ({
         percent: 0,
         status: 'uploading',
       };
-      if (!multiple) {
+      if (!isMultiple) {
         listFiles[0] = dataFile;
       } else {
         listFiles.push(dataFile);
@@ -138,7 +138,7 @@ export const CUpload = ({
     };
   }) => {
     if (data) {
-      const files = multiple
+      const files = isMultiple
         ? listFiles.map((item: any) => {
             if (item.id === dataFile.id) {
               item = { ...item, ...data, status: 'done' };
@@ -155,7 +155,7 @@ export const CUpload = ({
     }
   };
   const moverImage = async (index: number, new_index: number) => {
-    if (multiple) {
+    if (isMultiple) {
       const files = arrayMove(listFiles, index, new_index);
       setListFiles(files);
       onChange && (await onChange(files));
@@ -240,8 +240,8 @@ export const CUpload = ({
 
   return (
     <Spin spinning={isLoading.current}>
-      <input type='file' className={'hidden'} accept={accept} multiple={multiple} ref={ref} onChange={onUpload} />
-      <div className={classNames('upload', { 'upload-grid': multiple, 'w-24': !multiple })}>{renderListFiles}</div>
+      <input type='file' className={'hidden'} accept={accept} multiple={isMultiple} ref={ref} onChange={onUpload} />
+      <div className={classNames('upload', { 'upload-grid': isMultiple })}>{renderListFiles}</div>
       <div className={'mt-2 flex gap-2'}>
         <CButton
           isTiny={true}

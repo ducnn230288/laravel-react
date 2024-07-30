@@ -4,7 +4,6 @@ Test Setup              Setup
 Test Teardown           Tear Down
 
 *** Test Cases ***
-### Link to testcases https://docs.google.com/spreadsheets/d/1R_jW5GBVBaMy7YgNKJQ2Ha5xW12Vn0nRzOHE0-OsyF8/edit#gid=180435324 ###
 LO_00 Login
   [Tags]                                                                                                Develop                   UI                     Smoketest
   Then Heading should contain "Đăng nhập" inner text

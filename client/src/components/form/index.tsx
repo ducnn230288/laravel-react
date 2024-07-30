@@ -1,6 +1,6 @@
 import { Form, type FormInstance, Spin } from 'antd';
 import classNames from 'classnames';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { EFormType } from '@/enums';
@@ -42,13 +42,19 @@ export const CForm = ({
     handSubmit && handSubmit(values);
   };
 
+  const [isRender, setIsRender] = useState(false);
   const handleValuesChange = async objValue => {
     if (form && checkHidden) {
       clearTimeout(timeout.current);
       timeout.current = setTimeout(async () => {
+        let isChange = false;
         for (const key in objValue) {
-          if (Object.hasOwn(objValue, key)) columns.filter((_item: any) => _item.name === key);
+          if (Object.hasOwn(objValue, key)) {
+            columns.filter((_item: any) => _item.name === key);
+            isChange = true;
+          }
         }
+        if (isChange) setIsRender(!isRender);
       }, 500);
     }
   };
@@ -143,7 +149,6 @@ interface Type {
   handCancel?: () => void;
   values?: any;
   formAnt?: FormInstance;
-  onFirstChange?: () => void;
   widthLabel?: string;
   checkHidden?: boolean;
   extendForm?: (values: any) => JSX.Element;

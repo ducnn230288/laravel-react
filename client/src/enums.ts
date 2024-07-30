@@ -36,10 +36,7 @@ export enum EFormType {
   otp = 'otp',
   switch = 'switch',
 }
-export enum EFormModeSelect {
-  multiple = 'multiple',
-  tags = 'tags',
-}
+
 export enum EFormPickerDate {
   time = 'time',
   date = 'date',

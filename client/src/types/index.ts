@@ -1,11 +1,4 @@
-import type {
-  EFormModeSelect,
-  EFormPickerDate,
-  EFormRuleType,
-  EFormType,
-  ETableAlign,
-  ETableFilterType,
-} from '@/enums';
+import type { EFormPickerDate, EFormRuleType, EFormType, ETableAlign, ETableFilterType } from '@/enums';
 import type { CheckboxOptionType, FormInstance } from 'antd';
 
 export interface IResponses<T> {
@@ -21,6 +14,13 @@ export interface IResponses<T> {
     total: number;
   };
 }
+
+export interface ICommonEntity {
+  id?: string;
+  createdAt?: string;
+  isDisable?: boolean;
+}
+
 export interface IPaginationQuery<T = object> {
   [selector: string]: any;
   perPage?: number;
@@ -32,11 +32,13 @@ export interface IPaginationQuery<T = object> {
   fullTextSearch?: string;
   include?: string;
 }
+
 export interface IDataTable {
   name?: string;
   title?: any;
   tableItem?: ITableItem;
 }
+
 export interface ITableItem {
   filter?: ITableItemFilter;
   width?: number;
@@ -50,27 +52,32 @@ export interface ITableItem {
   defaultFilteredValue?: string;
   isDateTime?: boolean;
 }
+
 export interface ITableItemFilter {
   type?: ETableFilterType;
   list?: ITableItemFilterList[];
   get?: ITableGet;
 }
+
 export interface ITableGet {
   keyApi?: string;
   method?: string;
   format?: (item: any) => CheckboxOptionType;
-  params?: (fullTextSearch: string, value?: any) => any;
+  params?: (props: { fullTextSearch: string; value?: any }) => any;
   data?: any;
   column?: IDataTable[];
   keepUnusedDataFor?: number;
 }
+
 export interface ITableItemFilterList {
   label?: string;
   value?: string | number;
 }
+
 export interface ITableRefObject {
   onChange: (request?: any) => void;
 }
+
 export interface IEditTable {
   fields?: {
     columns?: IColumnEditTable[];
@@ -92,25 +99,28 @@ export interface IEditTable {
   };
   data?: any[];
 }
+
 export interface IColumnEditTable {
   key?: string;
   children?: IColumnEditTable[];
 }
+
 export interface IForm {
   name: string;
   title: string;
   formItem?: IFormItem;
 }
+
 export interface IFormItem {
   type?: EFormType;
   col?: number;
   condition?: (props: { value: string; form: FormInstance; index: number; values: any }) => boolean;
   list?: any[];
   rules?: IFormItemRule[];
-  mode?: EFormModeSelect;
+  isMultiple?: boolean;
   tab?: string;
   column?: IForm[];
-  disabled?: (values: any, form?: FormInstance) => boolean;
+  disabled?: (props: { value: any; form: FormInstance }) => boolean;
   placeholder?: string;
   min?: number;
   max?: number;
@@ -118,12 +128,12 @@ export interface IFormItem {
   symbol?: string;
   initialValues?: { start: string; end: string };
   convert?: (data: any) => any;
-  onChange?: (value: any, form: FormInstance) => void;
+  onChange?: (props: { value: any; form: FormInstance }) => void;
   onBlur?: (e: string, form: FormInstance, name: string) => void;
-  disabledDate?: (current: any, form: FormInstance) => boolean;
+  disabledDate?: (props: { current: any; form: FormInstance }) => boolean;
   showTime?: boolean;
   picker?: EFormPickerDate;
-  onCalendarChange?: (current: any, form: FormInstance) => void;
+  onCalendarChange?: (props: { current: any; form: FormInstance }) => void;
   api?: IFormApi;
   get?: ITableGet;
   label?: string;
@@ -132,7 +142,7 @@ export interface IFormItem {
     avatar: string;
     label: string;
     value: string;
-    params: (getFieldValue: any, fullTextSearch: string, value: any) => any;
+    params: (props: { getFieldValue: any; fullTextSearch: string; value: any }) => any;
     api: string;
   };
   showSearch?: boolean;
@@ -141,13 +151,14 @@ export interface IFormItem {
   addonAfter?: (form?: FormInstance) => JSX.Element;
   maxLength?: number;
   textAdd?: string;
-  onAdd?: (values: any, form: FormInstance) => void;
+  onAdd?: (props: { values: any; form: FormInstance }) => void;
   isTable?: boolean;
   showRemove?: any;
   idCheck?: any;
   notDefaultValid?: boolean;
-  render?: (form: FormInstance, values: any, generateForm: any, index: number) => JSX.Element;
+  render?: (props: { form: FormInstance; values: any; generateForm: any; index: number }) => JSX.Element;
 }
+
 export interface IFormItemRule {
   type?: EFormRuleType;
   message?: string;
@@ -162,11 +173,13 @@ export interface IFormItemRule {
     id?: string;
   };
 }
+
 export interface IFormApi {
   link?: () => string;
   format?: (item: any) => CheckboxOptionType;
-  params?: (form: FormInstance, fullTextSearch: string) => any;
+  params?: (props: { form: FormInstance; fullTextSearch: string }) => any;
 }
+
 export interface IFormModalRefObject {
   handleEdit?: (item?: { id?: string }, isGet?: boolean) => Promise<void>;
   form?: FormInstance;

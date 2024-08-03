@@ -65,6 +65,7 @@ export enum EStatusState {
 export enum ETypeChart {
   pie = 'pie',
   ring = 'ring',
+  ringHalfDonut = 'ring-half-donut',
   bubble = 'bubble',
   line = 'line',
   bar = 'bar',

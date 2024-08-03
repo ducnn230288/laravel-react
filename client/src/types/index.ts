@@ -1,4 +1,5 @@
 import type { EFormPickerDate, EFormRuleType, EFormType, ETableAlign, ETableFilterType } from '@/enums';
+import type { API, routerLinks } from '@/utils';
 import type { CheckboxOptionType, FormInstance } from 'antd';
 
 export interface IResponses<T> {
@@ -129,7 +130,13 @@ export interface IFormItem {
   initialValues?: { start: string; end: string };
   convert?: (data: any) => any;
   onChange?: (props: { value: any; form: FormInstance }) => void;
-  onBlur?: (e: string, form: FormInstance, name: string) => void;
+  onBlur?: (props: {
+    value: string;
+    form: FormInstance;
+    name: string;
+    api: typeof API;
+    routerLinks: typeof routerLinks;
+  }) => void;
   disabledDate?: (props: { current: any; form: FormInstance }) => boolean;
   showTime?: boolean;
   picker?: EFormPickerDate;

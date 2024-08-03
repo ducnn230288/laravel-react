@@ -82,8 +82,15 @@ Get Random Text
     ${new_text}=            Convert To String                 ${new_text}
   ELSE IF  ${cnt} > 0 and "${type}" == "paragraph"
     ${new_text}=            FakerLibrary.Paragraph
-  ELSE IF  ${cnt} > 0 and "${type}" == "email"
+   ELSE IF  ${cnt} > 0 and "${type}" == "email"
     ${new_text}=            FakerLibrary.Email
+    ${create_text}=         Get Regexp Matches                ${new_text}                       (.+)@                   1
+    ${new_text}=            Set Variable                      ${create_text[0]}
+    ${new_text}=            Catenate                          SEPARATOR=                    0                           ${new_text}                  @gmail.com
+  ELSE IF  ${cnt} > 0 and "${type}" == "username"
+    ${new_text}=            FakerLibrary.Email
+    ${create_text}=         Get Regexp Matches                ${new_text}                       (.+)@                   1
+    ${new_text}=            Set Variable                      ${create_text[0]}
   ELSE IF  ${cnt} > 0 and "${type}" == "phone"
     ${new_text}=            FakerLibrary.Random Int           min=200000000                 max=999999999
     ${new_text}=            Convert To String                 ${new_text}

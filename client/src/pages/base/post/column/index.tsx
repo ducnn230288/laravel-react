@@ -106,7 +106,7 @@ export default {
                     },
                   },
                 ],
-                onBlur: (value, form, name) => {
+                onBlur: ({ value, form, name }) => {
                   if (value && !form.getFieldValue(['languages', name[0], 'slug'])) {
                     form.setFieldValue(['languages', name[0], 'slug'], slug(value));
                   }

@@ -18,7 +18,7 @@ export default {
         name: 'name',
         formItem: {
           rules: [{ type: EFormRuleType.required }],
-          onBlur: (value, form) => {
+          onBlur: ({ value, form }) => {
             if (value && !form.getFieldValue('code')) form.setFieldValue('code', slug(value).toUpperCase());
           },
         },

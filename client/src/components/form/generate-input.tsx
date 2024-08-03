@@ -14,7 +14,7 @@ import type { TFunction } from 'i18next';
 
 import { EFormType } from '@/enums';
 import type { IForm } from '@/types';
-import { FORMAT_DATE } from '@/utils';
+import { API, FORMAT_DATE, routerLinks } from '@/utils';
 import { CSvgIcon } from '../svg-icon';
 import { CUpload } from '../upload';
 import {
@@ -141,7 +141,7 @@ export const generateInput = ({
             addonBefore={formItem.addonBefore}
             addonAfter={formItem.addonAfter}
             placeholder={t(formItem.placeholder ?? 'Enter', { title: item.title.toLowerCase() })}
-            onBlur={e => formItem.onBlur?.(e.target.value, form, name)}
+            onBlur={e => formItem.onBlur?.({ value: e.target.value, form, name, api: API, routerLinks })}
             onChange={e => formItem.onChange?.({ value: e.target.value, form })}
             disabled={formItem.disabled?.({ value: values[item.name], form })}
           />

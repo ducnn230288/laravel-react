@@ -8,18 +8,242 @@ import { ETypeChart } from '@/enums';
 import type { IEditTable } from '@/types';
 import { formatDataChart } from '@/utils';
 
+import {
+  addEdge,
+  ConnectionLineType,
+  Handle,
+  Panel,
+  Position,
+  ReactFlow,
+  useEdgesState,
+  useNodesState,
+} from '@xyflow/react';
+import '@xyflow/react/dist/style.css';
+import classNames from 'classnames';
+import { layoutFromMap } from 'entitree-flex';
+import { memo, useCallback } from 'react';
+
+const { Top, Bottom, Left, Right } = Position;
+
+export const CustomNode = memo(({ data, ...props }: any) => {
+  const { isSpouse, isSibling, label, direction } = data;
+
+  const isTreeHorizontal = direction === 'LR';
+
+  const getTargetPosition = () => {
+    if (isSpouse) {
+      return isTreeHorizontal ? Top : Left;
+    } else if (isSibling) {
+      return isTreeHorizontal ? Bottom : Right;
+    }
+    return isTreeHorizontal ? Left : Top;
+  };
+
+  const isRootNode = data?.isRoot;
+  const hasChildren = !!data?.children?.length;
+  const hasSiblings = !!data?.siblings?.length;
+  const hasSpouses = !!data?.spouses?.length;
+  console.log(data, props);
+
+  return (
+    <div className='nodrag'>
+      {/* For children */}
+      {hasChildren && (
+        <Handle type='source' position={isTreeHorizontal ? Right : Bottom} id={isTreeHorizontal ? Right : Bottom} />
+      )}
+
+      {/* For spouses */}
+      {hasSpouses && (
+        <Handle type='source' position={isTreeHorizontal ? Bottom : Right} id={isTreeHorizontal ? Bottom : Right} />
+      )}
+
+      {/* For siblings */}
+      {hasSiblings && (
+        <Handle type='source' position={isTreeHorizontal ? Top : Left} id={isTreeHorizontal ? Top : Left} />
+      )}
+
+      {/* Target Handle */}
+      {!isRootNode && <Handle type={'target'} position={getTargetPosition()} id={getTargetPosition()} />}
+      <div
+        className={classNames(' flex justify-center items-center rounded border', {
+          'h-9 min-w-36': !data.data,
+          'h-16 min-w-48': data.data,
+        })}
+      >
+        {label}
+      </div>
+    </div>
+  );
+});
+const nodeTypes: any = {
+  custom: CustomNode,
+};
+export const treeRootId = 1;
+export const initialTree = {
+  1: {
+    id: '1',
+    name: 'root',
+    type: 'input',
+    children: ['2', '3'],
+    data: {
+      text: 'test 1',
+    },
+  },
+  2: { id: '2', name: 'child2' },
+  3: {
+    id: '3',
+    name: 'child3',
+    children: ['4', '5'],
+  },
+  4: { id: '4', name: 'grandChild4' },
+  5: { id: '5', name: 'grandChild5' },
+};
+
 const Page = () => {
+  const { nodes: layoutedNodes, edges: layoutedEdges } = layoutElements(initialTree, treeRootId, 'TB');
+  const [nodes, setNodes, onNodesChange] = useNodesState(layoutedNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(layoutedEdges);
+
+  const onConnect = useCallback(
+    params => setEdges(eds => addEdge({ ...params, type: ConnectionLineType.SmoothStep, animated: true }, eds)),
+    [],
+  );
+  const onLayout = useCallback(
+    direction => {
+      const { nodes: layoutedNodes, edges: layoutedEdges } = layoutElements(initialTree, treeRootId, direction);
+
+      setNodes([...layoutedNodes]);
+      setEdges([...layoutedEdges]);
+    },
+    [nodes, edges],
+  );
   return (
     <div className='h-full pb-10'>
+      <div className='w-full h-96 relative'>
+        <ReactFlow
+          nodes={nodes}
+          edges={edges}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+          onConnect={onConnect}
+          connectionLineType={ConnectionLineType.SmoothStep}
+          fitView
+          nodeTypes={nodeTypes}
+        >
+          <Panel position='top-right'>
+            <button onClick={() => onLayout('TB')}>vertical layout</button>
+            <button onClick={() => onLayout('LR')}>horizontal layout</button>
+          </Panel>
+        </ReactFlow>
+      </div>
+
       <h1 className='mb-14 text-center text-3xl font-bold text-primary'>{'Welcome'}</h1>
-      <CGantt data={task} event={event} />
-      <CEditTable table={table2} />
-      <CEditTable table={table} />
       {dataDefault.map((item, index) => (
         <CEChart key={index + 'chart'} option={item}></CEChart>
       ))}
+      <CGantt data={task} event={event} />
+      <CEditTable table={table2} />
+      <CEditTable table={table} />
     </div>
   );
+};
+
+const Orientation = {
+  Vertical: 'vertical',
+  Horizontal: 'horizontal',
+};
+
+const entitreeSettings = {
+  clone: true, // returns a copy of the input, if your application does not allow editing the original object
+  enableFlex: true, // has slightly better perfomance if turned off (node.width, node.height will not be read)
+  firstDegreeSpacing: 100, // spacing in px between nodes belonging to the same source, eg children with same parent
+  nextAfterAccessor: 'spouses', // the side node prop used to go sideways, AFTER the current node
+  nextAfterSpacing: 100, // the spacing of the "side" nodes AFTER the current node
+  nextBeforeAccessor: 'siblings', // the side node prop used to go sideways, BEFORE the current node
+  nextBeforeSpacing: 100, // the spacing of the "side" nodes BEFORE the current node
+  nodeHeight: 35, // default node height in px
+  nodeWidth: 150, // default node width in px
+  orientation: Orientation.Vertical, // "vertical" to see parents top and children bottom, "horizontal" to see parents left and
+  rootX: 0, // set root position if other than 0
+  rootY: 0, // set root position if other than 0
+  secondDegreeSpacing: 100, // spacing in px between nodes not belonging to same parent eg "cousin" nodes
+  sourcesAccessor: 'parents', // the prop used as the array of ancestors ids
+  sourceTargetSpacing: 100, // the "vertical" spacing between nodes in vertical orientation, horizontal otherwise
+  targetsAccessor: 'children', // the prop used as the array of children ids
+};
+
+export const layoutElements = (tree: any, rootId: any, direction = 'TB') => {
+  const isTreeHorizontal = direction === 'LR';
+
+  const { nodes: entitreeNodes, rels: entitreeEdges }: any = layoutFromMap(rootId, tree, {
+    ...entitreeSettings,
+    orientation: isTreeHorizontal ? Orientation.Horizontal : (Orientation.Vertical as any),
+  });
+
+  const nodes: any = [],
+    edges: any = [];
+
+  entitreeEdges.forEach(edge => {
+    const sourceNode = edge.source.id;
+    const targetNode = edge.target.id;
+
+    const newEdge: any = {};
+
+    newEdge.id = 'e' + sourceNode + targetNode;
+    newEdge.source = sourceNode;
+    newEdge.target = targetNode;
+    newEdge.type = 'smoothstep';
+    newEdge.animated = 'true';
+
+    // Check if target node is spouse or sibling
+    const isTargetSpouse = !!edge.target.isSpouse;
+    const isTargetSibling = !!edge.target.isSibling;
+
+    if (isTargetSpouse) {
+      newEdge.sourceHandle = isTreeHorizontal ? Bottom : Right;
+      newEdge.targetHandle = isTreeHorizontal ? Top : Left;
+    } else if (isTargetSibling) {
+      newEdge.sourceHandle = isTreeHorizontal ? Top : Left;
+      newEdge.targetHandle = isTreeHorizontal ? Bottom : Right;
+    } else {
+      newEdge.sourceHandle = isTreeHorizontal ? Right : Bottom;
+      newEdge.targetHandle = isTreeHorizontal ? Left : Top;
+    }
+
+    edges.push(newEdge);
+  });
+
+  entitreeNodes.forEach(node => {
+    const newNode: any = {};
+
+    const isSpouse = !!node?.isSpouse;
+    const isSibling = !!node?.isSibling;
+    const isRoot = node?.id === rootId;
+
+    if (isSpouse) {
+      newNode.sourcePosition = isTreeHorizontal ? Bottom : Right;
+      newNode.targetPosition = isTreeHorizontal ? Top : Left;
+    } else if (isSibling) {
+      newNode.sourcePosition = isTreeHorizontal ? Top : Left;
+      newNode.targetPosition = isTreeHorizontal ? Bottom : Right;
+    } else {
+      newNode.sourcePosition = isTreeHorizontal ? Right : Bottom;
+      newNode.targetPosition = isTreeHorizontal ? Left : Top;
+    }
+
+    newNode.data = { label: node.name, direction, isRoot, ...node };
+    newNode.id = node.id;
+    newNode.type = 'custom';
+
+    newNode.position = {
+      x: node.x,
+      y: node.y,
+    };
+
+    nodes.push(newNode);
+  });
+
+  return { nodes, edges };
 };
 
 const task = [
@@ -1489,8 +1713,45 @@ const table2: IEditTable = {
     },
   },
 };
-
 const dataDefault: any[] = [
+  {
+    type: ETypeChart.area,
+    title: 'Line Chart One',
+    series: [
+      {
+        field: 'totalFrom',
+        name: 'Tổng số hộ tới',
+        value: [
+          [0, 0],
+          [1, 1.3488096893269022],
+          [2, 0.870353404927271],
+          [4, 0.2582374710442245],
+          [5, 3.4992630153517794],
+          [6, 10.165796338844878],
+          [7, 19.435802797730613],
+          [8, 29.247221696220688],
+          [9, 36.900573657650156],
+          [10, 39.941591483707086],
+          [11, 37.022903312892616],
+          [12, 28.44151963796814],
+          [13, 16.152947095922325],
+          [14, 3.238238801433192],
+          [19, 4.091031098382733],
+          [20, 12.759421640647318],
+        ],
+      },
+    ],
+  },
+  {
+    title: 'Ring Chart',
+    type: ETypeChart.ringHalfDonut,
+    series: [
+      {
+        data: [{ value: 30, name: 'Tổng số hộ tới', field: 'totalFrom' }],
+      },
+    ],
+    category: ['Quận Ba Đình'],
+  },
   formatDataChart({ obj: table, type: ETypeChart.bar, title: 'Bar Chart' }),
   formatDataChart({ obj: table, type: ETypeChart.stackedBar, title: 'Stacked Bar Chart' }),
   formatDataChart({ obj: table, type: ETypeChart.pie, title: 'Pie Chart' }),
@@ -1501,6 +1762,34 @@ const dataDefault: any[] = [
   formatDataChart({ obj: table, type: ETypeChart.area, title: 'Area Chart' }),
   formatDataChart({ obj: table, type: ETypeChart.stackedArea, title: 'Stacked Area Chart' }),
   formatDataChart({ obj: table, type: ETypeChart.lineBar, title: 'Line Bar Chart' }),
+  {
+    type: ETypeChart.line,
+    title: 'Line Chart One',
+    series: [
+      {
+        field: 'totalFrom',
+        name: 'Tổng số hộ tới',
+        value: [
+          [0, 0],
+          [1, 1.3488096893269022],
+          [2, 0.870353404927271],
+          [4, 0.2582374710442245],
+          [5, 3.4992630153517794],
+          [6, 10.165796338844878],
+          [7, 19.435802797730613],
+          [8, 29.247221696220688],
+          [9, 36.900573657650156],
+          [10, 39.941591483707086],
+          [11, 37.022903312892616],
+          [12, 28.44151963796814],
+          [13, 16.152947095922325],
+          [14, 3.238238801433192],
+          [19, 4.091031098382733],
+          [20, 12.759421640647318],
+        ],
+      },
+    ],
+  },
 ];
 
 export default Page;

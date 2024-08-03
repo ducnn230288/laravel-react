@@ -117,10 +117,12 @@ export const CDataTable = forwardRef(
       columns.push({
         title: t('Action'),
         tableItem: {
-          width: 100,
+          width: action.width ?? 100,
+          fixed: action.fixed ?? 'right',
           align: ETableAlign.center,
           render: (_: string, data) => (
             <div className={'action'}>
+              {action?.render(data)}
               {!!action.onDisable && (
                 <CTooltip
                   title={t(data.isDisable ? 'Disabled' : 'Enabled', {
@@ -332,7 +334,18 @@ interface Type {
   showSearch?: boolean;
   onRow?: (data: any) => { onDoubleClick?: () => void; onClick?: () => void };
   isLoading?: boolean;
-  action?: { onDisable?: any; onEdit?: any; onDelete?: any; label: any; name: any; onAdd?: any; labelAdd?: any };
+  action?: {
+    onDisable?: any;
+    onEdit?: any;
+    onDelete?: any;
+    label: any;
+    name: any;
+    onAdd?: any;
+    labelAdd?: any;
+    width?: any;
+    fixed?: any;
+    render?: any;
+  };
 }
 const Draggable = (props: any) => {
   const { attributes, listeners, setNodeRef } = useDraggable({ id: props.id });

@@ -1,17 +1,13 @@
 import { EStatusState } from '@/enums';
-import type { IMUser, IResetPassword } from '@/types/model';
 import { KEY_USER, lang } from '@/utils';
 import enUS from 'antd/lib/locale/en_US';
 import viVN from 'antd/lib/locale/vi_VN';
 import dayjs from 'dayjs';
 import { enLocale, viLocale } from './locale';
+import type { GlobalState } from './reducer';
 
 export const nameGlobal = 'Auth';
-export interface StateGlobal {
-  user?: IMUser;
-  data?: IResetPassword & IMUser;
-  isLoading?: boolean;
-  status?: EStatusState;
+export interface StateGlobal extends GlobalState {
   language?: string;
   locale?: typeof viVN | typeof enUS;
   localeDate?: typeof enLocale | typeof viLocale;

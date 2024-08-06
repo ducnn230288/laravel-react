@@ -1,5 +1,5 @@
 import { EStatusState } from '@/enums';
-import type { IPaginationQuery } from '@/types';
+import type { IPaginationQuery, IResponses } from '@/types';
 import { API, routerLinks } from '@/utils';
 import { createAsyncThunk, type ActionReducerMapBuilder } from '@reduxjs/toolkit';
 import { nameCrud, type StateCrud } from './state';
@@ -46,9 +46,7 @@ class Get extends RReducer {
       state.queryParamsType = JSON.stringify(queryParams.params);
     };
     this.fulfilled = (state, action) => {
-      if (action.payload.data) {
-        state.resultType = action.payload;
-      }
+      state.resultType = action.payload;
     };
   }
 }
@@ -63,10 +61,8 @@ class GetId extends RReducer {
       },
     );
     this.fulfilled = (state, action) => {
-      if (action.payload) {
-        if (JSON.stringify(state.dataType) !== JSON.stringify(action.payload)) state.dataType = action.payload;
-        state.isVisibleType = true;
-      }
+      if (JSON.stringify(state.dataType) !== JSON.stringify(action.payload)) state.dataType = action.payload;
+      state.isVisibleType = true;
     };
   }
 }
@@ -84,11 +80,9 @@ class Post extends RReducer {
       state.dataType = action.meta.arg.values;
     };
     this.fulfilled = (state, action) => {
-      if (action.payload) {
-        if (JSON.stringify(state.dataType) !== JSON.stringify(action.payload)) state.dataType = action.payload;
-        state.isVisibleType = false;
-        state.statusType = EStatusState.isFulfilled;
-      }
+      if (JSON.stringify(state.dataType) !== JSON.stringify(action.payload)) state.dataType = action.payload;
+      state.isVisibleType = false;
+      state.statusType = EStatusState.isFulfilled;
     };
   }
 }
@@ -106,11 +100,9 @@ class Put extends RReducer {
       state.dataType = action.meta.arg.values;
     };
     this.fulfilled = (state, action) => {
-      if (action.payload) {
-        if (JSON.stringify(state.dataType) !== JSON.stringify(action.payload)) state.dataType = action.payload;
-        state.isVisibleType = false;
-        state.statusType = EStatusState.isFulfilled;
-      }
+      if (JSON.stringify(state.dataType) !== JSON.stringify(action.payload)) state.dataType = action.payload;
+      state.isVisibleType = false;
+      state.statusType = EStatusState.isFulfilled;
     };
   }
 }
@@ -136,3 +128,14 @@ export const RCurdType = {
   put: new Put(nameCrud),
   delete: new Delete(nameCrud),
 };
+
+export interface CurdTypeState<T> {
+  isLoadingType?: boolean;
+  statusType?: EStatusState;
+  timeType?: number;
+  keepUnusedDataForType?: number;
+  queryParamsType?: string;
+  resultType?: IResponses<T[]>;
+  dataType?: T;
+  isVisibleType?: boolean;
+}

@@ -40,12 +40,10 @@ class GetProfile extends RReducer {
     });
 
     this.fulfilled = (state, action) => {
-      if (action.payload) {
-        state.user = action.payload;
-        state.data = action.payload;
-        localStorage.setItem(KEY_USER, JSON.stringify(action.payload));
-        state.status = EStatusState.idle;
-      }
+      state.user = action.payload;
+      state.data = action.payload;
+      localStorage.setItem(KEY_USER, JSON.stringify(action.payload));
+      state.status = EStatusState.idle;
     };
   }
 }
@@ -68,11 +66,9 @@ class PutProfile extends RReducer {
       state.data = { ...state.data, ...action.meta.arg };
     };
     this.fulfilled = (state, action) => {
-      if (action.payload) {
-        localStorage.setItem(KEY_USER, JSON.stringify(action.payload));
-        state.user = action.payload;
-        state.status = EStatusState.isFulfilled;
-      }
+      localStorage.setItem(KEY_USER, JSON.stringify(action.payload));
+      state.user = action.payload;
+      state.status = EStatusState.isFulfilled;
     };
   }
 }
@@ -96,12 +92,10 @@ class PostLogin extends RReducer {
       state.data = action.meta.arg;
     };
     this.fulfilled = (state, action) => {
-      if (action.payload) {
-        localStorage.setItem(KEY_USER, JSON.stringify(action.payload));
-        state.user = action.payload;
-        state.data = {};
-        state.status = EStatusState.isFulfilled;
-      }
+      localStorage.setItem(KEY_USER, JSON.stringify(action.payload));
+      state.user = action.payload;
+      state.data = {};
+      state.status = EStatusState.isFulfilled;
     };
   }
 }
@@ -117,9 +111,7 @@ class PostForgottenPassword extends RReducer {
       state.data = action.meta.arg;
     };
     this.fulfilled = (state, action) => {
-      if (action.payload) {
-        state.status = EStatusState.isFulfilled;
-      }
+      state.status = EStatusState.isFulfilled;
     };
   }
 }
@@ -135,9 +127,7 @@ class PostOtpConfirmation extends RReducer {
       state.data = action.meta.arg;
     };
     this.fulfilled = (state, action) => {
-      if (action.payload) {
-        state.status = EStatusState.isFulfilled;
-      }
+      state.status = EStatusState.isFulfilled;
     };
   }
 }
@@ -153,10 +143,8 @@ class PostResetPassword extends RReducer {
       state.data = action.meta.arg;
     };
     this.fulfilled = (state, action) => {
-      if (action.payload) {
-        state.data = {};
-        state.status = EStatusState.isFulfilled;
-      }
+      state.data = {};
+      state.status = EStatusState.isFulfilled;
     };
   }
 }
@@ -168,3 +156,9 @@ export const RGlobal = {
   postOtpConfirmation: new PostOtpConfirmation(nameGlobal),
   postResetPassword: new PostResetPassword(nameGlobal),
 };
+export interface GlobalState {
+  isLoading?: boolean;
+  user?: IMUser;
+  data?: IResetPassword & IMUser;
+  status?: EStatusState;
+}

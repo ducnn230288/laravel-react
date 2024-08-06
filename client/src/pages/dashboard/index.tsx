@@ -43,7 +43,6 @@ export const CustomNode = memo(({ data, ...props }: any) => {
   const hasChildren = !!data?.children?.length;
   const hasSiblings = !!data?.siblings?.length;
   const hasSpouses = !!data?.spouses?.length;
-  console.log(data, props);
 
   return (
     <div className='nodrag'>
@@ -65,12 +64,50 @@ export const CustomNode = memo(({ data, ...props }: any) => {
       {/* Target Handle */}
       {!isRootNode && <Handle type={'target'} position={getTargetPosition()} id={getTargetPosition()} />}
       <div
-        className={classNames(' flex justify-center items-center rounded border', {
-          'h-9 min-w-36': !data.data,
-          'h-16 min-w-48': data.data,
+        className={classNames(' flex justify-center items-center rounded border h-40 px-2', {
+          'w-80': data.attribute.type === 1 || data.attribute.type === 2,
+          'w-40': data.attribute.type !== 1 || data.attribute.type !== 2,
+          'bg-error': data.attribute.status === -1,
+          'bg-info': data.attribute.status === 0,
+          'bg-warning': data.attribute.status === 1,
         })}
       >
-        {label}
+        {data.attribute.type === 1 || data.attribute.type === 2 ? (
+          <div className='flex gap-3 items-center'>
+            <div>
+              <img className='w-32' src='https://via.placeholder.com/640x480.png/00cc11?text=quam' alt='' />
+            </div>
+            <table className='text-[10px] leading-loose w-48'>
+              <tr>
+                <td>
+                  <strong>CPU:</strong> <br />
+                  {data.attribute.cpu}
+                </td>
+                <td>
+                  <strong>RAM:</strong> <br /> {data.attribute.ram}
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Speed:</strong> <br /> {data.attribute.speed}
+                </td>
+                <td>
+                  <strong>Online:</strong> <br /> {data.attribute.online}
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Offline:</strong> <br /> {data.attribute.offline}
+                </td>
+                <td>
+                  <strong>Error:</strong> <br /> {data.attribute.error}
+                </td>
+              </tr>
+            </table>
+          </div>
+        ) : (
+          <img className='w-32' src='https://via.placeholder.com/640x480.png/00cc11?text=quam' alt='' />
+        )}
       </div>
     </div>
   );
@@ -78,25 +115,102 @@ export const CustomNode = memo(({ data, ...props }: any) => {
 const nodeTypes: any = {
   custom: CustomNode,
 };
-export const treeRootId = 1;
+export const treeRootId = 'node1';
 export const initialTree = {
-  1: {
-    id: '1',
+  node1: {
+    id: 'node1',
     name: 'root',
     type: 'input',
-    children: ['2', '3'],
-    data: {
-      text: 'test 1',
+    children: ['node2', 'node3'],
+    attribute: {
+      type: 1,
+      status: 0,
+      cpu: '50 / 100',
+      ram: '200GB / 400GB',
+      speed: '1TB / 2TB',
+      online: '25',
+      offline: '5',
+      error: 30,
     },
   },
-  2: { id: '2', name: 'child2' },
-  3: {
-    id: '3',
-    name: 'child3',
-    children: ['4', '5'],
+  node2: {
+    id: 'node2',
+    name: 'child2',
+    attribute: {
+      type: 2,
+      status: 0,
+      cpu: '20 / 30',
+      ram: '80GB / 128GB',
+      speed: '400GB / 600GB',
+      online: '15',
+      offline: '5',
+      error: 20,
+    },
   },
-  4: { id: '4', name: 'grandChild4' },
-  5: { id: '5', name: 'grandChild5' },
+  node3: {
+    id: 'node3',
+    name: 'child3',
+    children: ['node4', 'node5', 'node6'],
+    attribute: {
+      type: 2,
+      status: 0,
+      cpu: '20 / 30',
+      ram: '80GB / 128GB',
+      speed: '400GB / 600GB',
+      online: '15',
+      offline: '5',
+      error: 20,
+    },
+  },
+  node4: {
+    id: 'node4',
+    name: 'grandChild4',
+    attribute: {
+      type: 3,
+      status: 0,
+    },
+  },
+  node5: {
+    id: 'node5',
+    name: 'grandChild5',
+    children: ['node7', 'node8', 'node9'],
+    attribute: {
+      type: 3,
+      status: 1,
+    },
+  },
+  node6: {
+    id: 'node6',
+    name: 'grandChild6',
+    attribute: {
+      type: 3,
+      status: -1,
+    },
+  },
+  node7: {
+    id: 'node7',
+    name: 'grandChild7',
+    attribute: {
+      type: 4,
+      status: 0,
+    },
+  },
+  node8: {
+    id: 'node8',
+    name: 'grandChild8',
+    attribute: {
+      type: 4,
+      status: 1,
+    },
+  },
+  node9: {
+    id: 'node9',
+    name: 'grandChild9',
+    attribute: {
+      type: 4,
+      status: -1,
+    },
+  },
 };
 
 const Page = () => {
@@ -156,13 +270,13 @@ const Orientation = {
 const entitreeSettings = {
   clone: true, // returns a copy of the input, if your application does not allow editing the original object
   enableFlex: true, // has slightly better perfomance if turned off (node.width, node.height will not be read)
-  firstDegreeSpacing: 100, // spacing in px between nodes belonging to the same source, eg children with same parent
+  firstDegreeSpacing: 10, // spacing in px between nodes belonging to the same source, eg children with same parent
   nextAfterAccessor: 'spouses', // the side node prop used to go sideways, AFTER the current node
   nextAfterSpacing: 100, // the spacing of the "side" nodes AFTER the current node
   nextBeforeAccessor: 'siblings', // the side node prop used to go sideways, BEFORE the current node
   nextBeforeSpacing: 100, // the spacing of the "side" nodes BEFORE the current node
-  nodeHeight: 35, // default node height in px
-  nodeWidth: 150, // default node width in px
+  nodeHeight: 150, // default node height in px
+  nodeWidth: 320, // default node width in px
   orientation: Orientation.Vertical, // "vertical" to see parents top and children bottom, "horizontal" to see parents left and
   rootX: 0, // set root position if other than 0
   rootY: 0, // set root position if other than 0
@@ -239,6 +353,15 @@ export const layoutElements = (tree: any, rootId: any, direction = 'TB') => {
       x: node.x,
       y: node.y,
     };
+    if (node.attribute.type === 1 || node.attribute.type === 2) {
+      newNode.data.groupMaxWidth = 288;
+      // if (newNode.position.x != 0) {
+      //   newNode.position.x =
+      //     newNode.position.x < 0
+      //       ? newNode.position.x - (node.groupMaxWidth > newNode.position.x ? 70 : 0)
+      //       : newNode.position.x + (node.groupMaxWidth < newNode.position.x ? 70 : 0);
+      // }
+    }
 
     nodes.push(newNode);
   });

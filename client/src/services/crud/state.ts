@@ -1,26 +1,9 @@
 import { EStatusState } from '@/enums';
-import type { IResponses } from '@/types';
+import type { CurdState } from './reducer';
+import type { CurdTypeState } from './reducer-type';
 
 export const nameCrud = 'crud';
-export interface StateCrud<T = object, Y = object> {
-  result?: IResponses<T[]>;
-  data?: T;
-  isLoading?: boolean;
-  isVisible?: boolean;
-  status?: EStatusState;
-  queryParams?: string;
-  keepUnusedDataFor?: number;
-  time?: number;
-
-  resultType?: IResponses<Y[]>;
-  dataType?: Y;
-  isLoadingType?: boolean;
-  isVisibleType?: boolean;
-  statusType?: EStatusState;
-  queryParamsType?: string;
-  keepUnusedDataForType?: number;
-  timeType?: number;
-}
+export interface StateCrud<T = object, Y = object> extends CurdState<T>, CurdTypeState<Y> {}
 
 export const initialStateCrud: StateCrud = {
   result: undefined,

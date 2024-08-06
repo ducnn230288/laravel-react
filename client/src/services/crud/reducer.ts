@@ -1,5 +1,5 @@
 import { EStatusState } from '@/enums';
-import type { IPaginationQuery } from '@/types';
+import type { IPaginationQuery, IResponses } from '@/types';
 import { API, routerLinks } from '@/utils';
 import { createAsyncThunk, type ActionReducerMapBuilder } from '@reduxjs/toolkit';
 import { nameCrud, type StateCrud } from './state';
@@ -46,9 +46,7 @@ class Get extends RReducer {
       state.queryParams = JSON.stringify(queryParams.params);
     };
     this.fulfilled = (state, action) => {
-      if (action.payload.data) {
-        state.result = action.payload;
-      }
+      state.result = action.payload;
     };
   }
 }
@@ -63,10 +61,8 @@ class GetId extends RReducer {
       },
     );
     this.fulfilled = (state, action) => {
-      if (action.payload) {
-        if (JSON.stringify(state.data) !== JSON.stringify(action.payload)) state.data = action.payload;
-        state.isVisible = true;
-      }
+      if (JSON.stringify(state.data) !== JSON.stringify(action.payload)) state.data = action.payload;
+      state.isVisible = true;
     };
   }
 }
@@ -81,11 +77,9 @@ class Post extends RReducer {
       state.data = action.meta.arg.values;
     };
     this.fulfilled = (state, action) => {
-      if (action.payload) {
-        if (JSON.stringify(state.data) !== JSON.stringify(action.payload)) state.data = action.payload;
-        state.isVisible = false;
-        state.status = EStatusState.isFulfilled;
-      }
+      if (JSON.stringify(state.data) !== JSON.stringify(action.payload)) state.data = action.payload;
+      state.isVisible = false;
+      state.status = EStatusState.isFulfilled;
     };
   }
 }
@@ -103,11 +97,9 @@ class Put extends RReducer {
       state.data = action.meta.arg.values;
     };
     this.fulfilled = (state, action) => {
-      if (action.payload) {
-        if (JSON.stringify(state.data) !== JSON.stringify(action.payload)) state.data = action.payload;
-        state.isVisible = false;
-        state.status = EStatusState.isFulfilled;
-      }
+      if (JSON.stringify(state.data) !== JSON.stringify(action.payload)) state.data = action.payload;
+      state.isVisible = false;
+      state.status = EStatusState.isFulfilled;
     };
   }
 }
@@ -130,3 +122,14 @@ export const RCurd = {
   put: new Put(nameCrud),
   delete: new Delete(nameCrud),
 };
+
+export interface CurdState<T> {
+  isLoading?: boolean;
+  status?: EStatusState;
+  time?: number;
+  keepUnusedDataFor?: number;
+  queryParams?: string;
+  result?: IResponses<T[]>;
+  data?: T;
+  isVisible?: boolean;
+}

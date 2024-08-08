@@ -40,11 +40,6 @@ export const API = {
       (url.includes('https://') || url.includes('http://') ? '' : LINK_API) + url + (linkParam && '?' + linkParam),
       config,
     );
-    const res: IResponses<T> = await response.json();
-    if (response.ok) {
-      if (showMessage && res.message) message.success(res.message);
-      return res;
-    }
     if (
       response.status === 401 &&
       url !== `${routerLinks('Auth', 'api')}/refresh-token` &&
@@ -57,14 +52,17 @@ export const API = {
         const response = await fetch(LINK_API + url + (linkParam && '?' + linkParam), config);
         return (await response.json()) as IResponses<T>;
       }
+    } else if (response.status === 401 && url !== `${routerLinks('Auth', 'api')}/login`) {
+      localStorage.removeItem(KEY_TOKEN);
+      location.reload();
+    }
+    const res: IResponses<T> = await response.json();
+    if (response.ok) {
+      if (showMessage && res.message) message.success(res.message);
+      return res;
     } else if (res.message) {
       if (!throwError) message.error(res.message);
       else throw new Error(res.message);
-    }
-
-    if (response.status === 401 && url !== `${routerLinks('Auth', 'api')}/login`) {
-      localStorage.removeItem(KEY_TOKEN);
-      location.reload();
     }
     throw new Error('Error');
   },

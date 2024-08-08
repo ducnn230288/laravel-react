@@ -45,18 +45,20 @@ const loadData = async ({
   fullTextSearch = '',
   value,
   setTemp,
+  list,
 }: {
   get: ITableGet;
   fullTextSearch?: string;
   value?: any;
   setTemp: any;
+  list: ITableItemFilterList[];
 }) => {
   if (get?.keyApi) {
     const params = cleanObjectKeyNull(get.params ? get.params({ fullTextSearch, value }) : { fullTextSearch });
     const _local = localStorage.getItem(KEY_TEMP);
     const _temp = _local ? JSON.parse(_local) : {};
     const obj = _temp['table-filter-' + get.keyApi];
-    if (!obj || (obj && (new Date().getTime() > obj.time || JSON.stringify(params) != obj.queryParams)))
+    if (!list && (!obj || (obj && (new Date().getTime() > obj.time || JSON.stringify(params) != obj.queryParams))))
       try {
         setTemp(pre => ({ ...pre, isLoading: true }));
         _temp['table-filter-' + get.keyApi] = {
@@ -73,10 +75,15 @@ const loadData = async ({
         _temp['table-filter-' + get.keyApi].data = data.data;
         localStorage.setItem(KEY_TEMP, JSON.stringify(_temp));
       } catch (e) {}
+  } else if (list.length > 5) {
+    setTemp(pre => ({
+      ...pre,
+      list: list.filter((item: any) => item.label?.includes(fullTextSearch)),
+    }));
   }
 };
 
-const handleChange = ({ e, timeoutSearch, get, selectedKeys, setTemp }: any) => {
+const handleChange = ({ e, timeoutSearch, get, selectedKeys, setTemp, list }: any) => {
   clearTimeout(timeoutSearch.current);
   timeoutSearch.current = setTimeout(
     () =>
@@ -85,6 +92,7 @@ const handleChange = ({ e, timeoutSearch, get, selectedKeys, setTemp }: any) => 
         fullTextSearch: e.target.value,
         value: selectedKeys.length > 0 ? selectedKeys : undefined,
         setTemp,
+        list,
       }),
     500,
   );
@@ -120,18 +128,18 @@ export const getColumnSearchCheckbox = ({
     });
 
     if (get && valueFilter.current[key]) {
-      loadData({ get, fullTextSearch: '', setTemp });
+      loadData({ get, fullTextSearch: '', setTemp, list });
       valueFilter.current[key] = false;
     }
 
     return (
       <Spin spinning={temp.isLoading}>
         <div className='p-1'>
-          {!!get?.keyApi && (
+          {(!!get?.keyApi || list?.length > 5) && (
             <CIMask
               placeholder={t('Search')}
-              onChange={e => handleChange({ e, timeoutSearch, get, selectedKeys, setTemp })}
-              onPressEnter={e => loadData({ get, fullTextSearch: e.target.value, setTemp })}
+              onChange={e => handleChange({ e, timeoutSearch, get, selectedKeys, setTemp, list })}
+              onPressEnter={e => loadData({ get, fullTextSearch: e.target.value, setTemp, list })}
             />
           )}
           <div className='mt-1'>
@@ -186,18 +194,18 @@ export const getColumnSearchRadio = ({
     });
 
     if (get && valueFilter.current[key]) {
-      loadData({ get, fullTextSearch: '', setTemp });
+      loadData({ get, fullTextSearch: '', setTemp, list });
       valueFilter.current[key] = false;
     }
 
     return (
       <Spin spinning={temp.isLoading}>
         <div className='p-1'>
-          {get?.keyApi && (
+          {(!!get?.keyApi || list?.length > 5) && (
             <CIMask
               placeholder={t('Search')}
-              onChange={e => handleChange({ e, timeoutSearch, get, selectedKeys, setTemp })}
-              onPressEnter={e => loadData({ get, fullTextSearch: e.target.value, setTemp })}
+              onChange={e => handleChange({ e, timeoutSearch, get, selectedKeys, setTemp, list })}
+              onPressEnter={e => loadData({ get, fullTextSearch: e.target.value, setTemp, list })}
             />
           )}
           <div className='mt-1'>

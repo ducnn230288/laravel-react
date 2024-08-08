@@ -1,17 +1,17 @@
 import { useDraggable } from '@dnd-kit/core';
 import { Popconfirm, Table } from 'antd';
-import type { SorterResult } from 'antd/lib/table/interface';
+import type { ColumnsType, SorterResult, TableRowSelection } from 'antd/lib/table/interface';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import queryString from 'query-string';
 import React, { forwardRef, useEffect, useImperativeHandle, useRef, type Ref } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
-import { useLocation } from 'react-router-dom';
+import { NavigationType, useLocation, useNavigationType } from 'react-router-dom';
 dayjs.extend(utc);
 
 import type { IDataTable, IPaginationQuery, ITableRefObject } from '@/types';
-import { cleanObjectKeyNull, getSizePageByHeight, uuidv4 } from '@/utils';
+import { cleanObjectKeyNull, getSizePageByHeight, isNumeric, uuidv4 } from '@/utils';
 import CPagination from '../pagination';
 
 import { ETableAlign } from '@/enums';
@@ -28,6 +28,7 @@ export const CDataTable = forwardRef(
       columns = [],
       defaultRequest = {},
       rightHeader,
+      leftHeader,
       save = true,
       paginationDescription = (from: number, to: number, total: number) => from + '-' + to + ' of ' + total + ' items',
       facade = {},
@@ -38,46 +39,92 @@ export const CDataTable = forwardRef(
       onRow,
       isLoading,
       action,
+      ...props
     }: Type,
     ref: Ref<ITableRefObject>,
   ) => {
-    useImperativeHandle(ref, () => ({ onChange }));
+    useImperativeHandle(ref, () => ({ onChange, handleTableChange, params }));
 
     const location = useLocation();
     const refPageSizeOptions = useRef<number[]>();
-    const params = useRef(
-      save && location.search && location.search.indexOf('=') > -1
-        ? { ...defaultRequest, ...queryString.parse(location.search, { arrayFormat: 'index' }) }
-        : { ...defaultRequest },
-    );
+
+    const handleFormatParams = (save: boolean) => {
+      const queryParams =
+        save && location.search && location.search.indexOf('=') > -1
+          ? { ...defaultRequest, ...queryString.parse(location.search, { arrayFormat: 'index' }) }
+          : { ...defaultRequest };
+      if (queryParams.like && Array.isArray(queryParams.like)) {
+        const like: Record<string, any> = {};
+        queryParams.like.forEach(item => (like[item.split(',')[0] || ''] = item.split(',')[1]));
+        queryParams.like = like;
+      }
+      if (queryParams.between && Array.isArray(queryParams.between)) {
+        const arrayIn: Record<string, any> = {};
+        queryParams.between.forEach(
+          item =>
+            (arrayIn[item.split(',')[0] || ''] = item
+              .split(',')
+              .splice(1)
+              .map(i => (isNumeric(i) ? parseInt(i) : i))),
+        );
+        queryParams.between = arrayIn;
+      }
+
+      if (queryParams.in && Array.isArray(queryParams.in)) {
+        const arrayIn: Record<string, any> = {};
+        queryParams.in.forEach(
+          item =>
+            (arrayIn[item.split(',')[0] || ''] = item
+              .split(',')
+              .splice(1)
+              .map(i => (isNumeric(i) ? parseInt(i) : i))),
+        );
+        queryParams.in = arrayIn;
+      }
+      if (queryParams.sort && typeof queryParams.sort === 'string')
+        queryParams.sort = { [queryParams.sort.split(',')[0]]: queryParams.sort.split(',')[1] };
+      return queryParams;
+    };
+    const params = useRef(handleFormatParams(save));
+
+    const navigationType = useNavigationType();
+    const initialRender = React.useRef(false);
+    useEffect(() => {
+      if (initialRender.current && navigationType === NavigationType.Pop) {
+        onChange(handleFormatParams(save), false);
+      }
+    }, [location, navigationType]);
 
     const scroll = useRef<{ x?: number; y?: number }>({ x: undefined, y: undefined });
     useEffect(() => {
-      if (!params.current?.perPage) params.current.perPage = getSizePageByHeight();
-      else if (params.current.perPage < 5) params.current.perPage = 5;
-      else params.current.perPage = 10;
-      const { perPage } = params.current;
-      refPageSizeOptions.current = [perPage, perPage * 2, perPage * 3, perPage * 4, perPage * 5];
-      params.current = cleanObjectKeyNull({
-        ...params.current,
-        sort: Object.entries(params.current.sort ?? {})
-          .filter(([, value]) => !!value)
-          .map(([key, value]) => `${key},${value}`)
-          .join(''),
-        like: Object.entries(params.current.like ?? {})
-          .filter(([, value]) => !!value)
-          .map(([key, value]) => `${key},${value}`),
-      });
-      if (facade || new Date().getTime() > facade.time || JSON.stringify(params.current) != facade.queryParams) {
-        onChange(params.current, false);
-      }
-      if (!scroll.current.x) {
-        scroll.current.x = 0;
-        columns.forEach(item => {
-          if (item.tableItem) {
-            scroll.current.x! += item.tableItem?.width ?? 150;
-          }
+      if (columns.length > 1) {
+        if (!params.current?.perPage) params.current.perPage = getSizePageByHeight();
+        else if (params.current.perPage < 5) params.current.perPage = 5;
+        else params.current.perPage = 10;
+        const { perPage } = params.current;
+        refPageSizeOptions.current = [perPage, perPage * 2, perPage * 3, perPage * 4, perPage * 5];
+        params.current = cleanObjectKeyNull({
+          ...params.current,
+          sort: Object.entries(params.current.sort ?? {})
+            .filter(([, value]) => !!value)
+            .map(([key, value]) => `${key},${value}`)
+            .join(''),
+          like: Object.entries(params.current.like ?? {})
+            .filter(([, value]) => !!value)
+            .map(([key, value]) => `${key},${value}`),
         });
+        if (facade || new Date().getTime() > facade.time || JSON.stringify(params.current) != facade.queryParams) {
+          onChange(params.current, false);
+        }
+        if (!scroll.current.x) {
+          scroll.current.x = 0;
+          columns.forEach(item => {
+            if (item.tableItem) {
+              scroll.current.x! += item.tableItem?.width ?? 150;
+            }
+          });
+        }
+        initialRender.current = true;
       }
     }, []);
 
@@ -101,14 +148,6 @@ export const CDataTable = forwardRef(
         }, 10);
     }, [data, facade.result?.data, facade.status]);
 
-    if (params.current.like && Array.isArray(params.current.like)) {
-      const like: Record<string, any> = {};
-      params.current.like.forEach(item => (like[item.split(',')[0] || ''] = item.split(',')[1]));
-      params.current.like = like;
-    }
-    if (params.current.sort && typeof params.current.sort === 'string')
-      params.current.sort = { [params.current.sort.split(',')[0]]: params.current.sort.split(',')[1] };
-
     const { t } = useTranslation('locale', { keyPrefix: 'library' });
     const valueFilter = useRef<{ [selector: string]: boolean }>({});
     const typeKeys = useRef<Record<string, string>>({});
@@ -122,7 +161,7 @@ export const CDataTable = forwardRef(
           align: ETableAlign.center,
           render: (_: string, data) => (
             <div className={'action'}>
-              {action?.render(data)}
+              {action?.render?.(data)}
               {!!action.onDisable && (
                 <CTooltip
                   title={t(data.isDisable ? 'Disabled' : 'Enabled', {
@@ -136,7 +175,7 @@ export const CDataTable = forwardRef(
                       name: action.name(data),
                       label: action.label.toLowerCase(),
                     })}
-                    onConfirm={() => action.onDisable({ id: data.code ?? data.id, isDisable: !data.isDisable })}
+                    onConfirm={() => action.onDisable({ id: data.code ?? data.id ?? data, isDisable: !data.isDisable })}
                   >
                     <button
                       title={t(data.isDisable ? 'Disabled' : 'Enabled', {
@@ -158,7 +197,7 @@ export const CDataTable = forwardRef(
                 <CTooltip title={t('Edit', { name: action.name(data), label: action.label.toLowerCase() })}>
                   <button
                     title={t('Edit', { name: action.name(data), label: action.label.toLowerCase() })}
-                    onClick={() => action.onEdit({ id: data.code ?? data.id, params: defaultRequest })}
+                    onClick={() => action.onEdit({ id: data.code ?? data.id ?? data, params: defaultRequest })}
                   >
                     <CSvgIcon name='edit' className='primary' />
                   </button>
@@ -173,7 +212,7 @@ export const CDataTable = forwardRef(
                       name: action.name(data),
                       label: action.label.toLowerCase(),
                     })}
-                    onConfirm={() => action.onDelete(data.code ?? data.id)}
+                    onConfirm={() => action.onDelete(data.code ?? data.id ?? data)}
                   >
                     <button title={t('Delete', { name: action.name(data), label: action.label.toLowerCase() })}>
                       <CSvgIcon name='trash' className='error' />
@@ -186,9 +225,6 @@ export const CDataTable = forwardRef(
         },
       });
     }
-    const cols = useRef<IDataTable[]>(
-      formatColumns({ columns, params: params.current, typeKeys, valueFilter, timeoutSearch, t, facade }),
-    );
 
     const navigate = useNavigate();
     const onChange = (request?: IPaginationQuery, isChangeNavigate = true) => {
@@ -217,7 +253,6 @@ export const CDataTable = forwardRef(
       }
 
       if (tempFullTextSearch !== params.current.fullTextSearch) tempPageIndex = 1;
-
       const tempParams = cleanObjectKeyNull({
         ...params.current,
         ...formatFilter({ filters, typeKeys }),
@@ -248,18 +283,24 @@ export const CDataTable = forwardRef(
       </th>
     );
     const renderHeader = () =>
-      (!!showSearch || !!rightHeader) && (
+      (!!showSearch || !!leftHeader || !!rightHeader) && (
         <div className='top-header'>
-          {showSearch ? (
-            <CSearch
-              params={params.current}
-              timeoutSearch={timeoutSearch}
-              t={t}
-              handleTableChange={handleTableChange}
-            />
-          ) : (
-            <div />
+          {(!!showSearch || !!leftHeader) && (
+            <div className='flex gap-2'>
+              {showSearch ? (
+                <CSearch
+                  params={params.current}
+                  timeoutSearch={timeoutSearch}
+                  t={t}
+                  handleTableChange={handleTableChange}
+                />
+              ) : (
+                <div />
+              )}
+              {leftHeader}
+            </div>
           )}
+
           {(!!rightHeader || !!action?.onAdd) && !!action?.onAdd && (
             <div className={'right'}>
               <CButton
@@ -292,30 +333,44 @@ export const CDataTable = forwardRef(
           }
         />
       );
+
     return (
       <div ref={tableRef} className='data-table'>
         {renderHeader()}
 
-        <CTableDrag tableRef={tableRef}>
-          <Table
-            onRow={onRow}
-            components={{ header: { cell: componentsCell } }}
-            locale={{
-              emptyText: <div className='no-data'>{t('No Data')}</div>,
-            }}
-            loading={isLoading ?? facade.isLoading}
-            columns={cols.current}
-            pagination={false}
-            dataSource={loopData(data)}
-            onChange={(_, filters, sort) =>
-              handleTableChange(undefined, filters, sort as SorterResult<any>, params.current.fullTextSearch)
-            }
-            scroll={scroll.current}
-            size='small'
-          />
+        {columns.length > 1 && (
+          <CTableDrag tableRef={tableRef}>
+            <Table
+              onRow={onRow}
+              components={{ header: { cell: componentsCell } }}
+              locale={{
+                emptyText: <div className='no-data'>{t('No Data')}</div>,
+              }}
+              loading={isLoading ?? facade.isLoading}
+              columns={
+                formatColumns({
+                  columns,
+                  params: params.current,
+                  typeKeys,
+                  valueFilter,
+                  timeoutSearch,
+                  t,
+                  facade,
+                }) as ColumnsType<any>
+              }
+              pagination={false}
+              dataSource={loopData(data)}
+              onChange={(_, filters, sort) =>
+                handleTableChange(undefined, filters, sort as SorterResult<any>, params.current.fullTextSearch)
+              }
+              scroll={scroll.current}
+              size='small'
+              {...props}
+            />
 
-          {renderPagination()}
-        </CTableDrag>
+            {renderPagination()}
+          </CTableDrag>
+        )}
       </div>
     );
   },
@@ -324,7 +379,8 @@ CDataTable.displayName = 'CDataTable';
 interface Type {
   columns: IDataTable[];
   defaultRequest?: IPaginationQuery;
-  rightHeader?: JSX.Element | boolean;
+  rightHeader?: JSX.Element;
+  leftHeader?: JSX.Element;
   save?: boolean;
   paginationDescription?: (from: number, to: number, total: number) => string;
   facade?: any;
@@ -342,10 +398,11 @@ interface Type {
     name: any;
     onAdd?: any;
     labelAdd?: any;
-    width?: any;
-    fixed?: any;
     render?: any;
+    width?: number;
+    fixed?: string;
   };
+  rowSelection?: TableRowSelection<any>;
 }
 const Draggable = (props: any) => {
   const { attributes, listeners, setNodeRef } = useDraggable({ id: props.id });

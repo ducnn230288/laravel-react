@@ -110,7 +110,7 @@ class PostForgottenPassword extends RReducer {
     this.pending = (state, action) => {
       state.data = action.meta.arg;
     };
-    this.fulfilled = (state, action) => {
+    this.fulfilled = state => {
       state.status = EStatusState.isFulfilled;
     };
   }
@@ -126,7 +126,7 @@ class PostOtpConfirmation extends RReducer {
     this.pending = (state, action) => {
       state.data = action.meta.arg;
     };
-    this.fulfilled = (state, action) => {
+    this.fulfilled = state => {
       state.status = EStatusState.isFulfilled;
     };
   }
@@ -142,7 +142,7 @@ class PostResetPassword extends RReducer {
     this.pending = (state, action) => {
       state.data = action.meta.arg;
     };
-    this.fulfilled = (state, action) => {
+    this.fulfilled = state => {
       state.data = {};
       state.status = EStatusState.isFulfilled;
     };

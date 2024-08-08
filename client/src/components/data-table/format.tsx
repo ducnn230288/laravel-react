@@ -31,8 +31,12 @@ export const formatColumns = ({
     .map(col => {
       let item = col.tableItem;
       if (item?.filter) {
-        const like = params?.like as any;
-        if (like && col.name && like[col.name]) item = { ...item, defaultFilteredValue: like[col.name] };
+        if (params?.like && col.name && params?.like[col.name])
+          item = { ...item, defaultFilteredValue: params?.like[col.name] };
+        if (params?.in && col.name && params?.in[col.name])
+          item = { ...item, defaultFilteredValue: params?.in[col.name] };
+        if (params?.between && col.name && params?.between[col.name])
+          item = { ...item, defaultFilteredValue: params?.between[col.name] };
 
         switch (item?.filter?.type) {
           case ETableFilterType.radio:
